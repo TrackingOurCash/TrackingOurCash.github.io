@@ -281,6 +281,8 @@ def load_land():
         if path.name == "index.json":
             continue
         c = json.load(open(path))
+        if not in_inset(c["shape"]):
+            continue  # the riding touched an inset box but this municipality is far outside it
         out["features"].append({"type": "Feature", "properties": {"kind": "muni", "name": c["name"]},
                                 "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys_of(c["shape"]), 0.0015, 0.003)}})
     return out
