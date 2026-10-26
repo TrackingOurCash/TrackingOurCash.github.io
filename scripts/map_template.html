@@ -92,6 +92,12 @@ ul.grants { list-style: none; padding: 0; margin: 6px 0 0; }
 ul.grants li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12px; }
 ul.grants li b { font-variant-numeric: tabular-nums; }
 .tag { display: inline-block; font-size: 11px; border: 1px solid var(--axis); border-radius: 4px; padding: 0 4px; color: var(--ink-2); }
+.pies { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.pie { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 12px; align-items: center; }
+.pie svg { width: 170px; height: 170px; display: block; }
+.pie .leg { font-size: 12px; display: grid; grid-template-columns: auto 1fr auto; gap: 2px 8px; align-items: center; }
+.pie .leg .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); white-space: nowrap; }
+.pie h3 { grid-column: 1 / -1; margin: 0; }
 .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 .bar { height: 12px; border-radius: 0 4px 4px 0; margin: 2px 0; }
 .barrow { display: grid; grid-template-columns: 52px 1fr 64px; gap: 6px; align-items: center; font-size: 12px; color: var(--ink-2); }
@@ -105,6 +111,7 @@ tbody tr { cursor: pointer; }
 tbody tr:hover { background: var(--grid); }
 .notes { color: var(--ink-2); font-size: 13px; }
 .notes li { margin-bottom: 4px; }
+.notes a { color: var(--focus); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -131,6 +138,12 @@ tbody tr:hover { background: var(--grid); }
       <div class="legend" id="legend"></div>
     </div>
     <div class="card" id="panel"><p class="muted">Hover a riding for a summary. Click it for the MP, the 2025 result and its largest grants.</p></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>Who gets it</h2>
+    <p class="small muted" id="pieNote"></p>
+    <div class="pies" id="pies"></div>
   </div>
 
   <div class="card" style="margin-top:16px">
@@ -241,18 +254,24 @@ const LAND = D.land.features;
 const byKind = k => LAND.filter(f => f.properties.kind === k);
 function drawLand(parent, pth, clipId, box) {
   // box: an inset's [west, south, east, north]; insets also get small lakes, rivers and municipal outlines.
+  // The national map clips ridings to the coastline; insets don't, because at city scale the
+  // detailed riding edges follow the shoreline better than the coastline file does.
   const near = f => { if (!box) return false; const [[x0, y0], [x1, y1]] = d3.geoBounds(f); return x1 > box[0] && x0 < box[2] && y1 > box[1] && y0 < box[3]; };
   parent.selectAll(".otherland").data(byKind("other")).join("path").attr("class", "otherland").attr("d", pth);
   parent.selectAll(".land").data(byKind("canada")).join("path").attr("class", "land").attr("d", pth);
-  d3.select("#defs").insert("clipPath", "#patdefs").attr("id", clipId).selectAll("path").data(byKind("canada")).join("path").attr("d", pth);
-  const layer = parent.append("g").attr("clip-path", `url(#${clipId})`);
+  let layer;
+  if (box) layer = parent.append("g");
+  else {
+    d3.select("#defs").insert("clipPath", "#patdefs").attr("id", clipId).selectAll("path").data(byKind("canada")).join("path").attr("d", pth);
+    layer = parent.append("g").attr("clip-path", `url(#${clipId})`);
+  }
   const over = parent.append("g");
   over.selectAll(".lake").data(byKind("lake").concat(box ? byKind("lake_small").filter(near) : [])).join("path").attr("class", "lake").attr("d", pth);
   if (box) {
     over.selectAll(".river").data(byKind("river").filter(near)).join("path").attr("class", "river").attr("d", pth);
     over.selectAll(".muni").data(byKind("muni").filter(near)).join("path").attr("class", "muni").attr("d", pth).append("title").text(d => d.properties.name);
   }
-  over.selectAll(".coast").data(byKind("canada")).join("path").attr("class", "coast").attr("d", pth);
+  if (!box) over.selectAll(".coast").data(byKind("canada")).join("path").attr("class", "coast").attr("d", pth);
   return layer;
 }
 const ridingLayer = drawLand(g, path, "clip-canada");
@@ -267,10 +286,11 @@ const zoom = d3.zoom().scaleExtent([1, 80]).on("zoom", e => {
   if (Math.abs(e.transform.k - zoomK) / zoomK > 0.15) { zoomK = e.transform.k; defs.selectAll("pattern").attr("patternTransform", `rotate(45) scale(${1 / zoomK})`); }
 });
 svg.call(zoom);
-function zoomTo(b) {
+function zoomTo(b, factor = 1) {
+  // factor 0.5 fits the box into half the map, so the surrounding area shows too.
   if (!b) return svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity);
   const [x0, y0] = proj([b[0], b[3]]), [x1, y1] = proj([b[2], b[1]]);
-  const k = Math.min(80, 0.9 / Math.max((x1 - x0) / W, (y1 - y0) / H));
+  const k = Math.min(80, 0.9 * factor / Math.max((x1 - x0) / W, (y1 - y0) / H));
   svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity.translate(W / 2, H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2));
 }
 d3.select("#zoombar").append("button").text("Reset view").on("click", () => zoomTo(null));
@@ -279,8 +299,9 @@ d3.select("#zoombar").append("button").text("Reset view").on("click", () => zoom
 const INSETS = C.insets;
 const insetPaths = [];
 const insetsEl = d3.select("#insets");
+const FINE = Object.fromEntries((D.geoFine.features || []).map(f => [f.id, f]));
 for (const [name, b] of INSETS) {
-  const feats = D.geo.features.filter(f => { const [[x0, y0], [x1, y1]] = d3.geoBounds(f); return x1 > b[0] && x0 < b[2] && y1 > b[1] && y0 < b[3]; });
+  const feats = D.geo.features.map(f => FINE[f.id] || f).filter(f => { const [[x0, y0], [x1, y1]] = d3.geoBounds(f); return x1 > b[0] && x0 < b[2] && y1 > b[1] && y0 < b[3]; });
   const w = 190, h = Math.round(w * (b[3] - b[1]) / ((b[2] - b[0]) * Math.cos((b[1] + b[3]) / 2 * Math.PI / 180)));
   const ip = d3.geoMercator().fitExtent([[0, 0], [w, h]], {type: "Polygon", coordinates: [[[b[0], b[1]], [b[0], b[3]], [b[2], b[3]], [b[2], b[1]], [b[0], b[1]]]]});
   const box = insetsEl.append("div").attr("class", "inset");
@@ -291,11 +312,11 @@ for (const [name, b] of INSETS) {
   const ipath = d3.geoPath(ip);
   const ps = drawLand(inner, ipath, cid + "-land", b).selectAll("path").data(feats).join("path")
     .attr("class", "r").attr("d", d3.geoPath(ip))
-    .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip).on("click", (e, d) => select(d.id));
+    .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip).on("click", (e, d) => { select(d.id); zoomTo(b, 0.5); });
   insetPaths.push(ps);
   const cap = box.append("div").attr("class", "cap");
   cap.append("span").text(name);
-  cap.append("button").text("zoom main map").on("click", () => zoomTo(b));
+  cap.append("button").text("zoom main map").on("click", () => zoomTo(b, 0.5));
 }
 
 let V = compute();
@@ -306,7 +327,7 @@ function render() {
   const f = d => fillFor(d.id, V[d.id]);
   paths.attr("fill", f).attr("opacity", d => state.closeOnly && !R[d.id].close ? 0.45 : 1);
   insetPaths.forEach(ps => ps.attr("fill", f));
-  renderLegend(); renderGroups(); renderTable();
+  renderLegend(); renderPies(); renderGroups(); renderTable();
   if (state.sel) select(state.sel, true);
 }
 function renderLegend() {
@@ -376,6 +397,45 @@ function select(n, quiet) {
   if (!quiet && innerWidth < 960) document.getElementById("panel").scrollIntoView({block: "nearest", behavior: "smooth"});
 }
 
+// ---- pies: who gets it ----
+const SEQ_BLUE = ["#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#256abf", "#1c5cab", "#184f95", "#104281", "#0d366b"];
+function pie(container, title, items, note) {
+  // items: [{label, value, color}], already in the order the slices should run clockwise from 12 o'clock.
+  const total = d3.sum(items, d => d.value) || 1;
+  const box = container.append("div").attr("class", "pie");
+  box.append("h3").text(title);
+  const svgp = box.append("svg").attr("viewBox", "0 0 170 170").attr("role", "img").attr("aria-label", title);
+  const arcs = d3.pie().sort(null).value(d => d.value)(items);
+  const arc = d3.arc().innerRadius(38).outerRadius(82);
+  const gg = svgp.append("g").attr("transform", "translate(85,85)");
+  gg.selectAll("path").data(arcs).join("path").attr("d", arc).attr("fill", d => d.data.color).attr("stroke", css("--surface")).attr("stroke-width", 1.5)
+    .append("title").text(d => `${d.data.label}: ${fmt$(d.data.value)} (${(100 * d.data.value / total).toFixed(1)}%)`);
+  gg.selectAll("text").data(arcs.filter(d => d.endAngle - d.startAngle > 0.35)).join("text")
+    .attr("transform", d => `translate(${arc.centroid(d)})`).attr("text-anchor", "middle").attr("dy", "0.35em")
+    .attr("font-size", 10).attr("fill", "#fff").attr("font-weight", 600).text(d => d.data.short || d.data.label);
+  const leg = box.append("div").attr("class", "leg");
+  for (const it of items) {
+    leg.append("span").attr("class", "sw").style("background", it.color);
+    leg.append("span").text(it.label);
+    leg.append("span").attr("class", "n").text(`${fmt$(it.value)} · ${(100 * it.value / total).toFixed(0)}%`);
+  }
+  if (note) box.append("div").attr("class", "small muted").style("grid-column", "1 / -1").text(note);
+}
+function renderPies() {
+  const el = d3.select("#pies").html("");
+  const byParty = {};
+  for (const n of Object.keys(R)) { const p = R[n].rep_party || "IND"; byParty[p] = (byParty[p] || 0) + V[n].after; }
+  const partyItems = Object.entries(byParty).sort((a, b) => b[1] - a[1]).map(([p, v]) => ({label: PARTY[p] || p, short: p, value: v, color: tint(p, 1)}));
+  pie(el, `By the current ${C.rep}'s party`, partyItems, `Grants since the election, summed over the ${C.levelPlural} each party now holds.`);
+  if (C.regionOrder) {
+    const byRegion = {};
+    for (const n of Object.keys(R)) { const key = C.regionGroup[R[n].region] || R[n].region; byRegion[key] = (byRegion[key] || 0) + V[n].after; }
+    const items = C.regionOrder.filter(r => byRegion[r]).map((r, i) => ({label: r, short: C.regionShort[r] || r, value: byRegion[r], color: SEQ_BLUE[Math.round(i * (SEQ_BLUE.length - 1) / Math.max(1, C.regionOrder.length - 1))]}));
+    pie(el, "By province", items, "Slices run clockwise from the North: Atlantic on the right, Quebec and Ontario at the bottom, the Prairies and BC on the left.");
+  }
+  document.getElementById("pieNote").textContent = `${state.dept || C.filterAll}${state.natl && !state.dept ? ", everything included" : ""}; the pies follow the filters above.`;
+}
+
 // ---- four-group comparison ----
 function renderGroups() {
   const names = C.groups;
@@ -385,12 +445,12 @@ function renderGroups() {
     return {gname, count: ns.length, after: d3.median(ns, n => V[n].pc), before: d3.median(ns, n => V[n].pcb), chg: d3.median(chg), total: d3.sum(ns, n => V[n].after)};
   });
   const max = d3.max(rows, r => Math.max(r.after, r.before)) || 1;
-  document.getElementById("groupNote").innerHTML = `Median ${C.level} in each group, ${state.dept || C.filterAll.toLowerCase()}${state.natl && !state.dept ? ", everything included" : ""}. ${C.groupNote} <span class="sw" style="background:var(--before)"></span>${C.beforeLabel.toLowerCase()} <span class="sw" style="background:var(--after)"></span>since the election.`;
-  document.getElementById("groups").innerHTML = rows.map(r => `<div>
-    <h3>${r.gname} <span class="muted small">· ${r.count} ${C.levelPlural}</span></h3>
-    <div class="barrow"><span>Before</span><div class="bar" style="width:${100 * r.before / max}%;background:var(--before)"></div><span class="v">${fmtPc(r.before)}</span></div>
-    <div class="barrow"><span>After</span><div class="bar" style="width:${100 * r.after / max}%;background:var(--after)"></div><span class="v">${fmtPc(r.after)}</span></div>
-    <div class="small muted">per person per year · median change ${fmtPct(r.chg)} · total ${fmt$(r.total)}</div></div>`).join("");
+  document.getElementById("groupNote").innerHTML = `Median ${C.level} in each group, ${state.dept || C.filterAll.toLowerCase()}${state.natl && !state.dept ? ", everything included" : ""}. ${C.groupNote} Lighter bar: ${C.beforeLabel.toLowerCase()}; full bar: since the election.`;
+  document.getElementById("groups").innerHTML = rows.map(r => { const gp = C.groupParty[r.gname]; const cA = gp ? tint(gp, 1) : "var(--after)", cB = gp ? tint(gp, 0.35) : "var(--before)"; return `<div>
+    <h3>${gp ? `<span class="sw" style="background:${cA}"></span>` : ""}${r.gname} <span class="muted small">· ${r.count} ${C.levelPlural}</span></h3>
+    <div class="barrow"><span>Before</span><div class="bar" style="width:${100 * r.before / max}%;background:${cB}"></div><span class="v">${fmtPc(r.before)}</span></div>
+    <div class="barrow"><span>After</span><div class="bar" style="width:${100 * r.after / max}%;background:${cA}"></div><span class="v">${fmtPc(r.after)}</span></div>
+    <div class="small muted">per person per year · median change ${fmtPct(r.chg)} · total ${fmt$(r.total)}</div></div>`; }).join("");
 }
 
 // ---- table ----

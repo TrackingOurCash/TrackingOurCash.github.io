@@ -21,6 +21,9 @@ for f in ne_10m_admin_0_countries ne_10m_lakes ne_10m_rivers_lake_centerlines; d
   [[ -f data/raw/ne/$f.geojson ]] || curl -sSL -o data/raw/ne/$f.geojson "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/$f.geojson"
 done
 python3 scripts/fetch_csd.py
+python3 scripts/fetch_shapes.py
 python3 scripts/prep_ridings.py
 python3 scripts/build_spending.py > data/summary.json
+# Alberta layer (skipped if the Alberta downloads are missing)
+if [[ -f data/raw/ab/grants-2025-26.csv ]]; then python3 scripts/ab_prep.py && python3 scripts/ab_spending.py > data/ab/summary.json; fi
 python3 scripts/build_map.py

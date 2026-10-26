@@ -225,6 +225,21 @@ def load_shapes(ridings):
     return {"type": "FeatureCollection", "features": features}
 
 
+def load_fine_shapes(cache, ids_by_num, tol=0.0004):
+    """Full-detail shapes (fetch_shapes.py) for the ridings that touch a city inset,
+    lightly simplified. Returns a FeatureCollection; empty when nothing is cached."""
+    features = []
+    if cache.exists():
+        for path in sorted(cache.glob("*.json")):
+            num = path.stem
+            if num not in ids_by_num:
+                continue
+            geom = json.load(open(path))
+            features.append({"type": "Feature", "id": num, "properties": {"num": num},
+                             "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys_of(geom), tol, 0.001)}})
+    return {"type": "FeatureCollection", "features": features}
+
+
 def load_land():
     """Natural Earth 10m coastlines: Canada (the clip for the riding layer), neighbouring
     land for context, and the big lakes to paint back over the ridings."""
@@ -292,13 +307,16 @@ def main():
     ridings = load_results()
     unmatched = load_mps(ridings)
     geo = load_shapes(ridings)
+    fine = load_fine_shapes(RAW / "shape", ridings)
     land = load_land()
     json.dump(ridings, open(OUT / "ridings.json", "w"), ensure_ascii=False, indent=1)
     json.dump(geo, open(OUT / "ridings_geo.json", "w"), separators=(",", ":"))
     json.dump(land, open(OUT / "land_geo.json", "w"), separators=(",", ":"))
+    json.dump(fine, open(OUT / "ridings_geo_fine.json", "w"), separators=(",", ":"))
     print(f"{len(ridings)} ridings, {sum(r['mp'] != 'Vacant' for r in ridings.values())} with a current MP")
     print("MP constituencies not matched:", unmatched)
-    print("geo bytes:", (OUT / "ridings_geo.json").stat().st_size, "land bytes:", (OUT / "land_geo.json").stat().st_size)
+    print("geo bytes:", (OUT / "ridings_geo.json").stat().st_size, "land bytes:", (OUT / "land_geo.json").stat().st_size,
+          "fine shapes:", len(fine["features"]), (OUT / "ridings_geo_fine.json").stat().st_size)
 
 
 if __name__ == "__main__":

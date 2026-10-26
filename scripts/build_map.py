@@ -21,6 +21,10 @@ COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", 
           "group", "top_grants"]
 
 
+def links(items):
+    return "; ".join(f'<a href="{u}" target="_blank" rel="noopener">{t}</a>' for t, u in items) + "."
+
+
 def fmt_money(v):
     return "$" + (f"{v / 1e9:.1f}B" if v >= 1e9 else f"{v / 1e6:.0f}M" if v >= 1e6 else f"{v:,.0f}")
 
@@ -52,6 +56,12 @@ def federal():
         "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
         "groupTitle": "Does money follow close seats?", "groups": ["Close Liberal", "Close opposition", "Safe Liberal", "Safe opposition"],
         "groupNote": f'"Close" means the 2025 winner led by under {m["close_margin"]} points; "Liberal" means the Liberals won the seat in 2025.',
+        "groupParty": {"Close Liberal": "LPC", "Safe Liberal": "LPC", "Close opposition": None, "Safe opposition": None},
+        "regionOrder": ["Territories", "Newfoundland and Labrador", "Prince Edward Island", "Nova Scotia", "New Brunswick", "Quebec", "Ontario",
+                        "Manitoba", "Saskatchewan", "Alberta", "British Columbia"],
+        "regionGroup": {"Yukon": "Territories", "Northwest Territories": "Territories", "Nunavut": "Territories"},
+        "regionShort": {"Territories": "North", "Newfoundland and Labrador": "NL", "Prince Edward Island": "PE", "Nova Scotia": "NS", "New Brunswick": "NB",
+                        "Quebec": "QC", "Ontario": "ON", "Manitoba": "MB", "Saskatchewan": "SK", "Alberta": "AB", "British Columbia": "BC"},
         "beforeLabel": "Same dates a year earlier", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest grants since the election",
         "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
         "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
@@ -66,7 +76,15 @@ def federal():
                      f"and set against the 2025 result. Each riding wears its current MP's party colour; the deeper the colour, the more grant money per resident. "
                      f"\"Before\" means the same dates one year earlier."),
         "notes": [
-            f"<b>Sources:</b> Treasury Board \"Proactive Disclosure – Grants and Contributions\" (open.canada.ca), Elections Canada official 2025 results, House of Commons member list, GeoNames postal-code centroids, Open North riding boundaries, Natural Earth coastlines, Statistics Canada census subdivisions. Data as of {m.get('generated', m['cutoff'])}.",
+            "<b>Sources:</b> " + links([
+                ("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
+                ("Elections Canada official 2025 results, tables 11 and 12", "https://www.elections.ca/res/rep/off/ovrGE45/home.html"),
+                ("House of Commons member list", "https://www.ourcommons.ca/Members/en/search"),
+                ("Riding boundaries (Represent, Open North)", "https://represent.opennorth.ca/boundary-sets/federal-electoral-districts-2023-representation-order/"),
+                ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
+            ]) + f" Data as of {m.get('generated', m['cutoff'])}. Code: the pipeline is open and rebuilds the page daily.",
             f"<b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent. The dataset's own riding field is rarely filled in, so most of the {placed:,} awards since the election were placed by postal code; recipients with no postal code were matched to their address on other awards, then by city. {mth.get('after|unmapped', 0):,} awards worth {fmt_money(mth.get('after|unmapped $', 0))} are still unplaced.",
             "<b>Left out by default:</b> national non-profits booked at a head office (\"Hockey Canada\"), other governments (provinces, cities spread over several ridings), treaty and specific-claim settlements, and foreign aid routed through Canadian partners. Tick the box to put them back. Companies are kept even when \"Canada\" is in their name.",
             f"<b>Amendments</b> are counted once, at the agreement's latest total value. <b>Reporting lag:</b> departments report quarterly, so the window ends at the last quarter that looks fully reported ({m['cutoff']}).",
@@ -74,7 +92,8 @@ def federal():
         ],
     }
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"],
-               "deptBefore": sp["dept_by_riding_before"], "geo": json.load(open(DATA / "ridings_geo.json")), "land": json.load(open(DATA / "land_geo.json"))}
+               "deptBefore": sp["dept_by_riding_before"], "geo": json.load(open(DATA / "ridings_geo.json")), "land": json.load(open(DATA / "land_geo.json")),
+               "geoFine": json.load(open(DATA / "ridings_geo_fine.json")) if (DATA / "ridings_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]
 
 
@@ -104,6 +123,8 @@ def alberta():
         "includeLabel": "Include province-wide bodies (health, post-secondary, school divisions) & big-city governments",
         "groupTitle": "Does money follow close seats?", "groups": ["Close UCP", "Close NDP", "Safe UCP", "Safe NDP"],
         "groupNote": f'"Close" means the 2023 winner led by under {m["close_margin"]} points; "UCP" means the governing United Conservatives won the seat in 2023.',
+        "groupParty": {"Close UCP": "UCP", "Safe UCP": "UCP", "Close NDP": "NDP", "Safe NDP": "NDP"},
+        "regionOrder": None, "regionGroup": {}, "regionShort": {},
         "beforeLabel": "Same length of time before the election", "topProgsTitle": "Top programs", "topGrantsTitle": "Largest recipients since the election",
         "recordUrl": None, "searchUrl": None, "searchLabel": "",
         "linkNote": "Source: Alberta Treasury Board and Finance grant payments disclosure (open.alberta.ca/dataset/grant-disclosure), which lists every payment by recipient, program and date.",
@@ -114,7 +135,16 @@ def alberta():
                      f"Each division wears its current MLA's party colour; the deeper the colour, the more grant money per resident. "
                      f"\"Before\" is the same length of time ending on election day ({m['before_start']} to {m['before_end']})."),
         "notes": [
-            f"<b>Sources:</b> Alberta Treasury Board and Finance grant payments disclosure, Elections Alberta 2023 Statement of Vote, Legislative Assembly member list, Alberta 2021 census profiles by electoral division, Open North boundaries (2019 map), GeoNames, CRA list of charities, Natural Earth. Data as of {m.get('generated', m['cutoff'])}.",
+            "<b>Sources:</b> " + links([
+                ("Alberta grant payments disclosure (Treasury Board and Finance)", "https://open.alberta.ca/dataset/grant-disclosure"),
+                ("Elections Alberta 2023 Statement of Vote", "https://www.elections.ab.ca/uploads/2023-Provincial-General-Election-Statement-of-Vote.xlsx"),
+                ("Legislative Assembly of Alberta member list", "https://www.assembly.ab.ca/members/members-of-the-legislative-assembly"),
+                ("2021 census profiles by electoral division", "https://open.alberta.ca/dataset/330635ba-632a-4ad1-a9f6-b8176216cf07"),
+                ("Division boundaries, 2019 map (Represent, Open North)", "https://represent.opennorth.ca/boundary-sets/alberta-electoral-districts-2017/"),
+                ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+            ]) + f" Data as of {m.get('generated', m['cutoff'])}.",
             f"<b>Placing payments:</b> Alberta publishes recipient names but no addresses. Each recipient was matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality, or to a place name inside its own name, then located in a division. Of {fmt_money(m['total_after'])} paid since the election, {fmt_money(m['placed_after'])} was placed; {fmt_money(ex.get('individual programs', 0))} went through programs that pay individuals (physician fees, AISH, benefits, awards), {fmt_money(ex.get('individuals', 0))} to recipients who look like individuals, {fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
             "<b>Left out by default:</b> province-wide bodies booked at a head office (Alberta Health Services, universities and colleges, school divisions, agencies) and the governments of cities that span several divisions (Calgary, Edmonton and others). Tick the box to put them back.",
             "<b>Boundaries:</b> the 87 divisions used in 2023. Alberta's next election will use a new map that is not final yet.",
@@ -122,7 +152,8 @@ def alberta():
         ],
     }
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["prog_by_riding"], "deptBefore": {},
-               "geo": json.load(open(DATA / "ab" / "divisions_geo.json")), "land": land}
+               "geo": json.load(open(DATA / "ab" / "divisions_geo.json")), "land": land,
+               "geoFine": json.load(open(DATA / "ab" / "divisions_geo_fine.json")) if (DATA / "ab" / "divisions_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]
 
 

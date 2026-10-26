@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "ab"
 OUT = ROOT / "data" / "ab"
 sys.path.insert(0, str(ROOT / "scripts"))
-from prep_ridings import clean_polygons, polys_of  # noqa: E402
+from prep_ridings import clean_polygons, load_fine_shapes, polys_of  # noqa: E402
 
 # Ballot party codes -> short labels used on the map.
 PARTY = {"UCP": "UCP", "NDP": "NDP", "AP": "AP", "GPA": "GPA", "IND": "IND", "WLC": "WLC", "SM": "SM", "SPA": "SPA",
@@ -147,6 +147,9 @@ def main():
     geo = load_shapes(divisions)
     json.dump(divisions, open(OUT / "divisions.json", "w"), ensure_ascii=False, indent=1)
     json.dump(geo, open(OUT / "divisions_geo.json", "w"), separators=(",", ":"))
+    fine = load_fine_shapes(RAW / "shape", divisions)
+    json.dump(fine, open(OUT / "divisions_geo_fine.json", "w"), separators=(",", ":"))
+    print("fine shapes:", len(fine["features"]))
     close = sum(d["margin_pts"] < 10 for d in divisions.values())
     print(f"{len(divisions)} divisions, {len(geo['features'])} shapes, {close} close in 2023,",
           sum(d['population'] for d in divisions.values()), "people")
