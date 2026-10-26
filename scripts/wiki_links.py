@@ -23,12 +23,16 @@ QUERIES = {
     "alberta": "{name} provincial electoral district Alberta",
     "bc": "{name} provincial electoral district British Columbia",
     "saskatchewan": "{name} provincial electoral district Saskatchewan",
+    "manitoba": "{name} provincial electoral district Manitoba",
+    "nb": "{name} provincial electoral district New Brunswick",
 }
 SOURCES = {
     "federal": (DATA / "ridings.json", "current_name"),
     "alberta": (DATA / "ab" / "divisions.json", "name"),
     "bc": (DATA / "bc" / "divisions.json", "name"),
     "saskatchewan": (DATA / "sk" / "divisions.json", "name"),
+    "manitoba": (DATA / "mb" / "divisions.json", "name"),
+    "nb": (DATA / "nb" / "divisions.json", "name"),
 }
 
 

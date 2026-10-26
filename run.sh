@@ -50,4 +50,6 @@ if [[ -f data/raw/ab/grants-2025-26.csv ]]; then python3 scripts/ab_prep.py && p
 if python3 scripts/bc_prep.py && python3 scripts/bc_spending.py > data/bc/summary.json; then :; else echo "BC layer skipped"; fi
 # Saskatchewan layer
 if python3 scripts/sk_prep.py && python3 scripts/sk_spending.py > data/sk/summary.json; then :; else echo "SK layer skipped"; fi
+# Manitoba layer
+if python3 scripts/mb_prep.py && python3 scripts/mb_spending.py > data/mb/summary.json; then :; else echo "MB layer skipped"; fi
 python3 scripts/build_map.py

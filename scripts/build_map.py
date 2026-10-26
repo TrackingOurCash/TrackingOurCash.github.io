@@ -13,11 +13,11 @@ DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
-       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "legislatures.html", "label": "Legislatures"}]
+       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "legislatures.html", "label": "Legislatures"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
-                 "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p"}
+                 "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -219,10 +219,40 @@ PROVINCES = {
                     ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
                     ("Wikipedia (constituency articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Saskatchewan_provincial_electoral_districts")],
     },
+    "manitoba": {
+        "dir": "mb", "year": "2023", "region": "Manitoba", "title": "Where Manitoba's payments went after the 2023 election",
+        "electionLabel": "the 3 October 2023 election", "count": 57, "gov": "NDP",
+        "parties": {"NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"}, "PC": {"name": "Progressive Conservative", "light": "#1b4c9e", "dark": "#4f80d8"},
+                    "LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"}, "GPM": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"},
+                    "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["NDP", "PC", "LIB"], "opp": "PC",
+        "groupNote": '"NDP" means the governing New Democrats won the seat in 2023.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "beforeLabel": "Last full year before the election (2022-23)",
+        "includeLabel": "Include province-wide bodies (health authorities, Hydro, universities, school divisions) & the Winnipeg and Brandon city governments",
+        "projection": {"parallels": [50, 58], "rotate": [97.5, 0]},
+        "insets": [["Winnipeg", [-97.4, 49.72, -96.95, 50.0]], ["Brandon", [-100.05, 49.78, -99.85, 49.9]]],
+        "source": "Manitoba Public Accounts, \"Vendor Payments over $50,000\" (payees of $50,000 or more by department and fiscal year; grants and purchases are mixed; the town is printed for payees outside Winnipeg).",
+        "windowNote": "\"After\" is fiscal 2025-26, the latest year published; \"before\" is fiscal 2022-23, the last full year before the election",
+        "placing": "Manitoba prints the payee's town for everyone outside Winnipeg, so those payees are placed by their town. Winnipeg payees were matched by name to a postal code in the federal grants file or the CRA charity list, then located in a division. Public debt charges are left out altogether, and obvious suppliers of goods and services (contractors, consultants, software, pharmacies) are flagged and excluded from the default view because the list mixes them with grants.",
+        "individualNote": "pensions, tax credits and programs that pay individuals (income assistance, child-care providers, physicians)",
+        "leftOut": "province-wide bodies booked at a head office (the regional health authorities, Shared Health, Manitoba Hydro, universities, school divisions, child and family services authorities), the governments of Winnipeg and Brandon, and suppliers of goods and services",
+        "boundaryNote": "the 57 divisions of the 2018 commission, used in 2019 and 2023. Their populations come from the 2016 census (the commission's figures), scaled to Statistics Canada's July 2026 estimate for Manitoba.",
+        "sources": [("Manitoba Public Accounts: vendor payments over $50,000", "https://www.gov.mb.ca/government/finances/annualreports-publicaccounts.html"),
+                    ("Elections Manitoba 2023 results", "https://www.electionsmanitoba.ca/en/Results/PreviousElections/2023"),
+                    ("Legislative Assembly of Manitoba member list", "https://www.gov.mb.ca/legislature/members/mla_list_constituency.html"),
+                    ("2018 Electoral Divisions Boundaries Commission report (populations)", "https://www.boundariescommission.mb.ca/wp-content/uploads/edbc-final-report-2018-en.pdf"),
+                    ("Division boundaries (Represent, Open North)", "https://represent.opennorth.ca/boundary-sets/manitoba-electoral-districts-2018/"),
+                    ("Canadian Geographical Names Database (towns)", "https://natural-resources.canada.ca/maps-tools-publications/maps/geographical-names-canada"),
+                    ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (division articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Manitoba_provincial_electoral_districts")],
+    },
 }
 
 
-LEVEL = {"alberta": ("division", "divisions"), "bc": ("district", "districts"), "saskatchewan": ("constituency", "constituencies")}
+LEVEL = {"alberta": ("division", "divisions"), "bc": ("district", "districts"), "saskatchewan": ("constituency", "constituencies"),
+         "manitoba": ("division", "divisions"), "nb": ("district", "districts")}
 
 
 def provincial(key):
@@ -248,7 +278,7 @@ def provincial(key):
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
         "rep": "MLA", "electionYear": y, "popLabel": "registered voters, 2024" if key == "saskatchewan" else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
-        "flags": {"province-wide": "province-wide body", "other government": "other government"},
+        "flags": {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
         "filterAll": P["filterAll"], "filterOptions": m["programs"],
         "includeLabel": P["includeLabel"],
         "groupTitle": "Does money follow close seats?", "groups": [f"Close {gov}", f"Close {opp}", f"Safe {gov}", f"Safe {opp}"],
@@ -266,11 +296,14 @@ def provincial(key):
             "<b>Sources:</b> " + links(P["sources"]) + f" Data as of {m.get('generated', m['cutoff'])}.",
             f"<b>Placing payments:</b> {P['placing']} Of {fmt_money(m['total_after'])} paid in the \"after\" window, {fmt_money(m['placed_after'])} was placed; "
             f"{fmt_money(ex.get('individual programs', 0))} went through {P['individualNote']}, {fmt_money(ex.get('individuals', 0))} to recipients who look like individuals, "
-            f"{fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
+            f"{fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, "
+            + (f"{fmt_money(ex.get('suppliers', 0))} to suppliers of goods and services, " if ex.get('suppliers') else "")
+            + f"and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
             f"<b>Left out by default:</b> {P['leftOut']}. Tick the box to put them back.",
             f"<b>Boundaries:</b> {P['boundaryNote']}",
-            (f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each {LEVEL[key][0]}'s 2021 census count scaled by {P['region']}'s growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key != "saskatchewan" else
-             "<b>Population:</b> no census count exists for these constituencies, so per-person figures are per registered voter at the 2024 election."),
+            ("<b>Population:</b> no census count exists for these constituencies, so per-person figures are per registered voter at the 2024 election." if key == "saskatchewan" else
+             f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: the boundary commission's 2016 census count for each division, scaled by Manitoba's growth since then from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key == "manitoba" else
+             f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each {LEVEL[key][0]}'s 2021 census count scaled by {P['region']}'s growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province."),
             "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MLAs. A pattern by seat type is a signal worth checking, not proof of intent.",
         ],
     }
