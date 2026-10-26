@@ -8,7 +8,7 @@
   color-scheme: light;
   --page: #f6f6f3; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
   --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --water: #e4ecf1; --nodata: #d9d8d2;
-  --sel: #0b0b0b; --focus: #2a78d6; --before: #c3c2b7; --after: #52514e;
+  --sel: #0b0b0b; --focus: #2a78d6; --before: #c3c2b7; --after: #52514e; --deficit: #c62828; --surplus: #0a8a0a;
   --land: #eceae2; --otherland: #e6e4dc; --p-IND: #6f6e69;
 }
 @media (prefers-color-scheme: dark) {
@@ -16,7 +16,7 @@
     color-scheme: dark;
     --page: #0f0f0e; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --water: #141a1f; --nodata: #2f2f2d;
-    --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7;
+    --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7; --deficit: #ef6b6b; --surplus: #3fae63;
     --land: #262624; --otherland: #1f1f1e; --p-IND: #9a9892;
   }
 }
@@ -24,7 +24,7 @@
   color-scheme: dark;
   --page: #0f0f0e; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --water: #141a1f; --nodata: #2f2f2d;
-  --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7;
+  --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7; --deficit: #ef6b6b; --surplus: #3fae63;
   --land: #262624; --otherland: #1f1f1e; --p-IND: #9a9892;
 }
 * { box-sizing: border-box; }
@@ -82,6 +82,28 @@ ul.budget li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12p
 #leaders dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 14px; margin: 0; }
 #leaders dt { color: var(--muted); white-space: nowrap; }
 #leaders dd { margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 4px 0 14px; }
+.kpi { border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; min-width: 0; }
+.kpi .lab { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.kpi .big { font: 600 26px/1.1 "Source Serif 4", Georgia, serif; margin: 4px 0 2px; }
+.kpi .per { font-size: 13px; color: var(--ink-2); }
+.kpi .note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.kpi.deficit .big { color: var(--deficit, #c62828); }
+.kpi.surplus .big { color: var(--surplus, #0ca30c); }
+.kpi.debt { border-color: var(--ink); border-width: 2px; }
+.kpi.debt .big { font-size: 32px; }
+.sub-h { font-size: 13px; margin: 6px 0 4px; }
+#compare { margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 8px; }
+#compare summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
+#compare summary::-webkit-details-marker { display: none; }
+#compare .pm { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--axis); border-radius: 4px; align-items: center; justify-content: center; font-size: 14px; color: var(--ink-2); }
+#compare .pm::before { content: "+"; }
+#compare[open] .pm::before { content: "−"; }
+#compare .fiscbars { margin-top: 10px; }
+.hist { grid-template-columns: 64px 1fr 1fr 110px; }
+.hist .debtbar { position: relative; height: 16px; background: var(--grid); border-radius: 3px; }
+.hist .debtbar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--ink); opacity: .75; border-radius: 3px; }
+.hist .debtbar b { position: absolute; left: 4px; top: 0; font-size: 11px; line-height: 16px; font-weight: 600; color: var(--surface); mix-blend-mode: difference; }
 .fiscbars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 28px; }
 .fb h3 { font-size: 13px; margin: 0 0 6px; }
 .fb .r { display: grid; grid-template-columns: 110px 1fr 86px; gap: 6px; align-items: center; font-size: 12px; color: var(--ink-2); padding: 1px 0; }
@@ -196,10 +218,12 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
   <div class="card" id="budgetCard" hidden>
     <h2 id="budgetTitle"></h2>
     <p class="small muted" id="budgetSub"></p>
-    <div class="fiscbars" id="fiscbars"></div>
-    <details id="history" hidden>
-      <summary><span class="pm" aria-hidden="true"></span> Last five years: surplus or deficit, revenue and spending</summary>
-      <div id="historyChart"></div>
+    <div class="kpis" id="kpis"></div>
+    <h3 class="sub-h" id="historyTitle"></h3>
+    <div id="historyChart"></div>
+    <details id="compare" hidden>
+      <summary><span class="pm" aria-hidden="true"></span> Compare with the other governments, per person</summary>
+      <div class="fiscbars" id="fiscbars"></div>
     </details>
     <p class="fn" id="budgetFn"></p>
   </div>
@@ -222,6 +246,13 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
       <input type="search" id="q" placeholder="Search" aria-label="Search">
     </div>
     <div class="tablewrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="card" id="compareCard" hidden>
+    <h2>Every government, per person</h2>
+    <p class="small muted">Each government's own latest budget, divided by Statistics Canada's population estimate. Canada first, then the provinces from highest to lowest.</p>
+    <div class="fiscbars" id="fiscbarsBottom"></div>
+    <p class="fn" id="compareFn"></p>
   </div>
 
   <div class="card notes" style="margin-top:16px" id="notes"></div>
@@ -513,7 +544,16 @@ function select(n, quiet) {
 const LEGIS = D.legislature || null;
 const NAME_COLORS = {"Liberal": "#d71920", "Conservative": "#1b4c9e", "Progressive Conservative": "#1b4c9e", "United Conservative": "#1b4c9e",
   "Saskatchewan Party": "#1b7a3e", "NDP": "#f37021", "Bloc Québécois": "#1aa7bd", "Green": "#3d9b35", "Progressive Tory": "#6a4c93", "Independent": "#6f6e69"};
-const partyColor = p => NAME_COLORS[p] || (p && p.startsWith("Conservative") ? NAME_COLORS.Conservative : "#6f6e69");
+// Use the page's own party colours (which follow the theme) when the name matches one of them.
+const CODE_BY_NAME = {};
+for (const [code, pdef] of Object.entries(C.parties)) CODE_BY_NAME[pdef.name.toLowerCase()] = code;
+const partyColor = p => {
+  if (!p) return "#6f6e69";
+  const k = p.toLowerCase().replace(/^bc /, "");
+  const code = CODE_BY_NAME[k] || (k === "green" && (CODE_BY_NAME["bc green"] || CODE_BY_NAME["green"])) || null;
+  if (code) return `var(--p-${code})`;
+  return NAME_COLORS[p] || (p.startsWith("Conservative") ? NAME_COLORS.Conservative : "#6f6e69");
+};
 const fmtDateLong = s => s ? new Date(s + "T12:00:00").toLocaleDateString("en-CA", {year: "numeric", month: "long", day: "numeric"}) : "–";
 const fmtPer = v => v == null ? "–" : "$" + Math.round(v).toLocaleString();
 const fmtBn = v => v == null ? "–" : (Math.abs(v) >= 1000 ? `$${(v / 1000).toFixed(2)} trillion` : Math.abs(v) >= 1 ? `$${v.toFixed(1)} billion` : `$${Math.round(v * 1000)} million`);
@@ -551,39 +591,55 @@ function renderLegislature() {
     <dt>Standings as of</dt><dd>${fmtDateLong(J.as_of)} · <a href="${(J.sources || {}).standings || "#"}" target="_blank" rel="noopener">source</a></dd>
   </dl>`;
 
-  // Budget: this government against the others, per person and in dollars.
+  // Budget: this government's own numbers first, then its history, then (behind a toggle) the others.
   const b = J.budget, pop = J.population;
   if (!b) return;
   document.getElementById("budgetCard").hidden = false;
-  document.getElementById("budgetTitle").textContent = `${J.name === "Canada" ? "Federal" : J.name} budget: ${b.title || ""}`;
+  document.getElementById("budgetTitle").textContent = `${J.name === "Canada" ? "Federal" : J.name} budget`;
   const per = (v, p) => v == null ? null : 1e9 * v / p;
-  document.getElementById("budgetSub").innerHTML = `Tabled ${fmtDateLong(b.date)} for ${b.year}. Deficit <b>${fmtBn(b.deficit_billions)}</b> (${fmtPer(per(b.deficit_billions, pop))} per person)${b.deficit_note ? `; ${b.deficit_note}` : ""}. ${J.name === "Canada" ? "Federal debt" : "Net debt"} <b>${fmtBn(b.net_debt_billions)}</b> (${fmtPer(per(b.net_debt_billions, pop))} per person)${b.debt_to_gdp_pct != null ? `, ${b.debt_to_gdp_pct}% of GDP` : ""}. <span class="muted">${b.debt_measure || ""}</span>${b.general_government_net_debt_to_gdp_pct != null ? ` All governments together, counting CPP and QPP assets (IMF measure): ${b.general_government_net_debt_to_gdp_pct}% of GDP.` : ""}`;
+  const surplusNow = /SURPLUS/i.test(b.deficit_note || "");
+  document.getElementById("budgetSub").innerHTML = `${b.title || ""}, tabled ${fmtDateLong(b.date)} for ${b.year}.${J.name === "Canada" ? " Budget 2026 is due on 5 November 2026." : ""}`;
+  document.getElementById("kpis").innerHTML = `
+    <div class="kpi ${surplusNow ? "surplus" : "deficit"}"><div class="lab">${surplusNow ? "Budgeted deficit, now a surplus" : "Deficit this year"}</div><div class="big">${fmtBn(b.deficit_billions)}</div><div class="per">${fmtPer(per(b.deficit_billions, pop))} per person</div>${b.deficit_note ? `<div class="note">${b.deficit_note}</div>` : ""}</div>
+    <div class="kpi debt"><div class="lab">${J.name === "Canada" ? "Federal debt (accumulated deficit)" : "Net debt"}, what's owed in total</div><div class="big">${fmtBn(b.net_debt_billions)}</div><div class="per"><b>${fmtPer(per(b.net_debt_billions, pop))}</b> per person</div><div class="note">${b.debt_measure || ""}</div></div>
+    <div class="kpi"><div class="lab">Debt to GDP</div><div class="big">${b.debt_to_gdp_pct == null ? "–" : b.debt_to_gdp_pct + "%"}</div>${b.general_government_net_debt_to_gdp_pct != null ? `<div class="per">${b.general_government_net_debt_to_gdp_pct}% for all governments together, counting CPP and QPP assets (IMF measure)</div>` : `<div class="per">&nbsp;</div>`}</div>`;
+  // History: revenue, spending, balance and the debt it leaves behind, year by year.
+  const Hs = J.history;
+  if (Hs && Hs.years && Hs.years.length) {
+    const ys = Hs.years;
+    const mx = d3.max(ys, y => Math.abs(y.balance_billions || 0)) || 1;
+    const mxd = d3.max(ys, y => y.net_debt_billions || 0) || 1;
+    document.getElementById("historyTitle").textContent = "Revenue, spending and the balance, last five years, and the debt that follows";
+    document.getElementById("historyChart").innerHTML = `<div class="hist">
+      <span class="h muted small">Year</span><span class="h muted small">deficit ← 0 → surplus</span><span class="h muted small">${J.name === "Canada" ? "Net debt" : "Net debt"} at year end</span><span class="h muted small" style="text-align:right">Revenue · spending</span>
+      ${ys.map(y => { const v = y.balance_billions || 0, w = 50 * Math.abs(v) / mx, d = y.net_debt_billions; return `<span>${y.year}${y.status === "forecast" ? "*" : ""}</span>
+        <div class="axis" title="${v < 0 ? "deficit" : "surplus"} ${fmtBn(Math.abs(v))}"><b style="left:50%"></b><i class="${v < 0 ? "neg" : "pos"}" style="${v < 0 ? `right:50%;width:${w}%` : `left:50%;width:${w}%`}"></i><span style="position:absolute;${v < 0 ? "left:4px" : "right:4px"};top:0;line-height:16px;font-size:11px;font-weight:600;color:var(${v < 0 ? "--deficit" : "--surplus"})">${v < 0 ? "−" : "+"}${fmtBn(Math.abs(v))}</span></div>
+        <div class="debtbar" title="net debt ${fmtBn(d)}">${d != null ? `<i style="width:${100 * d / mxd}%"></i><b>${fmtBn(d)}</b>` : ""}</div>
+        <span class="v${y.status === "forecast" ? " fc" : ""}">${y.revenue_billions != null ? `${fmtBn(y.revenue_billions)}<br><span class="amt">${fmtBn(y.expense_billions)} spent</span>` : ""}</span>`; }).join("")}
+    </div><p class="fn">${Hs.basis || ""} * forecast. Sources: ${[...new Set(ys.map(y => y.source).filter(Boolean))].map((u, i) => `<a href="${u}" target="_blank" rel="noopener">${i + 1}</a>`).join(", ")}.</p>`;
+  }
+  // Comparison across governments: Canada first, then provinces high to low; the page's own government highlighted.
   const cmp = J.compare || [];
   const metric = (title, f, fmtv, amt, surplusTest) => {
-    const rows = cmp.map(c => ({name: c.name, v: f(c), amt: amt(c), me: c.name === J.name, surplus: surplusTest ? surplusTest(c) : false})).filter(r => r.v != null).sort((x, y) => y.v - x.v);
+    const rows = cmp.map(c => ({name: c.name, v: f(c), amt: amt(c), me: c.name === J.name, surplus: surplusTest ? surplusTest(c) : false})).filter(r => r.v != null)
+      .sort((x, y) => (x.name === "Canada" ? -1 : y.name === "Canada" ? 1 : y.v - x.v));
     const max = d3.max(rows, r => r.v) || 1;
     return `<div class="fb"><h3>${title}</h3>${rows.map(r => `<div class="r${r.me ? " me" : ""}"><span>${r.name === "Canada" ? "Canada (federal)" : r.name}</span><div class="bar${r.surplus ? " surplus" : ""}" style="width:${100 * r.v / max}%"></div><span class="v">${fmtv(r.v)}<br><span class="amt">${r.amt}</span></span></div>`).join("")}</div>`;
   };
-  document.getElementById("fiscbars").innerHTML =
+  const barsHtml =
     metric("Deficit per person, this year's budget", c => per(c.budget.deficit_billions, c.population), fmtPer, c => fmtBn(c.budget.deficit_billions), c => /SURPLUS/i.test(c.budget.deficit_note || "")) +
-    metric("Net debt per person", c => per(c.budget.net_debt_billions, c.population), fmtPer, c => fmtBn(c.budget.net_debt_billions)) +
+    metric("Net debt per person (what's owed in total)", c => per(c.budget.net_debt_billions, c.population), fmtPer, c => fmtBn(c.budget.net_debt_billions)) +
     metric("Net debt to GDP", c => c.budget.debt_to_gdp_pct, v => v + "%", c => c.budget.year);
-  document.getElementById("budgetFn").innerHTML = `Each government's own latest budget figure; green marks a budgeted deficit that the latest quarterly update has turned into a surplus. Debt measures differ (net debt, taxpayer-supported debt, net financial debt, accumulated deficit), so compare ratios with care. Per person uses Statistics Canada's ${fmtDateLong(J.population_date)} estimates. ${J.name === "Canada" ? "Budget 2026 is due on 5 November 2026. " : ""}Sources: ${["budget", "population"].filter(k => (J.sources || {})[k]).map(k => `<a href="${J.sources[k]}" target="_blank" rel="noopener">${k}</a>`).join(", ")}.${C.spendsUrl ? ` Full spending breakdown: <a href="${C.spendsUrl}" target="_blank" rel="noopener">Canada Spends</a>.` : ""}`;
-
-  // Five-year history, behind a +/- toggle, once the data exists.
-  const Hs = J.history;
-  if (Hs && Hs.years && Hs.years.length) {
-    const det = document.getElementById("history");
-    det.hidden = false;
-    const ys = Hs.years;
-    const mx = d3.max(ys, y => Math.abs(y.balance_billions || 0)) || 1;
-    det.querySelector("#historyChart").innerHTML = `<div class="hist">
-      <span class="h"></span><span class="h muted small">deficit ← 0 → surplus</span><span class="h muted small" style="text-align:right">balance</span>
-      ${ys.map(y => { const v = y.balance_billions || 0, w = 50 * Math.abs(v) / mx; return `<span>${y.year}${y.status === "forecast" ? "*" : ""}</span>
-        <div class="axis"><b style="left:50%"></b><i class="${v < 0 ? "neg" : "pos"}" style="${v < 0 ? `right:50%;width:${w}%` : `left:50%;width:${w}%`}"></i></div>
-        <span class="v${y.status === "forecast" ? " fc" : ""}">${v < 0 ? "−" : "+"}${fmtBn(Math.abs(v))}${y.revenue_billions != null ? `<br><span class="amt">rev ${fmtBn(y.revenue_billions)} · spend ${fmtBn(y.expense_billions)}</span>` : ""}</span>`; }).join("")}
-    </div><p class="fn">${Hs.basis || ""} * forecast. Sources: ${[...new Set(ys.map(y => y.source).filter(Boolean))].map((u, i) => `<a href="${u}" target="_blank" rel="noopener">${i + 1}</a>`).join(", ")}.</p>`;
+  const fn = `Each government's own latest budget figure; green marks a budgeted deficit that the latest quarterly update has turned into a surplus. Debt measures differ (net debt, taxpayer-supported debt, net financial debt, accumulated deficit), so compare ratios with care. Per person uses Statistics Canada's ${fmtDateLong(J.population_date)} estimates.`;
+  if (J.name === "Canada") {
+    document.getElementById("compareCard").hidden = false;
+    document.getElementById("fiscbarsBottom").innerHTML = barsHtml;
+    document.getElementById("compareFn").innerHTML = fn;
+  } else {
+    document.getElementById("compare").hidden = false;
+    document.getElementById("fiscbars").innerHTML = barsHtml;
   }
+  document.getElementById("budgetFn").innerHTML = `${J.name === "Canada" ? "" : fn + " "}Sources: ${["budget", "population"].filter(k => (J.sources || {})[k]).map(k => `<a href="${J.sources[k]}" target="_blank" rel="noopener">${k}</a>`).join(", ")}.${C.spendsUrl ? ` Full spending breakdown: <a href="${C.spendsUrl}" target="_blank" rel="noopener">Canada Spends</a>.` : ""}`;
 }
 renderLegislature();
 
