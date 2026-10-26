@@ -13,7 +13,7 @@ DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
-       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"}, {"href": "legislatures.html", "label": "Legislatures"}]
+       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
@@ -128,7 +128,9 @@ def federal():
                                + " for every measure that names a place, then locating that place in a riding. Budgets name few places: most measures are national programs, "
                                "and the money reaches ridings later through departmental grants, which is what the map colours show. "
                                f"Items with no amount are projects the budget names without a dollar figure. {budget['next']}")
+    config["legislatureInGrid"] = True  # the federal inset grid has room for it
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"], "budget": budget,
+               "legislature": legislature_for("Canada"),
                "deptBefore": sp["dept_by_riding_before"], "geo": json.load(open(DATA / "ridings_geo.json")), "land": json.load(open(DATA / "land_geo.json")),
                "geoFine": json.load(open(DATA / "ridings_geo_fine.json")) if (DATA / "ridings_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]
@@ -339,7 +341,9 @@ def provincial(key):
         ],
     }
     fine = DATA / P["dir"] / "divisions_geo_fine.json"
+    config["legislatureInGrid"] = False  # provinces: below the city insets
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["prog_by_riding"], "deptBefore": {},
+               "legislature": legislature_for(P["region"]),
                "geo": json.load(open(DATA / P["dir"] / "divisions_geo.json")), "land": land,
                "geoFine": json.load(open(fine)) if fine.exists() else {"features": []}}
     return payload, sp["ridings"], y
@@ -398,9 +402,20 @@ def legislatures():
     print(OUTDIR / "legislatures.html", f"{len(full) / 1e6:.2f} MB")
 
 
+def legislature_for(name):
+    """The jurisdiction's record from data/legislatures.json (standings, leaders, dates, budget), or None."""
+    src = DATA / "legislatures.json"
+    if not src.exists():
+        return None
+    d = json.load(open(src))
+    for j in d["jurisdictions"]:
+        if j["name"] == name:
+            return dict(j, as_of=d["as_of"], population_date=d["population_date"])
+    return None
+
+
 def main():
     OUTDIR.mkdir(exist_ok=True)
-    legislatures()
     payload, raw = federal()
     fragment = write_page(payload, "index")
     (OUTDIR / "artifact.html").write_text(fragment)
