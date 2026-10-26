@@ -653,5 +653,264 @@
   "mainstream": null,
   "independent": null,
   "query": "\"MDA\" Brampton Canadian Space Agency grant contribution 2025 funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17238": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Soneil\" Brampton EV charging Zero Emission Vehicle Infrastructure Program funding"
+ },
+ "nrcan-rncan|115-2026-2027-Q2-18929": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Soneil\" Brampton EV charging Zero Emission Vehicle Infrastructure Program funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17241": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Soneil\" Brampton EV charging Zero Emission Vehicle Infrastructure Program funding"
+ },
+ "nrcan-rncan|115-2026-2027-Q2-18926": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Soneil\" Brampton EV charging Zero Emission Vehicle Infrastructure Program funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1038289": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"TACTIQL\" Ottawa NRC IRAP funding"
+ },
+ "hc-sc|271-2025-2026-Q3-00087": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Benefits and Pensions Monitor (Key Media)",
+   "title": "New women's health funding targets care gaps that keep workers sidelined",
+   "url": "https://www.benefitsandpensionsmonitor.com/benefits/wellbeing/new-womens-health-funding-targets-care-gaps-that-keep-workers-sidelined/393201"
+  },
+  "query": "\"Abortion Care Canada\" Health Canada Sexual and Reproductive Health Fund funding"
+ },
+ "aafc-aac|235-2026-2027-00068": {
+  "mainstream": {
+   "outlet": "Norfolk & Tillsonburg News (Postmedia)",
+   "title": "On-farm dairy processor to receive funding",
+   "url": "https://norfolkandtillsonburgnews.com/livestock/on-farm-dairy-processor-to-receive-funding"
+  },
+  "independent": {
+   "outlet": "Farms.com",
+   "title": "Feds dole out $89 million to supply-managed processors",
+   "url": "https://m.farms.com/news/feds-dole-out-89-million-to-supply-managed-processors-207020.aspx"
+  },
+  "query": "\"Sheldon Creek Dairy\" Loretto Supply Management Processing Investment Fund funding"
+ },
+ "ced-dec|012-2025-2026-Q4-00065": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Groupe Simoneau\" Boucherville DEC financement tarifs douaniers"
+ },
+ "pacifican|240-2025-2026-Q4-00085": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"PowerHouse Building Solutions\" Surrey PacifiCan funding"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00006": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Inclusion Canada\" Canada Disability Benefit navigation funding Employment and Social Development Canada"
+ },
+ "ced-dec|093-2025-2026-Q3-00237": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Vic mobilier de magasins\" Victoriaville DEC financement"
+ },
+ "nrcan-rncan|115-2026-2027-Q2-18971": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"DP World\" Fraser Surrey Zero Emission Vehicle Infrastructure Program Natural Resources Canada funding"
+ },
+ "aafc-aac|235-2025-2026-Q4-00414": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"ADM Dairy\" Etobicoke Supply Management Processing Investment Fund funding"
+ },
+ "dnd-mdn|018-2025-2026-Q4-15-27": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Innu Nation\" Happy Valley-Goose Bay Coast Guard National Defence funding marine"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00008": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Mood Disorders Society of Canada\" Belleville Disability Benefits Navigation funding"
+ },
+ "wage|190-2025-2026-Q3-00002": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"WomanACT\" Toronto Women and Gender Equality Canada Gender-Based Violence Program funding"
+ },
+ "cwa-aec|001-2025-2026-Q3-00006": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ducks Unlimited Canada\" Canada Water Agency funding Lake Winnipeg Ontario 2025"
+ },
+ "acoa-apeca|276-2025-2026-Q4-00136": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Great Northern Timber\" Upper Musquodoboit ACOA funding"
+ },
+ "ced-dec|012-2025-2026-Q4-03989": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Saint-Léonard\" arrondissement DEC financement festivals projets locaux 850 000"
+ },
+ "cihr-irsc|236-2025-2026-Q3-00344": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Robert-Paul Juster\" CIHR grant Université de Montréal funding"
+ },
+ "infc|278-2025-2026-Q4-00062": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"City of Port Coquitlam\" Canada Public Transit Fund federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17223": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Miller Paving\" Markham Natural Resources Canada Green Industrial Facilities funding"
+ },
+ "pacifican|240-2025-2026-Q4-00099": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Rapid-Span\" Armstrong BC PacifiCan funding"
+ },
+ "jus|119-2025-2026-Q4-00076": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"BC First Nations Justice Council\" Indigenous Justice Program Department of Justice Canada funding"
+ },
+ "ced-dec|012-2025-2026-Q4-00185": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Bâtiments Unico\" Beaupré DEC financement tarifs"
+ },
+ "cwa-aec|001-2025-2026-Q3-00004": {
+  "mainstream": {
+   "outlet": "CTV News London",
+   "title": "Local conservation groups receive Great Lakes protection funding",
+   "url": "https://www.ctvnews.ca/london/article/local-conservation-groups-receive-great-lakes-protection-funding/"
+  },
+  "independent": null,
+  "query": "\"Ausable Bayfield Conservation\" Canada Water Agency Freshwater funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00250": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Westman Steel\" Manitoba PrairiesCan funding"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00260": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Labrador Shrimp Company\" L'Anse au Loup ACOA funding"
+ },
+ "pc|154-2025-2026-Q4-00111": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tourisme Charlevoix\" Parcs Canada financement 750 000"
+ },
+ "hc-sc|271-2025-2026-Q2-00022": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Lanark County\" Health Canada Substance Use and Addictions Program Emergency Treatment Fund funding"
+ },
+ "ced-dec|012-2025-2026-Q4-00168": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Soremag\" Laval DEC financement tarifs"
+ },
+ "pch|016-2025-2026-Q3-1376732": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Tire Jumpstart\" Sport Support Program Canadian Heritage funding 2025"
+ },
+ "phac-aspc|1480-2025-2026-Qrt3-0000063": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"The DAM\" Mississauga Develop Assist Mentor Public Health Agency of Canada funding"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00209": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Advanced Drilling\" Pasadena Newfoundland ACOA funding"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00259": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"3 T's Limited\" Woody Point ACOA funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00106": {
+  "mainstream": {
+   "outlet": "CTV News Kitchener",
+   "title": "Waterloo Region and Brant County businesses given $40.5M in tariff support",
+   "url": "https://www.ctvnews.ca/kitchener/article/waterloo-region-and-brant-county-businesses-given-405m-in-tariff-support/"
+  },
+  "independent": null,
+  "query": "\"Walters Inc\" Princeton Ontario FedDev tariff funding"
+ },
+ "pch|016-2025-2026-Q3-1375129": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Lacrosse Canada\" Sport Support Program Canadian Heritage funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17387": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Accuenergy\" Toronto Natural Resources Canada Green Industrial Facilities and Manufacturing funding"
+ },
+ "cic|094-2024-2025-Q4-X263931002": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Catholic Crosscultural Services\" IRCC settlement funding Toronto"
+ },
+ "feddevontario|062-2025-2026-Q4-00118": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"ZF Lifetec\" Midland Ontario FedDev tariff funding"
+ },
+ "ec|099-2025-2026-Q3-00006": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kwantlen First Nation\" Environment and Climate Change Canada funding Langley"
+ },
+ "feddevontario|062-2026-2027-Q1-00061": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Automation Design & Installation\" Stoney Creek FedDev Ontario tariff funding"
+ },
+ "pacifican|240-2025-2026-Q4-00097": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fraserview Cedar\" Surrey PacifiCan funding"
+ },
+ "cihr-irsc|236-2025-2026-Q3-00110": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Claude Alain\" Baycrest Rotman CIHR grant funding hearing music aging"
+ },
+ "pacifican|240-2025-2026-Q4-00087": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ntityix Resources\" Westbank PacifiCan funding"
+ },
+ "hc-sc|271-2025-2026-Q2-00003": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"St. Thomas\" Ontario Health Canada Emergency Treatment Fund Substance Use and Addictions Program funding city"
+ },
+ "wage|190-2025-2026-Q1-00004": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Western Standard",
+   "title": "Carney Liberals send $2M to sexual minorities",
+   "url": "https://www.westernstandard.news/amp/story/news/carney-liberals-send-2m-to-sexual-minorities/63522"
+  },
+  "query": "\"Intersex Canada\" Women and Gender Equality Canada funding"
  }
 }
