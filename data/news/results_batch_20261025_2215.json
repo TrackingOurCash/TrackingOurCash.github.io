@@ -1,0 +1,504 @@
+{
+ "ced-dec|093-2025-2026-Q3-00201": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Composites VCI\" Saint-Lin-Laurentides DEC financement fédéral"
+ },
+ "tc|217-YYYY-YYYY-Q2-90886": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Preston Chevrolet\" Langley iZEV zero-emission vehicle incentive Transport Canada"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00338": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"SABRI\" St. Anthony ACOA tariff response funding"
+ },
+ "feddevontario|062-2026-2027-Q1-00068": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Whitebird\" Hamilton FedDev Ontario tariff response funding"
+ },
+ "tc|217-2025-2026-Q4-90102": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"General Motors of Canada\" Oshawa iZEV incentive Transport Canada 2026"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00031": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Organization of Paramedic Regulators\" foreign credential recognition funding ESDC"
+ },
+ "tc|217-YYYY-YYYY-Q2-90672": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Roy Foss\" Woodbridge iZEV zero-emission vehicle incentive Transport Canada"
+ },
+ "aafc-aac|235-2025-2026-Q4-00419": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Empire Cheese\" Campbellford federal funding Supply Management Processing Investment Fund"
+ },
+ "prairiescan|044-2025-2026-Q4-00281": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"City Sheet Metal\" Winnipeg PrairiesCan federal funding"
+ },
+ "tc|217-YYYY-YYYY-Q2-90883": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Peterbilt Pacific\" Surrey iZEV zero-emission vehicle incentive Transport Canada"
+ },
+ "nserc-crsng|110_2025_2026_Q4_573": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ontario Tech University\" Oshawa NSERC funding 2026"
+ },
+ "feddevontario|062-2025-2026-Q4-00109": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"CABN\" Brockville FedDev Ontario tariff response funding"
+ },
+ "nserc-crsng|110_2025_2026_Q4_570": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ontario Tech University\" Oshawa NSERC funding 2026"
+ },
+ "ced-dec|012-2025-2026-Q4-01427": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"J.A. Roby\" Québec DEC tarifs financement fédéral"
+ },
+ "ced-dec|093-2025-2026-Q3-00298": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Usitech\" Mont-Laurier DEC financement fédéral"
+ },
+ "nrc-cnrc|172-2024-2025-Q4-1025673": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Reaction Dynamics\" Saint-Hubert NRC IRAP funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00125": {
+  "mainstream": {
+   "outlet": "CTV News Kitchener",
+   "title": "Waterloo Region and Brant County businesses given $4.05M in tariff support",
+   "url": "https://www.ctvnews.ca/kitchener/article/waterloo-region-and-brant-county-businesses-given-405m-in-tariff-support/"
+  },
+  "independent": null,
+  "query": "\"Cello Products\" Cambridge FedDev Ontario tariff response funding"
+ },
+ "feddevontario|062-2026-2027-Q1-00052": {
+  "mainstream": {
+   "outlet": "CTV News Kitchener",
+   "title": "Waterloo Region and Brant County businesses given $4.05M in tariff support",
+   "url": "https://www.ctvnews.ca/kitchener/article/waterloo-region-and-brant-county-businesses-given-405m-in-tariff-support/"
+  },
+  "independent": null,
+  "query": "\"Bock North America\" Cambridge FedDev Ontario tariff funding"
+ },
+ "pch|016-2025-2026-Q4-1378837": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Aboriginal Experiences\" Ottawa Canadian Heritage commemoration funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1035587": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Opta Glass\" Waterdown NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1035753": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Unisystech\" North York NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039585": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Precambrian Products\" Newmarket NRC IRAP funding"
+ },
+ "polar-polaire|171-2025-2026-Q4-P0022": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Télé-université\" Savoir polaire Canada subvention nord recherche"
+ },
+ "ced-dec|093-2025-2026-Q3-00302": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"IMAC\" Longueuil équipements de transformation DEC financement fédéral"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039092": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Earthfresh Farms\" Burlington NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1035276": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian UAVs\" Calgary Canadian International Innovation Program NRC funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1041085": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"uTrack Energy\" Toronto NRC IRAP funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17982": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"BC Wood\" Langley Natural Resources Canada Global Forest Leadership funding"
+ },
+ "ec|099-2025-2026-Q3-00004": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Okanagan Nation Alliance\" Environment and Climate Change Canada funding 2025"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00138": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tourism Elliston\" ACOA funding"
+ },
+ "ced-dec|012-2025-2026-Q4-00024": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Multi Online Distribution\" Saint-Sauveur DEC tarifs financement"
+ },
+ "pch|016-2025-2026-Q3-1377067": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"École de cirque de Québec\" Patrimoine canadien Fonds du Canada pour la formation dans le secteur des arts"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1037492": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Skyforest\" Mississauga NRC IRAP funding"
+ },
+ "jus|119-2026-2027-Q1-00013": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Sankofa Psychotherapy\" Brampton Department of Justice legal aid funding"
+ },
+ "acoa-apeca|276-2025-2026-Q3-00113": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"George's Brook-Milton\" ACOA Innovative Communities Fund funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1035426": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"QuantaSensing\" Calgary NRC funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1031960": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Winair\" London Ontario NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1033957": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Jones Microwave\" Edmonton NRC IRAP funding"
+ },
+ "acoa-apeca|276-2025-2026-Q1-00249": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Burin Peninsula Community Business Development Corporation\" Marystown ACOA Community Futures funding"
+ },
+ "tc|217-YYYY-YYYY-Q2-90901": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Shift Electric Vehicles\" Oakville iZEV incentive Transport Canada"
+ },
+ "hc-sc|271-2025-2026-Q4-00061": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"HIV Network of Edmonton\" Health Canada funding"
+ },
+ "ced-dec|093-2025-2026-Q3-00124": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Okaply\" Oka DEC financement fédéral"
+ },
+ "jus|119-2025-2026-Q4-00301": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Sankofa Psychotherapy\" Brampton Department of Justice legal aid funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q1-17112": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Waterloo Region District School Board\" electric school bus charging Natural Resources Canada ZEVIP funding"
+ },
+ "csa-asc|003-2025-2026-Q2-00034": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Perceptive Space\" Oakville Canadian Space Agency funding"
+ },
+ "prairiescan|044-2025-2026-Q2-00015": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Heritage Park\" Calgary PrairiesCan federal funding 2025"
+ },
+ "tc|217-2025-2026-Q4-90011": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Applewood Chevrolet\" Mississauga iZEV incentive Transport Canada"
+ },
+ "hc-sc|271-2025-2026-Q4-00037": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Public Services Health & Safety Association\" Health Canada Chemicals Management Plan funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039541": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Maratek\" Bolton NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040451": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Vanguard Canada",
+   "title": "Fueling Canada's autonomous future: Volatus advances Condor XL with NRC IRAP support",
+   "url": "https://vanguardcanada.com/fueling-canadas-autonomous-future-volatus-advances-condor-xl-with-nrc-irap-support/"
+  },
+  "query": "\"Volatus Aerospace\" Mirabel NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1033995": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Glacies Technologies\" Québec NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q1-1031004": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Browse AI\" North Vancouver NRC IRAP funding"
+ },
+ "pch|016-2025-2026-Q3-1378428": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"9225-9027 Québec inc\" Laval Fonds du livre du Canada éditeur"
+ },
+ "nrc-cnrc|172-2025-2026-Q1-1031329": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"SeQent\" London Ontario NRC IRAP funding"
+ },
+ "ced-dec|093-2025-2026-Q2-00103": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Camcube\" Dollard-des-Ormeaux DEC financement fédéral"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1033763": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"SecondShop\" Burlington NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q1-1030447": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Prairie Robotics\" Regina NRC IRAP funding"
+ },
+ "csa-asc|003-2025-2026-Q2-00046": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fluvial Systems Research\" Surrey Canadian Space Agency funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17952": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Westlake Transportation\" LaSalle Green Freight Program Natural Resources Canada"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17587": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Erb Transport\" New Hamburg Green Freight Program federal funding"
+ },
+ "tc|217-2025-2026-Q3-90253": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Scherer Chevrolet\" Kitchener iZEV incentive Transport Canada"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17317": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Burnbrae Farms\" Lyn Green Freight Program Natural Resources Canada funding"
+ },
+ "tc|217-YYYY-YYYY-Q2-90757": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"First Truck Centre\" Surrey iZEV incentive Transport Canada"
+ },
+ "dfo-mpo|086-2025-2026-Q3-00147": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pacific Salmon Commercial Transition Program\" Vancouver licence retirement Fisheries and Oceans payments"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17819": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"West Coast Commodities\" Brampton Green Freight Program Natural Resources Canada"
+ },
+ "ced-dec|012-2025-2026-Q4-01353": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Aliments SLY\" Sainte-Agathe-des-Monts DEC financement fédéral"
+ },
+ "tc|217-2025-2026-Q4-90105": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Girardin\" Ontario electric school bus iZEV incentive Transport Canada"
+ },
+ "tc|217-YYYY-YYYY-Q2-90896": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Scherer Chevrolet\" Kitchener iZEV incentive Transport Canada"
+ },
+ "cihr-irsc|236-2025-2026-Q3-00790": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Wanda Phillips-Beck\" CIHR funding Winnipeg research"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1033927": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Enviro-Stewards\" Elmira NRC IRAP funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17337": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"B.S.D. Linehaul\" Brampton Green Freight Program Natural Resources Canada"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17343": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"J.B. Transport\" Brampton Green Freight Program Natural Resources Canada grant"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17687": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Webley Express\" Brampton Green Freight Program Natural Resources Canada"
+ },
+ "ps-sp|088-2025-2026-Q2-00045": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Elizabeth Fry Society of Greater Vancouver\" Public Safety Canada funding 2025"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1032407": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Block 9 Consultancy\" New Westminster NRC IRAP funding"
+ },
+ "ced-dec|012-2025-2026-Q4-00059": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Zanimo\" Prévost DEC financement fédéral exportation"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1032246": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"ImaginAble Solutions\" Hamilton NRC IRAP funding"
+ },
+ "dnd-mdn|018-2025-2026-Q3-10027": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Wounded Warriors Canada\" National Defence sexual misconduct survivors grant funding"
+ },
+ "pch|016-2025-2026-Q3-1378195": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ariane Éditions\" Saint-Sauveur Fonds du livre du Canada Patrimoine canadien"
+ },
+ "dnd-mdn|018-2025-2026-Q4-0310": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Hydro One\" Barrie National Defence Capital Assistance Program funding"
+ },
+ "tc|217-2025-2026-Q3-90208": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Mercedes-Benz Mississauga\" iZEV incentive Transport Canada"
+ },
+ "ced-dec|093-2025-2026-Q2-00025": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pièges Ouell\" Lac-des-Écorces DEC financement fédéral"
+ },
+ "nrc-cnrc|172-2025-2026-Q1-1030337": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Sixes Software\" New Westminster NRC IRAP funding"
+ },
+ "tc|217-YYYY-YYYY-Q2-90398": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Markham Kia\" iZEV incentive Transport Canada"
+ },
+ "dfo-mpo|086-2025-2026-Q3-00122": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tinh V. Lam\" Surrey Pacific Salmon Commercial Transition Program Fisheries and Oceans Canada"
+ },
+ "tc|217-2025-2026-Q4-90174": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Mercedes-Benz Mississauga\" iZEV incentive Transport Canada"
+ },
+ "pch|016-2025-2026-Q3-1378574": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Town of Whitby\" Canadian Heritage anniversary legacy funding 2025"
+ },
+ "esdc-edsc|014-2025-2026-Q3-00004": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"St. Lawrence College\" Kingston training equipment grant Employment and Social Development Canada"
+ },
+ "cnsc-ccsn|047-2025-2026-Q3-00057": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Radiation Protection Association\" Canadian Nuclear Safety Commission Research and Support Program funding"
+ },
+ "pch|016-2025-2026-Q4-1380046": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ontario Alliance of Black School Educators\" Canadian Heritage anti-racism funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18013": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Paul's Hauling\" Edmonton Green Freight Program Natural Resources Canada"
+ },
+ "ps-sp|088-2025-2026-Q3-00075": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Islamic Centre of Markham\" Canada Community Security Program funding"
+ },
+ "ps-sp|088-2025-2026-Q4-00081": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Islamic Centre of Markham\" Canada Community Security Program funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1035482": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Arbelos Interactive\" Hamilton NRC IRAP funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17841": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"RS Carrier\" Brampton Green Freight Program Natural Resources Canada"
+ },
+ "tc|217-YYYY-YYYY-Q2-90756": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Finch Chevrolet\" London iZEV incentive Transport Canada"
+ },
+ "ps-sp|088-2025-2026-Q3-00066": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ontario Conference of the Seventh-Day Adventist Church\" Canada Community Security Program funding"
+ },
+ "esdc-edsc|014-2025-2026-Q4-02039": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"We Care International\" Brampton New Horizons for Seniors Program funding"
+ }
+}
