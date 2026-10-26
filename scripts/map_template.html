@@ -63,8 +63,8 @@ ul.grants a:hover { text-decoration-color: var(--ink); }
 .r:hover { stroke: var(--sel); stroke-width: 1.6; }
 .r.sel { stroke: var(--sel); stroke-width: 2.4; }
 .r:focus, .r:focus-visible { outline: none; }  /* the browser's box-shaped focus ring; the bold outline above marks the selection */
-.bdot { fill: var(--ink); fill-opacity: 0.85; stroke: var(--surface); stroke-width: 1; pointer-events: none; }
-.bdot.citywide { fill-opacity: 0.45; }
+.bdot { fill-opacity: 0.8; stroke-width: 1.2; vector-effect: non-scaling-stroke; pointer-events: none; }
+.bdot.citywide { fill-opacity: 0.4; }
 ul.budget { list-style: none; padding: 0; margin: 6px 0 0; }
 ul.budget li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12px; }
 .sw-big { display: inline-block; vertical-align: middle; border-radius: 3px; border: 1px solid var(--border); }
@@ -305,17 +305,22 @@ function renderDots() {
   if (!BUDGET) return;
   const rows = state.budget ? Object.keys(BUDGET.by_riding).map(n => [n, budgetItems(n)]).filter(d => d[1].length) : [];
   const feat = Object.fromEntries(D.geo.features.map(f => [f.id, f]));
+  // Dots keep a fixed size on screen (3 to 9 px) whatever the zoom, so they never cover a riding.
+  // National programs that merely name a first project don't count toward the dot's size.
+  const ink = css("--ink"), surface = css("--surface");
   dotLayer.selectAll("circle").data(rows, d => d[0]).join("circle")
     .attr("class", d => "bdot" + (d[1].every(i => i.city_wide) ? " citywide" : ""))
+    .attr("fill", ink).attr("stroke", surface)
     .attr("transform", d => `translate(${path.centroid(feat[d[0]])})`)
-    // National programs that merely name a first project don't count toward the dot's size.
-    .attr("r", d => (2.5 + Math.sqrt(d3.sum(d[1], i => /^national|^program/.test(i.kind) ? 0 : (i.amount_millions || 0))) / 6) / Math.sqrt(zoomK));
+    .attr("data-r", d => Math.min(9, 3 + Math.sqrt(d3.sum(d[1], i => /^national|^program/.test(i.kind) ? 0 : (i.amount_millions || 0))) / 8))
+    .attr("r", function () { return +this.dataset.r / zoomK; });
 }
 let zoomK = 1;
 const zoom = d3.zoom().scaleExtent([1, 80]).on("zoom", e => {
   g.attr("transform", e.transform);
   // Keep the close-seat stripes the same width on screen whatever the zoom.
-  if (Math.abs(e.transform.k - zoomK) / zoomK > 0.15) { zoomK = e.transform.k; defs.selectAll("pattern").attr("patternTransform", `rotate(45) scale(${1 / zoomK})`); renderDots(); }
+  if (Math.abs(e.transform.k - zoomK) / zoomK > 0.15) { zoomK = e.transform.k; defs.selectAll("pattern").attr("patternTransform", `rotate(45) scale(${1 / zoomK})`); }
+  dotLayer.selectAll("circle").attr("r", function () { return +this.dataset.r / e.transform.k; });
 });
 svg.call(zoom);
 function zoomTo(b, factor = 1) {
@@ -377,7 +382,7 @@ function renderLegend() {
     const bd = lg.append("div");
     bd.append("div").attr("class", "lab").text("Budget commitments");
     const docsIn = state.budgetScope === "all" ? BUDGET.documents : [LATEST_BUDGET];
-    bd.append("div").attr("class", "small").html(`<svg width="14" height="14" aria-hidden="true" style="vertical-align:-2px"><circle cx="7" cy="7" r="5" class="bdot"></circle></svg> ${C.level} named in ${docsIn.map(d => d.name.replace(/ \(.*\)/, "")).join(" or ")} (larger = more dollars named; faint = a city-wide item)`);
+    bd.append("div").attr("class", "small").html(`<svg width="14" height="14" aria-hidden="true" style="vertical-align:-2px"><circle cx="7" cy="7" r="5" class="bdot" fill="${css("--ink")}" stroke="${css("--surface")}"></circle></svg> ${C.level} named in ${docsIn.map(d => d.name.replace(/ \(.*\)/, "")).join(" or ")} (larger = more dollars named; faint = a city-wide item)`);
   }
   const hb = lg.append("div");
   hb.append("div").attr("class", "lab").text(`Close in ${C.electionYear} (under ${M.close_margin} pts): stripes of the top two parties`);
