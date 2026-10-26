@@ -416,8 +416,9 @@ function select(n, quiet) {
   state.sel = n;
   paths.classed("sel", d => d.id === n).filter(d => d.id === n).raise();
   document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.classList.toggle("sel", tr.dataset.n === n));
+  // Bring the row into view inside the table's own scroll box only; never scroll the page for it.
   const row = document.querySelector(`#tbl tbody tr[data-n="${n}"]`);
-  if (row) row.scrollIntoView({block: "nearest"});
+  if (row) { const wrap = row.closest(".tablewrap"); wrap.scrollTop = Math.max(0, row.offsetTop - wrap.clientHeight / 2); }
   insetPaths.forEach(ps => ps.classed("sel", d => d.id === n).filter(d => d.id === n).raise());
   const rankOf = Object.keys(R).filter(k => V[k].t != null).sort((a, b) => V[b].t - V[a].t);
   const rank = rankOf.indexOf(n) + 1;
@@ -449,7 +450,12 @@ function select(n, quiet) {
     <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span>${newsLine(t)}</li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
     <p class="small muted">${C.linkNote}</p>
     ${BUDGET ? budgetSection(n) : ""}`;
-  if (!quiet && innerWidth < 960) document.getElementById("panel").scrollIntoView({block: "nearest", behavior: "smooth"});
+  // Keep the reader at the map: the panel sits beside it on wide screens; on narrow ones bring the panel up.
+  if (!quiet) {
+    const mapTop = document.getElementById("svg").getBoundingClientRect().top;
+    if (innerWidth < 960) document.getElementById("panel").scrollIntoView({block: "start", behavior: "smooth"});
+    else if (mapTop < -40) document.getElementById("svg").scrollIntoView({block: "start", behavior: "smooth"});
+  }
 }
 
 // ---- budget commitments naming a riding ----
