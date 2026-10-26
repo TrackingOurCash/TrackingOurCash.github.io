@@ -1,0 +1,43 @@
+name: Refresh riding spending map
+
+on:
+  schedule:
+    - cron: "17 9 * * *"   # daily, 09:17 UTC (05:17 Eastern)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download data and build the map
+        run: ./run.sh
+      - name: Stage the site
+        run: |
+          mkdir -p site
+          cp output/riding_spending_map.html site/index.html
+          cp output/riding_spending.csv output/unmapped_after_election.csv data/summary.json site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

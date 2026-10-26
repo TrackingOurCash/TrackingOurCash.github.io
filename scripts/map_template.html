@@ -1,0 +1,382 @@
+<title>Riding Spending Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<style>
+/* Layout: one wide national map, a strip of city insets under it, a detail panel at the side; party colour is the base, spending is the saturation. */
+:root {
+  color-scheme: light;
+  --page: #f6f6f3; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --water: #e4ecf1; --nodata: #d9d8d2;
+  --sel: #0b0b0b; --focus: #2a78d6; --before: #c3c2b7; --after: #52514e;
+  --lpc: #d71920; --cpc: #1b4c9e; --ndp: #f37021; --bq: #1aa7bd; --gpc: #3d9b35; --ind: #6f6e69; --ppc: #4b2e83;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0f0f0e; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --water: #141a1f; --nodata: #2f2f2d;
+    --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7;
+    --lpc: #ea3a40; --cpc: #4f80d8; --ndp: #f68a45; --bq: #3fc0d4; --gpc: #5cb954; --ind: #9a9892; --ppc: #8a6bc8;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0f0f0e; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --water: #141a1f; --nodata: #2f2f2d;
+  --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7;
+  --lpc: #ea3a40; --cpc: #4f80d8; --ndp: #f68a45; --bq: #3fc0d4; --gpc: #5cb954; --ind: #9a9892; --ppc: #8a6bc8;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1320px; margin: 0 auto; padding-block: 20px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font: 600 26px/1.2 "Source Serif 4", Georgia, serif; margin: 0 0 6px; text-wrap: balance; }
+h2 { font-size: 16px; margin: 0 0 8px; text-wrap: balance; }
+h3 { font-size: 13px; margin: 0 0 2px; }
+button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.sub { color: var(--ink-2); margin: 0 0 16px; max-width: 900px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-bottom: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { border: 0; background: none; color: var(--ink-2); padding: 6px 10px; font: inherit; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+select, input[type=search] { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 5px 8px; max-width: 100%; }
+label.chk { color: var(--ink-2); display: inline-flex; gap: 6px; align-items: center; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; }
+@media (max-width: 960px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; min-width: 0; }
+.mapcard { padding: 10px; }
+#svg { width: 100%; height: auto; display: block; touch-action: none; background: var(--water); border-radius: 8px; }
+.r { stroke: var(--surface); stroke-width: 0.5; vector-effect: non-scaling-stroke; cursor: pointer; }
+.r:hover { stroke: var(--sel); stroke-width: 1.6; }
+.r.sel { stroke: var(--sel); stroke-width: 2.2; }
+.insets { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 8px; }
+.inset { background: var(--water); border-radius: 8px; padding: 4px; }
+.inset svg { width: 100%; height: auto; display: block; }
+.inset .cap { font-size: 11px; color: var(--ink-2); padding: 2px 4px 0; display: flex; justify-content: space-between; }
+.inset .cap button { font: inherit; font-size: 11px; border: 0; background: none; color: var(--focus); cursor: pointer; padding: 0; }
+.zoombar { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
+.zoombar button { font: inherit; font-size: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; color: var(--ink-2); font-size: 12px; margin-top: 10px; }
+.legend .lab { color: var(--muted); font-size: 11px; margin-bottom: 3px; }
+.ramp { display: flex; gap: 1px; }
+.ramp span { width: 14px; height: 12px; display: block; }
+.ramp span:first-child { border-radius: 2px 0 0 2px; } .ramp span:last-child { border-radius: 0 2px 2px 0; }
+.swl { display: flex; gap: 10px; flex-wrap: wrap; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; margin-right: 4px; }
+#tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.18); display: none; max-width: 270px; z-index: 10; }
+#tip b { font-size: 13px; }
+.pill { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; border-radius: 999px; padding: 1px 7px; vertical-align: 1px; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 13px; }
+.kv dt { color: var(--ink-2); }
+.kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.big { font: 600 22px/1.1 "Source Serif 4", Georgia, serif; margin: 2px 0 0; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.result { border-left: 3px solid var(--axis); padding: 4px 10px; margin: 10px 0; }
+ul.grants { list-style: none; padding: 0; margin: 6px 0 0; }
+ul.grants li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12px; }
+ul.grants li b { font-variant-numeric: tabular-nums; }
+.tag { display: inline-block; font-size: 11px; border: 1px solid var(--axis); border-radius: 4px; padding: 0 4px; color: var(--ink-2); }
+.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.bar { height: 12px; border-radius: 0 4px 4px 0; margin: 2px 0; }
+.barrow { display: grid; grid-template-columns: 52px 1fr 64px; gap: 6px; align-items: center; font-size: 12px; color: var(--ink-2); }
+.barrow .v { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+.tablewrap { overflow-x: auto; max-height: 560px; overflow-y: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th { color: var(--ink-2); font-weight: 600; cursor: pointer; user-select: none; position: sticky; top: 0; background: var(--surface); }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--grid); }
+.notes { color: var(--ink-2); font-size: 13px; }
+.notes li { margin-bottom: 4px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <h1>Where federal grants went after the 2025 election</h1>
+  <p class="sub" id="subtitle"></p>
+
+  <div class="controls">
+    <div class="seg" role="group" aria-label="What sets the colour depth" id="metric">
+      <button data-m="pc" aria-pressed="true">Depth = $ per person</button>
+      <button data-m="chg">Depth = change vs year before</button>
+    </div>
+    <select id="dept" aria-label="Department"><option value="">All departments</option></select>
+    <label class="chk"><input type="checkbox" id="natl"> Include national HQs, other governments, settlements &amp; foreign aid</label>
+    <label class="chk"><input type="checkbox" id="closeOnly"> Close ridings only</label>
+  </div>
+
+  <div class="grid">
+    <div class="card mapcard">
+      <svg id="svg" viewBox="0 0 960 600" role="img" aria-label="Map of Canada's 343 federal ridings"><defs id="defs"></defs><g id="main"></g></svg>
+      <div class="zoombar" id="zoombar"><span class="small muted">Scroll or pinch to zoom, drag to pan.</span></div>
+      <div class="insets" id="insets"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="card" id="panel"><p class="muted">Hover a riding for a summary. Click it for the MP, the 2025 result and its largest grants.</p></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>Does money follow close seats?</h2>
+    <p class="small muted" id="groupNote"></p>
+    <div class="groups" id="groups"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="controls" style="justify-content:space-between">
+      <h2 style="margin:0">All ridings</h2>
+      <input type="search" id="q" placeholder="Search riding, MP or province" aria-label="Search ridings">
+    </div>
+    <div class="tablewrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="card notes" style="margin-top:16px" id="notes"></div>
+</div>
+<div id="tip"></div>
+
+<script>
+const D = /*__DATA__*/null;
+const R = D.ridings, M = D.meta, YEARS = M.years_per_window;
+const PARTY = {LPC: "Liberal", CPC: "Conservative", BQ: "Bloc Québécois", NDP: "NDP", GPC: "Green", IND: "Independent", PPC: "PPC", OTH: "Other", "": "Vacant"};
+const PVAR = {LPC: "--lpc", CPC: "--cpc", BQ: "--bq", NDP: "--ndp", GPC: "--gpc", IND: "--ind", PPC: "--ppc", OTH: "--ind", "": "--ind"};
+const FLAG = {national: "national HQ", government: "other government", settlement: "treaty settlement", international: "foreign aid"};
+const fmt$ = v => v == null ? "–" : "$" + (Math.abs(v) >= 1e9 ? (v/1e9).toFixed(2) + "B" : Math.abs(v) >= 1e6 ? (v/1e6).toFixed(1) + "M" : Math.abs(v) >= 1e3 ? (v/1e3).toFixed(0) + "K" : Math.round(v));
+const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleString() : v.toFixed(2));
+const fmtPct = v => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(0) + "%";
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const state = {metric: "pc", dept: "", natl: false, closeOnly: false, sel: null, sort: "pc", dir: -1, q: ""};
+const pill = p => `<span class="pill" style="background:var(${PVAR[p] || "--ind"})">${PARTY[p] || p}</span>`;
+
+// ---- metric computation ----
+function compute() {
+  const out = {};
+  for (const [n, r] of Object.entries(R)) {
+    let after, before;
+    if (state.dept) {
+      after = (D.dept[state.dept] || {})[n] || 0;
+      before = (D.deptBefore[state.dept] || {})[n] || 0;
+    } else if (state.natl) { after = r.after_total; before = r.before_total; }
+    else { after = r.after_adj; before = r.before_adj; }
+    const pc = after / r.population / YEARS, pcb = before / r.population / YEARS;
+    out[n] = {after, before, pc, pcb, chg: before > 0 ? 100 * (after - before) / before : (after > 0 ? null : null)};
+  }
+  // Colour depth is the riding's rank on the chosen measure, 0 (lightest) to 1 (full party colour).
+  const key = state.metric === "pc" ? "pc" : "chg";
+  const ranked = Object.keys(R).filter(n => out[n][key] != null && (key !== "pc" || out[n].pc > 0)).sort((a, b) => out[a][key] - out[b][key]);
+  ranked.forEach((n, i) => out[n].t = ranked.length > 1 ? i / (ranked.length - 1) : 0.5);
+  for (const n of Object.keys(R)) if (out[n].t == null) out[n].t = key === "pc" ? 0 : null;
+  const med = d3.median(Object.values(out), d => d.pc) || 0;
+  for (const v of Object.values(out)) v.score = med > 0 ? v.pc / med : null;
+  return out;
+}
+
+// ---- colour: party hue, spending depth ----
+let surfaceColor = css("--surface");
+function tint(party, t) {
+  const base = css(PVAR[party] || "--ind");
+  return d3.interpolateLab(surfaceColor, base)(0.18 + 0.82 * t);
+}
+const defs = d3.select("#defs");
+const patterns = new Set();
+function hatch(pa, pb, t) {
+  const b = Math.round(t * 7);
+  const id = `h-${pa}-${pb}-${b}`;
+  if (!patterns.has(id)) {
+    patterns.add(id);
+    const p = defs.append("pattern").attr("id", id).attr("patternUnits", "userSpaceOnUse").attr("width", 5).attr("height", 5).attr("patternTransform", "rotate(45)");
+    p.append("rect").attr("width", 5).attr("height", 5).attr("fill", tint(pa, b / 7));
+    p.append("rect").attr("width", 2.5).attr("height", 5).attr("fill", tint(pb, b / 7));
+  }
+  return `url(#${id})`;
+}
+function fillFor(n, v) {
+  const r = R[n];
+  if (state.closeOnly && !r.close) return css("--nodata");
+  const t = v.t == null ? 0.18 : v.t;
+  const party = r.mp_party || r.party_2025;
+  if (r.close) return hatch(r.party_2025, r.runnerup_party_2025, t);
+  return tint(party, t);
+}
+
+// ---- main map ----
+const W = 960, H = 600;
+const svg = d3.select("#svg");
+const proj = d3.geoConicConformal().parallels([49, 77]).rotate([96, 0]).fitExtent([[6, 6], [W - 6, H - 6]], D.geo);
+const path = d3.geoPath(proj);
+const g = d3.select("#main");
+const paths = g.selectAll("path").data(D.geo.features).join("path")
+  .attr("class", "r").attr("d", path).attr("tabindex", 0).attr("aria-label", d => R[d.id].current_name)
+  .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip)
+  .on("click", (e, d) => select(d.id)).on("keydown", (e, d) => { if (e.key === "Enter") select(d.id); });
+const zoom = d3.zoom().scaleExtent([1, 80]).on("zoom", e => g.attr("transform", e.transform));
+svg.call(zoom);
+function zoomTo(b) {
+  if (!b) return svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity);
+  const [x0, y0] = proj([b[0], b[3]]), [x1, y1] = proj([b[2], b[1]]);
+  const k = Math.min(80, 0.9 / Math.max((x1 - x0) / W, (y1 - y0) / H));
+  svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity.translate(W / 2, H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2));
+}
+d3.select("#zoombar").append("button").text("Reset view").on("click", () => zoomTo(null));
+
+// ---- city insets (Elections Canada style) ----
+const INSETS = [
+  ["Vancouver", [-123.35, 49.0, -122.45, 49.42]], ["Victoria", [-123.75, 48.35, -123.25, 48.7]], ["Calgary", [-114.35, 50.85, -113.85, 51.22]],
+  ["Edmonton", [-113.75, 53.38, -113.25, 53.7]], ["Winnipeg", [-97.4, 49.72, -96.95, 50.0]], ["Toronto & GTA", [-79.85, 43.5, -79.0, 43.95]],
+  ["Hamilton–Niagara", [-80.2, 43.0, -79.0, 43.45]], ["Kitchener–Waterloo", [-80.7, 43.3, -80.2, 43.6]], ["London", [-81.4, 42.85, -81.1, 43.1]],
+  ["Ottawa–Gatineau", [-76.05, 45.2, -75.4, 45.6]], ["Montréal", [-74.05, 45.38, -73.4, 45.75]], ["Québec", [-71.55, 46.68, -71.1, 46.98]],
+  ["Halifax", [-63.85, 44.55, -63.4, 44.85]], ["St. John's", [-53.0, 47.4, -52.6, 47.65]],
+];
+const insetPaths = [];
+const insetsEl = d3.select("#insets");
+for (const [name, b] of INSETS) {
+  const feats = D.geo.features.filter(f => { const [[x0, y0], [x1, y1]] = d3.geoBounds(f); return x1 > b[0] && x0 < b[2] && y1 > b[1] && y0 < b[3]; });
+  const w = 150, h = Math.round(w * (b[3] - b[1]) / ((b[2] - b[0]) * Math.cos((b[1] + b[3]) / 2 * Math.PI / 180)));
+  const ip = d3.geoMercator().fitExtent([[0, 0], [w, h]], {type: "Polygon", coordinates: [[[b[0], b[1]], [b[0], b[3]], [b[2], b[3]], [b[2], b[1]], [b[0], b[1]]]]});
+  const box = insetsEl.append("div").attr("class", "inset");
+  const s = box.append("svg").attr("viewBox", `0 0 ${w} ${h}`);
+  const cid = "clip-" + name.replace(/\W/g, "");
+  s.append("clipPath").attr("id", cid).append("rect").attr("width", w).attr("height", h);
+  const ps = s.append("g").attr("clip-path", `url(#${cid})`).selectAll("path").data(feats).join("path")
+    .attr("class", "r").attr("d", d3.geoPath(ip))
+    .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip).on("click", (e, d) => select(d.id));
+  insetPaths.push(ps);
+  const cap = box.append("div").attr("class", "cap");
+  cap.append("span").text(name);
+  cap.append("button").text("zoom main map").on("click", () => zoomTo(b));
+}
+
+let V = compute();
+function render() {
+  surfaceColor = css("--surface");
+  defs.selectAll("*").remove(); patterns.clear();
+  V = compute();
+  const f = d => fillFor(d.id, V[d.id]);
+  paths.attr("fill", f).attr("opacity", d => state.closeOnly && !R[d.id].close ? 0.45 : 1);
+  insetPaths.forEach(ps => ps.attr("fill", f));
+  renderLegend(); renderGroups(); renderTable();
+  if (state.sel) select(state.sel, true);
+}
+function renderLegend() {
+  const lg = d3.select("#legend").html("");
+  const steps = [0, 0.2, 0.4, 0.6, 0.8, 1];
+  const partyBlock = lg.append("div");
+  partyBlock.append("div").attr("class", "lab").text(`Colour = current MP's party · depth = ${state.metric === "pc" ? "$ per person, lightest to highest" : "change vs year before, biggest cut to biggest rise"}`);
+  const row = partyBlock.append("div").attr("class", "swl");
+  for (const p of ["LPC", "CPC", "BQ", "NDP", "GPC"]) {
+    const d = row.append("div");
+    d.append("div").attr("class", "ramp").selectAll("span").data(steps).join("span").style("background", t => tint(p, t));
+    d.append("div").attr("class", "small").text(PARTY[p]);
+  }
+  const hb = lg.append("div");
+  hb.append("div").attr("class", "lab").text(`Close in 2025 (under ${M.close_margin} pts): stripes of the top two parties`);
+  hb.append("div").html(`<svg width="60" height="14" aria-hidden="true"><rect width="60" height="14" rx="2" fill="${hatch("LPC", "CPC", 0.7)}"></rect></svg> <svg width="60" height="14" aria-hidden="true"><rect width="60" height="14" rx="2" fill="${hatch("NDP", "LPC", 0.7)}"></rect></svg>`);
+}
+
+// ---- tooltip & panel ----
+const tip = document.getElementById("tip");
+function showTip(e, n) {
+  const r = R[n], v = V[n];
+  tip.innerHTML = `<b>${r.current_name}</b><br>${r.mp} ${pill(r.mp_party)}<br>
+    2025: ${PARTY[r.party_2025]} by ${r.margin_votes.toLocaleString()} votes (${r.margin_pts} pts)${r.close ? " · <b>close</b>" : ""}<br>
+    ${fmt$(v.after)} since the election · ${fmtPc(v.pc)}/person/yr · ${fmtPct(v.chg)} vs year before`;
+  tip.style.display = "block";
+  tip.style.left = Math.min(e.clientX + 14, innerWidth - 285) + "px"; tip.style.top = (e.clientY + 14) + "px";
+}
+function hideTip() { tip.style.display = "none"; }
+
+function select(n, quiet) {
+  state.sel = n;
+  paths.classed("sel", d => d.id === n);
+  insetPaths.forEach(ps => ps.classed("sel", d => d.id === n));
+  const r = R[n], v = V[n];
+  const shares = Object.entries(r.shares_2025).map(([p, s]) => `${PARTY[p] || p} ${s}%`).join(" · ");
+  const switched = r.mp_party && r.mp_party !== r.party_2025;
+  document.getElementById("panel").innerHTML = `
+    <h2 style="margin-bottom:2px">${r.current_name}</h2>
+    <div class="small muted">${r.province} · pop. ${r.population.toLocaleString()} (2021)</div>
+    <p style="margin:10px 0 4px"><b>${r.mp}</b> ${pill(r.mp_party)}${switched ? ` <span class="tag">elected as ${PARTY[r.party_2025]}</span>` : ""}</p>
+    <div class="result" style="border-color:var(${PVAR[r.party_2025]})">
+      <div><b>${r.winner_2025}</b> (${PARTY[r.party_2025]}) won by <b>${r.margin_votes.toLocaleString()} votes</b> (${r.margin_pts} pts) over ${r.runnerup_2025} (${PARTY[r.runnerup_party_2025]})${r.close ? ' <span class="tag">close</span>' : ""}</div>
+      <div class="small muted">${shares}</div>
+    </div>
+    <div class="small muted">Grants since the election (${M.election} to ${M.cutoff})</div>
+    <p class="big">${fmt$(v.after)}</p>
+    <dl class="kv" style="margin-top:8px">
+      <dt>Per person per year</dt><dd>${fmtPc(v.pc)}</dd>
+      <dt>Same period a year before</dt><dd>${fmt$(v.before)} · ${fmtPc(v.pcb)}/person</dd>
+      <dt>Change</dt><dd>${fmtPct(v.chg)}</dd>
+      <dt>vs median riding</dt><dd>${v.score == null ? "–" : v.score.toFixed(2) + "×"}</dd>
+      <dt>Awards, everything included</dt><dd>${r.after_n.toLocaleString()} · ${fmt$(r.after_total)}</dd>
+    </dl>
+    <h2 style="margin-top:14px">Top departments</h2>
+    <dl class="kv">${r.top_depts.map(([d, x]) => `<dt class="small">${d}</dt><dd>${fmt$(x)}</dd>`).join("") || "<dt>None</dt><dd></dd>"}</dl>
+    <h2 style="margin-top:14px">Largest grants since the election</h2>
+    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.who}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${t.prog} · ${t.dept} · ${t.date}${t.city ? " · " + t.city : ""}</span></li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>`;
+  if (!quiet && innerWidth < 960) document.getElementById("panel").scrollIntoView({block: "nearest", behavior: "smooth"});
+}
+
+// ---- four-group comparison ----
+function renderGroups() {
+  const names = ["Close Liberal", "Close opposition", "Safe Liberal", "Safe opposition"];
+  const rows = names.map(gname => {
+    const ns = Object.keys(R).filter(n => R[n].group === gname);
+    const chg = ns.map(n => V[n].chg).filter(x => x != null);
+    return {gname, count: ns.length, after: d3.median(ns, n => V[n].pc), before: d3.median(ns, n => V[n].pcb), chg: d3.median(chg), total: d3.sum(ns, n => V[n].after)};
+  });
+  const max = d3.max(rows, r => Math.max(r.after, r.before)) || 1;
+  document.getElementById("groupNote").innerHTML = `Median riding in each group, ${state.dept || "all departments"}${state.natl && !state.dept ? ", everything included" : ""}. "Close" means the 2025 winner led by under ${M.close_margin} points; "Liberal" means the Liberals won the seat in 2025. <span class="sw" style="background:var(--before)"></span>same period a year before <span class="sw" style="background:var(--after)"></span>since the election.`;
+  document.getElementById("groups").innerHTML = rows.map(r => `<div>
+    <h3>${r.gname} <span class="muted small">· ${r.count} ridings</span></h3>
+    <div class="barrow"><span>Before</span><div class="bar" style="width:${100 * r.before / max}%;background:var(--before)"></div><span class="v">${fmtPc(r.before)}</span></div>
+    <div class="barrow"><span>After</span><div class="bar" style="width:${100 * r.after / max}%;background:var(--after)"></div><span class="v">${fmtPc(r.after)}</span></div>
+    <div class="small muted">per person per year · median change ${fmtPct(r.chg)} · total ${fmt$(r.total)}</div></div>`).join("");
+}
+
+// ---- table ----
+const COLS = [
+  ["name", "Riding", r => r.current_name], ["prov", "Prov.", r => r.province],
+  ["mp", "MP (current)", r => `${r.mp} · ${r.mp_party || "–"}`], ["win", "2025", r => r.party_2025],
+  ["margin", "Margin (votes)", r => r.margin_votes, true], ["mpts", "Margin (pts)", r => r.margin_pts, true],
+  ["after", "$ since election", (r, v) => v.after, true], ["pc", "$/person/yr", (r, v) => v.pc, true],
+  ["pcb", "Year before", (r, v) => v.pcb, true], ["chg", "Change", (r, v) => v.chg, true],
+];
+function renderTable() {
+  const thead = document.querySelector("#tbl thead"), tbody = document.querySelector("#tbl tbody");
+  thead.innerHTML = "<tr>" + COLS.map(([k, label, , num]) => `<th data-k="${k}" class="${num ? "n" : ""}">${label}${state.sort === k ? (state.dir < 0 ? " ▼" : " ▲") : ""}</th>`).join("") + "</tr>";
+  thead.querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; state.dir = state.sort === k ? -state.dir : -1; state.sort = k; renderTable(); });
+  const col = COLS.find(c => c[0] === state.sort);
+  const q = state.q.toLowerCase();
+  const ns = Object.keys(R).filter(n => (!state.closeOnly || R[n].close) && (!q || (R[n].current_name + " " + R[n].mp + " " + R[n].province).toLowerCase().includes(q)));
+  ns.sort((a, b) => { const x = col[2](R[a], V[a]), y = col[2](R[b], V[b]); if (x == null) return 1; if (y == null) return -1; return (x < y ? -1 : x > y ? 1 : 0) * state.dir; });
+  tbody.innerHTML = ns.map(n => { const r = R[n], v = V[n]; return `<tr data-n="${n}"><td><span class="sw" style="background:var(${PVAR[r.mp_party]})"></span>${r.current_name}${r.close ? ' <span class="tag">close</span>' : ""}</td><td>${r.province.slice(0, 16)}</td>
+      <td>${r.mp} · ${r.mp_party || "–"}</td><td>${r.party_2025}</td><td class="n">${r.margin_votes.toLocaleString()}</td><td class="n">${r.margin_pts}</td>
+      <td class="n">${fmt$(v.after)}</td><td class="n">${fmtPc(v.pc)}</td><td class="n">${fmtPc(v.pcb)}</td><td class="n">${fmtPct(v.chg)}</td></tr>`; }).join("");
+  tbody.querySelectorAll("tr").forEach(tr => tr.onclick = () => select(tr.dataset.n));
+}
+
+// ---- controls ----
+document.querySelectorAll("#metric button").forEach(b => b.onclick = () => { document.querySelectorAll("#metric button").forEach(x => x.setAttribute("aria-pressed", x === b)); state.metric = b.dataset.m; render(); });
+const deptSel = document.getElementById("dept");
+M.departments.forEach(d => deptSel.add(new Option(d, d)));
+deptSel.onchange = () => { state.dept = deptSel.value; document.getElementById("natl").disabled = !!state.dept; render(); };
+document.getElementById("natl").onchange = e => { state.natl = e.target.checked; render(); };
+document.getElementById("closeOnly").onchange = e => { state.closeOnly = e.target.checked; render(); };
+document.getElementById("q").oninput = e => { state.q = e.target.value; renderTable(); };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+new MutationObserver(render).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+
+const mth = M.methods;
+const placed = k => Object.entries(mth).filter(([key]) => key.startsWith(k + "|") && !key.includes("unmapped")).reduce((s, [, v]) => s + v, 0);
+document.getElementById("subtitle").textContent =
+  `Federal grants and contributions with agreements starting ${M.election} (election day) to ${M.cutoff}, placed in the 343 ridings and set against the 2025 result. ` +
+  `Each riding wears its current MP's party colour; the deeper the colour, the more grant money per resident. "Year before" means the same dates one year earlier.`;
+document.getElementById("notes").innerHTML = `<h2>How to read this</h2><ul>
+  <li><b>Sources:</b> Treasury Board "Proactive Disclosure – Grants and Contributions" (open.canada.ca), Elections Canada official 2025 results, House of Commons member list, GeoNames postal-code centroids, Open North riding boundaries. Data as of ${M.generated || M.cutoff}.</li>
+  <li><b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent. The dataset's own riding field is rarely filled in, so most of the ${placed("after").toLocaleString()} awards since the election were placed by postal code; recipients with no postal code were matched to their address on other awards, then by city. ${(mth["after|unmapped"] || 0).toLocaleString()} awards worth ${fmt$(mth["after|unmapped $"] || 0)} are still unplaced.</li>
+  <li><b>Left out by default:</b> national non-profits booked at a head office ("Hockey Canada"), other governments (provinces, cities spread over several ridings), treaty and specific-claim settlements, and foreign aid routed through Canadian partners. Tick the box to put them back. Companies are kept even when "Canada" is in their name.</li>
+  <li><b>Amendments</b> are counted once, at the agreement's latest total value. <b>Reporting lag:</b> departments report quarterly, so the window ends at the last quarter that looks fully reported (${M.cutoff}).</li>
+  <li><b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MPs. A pattern by seat type is a signal worth checking, not proof of intent.</li></ul>`;
+
+render();
+</script>
