@@ -42,12 +42,14 @@ def federal():
     # News coverage found once per grant by the research step (scripts/merge_news.py); keyed "owner_org|ref_number".
     news = json.load(open(DATA / "news_links.json")) if (DATA / "news_links.json").exists() else {}
     wk = wiki("federal")
+    pw = json.load(open(DATA / "poliwave_links.json")) if (DATA / "poliwave_links.json").exists() else {}
     mth = m["methods"]
     placed = sum(v for k, v in mth.items() if k.startswith("after|") and "unmapped" not in k)
     ridings = {}
     for n, r in sp["ridings"].items():
         rec = {k: r[k] for k in COMMON}
         rec["wiki"] = (wk.get(n) or {}).get("url")
+        rec["poliwave"] = pw.get(n)
         rec["top_grants"] = [dict(g, news=news.get(f'{g["org"]}|{g["ref"]}')) if f'{g["org"]}|{g["ref"]}' in news else g for g in r["top_grants"]]
         rec.update({"num": n, "name": r["current_name"], "region": r["province"], "party_won": r["party_2025"],
                     "runnerup_party": r["runnerup_party_2025"], "winner": r["winner_2025"], "runnerup": r["runnerup_2025"],
@@ -97,6 +99,7 @@ def federal():
                 ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
                 ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
                 ("Wikipedia (riding articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Canadian_federal_electoral_districts"),
+                ("Poliwave riding projections (linked from each panel)", "https://www.poliwave.com/ca/fed/projection/ridings"),
             ]) + f" Data as of {m.get('generated', m['cutoff'])}. Code: the pipeline is open and rebuilds the page daily.",
             f"<b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent. The dataset's own riding field is rarely filled in, so most of the {placed:,} awards since the election were placed by postal code; recipients with no postal code were matched to their address on other awards, then by city. {mth.get('after|unmapped', 0):,} awards worth {fmt_money(mth.get('after|unmapped $', 0))} are still unplaced.",
             "<b>Left out by default:</b> national non-profits booked at a head office (\"Hockey Canada\"), other governments (provinces, cities spread over several ridings), treaty and specific-claim settlements, and foreign aid routed through Canadian partners. Tick the box to put them back. Companies are kept even when \"Canada\" is in their name.",
