@@ -18,13 +18,15 @@ CACHE = RAW / "csd"
 API = "https://represent.opennorth.ca"
 FED = "federal-electoral-districts-2023-representation-order"
 
-# Same boxes as the insets in map_template.html: [west, south, east, north].
+# The inset boxes used by build_map.py (federal and Alberta pages): [west, south, east, north].
 INSETS = [
     [-123.35, 49.0, -122.45, 49.42], [-123.75, 48.35, -123.25, 48.7], [-114.35, 50.85, -113.85, 51.22],
     [-113.75, 53.38, -113.25, 53.7], [-97.4, 49.72, -96.95, 50.0], [-79.85, 43.5, -79.0, 43.95],
     [-80.2, 43.0, -79.0, 43.45], [-80.7, 43.3, -80.2, 43.6], [-81.4, 42.85, -81.1, 43.1],
     [-76.05, 45.2, -75.4, 45.6], [-74.05, 45.38, -73.4, 45.75], [-71.55, 46.68, -71.1, 46.98],
     [-63.85, 44.55, -63.4, 44.85], [-53.0, 47.4, -52.6, 47.65],
+    # Alberta-page insets that aren't federal ones.
+    [-113.9, 52.2, -113.7, 52.35], [-112.95, 49.62, -112.75, 49.75], [-111.5, 56.65, -111.3, 56.78], [-118.9, 55.12, -118.7, 55.22],
 ]
 
 

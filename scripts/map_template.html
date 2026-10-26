@@ -254,17 +254,16 @@ const LAND = D.land.features;
 const byKind = k => LAND.filter(f => f.properties.kind === k);
 function drawLand(parent, pth, clipId, box) {
   // box: an inset's [west, south, east, north]; insets also get small lakes, rivers and municipal outlines.
-  // The national map clips ridings to the coastline; insets don't, because at city scale the
-  // detailed riding edges follow the shoreline better than the coastline file does.
+  // The national map clips ridings to the coastline.
   const near = f => { if (!box) return false; const [[x0, y0], [x1, y1]] = d3.geoBounds(f); return x1 > box[0] && x0 < box[2] && y1 > box[1] && y0 < box[3]; };
   parent.selectAll(".otherland").data(byKind("other")).join("path").attr("class", "otherland").attr("d", pth);
   parent.selectAll(".land").data(byKind("canada")).join("path").attr("class", "land").attr("d", pth);
-  let layer;
-  if (box) layer = parent.append("g");
-  else {
-    d3.select("#defs").insert("clipPath", "#patdefs").attr("id", clipId).selectAll("path").data(byKind("canada")).join("path").attr("d", pth);
-    layer = parent.append("g").attr("clip-path", `url(#${clipId})`);
-  }
+  // Insets clip to the municipal boundaries instead, which follow the shoreline closely
+  // (census subdivisions stop at the water's edge); the coastline file is too coarse there.
+  const munis = box ? byKind("muni").filter(near) : [];
+  const clipShapes = munis.length ? munis : byKind("canada");
+  d3.select("#defs").insert("clipPath", "#patdefs").attr("id", clipId).selectAll("path").data(clipShapes).join("path").attr("d", pth);
+  const layer = parent.append("g").attr("clip-path", `url(#${clipId})`);
   const over = parent.append("g");
   over.selectAll(".lake").data(byKind("lake").concat(box ? byKind("lake_small").filter(near) : [])).join("path").attr("class", "lake").attr("d", pth);
   if (box) {

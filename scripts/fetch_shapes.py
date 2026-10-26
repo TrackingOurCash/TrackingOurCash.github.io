@@ -42,18 +42,20 @@ def main():
         if not simple_path.exists():
             continue
         cache.mkdir(parents=True, exist_ok=True)
-        ids = {o["name"]: o["external_id"] for o in json.load(open(list_path))["objects"]}
+        # Shapes are addressed by the boundary's URL slug (which is the id for federal
+        # ridings but a name slug for Alberta); files are saved by the external id.
+        info = {o["name"]: (o["external_id"], o["url"]) for o in json.load(open(list_path))["objects"]}
         wanted = []
         for o in json.load(open(simple_path))["objects"]:
             x0, y0, x1, y1 = bounds(o["simple_shape"])
             if any(x1 > w and x0 < e and y1 > s and y0 < n for w, s, e, n in boxes):
-                wanted.append(ids[o["name"]])
-        for i, num in enumerate(sorted(wanted)):
+                wanted.append(info[o["name"]])
+        for i, (num, url) in enumerate(sorted(wanted)):
             out = cache / f"{num}.json"
             if out.exists():
                 continue
             try:
-                shp = get(f"{API}/boundaries/{set_name}/{num}/shape")
+                shp = get(f"{API}{url}shape")
             except Exception as e:
                 print(set_name, num, "failed:", e, file=sys.stderr)
                 continue
