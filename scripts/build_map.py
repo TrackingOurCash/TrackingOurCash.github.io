@@ -21,7 +21,7 @@ ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXg
                  "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv",
                  "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R", "pei.html": "https://claude.ai/artifact/X4239bKZYyxRcX8ozVVZHQ",
                  "ontario.html": "https://claude.ai/artifact/JXkiRVQspJBViHHJ2MDcYL", "quebec.html": "https://claude.ai/artifact/YCvZDpg18q9rNjVfrG1nGz",
-                 "ns.html": "https://claude.ai/artifact/KZKpkXpFKx5vSGPxYMrDPX"}
+                 "ns.html": "https://claude.ai/artifact/KZKpkXpFKx5vSGPxYMrDPX", "nl.html": "https://claude.ai/artifact/9bRA1fMpskDcP2EzTcYjT1"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -364,6 +364,60 @@ PROVINCES = {
                     ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
                     ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Nova_Scotia_provincial_electoral_districts")],
     },
+    "nl": {
+            "dir": "nl", "year": "2025", "region": "Newfoundland and Labrador",  # canadaspends.com has no NL page
+            "title": "Where federal grants land in Newfoundland and Labrador's provincial districts",
+            "electionLabel": "the 14 October 2025 provincial election", "count": 40, "gov": "PC",
+            "parties": {"PC": {"name": "Progressive Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"},
+                        "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+            "legendParties": ["PC", "LIB", "NDP", "IND"], "opp": "opposition",
+            "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2025; "opposition" covers the Liberals, the NDP and the two independents (Eddie Joyce and Paul Lane, the Speaker). The money is federal, so the question here is whether Ottawa\'s grants land more heavily in the province\'s close provincial seats.',
+            "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
+            "beforeLabel": "Same dates a year earlier",
+            "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+            "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
+            "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
+            "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
+            "linkNote": "Links open the government's own record of each award on open.canada.ca.",
+            "popLabel": "electors, est. {pop_date}",
+            "projection": {"parallels": [47, 55], "rotate": [60, 0]},
+            "insets": [["St. John's", [-53.0, 47.4, -52.6, 47.65]], ["Corner Brook", [-58.0, 48.9, -57.85, 48.98]]],
+            "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in Newfoundland and Labrador's provincial districts.",
+            "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Newfoundland and Labrador's 40 provincial districts "
+                         "and set against the 14 October 2025 provincial result. Each district wears its current MHA's party colour; the deeper the colour, the more federal grant money "
+                         "per resident. \"Before\" means the same dates one year earlier. The province publishes no list of its own payees, so provincial payments cannot be shown."),
+            "notes": [
+                "<b>Why federal money:</b> Newfoundland and Labrador's Public Accounts (the Report on the Program Expenditures and Revenues of the Consolidated Revenue Fund) stop at the "
+                "program level and the province publishes no payee or grant-recipient list, so provincial payments cannot be placed in a district. This page therefore shows the federal "
+                "grants that land in each district: the same awards as the federal page, cut along provincial lines.",
+                "<b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent, by postal code; recipients with no postal code were "
+                "matched to their address on other awards, then by postal area or city (marked approximate). {unmapped_n} awards worth {unmapped_money} since the federal election are still unplaced.",
+                "<b>Left out by default:</b> national non-profits booked at a head office, other governments (the Province itself, the City of St. John's and the other towns that span several districts, "
+                "the Nunatsiavut Government), treaty settlements and foreign aid. Tick the box to put them back.",
+                "<b>Boundaries:</b> the 40 districts of the 2015 Electoral Districts Boundaries Commission, used in 2015, 2019, 2021 and 2025, from Elections NL's map service "
+                "(the open-data \"Provincial Electoral Districts (2015)\" layer). Results are the official addition of 17 October 2025, with the 21 November 2025 judicial recount in "
+                "Topsail – Paradise (Paul Dinn, PC, by 106 votes). Keith Russell (Lake Melville) was elected PC and has sat as an independent since 14 September 2026.",
+                "<b>Population:</b> no census count exists for these districts (the 2015 commission worked from the 2011 census), so per-person figures use the registered electors at the "
+                "2025 election, scaled to Statistics Canada's {pop_date} estimate for the province.",
+                "<b>Party is correlation, not credit:</b> federal ministers and departments approve these grants, not MHAs. A pattern by provincial seat type is a signal worth checking, not proof of intent.",
+            ],
+            "boundaryNote": ("the 40 districts of the 2015 Electoral Districts Boundaries Commission, used in 2015, 2019, 2021 and 2025, from Elections NL's map service (the open-data "
+                             "\"Provincial Electoral Districts (2015)\" layer). Results are the official addition of 17 October 2025, with the judicial recount of 21 November 2025 in "
+                             "Topsail – Paradise (Paul Dinn, PC, by 106 votes). Keith Russell (Lake Melville) was elected PC and has sat as an independent since 14 September 2026."),
+            "sources": [("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
+                        ("Newfoundland and Labrador Public Accounts (program level only)", "https://www.gov.nl.ca/exec/tbs/home/publications/public-accounts/"),
+                        ("Elections NL, official results of the 2025 general election (release of 20 October 2025)", "https://www.gov.nl.ca/releases/2025/elections/1020n02/"),
+                        ("Elections NL, Topsail – Paradise judicial recount (21 November 2025)", "https://www.gov.nl.ca/releases/2025/elections/1121n06/"),
+                        ("Elections NL, 2025 general election report under s. 164 (electors, ballots cast, rejected)", "https://www.elections.gov.nl.ca/files/October-14-2025-Preliminary-Election-Report-1.pdf"),
+                        ("Elections NL, 2025 results dashboard and district map service", "https://www.elections.gov.nl.ca/2025-general-election-official-results/"),
+                        ("District boundaries, 2015 commission (Provincial Electoral Districts (2015), opendata.gov.nl.ca)", "https://opendata.gov.nl.ca/public/opendata/page/?page-id=datasetdetails&id=361"),
+                        ("2015 Electoral Districts Boundaries Commission final report (2011 populations)", "https://www.nledbc.ca/reports"),
+                        ("House of Assembly of Newfoundland and Labrador member list", "https://www.assembly.nl.ca/Members/members.aspx"),
+                        ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                        ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                        ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
+                        ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Newfoundland_and_Labrador_provincial_electoral_districts")],
+        },
     # PEI publishes no payee list, so its page shows the federal grants that land in each provincial district (pe_spending.py).
     "pei": {
         "dir": "pe", "year": "2023", "region": "Prince Edward Island",  # canadaspends.com has no PEI page yet
@@ -511,6 +565,7 @@ def provincial(key):
     ex = m["excluded_after"]
     wk = wiki(key)
     news = json.load(open(DATA / "news_links.json")) if P.get("recordUrl") and (DATA / "news_links.json").exists() else {}
+    pnews = json.load(open(DATA / "news_links_prov.json")) if (DATA / "news_links_prov.json").exists() else {}
     mins, minfo = ministers(key)
     ridings = {}
     for n, r in sp["ridings"].items():
@@ -519,13 +574,15 @@ def provincial(key):
         rec["minister"] = mins.get(n)
         if news:  # federal awards carry open.canada.ca keys, so the federal page's news links apply
             rec["top_grants"] = [dict(g, news=news[f'{g["org"]}|{g["ref"]}']) if f'{g.get("org")}|{g.get("ref")}' in news else g for g in r["top_grants"]]
+        elif pnews:  # provincial coverage is keyed by recipient name
+            rec["top_grants"] = [dict(g, news=pnews[f'{key}|{g["who"]}']) if f'{key}|{g["who"]}' in pnews else g for g in r["top_grants"]]
         rec.update({"num": n, "name": r["name"], "region": P["region"], "party_won": r[f"party_{y}"], "runnerup_party": r[f"runnerup_party_{y}"],
                     "winner": r[f"winner_{y}"], "runnerup": r[f"runnerup_{y}"], "shares": r[f"shares_{y}"], "rep": r["mla"],
                     "rep_party": r["mla_party"], "top_progs": r["top_progs"]})
         ridings[n] = rec
     land = land_for(P["insets"])
     gov, opp = P["gov"], P["opp"]
-    rep = {"quebec": "MNA", "ontario": "MPP"}.get(key, "MLA")
+    rep = {"quebec": "MNA", "ontario": "MPP", "nl": "MHA"}.get(key, "MLA")
     config = {
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
@@ -542,8 +599,8 @@ def provincial(key):
         "groupParty": {f"Close {gov}": gov, f"Safe {gov}": gov, f"Close {opp}": opp if opp in P["parties"] else None, f"Safe {opp}": opp if opp in P["parties"] else None},
         "regionOrder": None, "regionGroup": {}, "regionShort": {},
         "beforeLabel": P["beforeLabel"], "topProgsTitle": P["topProgsTitle"], "topGrantsTitle": P.get("topGrantsTitle", "Largest recipients since the election"),
-        "recordUrl": P.get("recordUrl"), "searchUrl": P.get("searchUrl"), "searchLabel": P.get("searchLabel", ""),
-        "linkNote": P.get("linkNote") or "Source: " + P["source"],
+        "recordUrl": P.get("recordUrl"), "searchUrl": P.get("searchUrl") or m.get("search_url"), "searchLabel": P.get("searchLabel") or ("search the web for this recipient" if m.get("search_url") else ""),
+        "linkNote": P.get("linkNote") or ("Recipient names open the source record where the province publishes one (a page of the Public Accounts volume, or the open-data table); " if any("src" in g for r in sp["ridings"].values() for g in r["top_grants"]) else "") + "Source: " + P["source"],
         "projection": P["projection"], "insets": P["insets"],
         "subtitle": P["subtitle"].format(**m) if P.get("subtitle") else
                     (f"{P['region']} government payments from {P['electionLabel']} to {m['cutoff']}, placed in the {P['count']} electoral "

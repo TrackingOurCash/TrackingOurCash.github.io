@@ -1162,6 +1162,386 @@
    },
    "unseated": [],
    "note": "St-Pierre Plamondon (PQ) cabinet sworn in 21 Oct 2026 (23 members). Delegate ministers (ministres délégués) have rank \"state\"; Camille Pellerin-Forget holds both a full \"Minister Responsible\" post and a delegate post and is ranked cabinet. The assnat page lists Stéphane Paquet as \"Minister of Municipal Affairs\" (apparently a translation glitch, since Nicolas Girard also holds that post); Wikipedia's Economic Development, Innovation and Energy is used. Whip and caucus chair excluded."
+  },
+  "ns": {
+   "head": "Tim Houston",
+   "source": "https://en.wikipedia.org/wiki/Executive_Council_of_Nova_Scotia (table reflecting the 27 May 2026 shuffle); official pages novascotia.ca/exec_council and nslegislature.ca could not be fetched on 2026-10-26",
+   "ministers": {
+    "42": {
+     "name": "Tim Houston",
+     "title": "Premier of Nova Scotia; President of the Executive Council; Minister of Intergovernmental Affairs; Minister of Trade",
+     "rank": "head"
+    },
+    "21": {
+     "name": "Barbara Adams",
+     "title": "Deputy Premier; Deputy President of the Executive Council; Minister of Seniors and Long-term Care; Minister responsible for Military Relations",
+     "rank": "cabinet"
+    },
+    "35": {
+     "name": "John Lohr",
+     "title": "Minister of Finance and Treasury Board; Minister of Labour Relations",
+     "rank": "cabinet"
+    },
+    "17": {
+     "name": "Timothy Halman",
+     "title": "Minister of Environment and Climate Change; Minister of Service Efficiency; Chair of Treasury and Policy Board",
+     "rank": "cabinet"
+    },
+    "45": {
+     "name": "Kim Masland",
+     "title": "Minister of Emergency Management",
+     "rank": "cabinet"
+    },
+    "16": {
+     "name": "Tory Rushton",
+     "title": "Minister of Natural Resources",
+     "rank": "cabinet"
+    },
+    "3": {
+     "name": "Colton LeBlanc",
+     "title": "Minister of Growth and Development; Minister of Acadian Affairs and Francophonie",
+     "rank": "cabinet"
+    },
+    "7": {
+     "name": "Brian Comer",
+     "title": "Minister of Addictions and Mental Health",
+     "rank": "cabinet"
+    },
+    "2": {
+     "name": "Michelle Thompson",
+     "title": "Minister of Health and Wellness; Minister responsible for the Office of Healthcare Professionals Recruitment; Minister responsible for Healthcare Redevelopment",
+     "rank": "cabinet"
+    },
+    "20": {
+     "name": "Jill Balser",
+     "title": "Minister of Cyber Security and Digital Solutions; Minister of Service Nova Scotia",
+     "rank": "cabinet"
+    },
+    "25": {
+     "name": "Greg Morrow",
+     "title": "Minister of Agriculture",
+     "rank": "cabinet"
+    },
+    "38": {
+     "name": "Susan Corkum-Greek",
+     "title": "Minister of Opportunities and Social Development",
+     "rank": "cabinet"
+    },
+    "22": {
+     "name": "Kent Smith",
+     "title": "Minister of Fisheries and Aquaculture",
+     "rank": "cabinet"
+    },
+    "54": {
+     "name": "Brian Wong",
+     "title": "Minister of Advanced Education",
+     "rank": "cabinet"
+    },
+    "44": {
+     "name": "Twila Grosse",
+     "title": "Minister of African Nova Scotian Affairs; Minister of the Public Service Commission",
+     "rank": "cabinet"
+    },
+    "27": {
+     "name": "Brendan Maguire",
+     "title": "Minister of Education and Early Childhood Development",
+     "rank": "cabinet"
+    },
+    "52": {
+     "name": "Dave Ritcey",
+     "title": "Minister of Communities, Culture, Tourism and Heritage; Minister of Gaelic Affairs",
+     "rank": "cabinet"
+    },
+    "40": {
+     "name": "Fred Tilley",
+     "title": "Minister of Public Works",
+     "rank": "cabinet"
+    },
+    "49": {
+     "name": "Nolan Young",
+     "title": "Minister of Labour, Skills and Immigration",
+     "rank": "cabinet"
+    },
+    "11": {
+     "name": "Scott Armstrong",
+     "title": "Attorney General and Minister of Justice; Provincial Secretary; Minister of Equity and Anti-Racism",
+     "rank": "cabinet"
+    },
+    "13": {
+     "name": "Leah Martin",
+     "title": "Minister of Communications; Minister responsible for L'nu Affairs; Minister responsible for the Advisory Council on the Status of Women Act; Minister responsible for Youth",
+     "rank": "cabinet"
+    },
+    "24": {
+     "name": "John White",
+     "title": "Minister of Housing",
+     "rank": "cabinet"
+    },
+    "43": {
+     "name": "Marco MacLeod",
+     "title": "Minister of Energy",
+     "rank": "cabinet"
+    },
+    "32": {
+     "name": "John A. MacDonald",
+     "title": "Minister of Municipal Affairs",
+     "rank": "cabinet"
+    }
+   },
+   "unseated": [],
+   "note": "Houston cabinet (24 members) as reshuffled 27 May 2026. Titles are Wikipedia wording because the official site could not be fetched."
+  },
+  "nl": {
+   "head": "Tony Wakeham",
+   "source": "https://www.gov.nl.ca/cabinet-ministers/ (official), cross-checked with https://en.wikipedia.org/wiki/Wakeham_ministry",
+   "ministers": {
+    "34": {
+     "name": "Tony Wakeham",
+     "title": "Premier; Minister for Intergovernmental Affairs",
+     "rank": "head"
+    },
+    "9": {
+     "name": "Barry Petten",
+     "title": "Deputy Premier; Minister of Transportation and Infrastructure; Minister of Public Procurement; Minister of Municipal and Community Affairs; Minister of Community Engagement; Registrar General; Deputy Government House Leader",
+     "rank": "cabinet"
+    },
+    "18": {
+     "name": "Helen Conway Ottenheimer",
+     "title": "Minister of Justice and Public Safety; Attorney General; Minister Responsible for Access to Information and Protection of Privacy; Minister Responsible for the Human Rights Commission",
+     "rank": "cabinet"
+    },
+    "1": {
+     "name": "Lin Paddock",
+     "title": "Minister of Jobs and Growth; Minister of Rural Development; Minister of Immigration; Minister of Francophone Affairs",
+     "rank": "cabinet"
+    },
+    "35": {
+     "name": "Lloyd Parrott",
+     "title": "Minister of Energy and Mines; Minister of Government Services; Minister of Red Tape Reduction; Minister of Labour; Minister Responsible for WorkplaceNL; Government House Leader",
+     "rank": "cabinet"
+    },
+    "11": {
+     "name": "Pleaman Forsey",
+     "title": "Minister of Forestry, Agriculture and Lands; Minister of Crown Lands; Minister of Emergency Preparedness and Disaster Management",
+     "rank": "cabinet"
+    },
+    "36": {
+     "name": "Paul Dinn",
+     "title": "Minister of Education and Early Childhood Development; Minister of Advanced Education and Skills",
+     "rank": "cabinet"
+    },
+    "37": {
+     "name": "Lela Evans",
+     "title": "Minister of Labrador Affairs; Minister of Indigenous Relations and Reconciliation; Minister of Women and Gender Equality",
+     "rank": "cabinet"
+    },
+    "5": {
+     "name": "Joedy Wall",
+     "title": "Minister of Health and Community Services; Minister of Mental Health and Addictions; Minister Responsible for Newfoundland and Labrador Health Services",
+     "rank": "cabinet"
+    },
+    "29": {
+     "name": "Andrea Barbour",
+     "title": "Minister of Environment, Conservation and Climate Change; Minister Responsible for the Multi-Materials Stewardship Board",
+     "rank": "cabinet"
+    },
+    "20": {
+     "name": "Mike Goosney",
+     "title": "Minister of Tourism, Culture and Arts; Minister of Sport, Recreation and Parks; Minister Responsible for PictureNL; Minister Responsible for the Newfoundland and Labrador Arts Council; Minister Responsible for the Pippy Park Commission",
+     "rank": "cabinet"
+    },
+    "16": {
+     "name": "Chris Tibbs",
+     "title": "Minister of Housing; Minister of Social Supports and Well-Being; Minister of Poverty Reduction; Minister Responsible for the Status of Persons with Disabilities",
+     "rank": "cabinet"
+    },
+    "2": {
+     "name": "Craig Pardy",
+     "title": "Minister of Finance; President of Treasury Board; Minister of Seniors; Minister Responsible for the Public Service Commission; Minister Responsible for the Newfoundland and Labrador Liquor Corporation; Minister Responsible for the Office of the Chief Information Officer",
+     "rank": "cabinet"
+    },
+    "12": {
+     "name": "Loyola O'Driscoll",
+     "title": "Minister of Fisheries and Aquaculture",
+     "rank": "cabinet"
+    }
+   },
+   "unseated": [],
+   "note": "Wakeham (PC) cabinet formed 29 Oct 2025 after the 14 Oct 2025 election, as reshuffled 20 Aug 2026 (14 members)."
+  },
+  "yt": {
+   "head": "Currie Dixon",
+   "source": "https://en.wikipedia.org/wiki/Executive_Council_of_Yukon (Dixon ministry, current as of Nov 2025); yukon.ca and yukonassembly.ca block automated fetches (403)",
+   "ministers": {
+    "district:Copperbelt North": {
+     "name": "Currie Dixon",
+     "title": "Premier of Yukon; Minister of the Executive Council Office; Minister of Finance",
+     "rank": "head",
+     "district": "Copperbelt North"
+    },
+    "district:Mayo-Tatchun": {
+     "name": "Cory Bellmore",
+     "title": "Minister of Community Services; Minister responsible for the Yukon Lottery Commission",
+     "rank": "cabinet",
+     "district": "Mayo-Tatchun"
+    },
+    "district:Whistle Bend South": {
+     "name": "Linda Benoit",
+     "title": "Minister of Highways and Public Works",
+     "rank": "cabinet",
+     "district": "Whistle Bend South"
+    },
+    "district:Lake Laberge": {
+     "name": "Brad Cathers",
+     "title": "Minister of Health and Social Services",
+     "rank": "cabinet",
+     "district": "Lake Laberge"
+    },
+    "district:Marsh Lake-Mount Lorne-Golden Horn": {
+     "name": "Jen Gehmair",
+     "title": "Minister of Economic Development; Minister of Tourism and Culture; Minister of the Public Service Commission; Minister responsible for the Yukon Liquor Corporation",
+     "rank": "cabinet",
+     "district": "Marsh Lake-Mount Lorne-Golden Horn"
+    },
+    "district:Kluane": {
+     "name": "Wade Istchenko",
+     "title": "Minister of Environment",
+     "rank": "cabinet",
+     "district": "Kluane"
+    },
+    "district:Copperbelt South": {
+     "name": "Scott Kent",
+     "title": "Minister of Education; Minister responsible for the Yukon Housing Corporation",
+     "rank": "cabinet",
+     "district": "Copperbelt South"
+    },
+    "district:Porter Creek Centre": {
+     "name": "Ted Laking",
+     "title": "Minister of Energy, Mines and Resources; Minister responsible for the Yukon Development Corporation; Minister responsible for the Yukon Energy Corporation",
+     "rank": "cabinet",
+     "district": "Porter Creek Centre"
+    },
+    "district:Whitehorse West": {
+     "name": "Laura Lang",
+     "title": "Minister of Justice; Minister responsible for the French Language Services Directorate; Minister responsible for the Women and Gender Equity Directorate; Minister responsible for the Worker's Safety and Compensation Board",
+     "rank": "cabinet",
+     "district": "Whitehorse West"
+    }
+   },
+   "unseated": [],
+   "note": "Dixon (Yukon Party) cabinet formed after the 3 Nov 2025 election (9 members). Titles are Wikipedia wording because official sites could not be fetched. RIDING FILE NOT AVAILABLE when written: keys are \"district:<district name>\" rather than riding keys."
+  },
+  "nt": {
+   "head": "R.J. Simpson",
+   "source": "https://www.ntlegislativeassembly.ca/premier-and-ministers and the individual MLA profile pages (meet-members/mla/...), plus Cabin Radio (20-21 Oct 2026) for the Rodgers appointment",
+   "ministers": {
+    "district:Hay River North": {
+     "name": "R.J. Simpson",
+     "title": "Premier; Minister of Executive and Indigenous Affairs",
+     "rank": "head",
+     "district": "Hay River North"
+    },
+    "district:Yellowknife South": {
+     "name": "Caroline Wawzonek",
+     "title": "Deputy Premier; Minister of Finance; Minister Responsible for the Northwest Territories Power Corporation; Minister Responsible for Strategic Infrastructure, Energy and Supply Chains",
+     "rank": "cabinet",
+     "district": "Yellowknife South"
+    },
+    "district:Kam Lake": {
+     "name": "Caitlin Cleveland",
+     "title": "Minister of Industry, Tourism and Investment; Minister of Education, Culture and Employment",
+     "rank": "cabinet",
+     "district": "Kam Lake"
+    },
+    "district:Inuvik Boot Lake": {
+     "name": "Denny Rodgers",
+     "title": "Minister of Health and Social Services",
+     "rank": "cabinet",
+     "district": "Inuvik Boot Lake"
+    },
+    "district:Thebacha": {
+     "name": "Jay Macdonald",
+     "title": "Minister of Environment and Climate Change; Minister of Justice; Government House Leader",
+     "rank": "cabinet",
+     "district": "Thebacha"
+    },
+    "district:Nunakput": {
+     "name": "Lucy Kuptana",
+     "title": "Minister Responsible for Housing Northwest Territories; Minister Responsible for the Status of Women",
+     "rank": "cabinet",
+     "district": "Nunakput"
+    },
+    "district:Hay River South": {
+     "name": "Vince McKay",
+     "title": "Minister of Infrastructure; Minister of Municipal and Community Affairs; Minister Responsible for Workers' Safety and Compensation Commission; Minister Responsible for the Public Utilities Board",
+     "rank": "cabinet",
+     "district": "Hay River South"
+    }
+   },
+   "unseated": [],
+   "note": "Consensus government: Simpson executive council (premier + 6 ministers). Denny Rodgers was chosen by MLAs on 20 Oct 2026 to replace Lesa Semmler and took Health and Social Services on 21 Oct 2026. The Speaker (Shane Thompson) is not a minister. Portfolios from each minister's Legislative Assembly profile header. RIDING FILE NOT AVAILABLE when written: keys are \"district:<district name>\" rather than riding keys."
+  },
+  "nu": {
+   "head": "John Main",
+   "source": "https://assembly.nu.ca/members/mla (membership and constituencies) with portfolios from https://en.wikipedia.org/wiki/Executive_Council_of_Nunavut (as of 20 Nov 2025, citing the Government of Nunavut portfolio announcement); gov.nu.ca blocks automated fetches (403)",
+   "ministers": {
+    "district:Arviat North-Whale Cove": {
+     "name": "John Main",
+     "title": "Premier; Minister of Finance; Minister of Indigenous Affairs; Minister of Immigration; Minister of Executive and Intergovernmental Affairs; Minister responsible for the Utility Rates Review Council; Minister responsible for Seniors; Minister responsible for the Nunavut Liquor and Cannabis Commission; Minister responsible for the Nunavut Liquor and Cannabis Board",
+     "rank": "head",
+     "district": "Arviat North-Whale Cove"
+    },
+    "district:Iqaluit-Tasiluk": {
+     "name": "George Hickes",
+     "title": "Deputy Premier; Minister of Justice; Minister of Transportation and Infrastructure Nunavut; Minister of Labour; Minister responsible for the Human Rights Tribunal",
+     "rank": "cabinet",
+     "district": "Iqaluit-Tasiluk"
+    },
+    "district:Iqaluit-Niaqunnguu": {
+     "name": "David Akeeagok",
+     "title": "Government House Leader; Minister of Education; Minister responsible for Nunavut Arctic College",
+     "rank": "cabinet",
+     "district": "Iqaluit-Niaqunnguu"
+    },
+    "district:Iqaluit-Sinaa": {
+     "name": "Janet Brewster",
+     "title": "Minister of Health; Minister responsible for Suicide Prevention",
+     "rank": "cabinet",
+     "district": "Iqaluit-Sinaa"
+    },
+    "district:Iqaluit-Manirajak": {
+     "name": "Gwen Healey Akearok",
+     "title": "Minister of Family Services; Minister responsible for the Qulliq Energy Corporation; Minister responsible for the Status of Women; Minister responsible for Homelessness; Minister responsible for Poverty Reduction",
+     "rank": "cabinet",
+     "district": "Iqaluit-Manirajak"
+    },
+    "district:Tununiq": {
+     "name": "Brian Koonoo",
+     "title": "Minister of Culture and Heritage; Minister of Environment; Minister of Languages; Minister responsible for Energy",
+     "rank": "cabinet",
+     "district": "Tununiq"
+    },
+    "district:Netsilik": {
+     "name": "Cecile Nelvana Lyall",
+     "title": "Minister responsible for the Nunavut Housing Corporation",
+     "rank": "cabinet",
+     "district": "Netsilik"
+    },
+    "district:Baker Lake": {
+     "name": "Craig Simailak",
+     "title": "Minister of Community Services; Minister responsible for the Nunavut Business Credit Corporation; Minister responsible for the Nunavut Development Corporation; Minister responsible for Mines; Minister responsible for Trade",
+     "rank": "cabinet",
+     "district": "Baker Lake"
+    },
+    "district:Rankin Inlet South": {
+     "name": "Annie Tattuinee",
+     "title": "Minister of Human Resources; Minister responsible for the Workers' Safety and Compensation Commission",
+     "rank": "cabinet",
+     "district": "Rankin Inlet South"
+    }
+   },
+   "unseated": [],
+   "note": "Consensus government: Main executive council chosen by the Nunavut Leadership Forum after the 27 Oct 2025 election (premier + 8 ministers). The Speaker (David Joanasie) is not a minister. RIDING FILE NOT AVAILABLE when written: keys are \"district:<district name>\" rather than riding keys."
   }
  }
 }

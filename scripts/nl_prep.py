@@ -14,14 +14,18 @@ Inputs (data/raw/nl/, downloaded here when missing; never re-downloaded):
                                  official addition of 17 October 2025, by numbered district
                                  (the official district numbers 1-40 are the ones used
                                  everywhere here).
-  2025-General-Election-Report.pdf  Elections NL's official report (20 MB): per district a
-                                 "Summary of Polling Divisions" page with the total number
-                                 of registered electors and an "Official Results" table
-                                 whose TOTAL row has rejected ballots and total votes cast.
-                                 Its text is extracted with a small stdlib PDF reader
-                                 (FlateDecode streams, Tm/TJ operators) and the per-district
-                                 figures are cached in report2025_totals.json, since the
-                                 extraction takes minutes.
+  recount_topsail_paradise.html  the Office's release of 21 November 2025 with the judicial
+                                 recount's figures for Topsail – Paradise (district 36),
+                                 which replace the release's for that district.
+  section164_report.pdf          Elections NL's post-election report under s. 164 of the
+                                 Elections Act, 1991 (posted on the official-results page as
+                                 "Preliminary General Election Report"): per district the
+                                 rejected ballots, total votes cast, cancelled ballots and
+                                 electors on the revised list. Its candidate votes equal the
+                                 official release's, and each district's votes cast is
+                                 checked here to equal the release's valid votes plus the
+                                 rejected ballots. Read with a small stdlib PDF text reader
+                                 (page /Contents, FlateDecode, Tm/Td/TJ operators).
   votes_by_candidate.json        Elections NL's results dashboard layer
                                  (2025_NL_Provincial_Election_Votes_by_Candidate_view), used
                                  only to cross-check the release.
@@ -37,12 +41,15 @@ Inputs (data/raw/nl/, downloaded here when missing; never re-downloaded):
                                  opendata.gov.nl.ca file-id 3323), WGS84, 6 decimals.
 
 Choices made here:
-  * Results: the official release (votes per candidate, valid votes only). Margins and
+  * Results: the official release (votes per candidate, valid votes only), with the
+    21 November 2025 judicial recount's figures for Topsail – Paradise (Dinn 3,029,
+    Bobbett 2,923, Bourne 354; the release had 3,031 / 2,929 / 353). Margins and
     shares are over the district's valid votes (the sum of the candidates' votes);
-    turnout_pct is total votes cast (valid + rejected, from the official report's TOTAL
-    row) over the registered electors in the district (the report's "Total Number of
-    Registered Electors in District", which is the revised list; Elections NL's own
-    turnout figures use it). Candidate names are "Given Surname" as on the ballot.
+    turnout_pct is total votes cast (valid + rejected) over the electors on the revised
+    list, both from the s. 164 report, which is how Elections NL and Wikipedia state
+    turnout (the official report's per-district "registered electors" is the final voters
+    list before election-day additions and differs by a few hundred in some districts).
+    Candidate names are "Given Surname" as on the ballot.
   * Party codes: PC, LIB, NDP, IND (the release lists independents with no affiliation;
     Elections NL calls them "Non-Affiliated").
   * Current MHAs: the Assembly's list, matched by district name; the party is the caucus
@@ -93,7 +100,8 @@ from prep_ridings import clean_polygons, polys_of  # noqa: E402
 ARCGIS = "https://services8.arcgis.com/aCyQID5qQcyrJMm2/arcgis/rest/services"
 SOURCES = {
     "official_results_release.html": "https://www.gov.nl.ca/releases/2025/elections/1020n02/",
-    "2025-General-Election-Report.pdf": "https://www.elections.gov.nl.ca/files/2025-General-Election-Report.pdf",
+    "recount_topsail_paradise.html": "https://www.gov.nl.ca/releases/2025/elections/1121n06/",
+    "section164_report.pdf": "https://www.elections.gov.nl.ca/files/October-14-2025-Preliminary-Election-Report-1.pdf",
     "votes_by_candidate.json": f"{ARCGIS}/2025_NL_Provincial_Election_Votes_by_Candidate_view/FeatureServer/0/query?where=1%3D1&outFields=*&f=json",
     "members-index.js": "https://www.assembly.nl.ca/js/members-index.js",
     "nledbc_Appendix1.pdf": "https://www.nledbc.ca/final/Appendix1.pdf",
@@ -107,15 +115,16 @@ PARTY = {"Liberal Party": "LIB", "Progressive Conservative Party": "PC", "New De
 CAUCUS = {"Progressive Conservative": "PC", "Liberal": "LIB", "New Democrat": "NDP", "Independent/Non-Affiliated": "IND",
           "Independent": "IND"}
 # The House renamed four districts when it enacted the commission's map (same boundaries).
-COMMISSION_RENAMED = {"gros morne": "humber gros morne", "portugal cove bell island": "conception bay east bell island",
-                      "st george s grand lake": "st george s humber", "trinity bay de verde": "carbonear trinity bay de verde"}
-POPULATION_BASIS = ("registered electors at the 14 October 2025 election (Elections NL official report), scaled to "
-                    "Statistics Canada's latest NL estimate by the ratio of that estimate to the elector total; "
-                    "the 2015 boundary commission's counts are 2011-census based and no census population exists for these districts")
+COMMISSION_RENAMED = {"grosmorne": "humbergrosmorne", "portugalcovebellisland": "conceptionbayeastbellisland",
+                      "stgeorgesgrandlake": "stgeorgeshumber", "trinitybaydeverde": "carboneartrinitybaydeverde"}
+POPULATION_BASIS = ("registered electors at the 14 October 2025 election (Elections NL's s. 164 election report, electors on the "
+                    "revised list), scaled to Statistics Canada's latest NL estimate by the ratio of that estimate to the elector "
+                    "total; the 2015 boundary commission's counts are 2011-census based and no census population exists for these districts")
 # Hand-written notes (Wikipedia, 2025 Newfoundland and Labrador general election; CBC and VOCM
 # of 14 September 2026 for the caucus change), keyed by district number.
 RESULT_NOTES = {
-    "36": "judicial recount granted 14 November 2025 and concluded 21 November 2025, reaffirming the result (Paul Dinn, PC, by 102 votes)",
+    "36": "figures of the judicial recount concluded 21 November 2025 (Paul Dinn, PC, by 106 votes; the 20 October official addition had him "
+          "3,031 to 2,929, by 102); rejected ballots are the recount's valid votes taken from the s. 164 report's votes cast",
     "23": "a judicial recount was requested and refused on 14 November 2025 (Mark Butt, PC, by 18 votes)",
     "28": "a judicial recount was requested and refused on 14 November 2025 (Jeff Dwyer, PC, by 64 votes)",
 }
@@ -130,6 +139,11 @@ def norm(name):
     s = re.sub(r"[–—\-'’]", " ", name or "")
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower()
     return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", s)).strip()
+
+
+def key(name):
+    """norm without spaces: the PDFs' kerning puts spaces inside words ('Gr een Bay')."""
+    return norm(name).replace(" ", "")
 
 
 def get(url, path, pause=1.0):
@@ -159,7 +173,8 @@ def person(name):
 
 
 def load_release():
-    """{num: {'name', 'candidates': [{'name', 'party', 'votes'}]}} from the official release."""
+    """{num: {'name', 'candidates': [{'name', 'party', 'votes'}]}} from the official release
+    (candidates in the release's order, alphabetical by surname)."""
     text = open(RAW / "official_results_release.html", encoding="utf-8", errors="replace").read()
     body = text[text.find("ELECTORAL DISTRICT NAME"):]
     out, cur = {}, None
@@ -184,100 +199,147 @@ def load_release():
     return out
 
 
-def pdf_lines(path):
-    """Text lines of a PDF, page by page: FlateDecode content streams, text grouped by the
-    Tm y coordinate and ordered by x (enough for the tables Elections NL and the commission
-    publish; the numbers are checked against known totals below)."""
+# --- a small PDF text reader, enough for Elections NL's and the commission's tables ---------
+PDF_TOK = re.compile(rb"\[((?:\\.|[^\]\\])*)\]\s*TJ|\(((?:\\.|[^\\)])*)\)\s*(Tj|'|\")"
+                     rb"|(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+Tm"
+                     rb"|(-?[\d.]+)\s+(-?[\d.]+)\s+T[dD]|(-?[\d.]+)\s+TL|T\*|\bBT\b", re.S)
+
+
+def pdf_unescape(b):
+    def rep(m):
+        s = m.group(1)
+        return bytes([int(s, 8) & 255]) if s.isdigit() else {b"n": b"\n", b"r": b"", b"t": b" "}.get(s, s)
+    return re.sub(rb"\\([0-7]{1,3}|.)", rep, b).decode("cp1252", "replace")
+
+
+def pdf_pages(path, ytol=1.5):
+    """Text lines of each page: the page's /Contents streams in order, text positioned by
+    Tm/Td/T*, grouped into rows by y (within ytol) and ordered by x. Numbers whose digits
+    the kerning splits ('9, 745') are rejoined by the callers."""
     data = open(path, "rb").read()
-    pages = []
-    for m in re.finditer(rb"stream\r?\n(.*?)\r?\nendstream", data, re.S):
+    objs = {int(m.group(1)): m.group(2) for m in re.finditer(rb"(?<![0-9])(\d+) 0 obj\b(.*?)\bendobj", data, re.S)}
+
+    def stream(num):
+        m = re.search(rb"stream\r?\n(.*?)\r?\nendstream", objs.get(num, b""), re.S)
         try:
-            s = zlib.decompress(m.group(1))
+            return zlib.decompress(m.group(1)) if m else b""
         except zlib.error:
-            continue
-        if b"BT" not in s or b"Tm" not in s:
-            continue
-        rows, x, y = {}, 0.0, 0.0
-        for mm in re.finditer(rb"1 0 0 1 ([\d.\-]+) ([\d.\-]+) Tm|\[(.*?)\]\s*TJ|\((.*?)\)\s*Tj", s, re.S):
-            if mm.group(1):
-                x, y = float(mm.group(1)), float(mm.group(2))
-                continue
-            raw = mm.group(3) if mm.group(3) is not None else b"(" + mm.group(4) + b")"
-            txt = ""
-            for p, k in re.findall(rb"\(((?:\\.|[^\\)])*)\)|(-?\d+\.?\d*)", raw):
-                if p:
-                    txt += re.sub(rb"\\(.)", rb"\1", p).decode("latin-1")
-                elif k and float(k) < -200:
-                    txt += " "
-            rows.setdefault(round(y), []).append((x, txt))
-            x += 1e-3
-        pages.append([" ".join(t for _, t in sorted(rows[yy])) for yy in sorted(rows, reverse=True)])
-    return pages
+            return b""
 
-
-def report_totals(release):
-    """{num: {'electors', 'rejected', 'cast'}} from the official report, cached."""
-    cache = RAW / "report2025_totals.json"
-    if cache.exists():
-        return json.load(open(cache))
-    by_name = {norm(d["name"]): num for num, d in release.items()}
-    electors, totals = {}, {}
-    for page in pdf_lines(RAW / "2025-General-Election-Report.pdf"):
-        text = re.sub(r"\s+", " ", " ".join(page))
-        m = re.search(r"ELECTORAL DISTRICT OF (.+?): SUMMARY OF POLLING DIVISIONS.*?Registered Electors in District: ([\d, ]+)", text)
-        if m:
-            num = by_name.get(norm(m.group(1)))
-            if num:
-                electors.setdefault(num, int(re.sub(r"\D", "", m.group(2))))
-        m = re.search(r"ELECTORAL DISTRICT OF (.+?): OFFICIAL RESULTS", text)
-        t = re.search(r"TOTAL((?: [\d ]+)+)", text)
-        if m and t:
-            num = by_name.get(norm(m.group(1)))
-            if num and num not in totals:
-                totals[num] = re.sub(r"\D", "", t.group(1))
-    out = {}
-    for num, d in release.items():
-        votes = [c["votes"] for c in d["candidates"]]  # the report's columns are alphabetical, like the release
-        valid = sum(votes)
-        digits = totals.get(num, "")
-        prefix = "".join(str(v) for v in votes)
-        rec = {"electors": electors.get(num)}
-        if not digits.startswith(prefix):
-            print(f"warning: report TOTAL row for {d['name']} does not match the release: {digits} vs {prefix}", file=sys.stderr)
-        else:
-            rest = digits[len(prefix):]
-            found = [r for r in range(0, 2000) if rest.startswith(f"{r}{valid + r}")]
-            if len(found) > 1 and rec["electors"]:
-                found = [r for r in found if rest.startswith(f"{r}{valid + r}{rec['electors']}")] or found[:1]
-            if found:
-                rec["rejected"], rec["cast"] = found[0], valid + found[0]
+    pages = []
+    for num, body in objs.items():
+        head = body.split(b"stream", 1)[0]
+        m = re.search(rb"/Type\s*/Page\b", head) and re.search(rb"/Contents\s*(\[[^\]]*\]|\d+ 0 R)", head)
+        if not m:
+            continue
+        s = b"\n".join(stream(int(r)) for r in re.findall(rb"(\d+) 0 R", m.group(1)))
+        items, x, y, lx, ly, lead = [], 0.0, 0.0, 0.0, 0.0, 12.0
+        for t in PDF_TOK.finditer(s):
+            g = t.groups()
+            if g[0] is not None:  # [(..) kern (..)] TJ
+                txt = ""
+                for p, k in re.findall(rb"\(((?:\\.|[^\\)])*)\)|(-?\d+\.?\d*)", g[0]):
+                    if p:
+                        txt += pdf_unescape(p)
+                    elif k and float(k) < -200:
+                        txt += " "
+                items.append((y, x, txt))
+                x += 1e-3
+            elif g[1] is not None:  # (..) Tj, ' or "
+                if g[2] != b"Tj":
+                    y, x = ly - lead, lx
+                    ly = y
+                items.append((y, x, pdf_unescape(g[1])))
+                x += 1e-3
+            elif g[3] is not None:  # Tm
+                x, y = float(g[7]), float(g[8])
+                lx, ly = x, y
+            elif g[9] is not None:  # Td / TD
+                x, y = lx + float(g[9]), ly + float(g[10])
+                lx, ly = x, y
+            elif g[11] is not None:  # TL
+                lead = float(g[11])
+            elif t.group(0) == b"T*":
+                y, x = ly - lead, lx
+                ly = y
+            else:  # BT
+                x = y = lx = ly = 0.0
+        items.sort(key=lambda i: (-i[0], i[1]))
+        rows = []
+        for yy, xx, txt in items:
+            if rows and abs(rows[-1][0] - yy) <= ytol:
+                rows[-1][1].append((xx, txt))
             else:
-                print(f"warning: cannot read rejected ballots for {d['name']}: {rest}", file=sys.stderr)
-        out[num] = rec
-    json.dump(out, open(cache, "w"), indent=1)
+                rows.append([yy, [(xx, txt)]])
+        pages.append((num, [" ".join(t for _, t in sorted(r)) for _, r in rows]))
+    return [p for _, p in sorted(pages)]
+
+
+def load_s164(release):
+    """{num: {'electors', 'rejected', 'cast', 'cancelled'}} from the s. 164 report's table
+    (row: district #, name, [stray candidate votes], rejected, cast, cancelled, electors,
+    elected candidate). The pair (rejected, cast) is identified from the release's valid
+    votes, which also checks the two documents against each other."""
+    out = {}
+    for page in pdf_pages(RAW / "section164_report.pdf"):
+        for line in page:
+            for m in re.finditer(r"(?<!\d)(\d{1,2}) ([A-Za-z][^\d]*?) ((?:\d+ )+)([A-Z][A-Z’' \-]+,)", line.strip() + " "):
+                num, nums = m.group(1), [int(v) for v in m.group(3).split()]
+                if num not in release or key(m.group(2))[:6] != key(release[num]["name"])[:6]:
+                    continue
+                valid = sum(c["votes"] for c in release[num]["candidates"])
+                cast = [c for c in nums if 0 <= c - valid < 500 and (c - valid) in nums]
+                if not cast:
+                    print(f"warning: s. 164 row for {release[num]['name']} does not match the release: {nums}", file=sys.stderr)
+                    continue
+                i = nums.index(cast[0])
+                out.setdefault(num, {"electors": nums[-1], "rejected": cast[0] - valid, "cast": cast[0],
+                                     "cancelled": nums[i + 1] if i + 2 < len(nums) else None})
+    missing = [n for n in release if n not in out]
+    if missing:
+        print("warning: no s. 164 row for districts", missing, file=sys.stderr)
     return out
 
 
+def apply_recounts(release, s164):
+    """Replace a district's votes with a judicial recount's (the Office's release has the
+    same table layout as the official results, one <p> per candidate)."""
+    text = open(RAW / "recount_topsail_paradise.html", encoding="utf-8", errors="replace").read()
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", text, re.S):
+        cells = re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)
+        if len(cells) != 5 or not re.sub(r"<[^>]+>", "", cells[0]).strip().isdigit():
+            continue
+        num = re.sub(r"<[^>]+>", "", cells[0]).strip()
+        names = [person(re.sub(r"<[^>]+>", "", c)) for c in re.split(r"</?p>", cells[2]) if re.sub(r"<[^>]+>", "", c).strip()]
+        votes = [int(re.sub(r"\D", "", c)) for c in re.split(r"</?p>", cells[4]) if re.sub(r"\D", "", c)]
+        d = release[num]
+        by_surname = {norm(c["name"]).split()[-1]: c for c in d["candidates"]}
+        if len(names) != len(votes) or any(norm(n).split()[-1] not in by_surname for n in names):
+            print("warning: recount table does not match the release for", d["name"], names, votes, file=sys.stderr)
+            continue
+        before = [c["votes"] for c in d["candidates"]]
+        for n, v in zip(names, votes):
+            by_surname[norm(n).split()[-1]]["votes"] = v
+        if num in s164:  # the ballots cast do not change in a recount; their classification does
+            s164[num]["rejected"] = s164[num]["cast"] - sum(c["votes"] for c in d["candidates"])
+        print(f"recount applied to {d['name']}: {before} -> {[c['votes'] for c in d['candidates']]}", file=sys.stderr)
+
+
 def cross_check(release):
-    """The dashboard layer must agree with the release, candidate by candidate."""
-    data = json.load(open(RAW / "votes_by_candidate.json"))
+    """The dashboard layer must agree with the release, district by district (vote multisets)."""
     dash = {}
-    for f in data["features"]:
+    for f in json.load(open(RAW / "votes_by_candidate.json"))["features"]:
         a = f["attributes"]
-        dash.setdefault(str(a["districtid"]), {})[norm(a["candidatename"]).split()[0]] = a["votes"]
+        dash.setdefault(str(a["districtid"]), []).append(a["votes"])
     bad = 0
     for num, d in release.items():
-        for c in d["candidates"]:
-            surname = norm(c["name"]).split()[-1] if "mc" not in norm(c["name"]) else None
-            got = {k: v for k, v in dash.get(num, {}).items()}
-            key = next((k for k in got if norm(c["name"]).startswith(k) or norm(c["name"]).endswith(k) or (surname and k.startswith(surname))), None)
-            if key is None or got[key] != c["votes"]:
-                bad += 1
-                print(f"dashboard differs for {d['name']} {c['name']}: release {c['votes']}, dashboard {got}", file=sys.stderr)
+        if sorted(dash.get(num, [])) != sorted(c["votes"] for c in d["candidates"]):
+            bad += 1
+            print(f"dashboard differs for {d['name']}: release {[c['votes'] for c in d['candidates']]}, dashboard {dash.get(num)}", file=sys.stderr)
     return bad
 
 
-def load_results(release, totals):
+def load_results(release, s164):
     divisions = {}
     for num in sorted(release, key=int):
         d = release[num]
@@ -287,7 +349,7 @@ def load_results(release, totals):
         shares = Counter()
         for c in cands:
             shares[c["party"]] += c["votes"]
-        t = totals.get(num, {})
+        t = s164.get(num, {})
         rec = {
             "num": num, "name": d["name"],
             "winner_2025": w["name"], "party_2025": w["party"], "runnerup_2025": r["name"], "runnerup_party_2025": r["party"],
@@ -305,11 +367,11 @@ def load_results(release, totals):
 
 
 def load_mhas(divisions):
-    by_name = {norm(d["name"]): d for d in divisions.values()}
+    by_name = {key(d["name"]): d for d in divisions.values()}
     text = open(RAW / "members-index.js", encoding="utf-8").read()
     seen = set()
     for name, district, party in re.findall(r"name:\s*'(.*?)',\s*district:\s*'(.*?)',\s*party:\s*'(.*?)'", text, re.S):
-        d = by_name.get(norm(district.replace("\\'", "'")))
+        d = by_name.get(key(district.replace("\\'", "'")))
         if not d:
             print("MHA district matches no result:", district, file=sys.stderr)
             continue
@@ -333,16 +395,15 @@ def load_mhas(divisions):
 
 def commission_population(divisions):
     """Appendix 1 of the 2015 commission's final report: 2011 census population per district."""
-    by_name = {norm(d["name"]): d for d in divisions.values()}
+    by_name = {key(d["name"]): d for d in divisions.values()}
     found = 0
-    for page in pdf_lines(RAW / "nledbc_Appendix1.pdf"):
+    for page in pdf_pages(RAW / "nledbc_Appendix1.pdf"):
         for line in page:
             m = re.match(r"^\s*([A-Za-z][A-Za-z .'’\-]+?)\s{2,}([\d,]+)\s+(-?\s*[\d.]+%|-)\s*$", line)
             if not m:
                 continue
-            key = norm(m.group(1))
-            key = COMMISSION_RENAMED.get(key, key)
-            d = by_name.get(key)
+            k = key(m.group(1))
+            d = by_name.get(COMMISSION_RENAMED.get(k, k))
             if not d:
                 print("commission district matches no result:", repr(m.group(1)), file=sys.stderr)
                 continue
@@ -389,14 +450,14 @@ def load_shapes(divisions):
         if num not in divisions:
             print("shape with no result:", num, f["properties"].get("dist_name"), file=sys.stderr)
             continue
-        if norm(f["properties"].get("dist_name", "")) != norm(divisions[num]["name"]):
+        if key(f["properties"].get("dist_name", "")) != key(divisions[num]["name"]):
             print("shape name differs:", f["properties"].get("dist_name"), "/", divisions[num]["name"], file=sys.stderr)
         coarse.append(feature(num, f["geometry"], 0.002, 0.005))
         if touches_inset(f["geometry"]):
             fine.append(feature(num, f["geometry"], 0.0004, 0.001))
-    key = lambda ft: int(ft["id"])
-    return ({"type": "FeatureCollection", "features": sorted(coarse, key=key)},
-            {"type": "FeatureCollection", "features": sorted(fine, key=key)})
+    order = lambda ft: int(ft["id"])
+    return ({"type": "FeatureCollection", "features": sorted(coarse, key=order)},
+            {"type": "FeatureCollection", "features": sorted(fine, key=order)})
 
 
 def main():
@@ -404,8 +465,9 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     release = load_release()
     bad = cross_check(release)
-    totals = report_totals(release)
-    divisions = load_results(release, totals)
+    s164 = load_s164(release)
+    apply_recounts(release, s164)
+    divisions = load_results(release, s164)
     load_mhas(divisions)
     commission_population(divisions)
     factor, pop_date, total = scale_population(divisions)
@@ -420,12 +482,13 @@ def main():
     seats = Counter(d["party_2025"] for d in divisions.values())
     now = Counter(d["mla_party"] for d in divisions.values())
     print(f"{len(divisions)} districts, {len(geo['features'])} shapes ({len(fine['features'])} fine), {close} close in 2025, "
-          f"seats 2025 {dict(seats)}, sitting {dict(now)}; dashboard cross-check: {bad} candidates differ")
+          f"seats 2025 {dict(seats)}, sitting {dict(now)}; dashboard cross-check: {bad} districts differ")
     print(f"population: {total:,} registered electors scaled by {factor:.4f} to {pop_date}: "
           f"{sum(d['population'] for d in divisions.values()):,}; commission 2011 total "
           f"{sum(d.get('population_2011_commission', 0) for d in divisions.values()):,}")
-    print("turnout: province", round(100 * sum(totals[n]["cast"] for n in totals) / sum(totals[n]["electors"] for n in totals), 1),
-          "%; geo bytes:", (OUT / "divisions_geo.json").stat().st_size, "fine bytes:", (OUT / "divisions_geo_fine.json").stat().st_size)
+    cast, electors = sum(t["cast"] for t in s164.values()), sum(t["electors"] for t in s164.values())
+    print(f"turnout: {cast:,} of {electors:,} electors, {100 * cast / electors:.1f}%; geo bytes:",
+          (OUT / "divisions_geo.json").stat().st_size, "fine bytes:", (OUT / "divisions_geo_fine.json").stat().st_size)
 
 
 if __name__ == "__main__":

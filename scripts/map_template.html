@@ -606,7 +606,7 @@ function select(n, quiet) {
     ${sparkline(r)}
     ${CT && state.money !== "grants" && CT.ridings[n] ? contractsList(n) : ""}
     <h2 style="margin-top:14px">${C.topGrantsTitle}</h2>
-    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}${t.formula ? ' <span class="tag" title="allocated by a published formula">formula</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span>${newsLine(t)}</li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
+    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.src ? `<a href="${t.src}" target="_blank" rel="noopener" title="Open the source record">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}${t.formula ? ' <span class="tag" title="allocated by a published formula">formula</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span>${newsLine(t)}</li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
     <p class="small muted">${C.linkNote}</p>
     ${BUDGET ? budgetSection(n) : ""}`;
   // Keep the reader at the map: the panel sits beside it on wide screens; on narrow ones bring the panel up.
@@ -669,16 +669,19 @@ function renderLegislature() {
   </dl>`;
 
   // Budget: this government's own numbers first, then its history, then (behind a toggle) the others.
-  const b = J.budget, pop = J.population;
+  // Territories have no budget block in the legislature record; build the tiles from the fiscal history's latest year instead.
+  const lastH = J.history && J.history.years && J.history.years.length ? J.history.years[J.history.years.length - 1] : null;
+  const b = J.budget || (lastH ? {date: null, title: `Budget ${lastH.year} (from the fiscal history; territorial budgets are not consolidated)`, year: lastH.year, deficit_billions: lastH.balance_billions == null ? null : -lastH.balance_billions,
+    net_debt_billions: lastH.net_debt_billions, debt_measure: lastH.net_debt_billions != null && lastH.net_debt_billions < 0 ? "Net financial assets (more financial assets than debt), stored as a negative net debt" : "", debt_to_gdp_pct: null} : null), pop = J.population;
   if (!b) return;
   document.getElementById("budgetCard").hidden = false;
   document.getElementById("budgetTitle").textContent = `${J.name === "Canada" ? "Federal" : J.name} budget`;
   const per = (v, p) => v == null ? null : 1e9 * v / p;
   const surplusNow = /SURPLUS/i.test(b.deficit_note || "");
-  document.getElementById("budgetSub").innerHTML = `${b.title || ""}, tabled ${fmtDateLong(b.date)} for ${b.year}.${J.name === "Canada" ? " Budget 2026 is due on 5 November 2026." : ""}`;
+  document.getElementById("budgetSub").innerHTML = `${b.title || ""}${b.date ? `, tabled ${fmtDateLong(b.date)}` : ""} for ${b.year}.${J.name === "Canada" ? " Budget 2026 is due on 5 November 2026." : ""}`;
   document.getElementById("kpis").innerHTML = `
     <div class="kpi ${surplusNow ? "surplus" : "deficit"}"><div class="lab">${surplusNow ? "Budgeted deficit, now a surplus" : "Deficit this year"}</div><div class="big">${fmtBn(b.deficit_billions)}</div><div class="per">${fmtPer(per(b.deficit_billions, pop))} per person</div>${b.deficit_note ? `<div class="note">${b.deficit_note}</div>` : ""}</div>
-    <div class="kpi debt"><div class="lab">${J.name === "Canada" ? "Federal debt (accumulated deficit)" : "Net debt"}, what's owed in total</div><div class="big">${fmtBn(b.net_debt_billions)}</div><div class="per"><b>${fmtPer(per(b.net_debt_billions, pop))}</b> per person</div><div class="note">${b.debt_measure || ""}</div></div>
+    <div class="kpi debt"><div class="lab">${J.name === "Canada" ? "Federal debt (accumulated deficit)" : b.net_debt_billions != null && b.net_debt_billions < 0 ? "Net financial assets" : "Net debt"}, ${b.net_debt_billions != null && b.net_debt_billions < 0 ? "assets beyond what's owed" : "what's owed in total"}</div><div class="big">${fmtBn(b.net_debt_billions == null ? null : Math.abs(b.net_debt_billions))}</div><div class="per"><b>${fmtPer(per(b.net_debt_billions, pop))}</b> per person</div><div class="note">${b.debt_measure || ""}</div></div>
     <div class="kpi"><div class="lab">Debt to GDP</div><div class="big">${b.debt_to_gdp_pct == null ? "–" : b.debt_to_gdp_pct + "%"}</div>${b.general_government_net_debt_to_gdp_pct != null ? `<div class="per">${b.general_government_net_debt_to_gdp_pct}% for all governments together, counting CPP and QPP assets (IMF measure)</div>` : ""}${equalizationLine(J)}</div>`;
   // (equalization text lives in equalizationLine, defined below renderLegislature)
   // History: grouped bars per year (revenue black, spending maroon, balance green/red) with trend lines,
