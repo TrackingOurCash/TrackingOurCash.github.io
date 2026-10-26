@@ -118,6 +118,8 @@ th { color: var(--ink-2); font-weight: 600; cursor: pointer; user-select: none; 
 td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
 tbody tr { cursor: pointer; }
 tbody tr:hover { background: var(--grid); }
+tbody tr.sel { background: var(--grid); box-shadow: inset 3px 0 0 var(--focus); font-weight: 600; }
+tbody tr.sel td { border-bottom-color: var(--focus); }
 .notes { color: var(--ink-2); font-size: 13px; }
 .notes li { margin-bottom: 4px; }
 .notes a, #panel a { color: var(--focus); }
@@ -404,9 +406,18 @@ function showTip(e, n) {
 }
 function hideTip() { tip.style.display = "none"; }
 
+const featById = Object.fromEntries(D.geo.features.map(f => [f.id, f]));
+function zoomToRiding(n) {
+  const [[w, s], [e, no]] = d3.geoBounds(featById[n]);
+  zoomTo([w, s, e, no], 0.5);
+  document.getElementById("svg").scrollIntoView({block: "nearest", behavior: "smooth"});
+}
 function select(n, quiet) {
   state.sel = n;
   paths.classed("sel", d => d.id === n).filter(d => d.id === n).raise();
+  document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.classList.toggle("sel", tr.dataset.n === n));
+  const row = document.querySelector(`#tbl tbody tr[data-n="${n}"]`);
+  if (row) row.scrollIntoView({block: "nearest"});
   insetPaths.forEach(ps => ps.classed("sel", d => d.id === n).filter(d => d.id === n).raise());
   const rankOf = Object.keys(R).filter(k => V[k].t != null).sort((a, b) => V[b].t - V[a].t);
   const rank = rankOf.indexOf(n) + 1;
@@ -542,7 +553,11 @@ function renderTable() {
   tbody.innerHTML = ns.map(n => { const r = R[n], v = V[n]; return `<tr data-n="${n}"><td><span class="sw" style="background:var(${PVAR[r.rep_party]})"></span>${r.name}${r.close ? ' <span class="tag">close</span>' : ""}</td><td>${r.region.slice(0, 16)}</td>
       <td>${r.rep} · ${r.rep_party || "–"}</td><td>${r.party_won}</td><td class="n">${r.margin_votes.toLocaleString()}</td><td class="n">${r.margin_pts}</td>
       <td class="n">${fmt$(v.after)}</td><td class="n">${fmtPc(v.pc)}</td><td class="n">${fmtPc(v.pcb)}</td><td class="n">${fmtPct(v.chg)}</td></tr>`; }).join("");
-  tbody.querySelectorAll("tr").forEach(tr => tr.onclick = () => select(tr.dataset.n));
+  tbody.querySelectorAll("tr").forEach(tr => {
+    tr.classList.toggle("sel", tr.dataset.n === state.sel);
+    // Clicking a row selects the riding and zooms the main map so the riding fills half the view.
+    tr.onclick = () => { select(tr.dataset.n); zoomToRiding(tr.dataset.n); };
+  });
 }
 
 // ---- controls ----
