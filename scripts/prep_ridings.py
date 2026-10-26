@@ -163,55 +163,102 @@ def simplify(points, tol):
     return out if len(out) >= 4 else points[:1] + points[1:-1][:2] + points[-1:]
 
 
+def densify(ring, step=0.2):
+    """Insert points along long straight edges (the 60th parallel, the 141st meridian) so
+    d3's great-circle rendering follows the lon/lat line both neighbours were drawn with."""
+    out = [ring[0]]
+    for (x0, y0), (x1, y1) in zip(ring, ring[1:]):
+        n = int(max(abs(x1 - x0), abs(y1 - y0)) / step)
+        for i in range(1, n + 1):
+            out.append([x0 + (x1 - x0) * i / (n + 1), y0 + (y1 - y0) * i / (n + 1)])
+        out.append([x1, y1])
+    return out
+
+
+def clean_polygons(polys, tol, min_extent, cap_lat=None):
+    """Simplify a list of GeoJSON polygons (each a list of rings) with one tolerance,
+    drop specks, and wind exterior rings clockwise for d3-geo (holes the other way)."""
+    new_polys = []
+    for poly in polys:
+        rings = []
+        for i, ring in enumerate(poly):
+            if cap_lat is not None:
+                ring = [[x, min(y, cap_lat)] for x, y in ring]
+            ring_x = [p[0] for p in ring]
+            ring_y = [p[1] for p in ring]
+            if max(max(ring_x) - min(ring_x), max(ring_y) - min(ring_y)) < min_extent:
+                if i == 0:
+                    break
+                continue
+            s = densify(simplify(ring, tol))
+            ring_out = [[round(x, 4), round(y, 4)] for x, y in s]
+            if len(ring_out) < 4:
+                continue
+            area = sum(ring_out[j][0] * ring_out[j + 1][1] - ring_out[j + 1][0] * ring_out[j][1]
+                       for j in range(len(ring_out) - 1))
+            clockwise = area < 0
+            if (i == 0) != clockwise:
+                ring_out = ring_out[::-1]
+            rings.append(ring_out)
+        if rings:
+            new_polys.append(rings)
+    return new_polys
+
+
+def polys_of(geom):
+    return geom["coordinates"] if geom["type"] == "MultiPolygon" else [geom["coordinates"]]
+
+
 def load_shapes(ridings):
     shapes = json.load(open(RAW / "fed2023_simple.json"))["objects"]
     ids = {o["name"]: o["external_id"] for o in json.load(open(RAW / "fed2023_list.json"))["objects"]}
     features = []
     for o in shapes:
         num = ids[o["name"]]
-        geom = o["simple_shape"]
-        polys = geom["coordinates"] if geom["type"] == "MultiPolygon" else [geom["coordinates"]]
-        xs = [p[0] for poly in polys for p in poly[0]]
-        ys = [p[1] for poly in polys for p in poly[0]]
-        extent = max(max(xs) - min(xs), max(ys) - min(ys))
-        tol = max(0.0004, extent / 400)
-        min_extent = extent / 200  # drop specks (tiny islands)
-        new_polys = []
-        for poly in polys:
-            ring_x = [p[0] for p in poly[0]]
-            ring_y = [p[1] for p in poly[0]]
-            if max(max(ring_x) - min(ring_x), max(ring_y) - min(ring_y)) < min_extent:
-                continue
-            rings = []
-            for ring in poly[:1]:  # holes dropped: they're rarely visible at this scale
-                # Nunavut's legal boundary runs to the North Pole; cap it just above the
-                # northernmost land so the map isn't one giant red wedge.
-                ring = [[x, min(y, 83.3)] for x, y in ring]
-                s = simplify(ring, tol)
-                ring_out = [[round(x, 4), round(y, 4)] for x, y in s]
-                # d3-geo wants exterior rings clockwise (negative planar area); the source mixes both.
-                area = sum(ring_out[i][0] * ring_out[i + 1][1] - ring_out[i + 1][0] * ring_out[i][1]
-                           for i in range(len(ring_out) - 1))
-                rings.append(ring_out[::-1] if area > 0 else ring_out)
-            new_polys.append(rings)
-        features.append({
-            "type": "Feature",
-            "id": num,
-            "properties": {"num": num},
-            "geometry": {"type": "MultiPolygon", "coordinates": new_polys},
-        })
+        # One tolerance for every riding, so shared borders simplify the same way on both sides.
+        # Nunavut's legal boundary runs to the North Pole; cap it just above the northernmost land.
+        new_polys = clean_polygons(polys_of(o["simple_shape"]), 0.003, 0.01, cap_lat=83.3)
+        features.append({"type": "Feature", "id": num, "properties": {"num": num},
+                         "geometry": {"type": "MultiPolygon", "coordinates": new_polys}})
     return {"type": "FeatureCollection", "features": features}
+
+
+def load_land():
+    """Natural Earth 10m coastlines: Canada (the clip for the riding layer), neighbouring
+    land for context, and the big lakes to paint back over the ridings."""
+    countries = json.load(open(RAW / "ne" / "ne_10m_admin_0_countries.geojson"))["features"]
+    lakes = json.load(open(RAW / "ne" / "ne_10m_lakes.geojson"))["features"]
+    out = {"type": "FeatureCollection", "features": []}
+    for f in countries:
+        name = f["properties"].get("ADMIN")
+        if name == "Canada":
+            out["features"].append({"type": "Feature", "properties": {"kind": "canada"},
+                                    "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys_of(f["geometry"]), 0.004, 0.02)}})
+        elif name in ("United States of America", "Greenland", "Saint Pierre and Miquelon"):
+            # Keep only the parts near Canada.
+            polys = [p for p in polys_of(f["geometry"]) if max(pt[1] for pt in p[0]) > 40 and min(pt[0] for pt in p[0]) < -45 and max(pt[0] for pt in p[0]) > -170]
+            out["features"].append({"type": "Feature", "properties": {"kind": "other"},
+                                    "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys, 0.01, 0.05)}})
+    for f in lakes:
+        p = f["properties"]
+        polys = polys_of(f["geometry"])
+        if p.get("scalerank", 9) <= 2 and max(pt[1] for pt in polys[0][0]) > 41 and min(pt[0] for pt in polys[0][0]) < -52:
+            out["features"].append({"type": "Feature", "properties": {"kind": "lake", "name": p.get("name")},
+                                    "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys, 0.004, 0.02)}})
+    return out
 
 
 def main():
     ridings = load_results()
     unmatched = load_mps(ridings)
     geo = load_shapes(ridings)
+    land = load_land()
     json.dump(ridings, open(OUT / "ridings.json", "w"), ensure_ascii=False, indent=1)
     json.dump(geo, open(OUT / "ridings_geo.json", "w"), separators=(",", ":"))
+    json.dump(land, open(OUT / "land_geo.json", "w"), separators=(",", ":"))
     print(f"{len(ridings)} ridings, {sum(r['mp'] != 'Vacant' for r in ridings.values())} with a current MP")
     print("MP constituencies not matched:", unmatched)
-    print("geo bytes:", (OUT / "ridings_geo.json").stat().st_size)
+    print("geo bytes:", (OUT / "ridings_geo.json").stat().st_size, "land bytes:", (OUT / "land_geo.json").stat().st_size)
 
 
 if __name__ == "__main__":

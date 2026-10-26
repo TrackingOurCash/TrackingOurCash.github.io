@@ -15,6 +15,7 @@ KEEP = ["num", "current_name", "province", "population", "party_2025", "runnerup
 def main():
     sp = json.load(open(DATA / "riding_spending.json"))
     geo = json.load(open(DATA / "ridings_geo.json"))
+    land = json.load(open(DATA / "land_geo.json"))
     ridings = {n: {k: r[k] for k in KEEP} for n, r in sp["ridings"].items()}
     meta = dict(sp["meta"])
     meta.pop("top_flagged_recipients", None)
@@ -25,6 +26,7 @@ def main():
         "dept": sp["dept_by_riding"],
         "deptBefore": sp["dept_by_riding_before"],
         "geo": geo,
+        "land": land,
     }
     tpl = (ROOT / "scripts" / "map_template.html").read_text()
     html = tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False, separators=(",", ":")))

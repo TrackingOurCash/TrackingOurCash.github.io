@@ -172,6 +172,8 @@ def main():
                 "prov": row["recipient_province"],
                 "pc": pc,
                 "bn": bn,
+                "org": row["owner_org"],
+                "ref": row["ref_number"].strip(),
                 "riding": rnum,
                 "program": first(row["prog_name_en"]),
                 "title": (row["agreement_title_en"] or "").strip()[:140],
@@ -345,8 +347,8 @@ def main():
             "top_depts": [[d, round(v)] for d, v in p["depts"].most_common(4)],
             "top_grants": [
                 {"v": round(v), "who": g["recipient"][:80], "dept": g["dept"][:60], "prog": g["program"][:80],
-                 "date": g["start"], "city": g["city"], "flag": fl, "how": how}
-                for v, g, fl, how in sorted(p["grants"], key=lambda t: -t[0])[:6]
+                 "date": g["start"], "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"]}
+                for v, g, fl, how in sorted(p["grants"], key=lambda t: -t[0])[:10]
             ],
         })
         rec["change_pc"] = round(rec["pc_after"] - rec["pc_before"], 2)

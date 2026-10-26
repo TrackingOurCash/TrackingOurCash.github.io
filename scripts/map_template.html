@@ -10,6 +10,7 @@
   --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --water: #e4ecf1; --nodata: #d9d8d2;
   --sel: #0b0b0b; --focus: #2a78d6; --before: #c3c2b7; --after: #52514e;
   --lpc: #d71920; --cpc: #1b4c9e; --ndp: #f37021; --bq: #1aa7bd; --gpc: #3d9b35; --ind: #6f6e69; --ppc: #4b2e83;
+  --land: #eceae2; --otherland: #e6e4dc;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -18,6 +19,7 @@
     --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --water: #141a1f; --nodata: #2f2f2d;
     --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7;
     --lpc: #ea3a40; --cpc: #4f80d8; --ndp: #f68a45; --bq: #3fc0d4; --gpc: #5cb954; --ind: #9a9892; --ppc: #8a6bc8;
+    --land: #262624; --otherland: #1f1f1e;
   }
 }
 :root[data-theme="dark"] {
@@ -26,6 +28,7 @@
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --water: #141a1f; --nodata: #2f2f2d;
   --sel: #f0efec; --focus: #3987e5; --before: #5c5b57; --after: #c3c2b7;
   --lpc: #ea3a40; --cpc: #4f80d8; --ndp: #f68a45; --bq: #3fc0d4; --gpc: #5cb954; --ind: #9a9892; --ppc: #8a6bc8;
+  --land: #262624; --otherland: #1f1f1e;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -47,6 +50,14 @@ label.chk { color: var(--ink-2); display: inline-flex; gap: 6px; align-items: ce
 .mapcard { padding: 10px; }
 #svg { width: 100%; height: auto; display: block; touch-action: none; background: var(--water); border-radius: 8px; }
 .r { stroke: var(--surface); stroke-width: 0.5; vector-effect: non-scaling-stroke; cursor: pointer; }
+.land { fill: var(--land); stroke: none; pointer-events: none; }
+.otherland { fill: var(--otherland); stroke: none; pointer-events: none; }
+.lake { fill: var(--water); stroke: none; pointer-events: none; }
+.coast { fill: none; stroke: var(--axis); stroke-width: 0.4; vector-effect: non-scaling-stroke; pointer-events: none; }
+.topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+#theme { font: inherit; font-size: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 4px 12px; cursor: pointer; white-space: nowrap; }
+ul.grants a { color: inherit; text-decoration: underline; text-decoration-color: var(--axis); text-underline-offset: 2px; }
+ul.grants a:hover { text-decoration-color: var(--ink); }
 .r:hover { stroke: var(--sel); stroke-width: 1.6; }
 .r.sel { stroke: var(--sel); stroke-width: 2.2; }
 .insets { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 8px; }
@@ -94,7 +105,7 @@ tbody tr:hover { background: var(--grid); }
 </style>
 
 <div class="wrap">
-  <h1>Where federal grants went after the 2025 election</h1>
+  <div class="topbar"><h1>Where federal grants went after the 2025 election</h1><button id="theme" type="button" aria-pressed="false">Dark mode</button></div>
   <p class="sub" id="subtitle"></p>
 
   <div class="controls">
@@ -146,6 +157,8 @@ const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleS
 const fmtPct = v => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(0) + "%";
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const state = {metric: "pc", dept: "", natl: false, closeOnly: false, sel: null, sort: "pc", dir: -1, q: ""};
+const recordUrl = t => "https://search.open.canada.ca/grants/record/" + encodeURIComponent(`${t.org},${t.ref},current`);
+const searchUrl = who => "https://search.open.canada.ca/grants/?search_text=" + encodeURIComponent('"' + who + '"');
 const pill = p => `<span class="pill" style="background:var(${PVAR[p] || "--ind"})">${PARTY[p] || p}</span>`;
 
 // ---- metric computation ----
@@ -177,7 +190,7 @@ function tint(party, t) {
   const base = css(PVAR[party] || "--ind");
   return d3.interpolateLab(surfaceColor, base)(0.18 + 0.82 * t);
 }
-const defs = d3.select("#defs");
+const defs = d3.select("#defs").append("g").attr("id", "patdefs");
 const patterns = new Set();
 function hatch(pa, pb, t) {
   const b = Math.round(t * 7);
@@ -205,7 +218,20 @@ const svg = d3.select("#svg");
 const proj = d3.geoConicConformal().parallels([49, 77]).rotate([96, 0]).fitExtent([[6, 6], [W - 6, H - 6]], D.geo);
 const path = d3.geoPath(proj);
 const g = d3.select("#main");
-const paths = g.selectAll("path").data(D.geo.features).join("path")
+const LAND = D.land.features;
+const byKind = k => LAND.filter(f => f.properties.kind === k);
+function drawLand(parent, pth, clipId) {
+  parent.selectAll(".otherland").data(byKind("other")).join("path").attr("class", "otherland").attr("d", pth);
+  parent.selectAll(".land").data(byKind("canada")).join("path").attr("class", "land").attr("d", pth);
+  d3.select("#defs").insert("clipPath", "#patdefs").attr("id", clipId).selectAll("path").data(byKind("canada")).join("path").attr("d", pth);
+  const layer = parent.append("g").attr("clip-path", `url(#${clipId})`);
+  const over = parent.append("g");
+  over.selectAll(".lake").data(byKind("lake")).join("path").attr("class", "lake").attr("d", pth);
+  over.selectAll(".coast").data(byKind("canada")).join("path").attr("class", "coast").attr("d", pth);
+  return layer;
+}
+const ridingLayer = drawLand(g, path, "clip-canada");
+const paths = ridingLayer.selectAll("path").data(D.geo.features).join("path")
   .attr("class", "r").attr("d", path).attr("tabindex", 0).attr("aria-label", d => R[d.id].current_name)
   .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip)
   .on("click", (e, d) => select(d.id)).on("keydown", (e, d) => { if (e.key === "Enter") select(d.id); });
@@ -237,7 +263,9 @@ for (const [name, b] of INSETS) {
   const s = box.append("svg").attr("viewBox", `0 0 ${w} ${h}`);
   const cid = "clip-" + name.replace(/\W/g, "");
   s.append("clipPath").attr("id", cid).append("rect").attr("width", w).attr("height", h);
-  const ps = s.append("g").attr("clip-path", `url(#${cid})`).selectAll("path").data(feats).join("path")
+  const inner = s.append("g").attr("clip-path", `url(#${cid})`);
+  const ipath = d3.geoPath(ip);
+  const ps = drawLand(inner, ipath, cid + "-land").selectAll("path").data(feats).join("path")
     .attr("class", "r").attr("d", d3.geoPath(ip))
     .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip).on("click", (e, d) => select(d.id));
   insetPaths.push(ps);
@@ -300,11 +328,11 @@ function select(n, quiet) {
       <div><b>${r.winner_2025}</b> (${PARTY[r.party_2025]}) won by <b>${r.margin_votes.toLocaleString()} votes</b> (${r.margin_pts} pts) over ${r.runnerup_2025} (${PARTY[r.runnerup_party_2025]})${r.close ? ' <span class="tag">close</span>' : ""}</div>
       <div class="small muted">${shares}</div>
     </div>
-    <div class="small muted">Grants since the election (${M.election} to ${M.cutoff})</div>
+    <div class="small muted">Grants since the election (${M.election} to ${M.cutoff}, the last fully reported quarter)</div>
     <p class="big">${fmt$(v.after)}</p>
     <dl class="kv" style="margin-top:8px">
       <dt>Per person per year</dt><dd>${fmtPc(v.pc)}</dd>
-      <dt>Same period a year before</dt><dd>${fmt$(v.before)} · ${fmtPc(v.pcb)}/person</dd>
+      <dt>Same dates a year earlier<br><span class="muted">(${M.before_start} to ${M.before_end})</span></dt><dd>${fmt$(v.before)} · ${fmtPc(v.pcb)}/person</dd>
       <dt>Change</dt><dd>${fmtPct(v.chg)}</dd>
       <dt>vs median riding</dt><dd>${v.score == null ? "–" : v.score.toFixed(2) + "×"}</dd>
       <dt>Awards, everything included</dt><dd>${r.after_n.toLocaleString()} · ${fmt$(r.after_total)}</dd>
@@ -312,7 +340,8 @@ function select(n, quiet) {
     <h2 style="margin-top:14px">Top departments</h2>
     <dl class="kv">${r.top_depts.map(([d, x]) => `<dt class="small">${d}</dt><dd>${fmt$(x)}</dd>`).join("") || "<dt>None</dt><dd></dd>"}</dl>
     <h2 style="margin-top:14px">Largest grants since the election</h2>
-    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.who}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${t.prog} · ${t.dept} · ${t.date}${t.city ? " · " + t.city : ""}</span></li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>`;
+    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> <a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${t.prog} · ${t.dept} · ${t.date}${t.city ? " · " + t.city : ""} · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">all awards to this recipient</a></span></li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
+    <p class="small muted">Links open the government's own record of each award on open.canada.ca.</p>`;
   if (!quiet && innerWidth < 960) document.getElementById("panel").scrollIntoView({block: "nearest", behavior: "smooth"});
 }
 
@@ -364,7 +393,13 @@ document.getElementById("natl").onchange = e => { state.natl = e.target.checked;
 document.getElementById("closeOnly").onchange = e => { state.closeOnly = e.target.checked; render(); };
 document.getElementById("q").oninput = e => { state.q = e.target.value; renderTable(); };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
-new MutationObserver(render).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
+const themeBtn = document.getElementById("theme");
+const isDark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+function syncThemeBtn() { const d = isDark(); themeBtn.textContent = d ? "Light mode" : "Dark mode"; themeBtn.setAttribute("aria-pressed", d); }
+themeBtn.onclick = () => { const next = isDark() ? "light" : "dark"; document.documentElement.dataset.theme = next; try { localStorage.setItem("theme", next); } catch (e) {} syncThemeBtn(); render(); };
+try { const saved = localStorage.getItem("theme"); if (saved && !document.documentElement.dataset.theme) document.documentElement.dataset.theme = saved; } catch (e) {}
+syncThemeBtn();
+new MutationObserver(() => { syncThemeBtn(); render(); }).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme"]});
 
 const mth = M.methods;
 const placed = k => Object.entries(mth).filter(([key]) => key.startsWith(k + "|") && !key.includes("unmapped")).reduce((s, [, v]) => s + v, 0);
