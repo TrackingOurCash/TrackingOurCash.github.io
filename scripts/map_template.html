@@ -75,24 +75,38 @@ ul.budget li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12p
 .inset .cap button { font: inherit; font-size: 11px; border: 0; background: none; color: var(--focus); cursor: pointer; padding: 0; }
 .zoombar { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
 .zoombar button { font: inherit; font-size: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
-.legis { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; min-width: 0; }
-.legis.ingrid { grid-column: span 2; }
-@media (max-width: 480px) { .legis.ingrid { grid-column: span 1; } }
-.legis.below { margin-top: 8px; }
-.legis h3 { font: 600 15px/1.2 "Source Serif 4", Georgia, serif; margin: 0 0 4px; }
-.legis .row { display: grid; grid-template-columns: minmax(150px, 220px) minmax(0, 1fr); gap: 8px 14px; align-items: start; }
-@media (max-width: 640px) { .legis .row { grid-template-columns: 1fr; } }
-.legis svg { width: 100%; height: auto; display: block; }
-.legis .seatlist { display: flex; flex-wrap: wrap; gap: 3px 10px; font-size: 12px; color: var(--ink-2); margin-top: 2px; }
-.legis dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; font-size: 12px; margin: 0; }
-.legis dt { color: var(--muted); white-space: nowrap; }
-.legis dd { margin: 0; }
-.legis .fisc { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--grid); }
-.legis .fisc table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.legis .fisc td, .legis .fisc th { padding: 2px 6px 2px 0; border: 0; text-align: left; white-space: normal; position: static; }
-.legis .fisc td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.legis .fisc th { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
-.legis .fn { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.seatsrow { display: grid; grid-template-columns: minmax(260px, 1.1fr) minmax(0, 1fr); gap: 16px 32px; align-items: center; }
+@media (max-width: 760px) { .seatsrow { grid-template-columns: 1fr; } }
+#hemicycle svg { width: 100%; max-width: 560px; height: auto; display: block; margin: 0 auto; }
+.seatlist { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+#leaders dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 14px; margin: 0; }
+#leaders dt { color: var(--muted); white-space: nowrap; }
+#leaders dd { margin: 0; }
+.fiscbars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 28px; }
+.fb h3 { font-size: 13px; margin: 0 0 6px; }
+.fb .r { display: grid; grid-template-columns: 110px 1fr 86px; gap: 6px; align-items: center; font-size: 12px; color: var(--ink-2); padding: 1px 0; }
+.fb .r.me { color: var(--ink); font-weight: 600; }
+.fb .bar { height: 11px; border-radius: 0 3px 3px 0; background: var(--axis); min-width: 1px; }
+.fb .r.me .bar { background: var(--focus); }
+.fb .bar.surplus { background: var(--surplus, #0ca30c); }
+.fb .v { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fb .amt { font-size: 11px; color: var(--muted); }
+#history { margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 8px; }
+#history summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
+#history summary::-webkit-details-marker { display: none; }
+#history .pm { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--axis); border-radius: 4px; align-items: center; justify-content: center; font-size: 14px; color: var(--ink-2); }
+#history .pm::before { content: "+"; }
+#history[open] .pm::before { content: "−"; }
+.hist { display: grid; grid-template-columns: 70px 1fr 90px; gap: 4px 10px; align-items: center; font-size: 12px; margin-top: 8px; }
+.hist .axis { position: relative; height: 16px; background: var(--grid); border-radius: 3px; }
+.hist .axis i { position: absolute; top: 0; bottom: 0; }
+.hist .axis i.neg { background: var(--lpc, #d71920); opacity: .8; border-radius: 3px 0 0 3px; }
+.hist .axis i.pos { background: var(--surplus, #0ca30c); opacity: .85; border-radius: 0 3px 3px 0; }
+.hist .axis b { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--ink); }
+.hist .v { text-align: right; font-variant-numeric: tabular-nums; }
+.hist .fc { color: var(--muted); font-style: italic; }
+.fn { font-size: 11px; color: var(--muted); margin: 8px 0 0; }
+.fiscline { font-size: 13px; margin: 0 0 10px; }
 .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; color: var(--ink-2); font-size: 12px; margin-top: 10px; }
 .legend .lab { color: var(--muted); font-size: 11px; margin-bottom: 3px; }
 .ramp { display: flex; gap: 1px; }
@@ -166,10 +180,28 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
       <svg id="svg" viewBox="0 0 960 600" role="img" aria-label="Map"><defs id="defs"></defs><g id="main"></g></svg>
       <div class="zoombar" id="zoombar"><span class="small muted">Scroll or pinch to zoom, drag to pan.</span></div>
       <div class="insets" id="insets"></div>
-      <div id="legisBelow"></div>
       <div class="legend" id="legend"></div>
     </div>
     <div class="card" id="panel"><p class="muted">Hover a riding for a summary. Click it for the MP, the 2025 result and its largest grants.</p></div>
+  </div>
+
+  <div class="card" id="seatsCard" hidden>
+    <h2 id="seatsTitle"></h2>
+    <div class="seatsrow">
+      <div id="hemicycle"></div>
+      <div id="leaders"></div>
+    </div>
+  </div>
+
+  <div class="card" id="budgetCard" hidden>
+    <h2 id="budgetTitle"></h2>
+    <p class="small muted" id="budgetSub"></p>
+    <div class="fiscbars" id="fiscbars"></div>
+    <details id="history" hidden>
+      <summary><span class="pm" aria-hidden="true"></span> Last five years: surplus or deficit, revenue and spending</summary>
+      <div id="historyChart"></div>
+    </details>
+    <p class="fn" id="budgetFn"></p>
   </div>
 
   <div class="card" style="margin-top:16px">
@@ -483,50 +515,75 @@ const NAME_COLORS = {"Liberal": "#d71920", "Conservative": "#1b4c9e", "Progressi
   "Saskatchewan Party": "#1b7a3e", "NDP": "#f37021", "Bloc Québécois": "#1aa7bd", "Green": "#3d9b35", "Progressive Tory": "#6a4c93", "Independent": "#6f6e69"};
 const partyColor = p => NAME_COLORS[p] || (p && p.startsWith("Conservative") ? NAME_COLORS.Conservative : "#6f6e69");
 const fmtDateLong = s => s ? new Date(s + "T12:00:00").toLocaleDateString("en-CA", {year: "numeric", month: "long", day: "numeric"}) : "–";
+const fmtPer = v => v == null ? "–" : "$" + Math.round(v).toLocaleString();
 const fmtBn = v => v == null ? "–" : (Math.abs(v) >= 1000 ? `$${(v / 1000).toFixed(2)} trillion` : Math.abs(v) >= 1 ? `$${v.toFixed(1)} billion` : `$${Math.round(v * 1000)} million`);
 function renderLegislature() {
   if (!LEGIS) return;
   const J = LEGIS, total = J.seats_total;
   const segs = J.standings.slice().sort((a, b) => b.seats - a.seats);
   if (J.vacant) segs.push({party: "Vacant", seats: J.vacant, vacant: true});
-  // Hemicycle: seats sweep from the left (9 o'clock) to the right (3 o'clock), government first.
-  const W = 220, H = 125, R0 = 46, R1 = 102;
-  const arc = d3.arc().innerRadius(R0).outerRadius(R1).padAngle(0.006);
+  // Seats: a wide hemicycle, government first from the left, majority marked.
+  const W = 560, H = 300, R0 = 110, R1 = 260;
+  const arc = d3.arc().innerRadius(R0).outerRadius(R1).padAngle(0.004);
   const pie = d3.pie().sort(null).startAngle(-Math.PI / 2).endAngle(Math.PI / 2).value(d => d.seats)(segs);
-  const maj = Math.floor(total / 2) + 1;
-  const majAngle = -Math.PI / 2 + Math.PI * maj / total;
-  const svgText = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${J.legislature}: seats by party">
-    <g transform="translate(${W / 2},${H - 12})">
+  const maj = Math.floor(total / 2) + 1, majAngle = -Math.PI / 2 + Math.PI * maj / total;
+  document.getElementById("seatsCard").hidden = false;
+  document.getElementById("seatsTitle").textContent = `${J.legislature}: ${total} seats`;
+  document.getElementById("hemicycle").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${J.legislature}: seats by party">
+    <g transform="translate(${W / 2},${H - 20})">
       ${pie.map(d => `<path d="${arc(d)}" fill="${d.data.vacant ? "var(--nodata)" : partyColor(d.data.party)}"><title>${d.data.party}: ${d.data.seats}</title></path>`).join("")}
-      ${pie.filter(d => d.endAngle - d.startAngle > 0.22).map(d => { const [x, y] = arc.centroid(d); return `<text x="${x}" y="${y}" text-anchor="middle" dy="0.35em" font-size="11" font-weight="600" fill="${d.data.vacant ? "var(--ink-2)" : "#fff"}">${d.data.seats}</text>`; }).join("")}
-      <line x1="${Math.sin(majAngle) * (R0 - 4)}" y1="${-Math.cos(majAngle) * (R0 - 4)}" x2="${Math.sin(majAngle) * (R1 + 5)}" y2="${-Math.cos(majAngle) * (R1 + 5)}" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="3 2"/>
-      <text x="0" y="-6" text-anchor="middle" font-size="18" font-weight="600" fill="var(--ink)">${total}</text>
-      <text x="0" y="8" text-anchor="middle" font-size="10" fill="var(--muted)">seats · ${maj} for a majority</text>
-    </g></svg>`;
+      ${pie.filter(d => d.endAngle - d.startAngle > 0.12).map(d => { const [x, y] = arc.centroid(d); return `<text x="${x}" y="${y}" text-anchor="middle" dy="0.35em" font-size="20" font-weight="600" fill="${d.data.vacant ? "var(--ink-2)" : "#fff"}">${d.data.seats}</text>`; }).join("")}
+      <line x1="${Math.sin(majAngle) * (R0 - 8)}" y1="${-Math.cos(majAngle) * (R0 - 8)}" x2="${Math.sin(majAngle) * (R1 + 10)}" y2="${-Math.cos(majAngle) * (R1 + 10)}" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="${Math.sin(majAngle) * (R1 + 24)}" y="${-Math.cos(majAngle) * (R1 + 24)}" text-anchor="middle" font-size="12" fill="var(--ink-2)">majority ${maj}</text>
+      <text x="0" y="-36" text-anchor="middle" font-size="34" font-weight="600" fill="var(--ink)">${total}</text>
+      <text x="0" y="-14" text-anchor="middle" font-size="12" fill="var(--muted)">seats</text>
+    </g></svg>
+    <div class="seatlist">${segs.map(sg => `<span><span class="sw" style="background:${sg.vacant ? "var(--nodata)" : partyColor(sg.party)}"></span>${sg.party} ${sg.seats}</span>`).join("")}</div>
+    ${J.standings_note ? `<p class="fn" style="text-align:center">${J.standings_note}</p>` : ""}`;
   const hog = J.head_of_government || {}, opp = J.opposition_leader;
   const pillN = p => p ? `<span class="pill" style="background:${partyColor(p)}">${p}</span>` : "";
-  const leaders = `<dl>
+  document.getElementById("leaders").innerHTML = `<dl>
     <dt>${J.name === "Canada" ? "Prime Minister" : "Premier"}</dt><dd><b>${hog.name || "–"}</b> ${pillN(hog.party)}${hog.riding ? ` · ${hog.riding}` : ""}</dd>
-    ${opp ? `<dt>Opposition</dt><dd>${opp.name || '<span class="muted">to be named</span>'} ${pillN(opp.party)}${opp.riding ? ` · ${opp.riding}` : ""}${opp.note ? ` <span class="muted">(${opp.note})</span>` : ""}</dd>` : ""}
-    ${(J.other_leaders || []).map(l => `<dt>${(l.party || "").split(" (")[0]}</dt><dd>${l.name}${l.riding ? ` · ${l.riding}` : ' <span class="muted">· no seat</span>'}${l.note ? ` <span class="muted">(${l.note})</span>` : ""}</dd>`).join("")}
+    ${opp ? `<dt>Opposition leader</dt><dd>${opp.name || '<span class="muted">to be named</span>'} ${pillN(opp.party)}${opp.riding ? ` · ${opp.riding}` : ""}${opp.note ? ` <span class="muted small">(${opp.note})</span>` : ""}</dd>` : ""}
+    ${(J.other_leaders || []).map(l => `<dt>${(l.party || "").split(" (")[0]}</dt><dd>${l.name}${l.riding ? ` · ${l.riding}` : ' <span class="muted">· no seat</span>'}${l.note ? ` <span class="muted small">(${l.note})</span>` : ""}</dd>`).join("")}
     <dt>Last election</dt><dd>${fmtDateLong(J.last_election)}</dd>
-    <dt>Next election</dt><dd>${J.next_election ? fmtDateLong(J.next_election) : "No fixed date"}${J.next_election_note ? ` <span class="muted">${J.next_election_note}</span>` : ""}</dd>
+    <dt>Next election</dt><dd>${J.next_election ? fmtDateLong(J.next_election) : "No fixed date"}${J.next_election_note ? `<br><span class="muted small">${J.next_election_note}</span>` : ""}</dd>
+    <dt>Standings as of</dt><dd>${fmtDateLong(J.as_of)} · <a href="${(J.sources || {}).standings || "#"}" target="_blank" rel="noopener">source</a></dd>
   </dl>`;
+
+  // Budget: this government against the others, per person and in dollars.
   const b = J.budget, pop = J.population;
-  const per = v => v == null ? "–" : "$" + Math.round(1e9 * v / pop).toLocaleString();
-  const fiscal = b ? `<div class="fisc">
-    <table><tr><th>Latest budget: ${b.title || ""}, ${fmtDateLong(b.date)} (${b.year})</th><th class="n">Amount</th><th class="n">Per person</th></tr>
-      <tr><td>Deficit${b.deficit_note ? ` <span class="muted">· ${b.deficit_note}</span>` : ""}</td><td class="n">${fmtBn(b.deficit_billions)}</td><td class="n">${per(b.deficit_billions)}</td></tr>
-      <tr><td>${J.name === "Canada" ? "Federal debt (accumulated deficit)" : "Net debt"} <span class="muted">· ${b.debt_measure || ""}</span></td><td class="n">${fmtBn(b.net_debt_billions)}</td><td class="n">${per(b.net_debt_billions)}</td></tr>
-      ${b.debt_to_gdp_pct != null ? `<tr><td>Debt to GDP</td><td class="n">${b.debt_to_gdp_pct}%</td><td class="n"></td></tr>` : ""}
-      ${b.general_government_net_debt_to_gdp_pct != null ? `<tr><td>All governments' net debt, counting CPP and QPP assets (IMF general-government measure)</td><td class="n">${b.general_government_net_debt_to_gdp_pct}% of GDP</td><td class="n"></td></tr>` : ""}
-    </table>
-    ${C.spendsUrl ? `<div class="small" style="margin-top:6px"><a href="${C.spendsUrl}" target="_blank" rel="noopener">Where the money goes: full spending breakdown on Canada Spends</a></div>` : ""}
-    <div class="fn">Per person uses Statistics Canada's ${fmtDateLong(J.population_date)} population (${pop.toLocaleString()}). ${J.name === "Canada" ? "The federal debt is what Ottawa owes net of its own assets; the IMF measure consolidates every level of government and nets off their financial assets, including the pension funds, which is why Canada ranks low on international debt tables. Budget 2026 is due on 5 November 2026. " : ""}${J.standings_note ? J.standings_note + " " : ""}Standings as of ${fmtDateLong(J.as_of)}. Sources: ${["standings", "budget", "population"].filter(k => (J.sources || {})[k]).map(k => `<a href="${J.sources[k]}" target="_blank" rel="noopener">${k}</a>`).join(", ")}.</div>
-  </div>` : "";
-  const html = `<h3>${J.legislature}</h3><div class="row"><div>${svgText}<div class="seatlist">${segs.map(sg => `<span><span class="sw" style="background:${sg.vacant ? "var(--nodata)" : partyColor(sg.party)}"></span>${sg.party} ${sg.seats}</span>`).join("")}</div></div><div>${leaders}</div></div>${fiscal}`;
-  const host = C.legislatureInGrid ? d3.select("#insets").append("div").attr("class", "legis ingrid") : d3.select("#legisBelow").append("div").attr("class", "legis below");
-  host.html(html);
+  if (!b) return;
+  document.getElementById("budgetCard").hidden = false;
+  document.getElementById("budgetTitle").textContent = `${J.name === "Canada" ? "Federal" : J.name} budget: ${b.title || ""}`;
+  const per = (v, p) => v == null ? null : 1e9 * v / p;
+  document.getElementById("budgetSub").innerHTML = `Tabled ${fmtDateLong(b.date)} for ${b.year}. Deficit <b>${fmtBn(b.deficit_billions)}</b> (${fmtPer(per(b.deficit_billions, pop))} per person)${b.deficit_note ? `; ${b.deficit_note}` : ""}. ${J.name === "Canada" ? "Federal debt" : "Net debt"} <b>${fmtBn(b.net_debt_billions)}</b> (${fmtPer(per(b.net_debt_billions, pop))} per person)${b.debt_to_gdp_pct != null ? `, ${b.debt_to_gdp_pct}% of GDP` : ""}. <span class="muted">${b.debt_measure || ""}</span>${b.general_government_net_debt_to_gdp_pct != null ? ` All governments together, counting CPP and QPP assets (IMF measure): ${b.general_government_net_debt_to_gdp_pct}% of GDP.` : ""}`;
+  const cmp = J.compare || [];
+  const metric = (title, f, fmtv, amt, surplusTest) => {
+    const rows = cmp.map(c => ({name: c.name, v: f(c), amt: amt(c), me: c.name === J.name, surplus: surplusTest ? surplusTest(c) : false})).filter(r => r.v != null).sort((x, y) => y.v - x.v);
+    const max = d3.max(rows, r => r.v) || 1;
+    return `<div class="fb"><h3>${title}</h3>${rows.map(r => `<div class="r${r.me ? " me" : ""}"><span>${r.name === "Canada" ? "Canada (federal)" : r.name}</span><div class="bar${r.surplus ? " surplus" : ""}" style="width:${100 * r.v / max}%"></div><span class="v">${fmtv(r.v)}<br><span class="amt">${r.amt}</span></span></div>`).join("")}</div>`;
+  };
+  document.getElementById("fiscbars").innerHTML =
+    metric("Deficit per person, this year's budget", c => per(c.budget.deficit_billions, c.population), fmtPer, c => fmtBn(c.budget.deficit_billions), c => /SURPLUS/i.test(c.budget.deficit_note || "")) +
+    metric("Net debt per person", c => per(c.budget.net_debt_billions, c.population), fmtPer, c => fmtBn(c.budget.net_debt_billions)) +
+    metric("Net debt to GDP", c => c.budget.debt_to_gdp_pct, v => v + "%", c => c.budget.year);
+  document.getElementById("budgetFn").innerHTML = `Each government's own latest budget figure; green marks a budgeted deficit that the latest quarterly update has turned into a surplus. Debt measures differ (net debt, taxpayer-supported debt, net financial debt, accumulated deficit), so compare ratios with care. Per person uses Statistics Canada's ${fmtDateLong(J.population_date)} estimates. ${J.name === "Canada" ? "Budget 2026 is due on 5 November 2026. " : ""}Sources: ${["budget", "population"].filter(k => (J.sources || {})[k]).map(k => `<a href="${J.sources[k]}" target="_blank" rel="noopener">${k}</a>`).join(", ")}.${C.spendsUrl ? ` Full spending breakdown: <a href="${C.spendsUrl}" target="_blank" rel="noopener">Canada Spends</a>.` : ""}`;
+
+  // Five-year history, behind a +/- toggle, once the data exists.
+  const Hs = J.history;
+  if (Hs && Hs.years && Hs.years.length) {
+    const det = document.getElementById("history");
+    det.hidden = false;
+    const ys = Hs.years;
+    const mx = d3.max(ys, y => Math.abs(y.balance_billions || 0)) || 1;
+    det.querySelector("#historyChart").innerHTML = `<div class="hist">
+      <span class="h"></span><span class="h muted small">deficit ← 0 → surplus</span><span class="h muted small" style="text-align:right">balance</span>
+      ${ys.map(y => { const v = y.balance_billions || 0, w = 50 * Math.abs(v) / mx; return `<span>${y.year}${y.status === "forecast" ? "*" : ""}</span>
+        <div class="axis"><b style="left:50%"></b><i class="${v < 0 ? "neg" : "pos"}" style="${v < 0 ? `right:50%;width:${w}%` : `left:50%;width:${w}%`}"></i></div>
+        <span class="v${y.status === "forecast" ? " fc" : ""}">${v < 0 ? "−" : "+"}${fmtBn(Math.abs(v))}${y.revenue_billions != null ? `<br><span class="amt">rev ${fmtBn(y.revenue_billions)} · spend ${fmtBn(y.expense_billions)}</span>` : ""}</span>`; }).join("")}
+    </div><p class="fn">${Hs.basis || ""} * forecast. Sources: ${[...new Set(ys.map(y => y.source).filter(Boolean))].map((u, i) => `<a href="${u}" target="_blank" rel="noopener">${i + 1}</a>`).join(", ")}.</p>`;
+  }
 }
 renderLegislature();
 

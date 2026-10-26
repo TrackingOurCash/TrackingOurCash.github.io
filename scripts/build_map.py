@@ -404,14 +404,18 @@ def legislatures():
 
 
 def legislature_for(name):
-    """The jurisdiction's record from data/legislatures.json (standings, leaders, dates, budget), or None."""
+    """The jurisdiction's record from data/legislatures.json (standings, leaders, dates, budget), with
+    every government's budget figures for comparison bars and the five-year history when present."""
     src = DATA / "legislatures.json"
     if not src.exists():
         return None
     d = json.load(open(src))
+    hist_path = DATA / "fiscal_history.json"
+    hist = json.load(open(hist_path))["jurisdictions"] if hist_path.exists() else {}
+    compare = [{"name": j["name"], "budget": j["budget"], "population": j["population"]} for j in d["jurisdictions"] if j.get("budget") and j.get("population")]
     for j in d["jurisdictions"]:
         if j["name"] == name:
-            return dict(j, as_of=d["as_of"], population_date=d["population_date"])
+            return dict(j, as_of=d["as_of"], population_date=d["population_date"], compare=compare, history=hist.get(name))
     return None
 
 
