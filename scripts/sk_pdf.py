@@ -293,27 +293,32 @@ def stream_text_items(content):
     return items
 
 
-def items_to_lines(items, y_tol=2.0, sizes=False):
-    """Group positioned strings into text lines, top of page first, left to right.
-    With sizes=True each line is (text, font size of its largest string)."""
+def _group_lines(items, y_tol=2.0):
+    """Group positioned strings by baseline: list of item lists, top of page first."""
     items = sorted(items, key=lambda it: (-it[0], it[1]))
     lines = []
     cur, cur_y = [], None
-    for y, x, fs, text in items:
-        if cur_y is None or abs(y - cur_y) > y_tol:
+    for it in items:
+        if cur_y is None or abs(it[0] - cur_y) > y_tol:
             if cur:
                 lines.append(cur)
-            cur, cur_y = [], y
-        cur.append((x, fs, text))
+            cur, cur_y = [], it[0]
+        cur.append(it)
     if cur:
         lines.append(cur)
+    return lines
+
+
+def items_to_lines(items, y_tol=2.0, sizes=False):
+    """Group positioned strings into text lines, top of page first, left to right.
+    With sizes=True each line is (text, font size of its largest string)."""
     out = []
-    for line in lines:
-        line.sort(key=lambda it: it[0])
+    for line in _group_lines(items, y_tol):
+        line.sort(key=lambda it: it[1])
         s = ""
         end_x = None
         size = 0.0
-        for x, fs, text in line:
+        for y, x, fs, text in line:
             if not text.strip():
                 continue
             if end_x is not None and x - end_x > 0.25 * fs and not s.endswith(" ") and not text.startswith(" "):
@@ -325,6 +330,34 @@ def items_to_lines(items, y_tol=2.0, sizes=False):
         if s:
             out.append((s, round(size, 1)) if sizes else s)
     return out
+
+
+def split_columns(items, split):
+    """Divide a page's items into (left, right) for a two-column layout. A baseline
+    whose string crosses the gutter (a dot leader running into a wide table), a row
+    with a dot leader on the left and nothing but figures on the right (a wide table
+    row), or a large-font line with pieces on both sides (a chapter title) stays whole
+    on the left so it is not cut in two."""
+    left, right = [], []
+    for line in _group_lines(items):
+        texty = [it for it in line if it[3].strip()]
+        if not texty:
+            continue
+        # Dots are about 0.28 em wide; a leader that truly crosses runs well past the gutter.
+        crosses = any(x < split and x + 0.28 * fs * len(t) > split + 12 for _, x, fs, t in texty)
+        both = any(x < split for _, x, _, _ in texty) and any(x >= split for _, x, _, _ in texty)
+        big = min(fs for _, _, fs, _ in texty) >= 11
+        # A wide table row: a dot leader on the left and only figures on the right.
+        lefts = [it for it in texty if it[1] < split]
+        rights = [it for it in texty if it[1] >= split]
+        tabular = (lefts and rights and any(set(t.strip()) <= {"."} for _, _, _, t in lefts)
+                   and not any(re.search(r"[A-Za-z]", t) for _, _, _, t in rights))
+        if crosses or tabular or (both and big):
+            left += line
+        else:
+            left += [it for it in line if it[1] < split]
+            right += [it for it in line if it[1] >= split]
+    return left, right
 
 
 def _printable_share(items):
@@ -352,8 +385,8 @@ def pdf_pages(path, split=None, landscape_x=620, sizes=False):
             pages.append([])
             continue
         if split is not None and max(x for _, x, _, _ in items) < landscape_x:
-            lines = items_to_lines([it for it in items if it[1] < split], sizes=sizes) + \
-                items_to_lines([it for it in items if it[1] >= split], sizes=sizes)
+            left, right = split_columns(items, split)
+            lines = items_to_lines(left, sizes=sizes) + items_to_lines(right, sizes=sizes)
         else:
             lines = items_to_lines(items, sizes=sizes)
         pages.append(lines)

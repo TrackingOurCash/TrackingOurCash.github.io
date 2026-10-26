@@ -12,10 +12,11 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
-NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"}]
+NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
+       {"href": "saskatchewan.html", "label": "Saskatchewan"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
-                 "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s"}
+                 "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -174,7 +175,39 @@ PROVINCES = {
                     ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
                     ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_British_Columbia_provincial_electoral_districts")],
     },
+    "saskatchewan": {
+        "dir": "sk", "year": "2024", "region": "Saskatchewan", "title": "Where Saskatchewan's transfers went after the 2024 election",
+        "electionLabel": "the 28 October 2024 election", "count": 61, "gov": "SP",
+        "parties": {"SP": {"name": "Saskatchewan Party", "light": "#1b7a3e", "dark": "#3fae63"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
+                    "SUP": {"name": "Sask United", "light": "#1b4c9e", "dark": "#4f80d8"}, "BPSK": {"name": "Buffalo Party", "light": "#8b5a2b", "dark": "#c0894f"},
+                    "SGP": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"}, "PC": {"name": "Progressive Conservative", "light": "#5a9bd5", "dark": "#7fb3e6"},
+                    "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["SP", "NDP", "IND"], "opp": "NDP",
+        "groupNote": '"SP" means the governing Saskatchewan Party won the seat in 2024.',
+        "filterAll": "All programs", "topProgsTitle": "Top programs", "beforeLabel": "Fiscal year before (2023-24)",
+        "includeLabel": "Include province-wide bodies (health authority, universities, school divisions, Crown corporations) & Regina and Saskatoon city governments",
+        "projection": {"parallels": [49, 60], "rotate": [106, 0]},
+        "insets": [["Regina", [-104.75, 50.38, -104.5, 50.52]], ["Saskatoon", [-106.8, 52.05, -106.5, 52.22]], ["Prince Albert", [-105.85, 53.15, -105.65, 53.25]],
+                   ["Moose Jaw", [-105.6, 50.36, -105.48, 50.44]]],
+        "source": "Saskatchewan Public Accounts, Volume 2 (transfers of $50,000 or more by ministry, program and recipient; a PDF, parsed by this project's own extractor).",
+        "windowNote": "The 2025-26 Public Accounts are not published yet, so \"after\" is fiscal 2024-25, which straddles the election (seven months before it, five after), and \"before\" is fiscal 2023-24; the page switches to 2025-26 automatically when that volume appears",
+        "placing": "Saskatchewan publishes recipient names but no addresses, and only transfers of $50,000 or more, inside a PDF. The extractor recovered 92% of the dollars in the 2024-25 Volume 2 (the rest is mostly physician payments and transfers under $50,000 that the volume does not itemise). Each recipient was then matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality, or to a place name inside its own name, and located in a constituency.",
+        "individualNote": "programs that pay individuals (crop insurance, income assistance, physician services, the drug plan, student aid)",
+        "leftOut": "province-wide bodies booked at a head office (the Saskatchewan Health Authority, universities, Sask Polytechnic, school divisions, Crown corporations) and the governments of Regina and Saskatoon, which span several constituencies",
+        "boundaryNote": "the 61 constituencies of the 2022 commission, used in 2024. No census population exists for these constituencies, so \"per person\" here means per registered voter at the 2024 election (818,996 in all).",
+        "sources": [("Saskatchewan Public Accounts, Volume 2 (2024-25)", "https://www.saskatchewan.ca/-/media/news-release-backgrounders/2025/oct/2024-25-volume-2---5155.pdf"),
+                    ("Elections Saskatchewan 2024 poll-by-poll results", "https://cdn.elections.sk.ca/upload/2024-GE-POLL-BY-POLL-RESULTS-v1.0.csv"),
+                    ("Elections Saskatchewan constituency boundaries (2022 commission)", "https://www.elections.sk.ca/candidates-political-parties/maps/"),
+                    ("Legislative Assembly of Saskatchewan member list", "https://www.legassembly.sk.ca/mlas/mla-contact-information/"),
+                    ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (constituency articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Saskatchewan_provincial_electoral_districts")],
+    },
 }
+
+
+LEVEL = {"alberta": ("division", "divisions"), "bc": ("district", "districts"), "saskatchewan": ("constituency", "constituencies")}
 
 
 def provincial(key):
@@ -197,8 +230,7 @@ def provincial(key):
     config = {
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
-        "level": "district" if key == "bc" else "division", "levelPlural": "districts" if key == "bc" else "divisions",
-        "levelTitle": "District" if key == "bc" else "Division", "region": "province", "regionTitle": "Prov.",
+        "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
         "rep": "MLA", "electionYear": y,
         "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": {"province-wide": "province-wide body", "other government": "other government"},
@@ -213,7 +245,7 @@ def provincial(key):
         "linkNote": "Source: " + P["source"],
         "projection": P["projection"], "insets": P["insets"],
         "subtitle": (f"{P['region']} government payments from {P['electionLabel']} to {m['cutoff']}, placed in the {P['count']} electoral "
-                     f"{'districts' if key == 'bc' else 'divisions'} and set against the {y} result. Each one wears its current MLA's party colour; "
+                     f"{LEVEL[key][1]} and set against the {y} result. Each one wears its current MLA's party colour; "
                      f"the deeper the colour, the more money per resident. {P['windowNote']} ({m['before_start']} to {m['before_end']})."),
         "notes": [
             "<b>Sources:</b> " + links(P["sources"]) + f" Data as of {m.get('generated', m['cutoff'])}.",

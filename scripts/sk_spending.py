@@ -92,8 +92,13 @@ PROVINCEWIDE = re.compile(
     r"FEDERATION OF SOVEREIGN|METIS NATION|SASKATCHEWAN TEACHERS|SASKATCHEWAN SCHOOL BOARDS|"
     r"SASKATCHEWAN MEDICAL ASSOCIATION|SASKATCHEWAN WORKERS|SASKATCHEWAN CHAMBER|"
     r"SASKATCHEWAN (ASSOCIATION|COUNCIL|FOUNDATION|SOCIETY|FEDERATION|ALLIANCE|NETWORK|INSTITUTE|ABILITIES)|"
-    r"SASKATCHEWAN$|SASKATCHEWAN INC\.?$|SASKATCHEWAN LTD\.?$",
+    r"SASKATCHEWAN$|SASKATCHEWAN INC\.?$|SASKATCHEWAN LTD\.?$|"
+    r"SUPERANNUATION|PENSION PLAN|\b(FUND|TRUST|ACCOUNT)$|^SASKATCHEWAN .*(CORPORATION|AGENCY|AUTHORITY|COMMISSION|BOARD|CENTRE)$|"
+    r"SHOCK TRAUMA AIR RESCUE|\bSTARS\b|HEALTH QUALITY COUNCIL|HEALTHCARE RECRUITMENT|PROVINCIAL ARCHIVES|DISTANCE LEARNING|"
+    r"TRADE . EXPORT PARTNERSHIP|CANADA MORTGAGE|SUN LIFE|GREAT.WEST LIFE|MANULIFE|CANADA LIFE|BLUE CROSS|"
+    r"PROVINCIAL CAPITAL COMMISSION|^WORKERS. COMPENSATION|^GOVERNMENT OF|^PROVINCE OF|^MINISTER OF",
     re.I)
+PERSON = re.compile(r"^[A-Z][A-Z'\-]+(?: [A-Z][A-Z'\-]+)?, [A-Z][A-Z'\-]+(?: [A-Z][A-Z'\-]*\.?)*[ .]*$")
 MUNI_TYPES = r"R M|RM|RURAL MUNICIPALITY|CITY|TOWN|VILLAGE|RESORT VILLAGE|NORTHERN VILLAGE|NORTHERN HAMLET|HAMLET|NORTHERN TOWN|DISTRICT"
 MUNI = re.compile(rf"^(?:{MUNI_TYPES}) (.+?)$")
 MUNI2 = re.compile(rf"^(.+?) (?:{MUNI_TYPES})$")
@@ -104,7 +109,11 @@ ORG_WORDS = re.compile(r"\b(INC|LTD|LTEE|LLP|SCHOOL|DIVISION|SOCIETY|CLUB|CHURCH
 
 END_HEADINGS = {"Goods and Services", "Other Expenses", "Capital Asset Acquisitions", "Salaries and Benefits",
                 "Other", "Revenue", "Capital Asset Acquisitions by Class"}
-AMT = re.compile(r"^(?P<name>.*?)\s*\.{2,}[\s.$]*(?P<amt>\d{1,3}(?:,\d{3})+)[\s.$]*$")
+# Name, dot leader, then one or more amount columns (dots or "$" for empty cells);
+# the last number is the amount (the Total column in multi-column tables).
+AMT = re.compile(r"^(?P<name>.*?)\s*\.{2,}(?P<cols>(?:[\s.$]|\d{1,3}(?:,\d{3})+)*?)(?P<amt>\d{1,3}(?:,\d{3})+)[\s.$]*$")
+MERGED = re.compile(r"\.{2,}[\s.$]*\d[\d,]*\s+[A-Z(]")  # two recipients ran together on one line
+CODE_ONLY = re.compile(r"^[\s()A-Z]{0,4}\d{1,2}\s*\)?$")  # "(SR01)", "WS( 01)": the recipient is the heading
 ONLY_AMT = re.compile(r"^[\s.$]*(?P<amt>\d{1,3}(?:,\d{3})+)[\s.$]*$")
 SCHEDULE_ROW = re.compile(r"^(?P<name>[A-Za-z][A-Za-z ,'&\-]*?)\s*\.{3,}\s*(?P<vote>\d+)\s+(?P<rest>.*)$")
 
@@ -200,9 +209,12 @@ def parse_schedule(pages):
     return votes, totals
 
 
-def is_noise(text, ministry):
+def is_noise(text, size, ministry):
+    """Page numbers and running headers (8 pt), e.g. "120 Government Relations"."""
     if text.isdigit() or text.startswith("Public Accounts"):
         return True
+    if size >= 10:
+        return False
     bare = re.sub(r"[\d\s]", "", text)
     return bool(ministry) and bare == re.sub(r"\s", "", ministry)
 
@@ -225,6 +237,7 @@ def parse_transfers(path, fy):
     in_tr = skip_intro = False
     program = sub = None
     pend_name = []
+    pend_from_leader = False  # the pending name came from a leader line with no amount
     head_buf, head_size = [], None
 
     def flush_heading():
@@ -239,14 +252,18 @@ def parse_transfers(path, fy):
             sub = text
         head_buf = []
 
+    by_name = {re.sub(r"\W", "", k).lower(): k for k in schedule}
     for text, size in lines:
-        m = re.search(r"\(Vote (\d+)\)$", text)
-        if m and size >= 10:
+        m = re.search(r"\(Vote\s*(\d+)?\s*\)?\s*$", text)
+        if m and size >= 10 and len(text) > 6:
             vote = m.group(1)
-            ministry = votes.get(vote) or text[:m.start()].strip()
+            name = re.sub(r"\W", "", text[:m.start()]).lower()
+            ministry = by_name.get(name) or votes.get(vote) or text[:m.start()].strip()
+            if not vote:
+                vote = next((v for v, n in votes.items() if n == ministry), "")
             in_tr = False
             continue
-        if not ministry or is_noise(text, ministry):
+        if not ministry or is_noise(text, size, ministry):
             continue
         if not in_tr:
             if text == "Transfers" and size >= 12:
@@ -264,10 +281,22 @@ def parse_transfers(path, fy):
             in_tr = False
             continue
         m = AMT.match(text)
+        if m and MERGED.search(text):
+            bad[(ministry, "two recipients on one line")] += 1
+            pend_name = []
+            continue
         if m:
             flush_heading()
-            name = " ".join(pend_name + [clean_name(m.group("name"))]).strip()
+            own = clean_name(m.group("name"))
+            if own and pend_from_leader:
+                # The leader line before this one lost its amount; this row stands alone.
+                bad[(ministry, "garbled amount")] += 1
+                pend_name = []
+            name = " ".join(pend_name + [own]).strip()
             pend_name = []
+            pend_from_leader = False
+            if CODE_ONLY.match(name):
+                name = sub or program or ""  # single-recipient votes name the recipient in the heading
             if name:
                 rows.append({"fiscal_year": fy, "ministry": ministry, "vote": vote, "program": program or "",
                              "subprogram": sub or "", "recipient": name,
@@ -278,6 +307,7 @@ def parse_transfers(path, fy):
         m = ONLY_AMT.match(text)
         if m and pend_name:
             flush_heading()
+            pend_from_leader = False
             rows.append({"fiscal_year": fy, "ministry": ministry, "vote": vote, "program": program or "",
                          "subprogram": sub or "", "recipient": " ".join(pend_name),
                          "amount": int(m.group("amt").replace(",", ""))})
@@ -285,11 +315,22 @@ def parse_transfers(path, fy):
             continue
         if size < 10:
             if "...." in text:
-                # A dot leader with an unreadable amount (columns ran together).
-                bad[(ministry, "garbled amount")] += 1
-                pend_name = []
+                # A dot leader without a readable amount: in wide tables the amounts sit on
+                # the next line, so keep the name; otherwise the columns ran together.
+                head = clean_name(re.split(r"\.{2,}", text, maxsplit=1)[0])
+                if head and head == head.upper() and re.search(r"[A-Z]", head) and not re.search(r"\d,\d", text):
+                    flush_heading()
+                    pend_name = [head]
+                    pend_from_leader = True
+                else:
+                    bad[(ministry, "garbled amount")] += 1
+                    pend_name = []
             elif text == text.upper() and re.search(r"[A-Z]", text):
                 flush_heading()
+                if pend_from_leader:
+                    bad[(ministry, "garbled amount")] += 1
+                    pend_name = []
+                    pend_from_leader = False
                 pend_name.append(clean_name(text))
             continue
         # A heading (program or sub-program).
@@ -394,10 +435,8 @@ def main():
         return m.group(1) if m else None
 
     def looks_individual(raw, n):
-        words = n.split()
-        if len(words) > 4 or ORG_WORDS.search(n):
-            return False
-        return "," in raw or len(words) <= 3
+        """'LEMAIGRE, JIM G.' is a person; 'ABERDEEN, TOWN OF' and 'MNP LTD.' are not."""
+        return bool(PERSON.match(raw.strip())) and not ORG_WORDS.search(n)
 
     def place(name):
         """-> (constituency number or None, method)."""
