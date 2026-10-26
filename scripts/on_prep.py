@@ -79,10 +79,19 @@ Choices made here:
     North, Timiskaming-Cochrane, Timmins) and two were carved out of them by the Far North
     Electoral Boundaries Commission (Kiiwetinoong, Mushkegowuk-James Bay). Their count is
     the sum of the 2021 census subdivisions (municipalities, reserves and unorganized
-    areas) whose centroid falls inside the riding. Unorganized areas straddle riding lines,
-    so a few thousand people per riding can sit on the wrong side; for the five northern
-    ridings that share a name with a federal district the two figures are printed side by
-    side as a check. The raw count is kept as "population_2021" and "population_basis"
+    areas) inside the riding. A subdivision whose bounding box touches more than one riding
+    (the unorganized areas, a few townships) is split in proportion to the GeoNames postal
+    codes falling on each side of the line (a postal code covers a block face in town or a
+    rural route, so the split is approximate; Represent's simple_shape of each such
+    subdivision is fetched once into data/raw/on/csd_shape/). Postal codes are far denser
+    in a city core than in its suburbs, so the two cities that hold two ridings each are
+    split differently: Greater Sudbury's share in the Sudbury riding and Thunder Bay's in
+    Thunder Bay-Superior North are set so that the riding's 2016 subdivision total equals
+    Elections Ontario's 2016 census count for it (EO_2016), and that share is applied to
+    the 2021 count; the remainder goes to Nickel Belt and Thunder Bay-Atikokan. For the five northern ridings that share a
+    name with a federal district the two figures are printed side by side as a check
+    (Parry Sound-Muskoka agrees to ten people; Sault Ste. Marie is the city alone
+    provincially, 72,051, where the federal district adds the townships around it). The raw count is kept as "population_2021" and "population_basis"
     says which method applied; "population" is the count scaled by the province's growth
     since 2021 (prep_ridings.scale_population, data/population_scale.json).
 """
@@ -133,8 +142,10 @@ NORTH_RIDINGS = {"2", "44", "72", "105", "107", "108", "123", "124",  # not fede
                  "71", "84", "92", "103", "106"}  # Nickel Belt, Parry Sound-Muskoka, Sault Ste. Marie, Sudbury, Thunder Bay-Superior North
 SCALE_NOTE = "scaled to Statistics Canada's latest Ontario estimate by the province's growth since 2021"
 BASIS_FED = f"2021 census count for the identical 2013-order federal electoral district (Statistics Canada table 98-10-0010-01), {SCALE_NOTE}"
-BASIS_CSD = ("2021 census subdivisions (municipalities, reserves, unorganized areas; table 98-10-0002-01) summed by the "
-             f"subdivision whose centroid lies in the riding, because the northern ridings are not federal districts; {SCALE_NOTE}")
+BASIS_CSD = ("2021 census subdivisions (municipalities, reserves, unorganized areas; table 98-10-0002-01) summed over the riding, "
+             "Greater Sudbury and Thunder Bay being split between their two ridings in the proportions Elections Ontario's 2016 "
+             "census counts imply and the unorganized areas by the postal codes on each side of the line, because the northern "
+             f"ridings are not federal districts; {SCALE_NOTE}")
 UA = {"User-Agent": "riding-spending (research)"}
 
 
@@ -294,7 +305,8 @@ def load_mlas(divisions):
         d["mla"] = person(name)
         d["mla_party"] = CAUCUS.get(party, party)
         # Compare surnames only: the Assembly writes "Jennifer (Jennie) Stevens", middle initials, etc.
-        if norm(d["mla"]).split()[-1] != norm(d["winner_2025"]).split()[-1]:
+        mla_words, win_last = norm(d["mla"]).split(), norm(d["winner_2025"]).split()[-1]
+        if win_last not in mla_words and mla_words[-1] not in norm(d["winner_2025"]).split():
             when = BYELECTIONS.get(d["num"])
             d["mla_note"] = (f"elected at the {when} by-election; the 2025 result is {d['winner_2025']}'s" if when else
                              f"not the 2025 winner ({d['winner_2025']}, {d['party_2025']}); by-election or change since")
@@ -326,31 +338,99 @@ def load_fed_population():
 
 
 def northern_csds():
-    """[(csduid, name, 2021 population)] for populated subdivisions of the northern census divisions."""
+    """[(csduid, name, 2021 population, 2016 population)] for populated subdivisions of the northern census divisions."""
     out = []
     with open(DL / "statcan" / "98100002.csv", encoding="utf-8-sig", newline="") as f:
         rd = csv.DictReader(f)
         col = pop_column(rd.fieldnames)
+        col16 = next(c for c in rd.fieldnames if c.startswith("Population and dwelling counts") and "Population, 2016" in c)
         for r in rd:
             g = r["DGUID"]
             if g.startswith("2021A000535") and g[9:13] in NORTH_CDS and int(r[col] or 0) > 0:
-                out.append((g[9:], r["GEO"], int(r[col])))
+                out.append((g[9:], r["GEO"], int(r[col]), int(r[col16] or 0)))
     return out
 
 
-def csd_centroid(csduid):
-    """(lat, lon) of the subdivision from Represent's 2016 census-subdivision set, cached."""
+# Elections Ontario's 2016 census population of the northern ridings (as quoted in Wikipedia's list of
+# Ontario provincial electoral districts, "Population information from 2016 Census or Elections Ontario").
+# Used to calibrate the split of the two cities that hold two ridings each, and printed as a check.
+EO_2016 = {"2": 68480, "44": 53027, "123": 32987, "124": 30037, "71": 84520, "72": 75060, "84": 94400, "92": 73370,
+           "103": 80840, "105": 75920, "106": 70475, "107": 67290, "108": 41788}
+# Subdivision -> riding whose 2016 count fixes its share of the city: Greater Sudbury's share in the
+# Sudbury riding, Thunder Bay's in Thunder Bay-Superior North; the rest goes to the other riding.
+SPLIT_CALIBRATION = {"3553005": "103", "3558004": "106"}
+
+
+# 2021 subdivisions that Represent's 2016 set does not have (created since; 82 people in all): (lat, lon).
+CSD_POINTS = {"3559089": (46.36, -79.93), "3552056": (47.84, -83.40), "3552037": (46.05, -81.30), "3558074": (49.80, -88.00)}
+
+
+def csd_record(csduid):
+    """Represent's record (centroid, extent) for the subdivision, cached; CSD_POINTS for the ones it lacks."""
+    if csduid in CSD_POINTS:
+        lat, lon = CSD_POINTS[csduid]
+        return {"centroid": {"coordinates": [lon, lat]}, "extent": [lon, lat, lon, lat]}
     cache = RAW / "csd_centroid"
     cache.mkdir(parents=True, exist_ok=True)
     path = cache / f"{csduid}.json"
     if not path.exists() and not get(f"{API}/boundaries/census-subdivisions/{csduid}/", path):
         return None
     try:
-        lon, lat = json.load(open(path))["centroid"]["coordinates"]
+        o = json.load(open(path))
+        o["centroid"]["coordinates"]
+        return o
     except (KeyError, ValueError, TypeError):
         print("no centroid for subdivision", csduid, file=sys.stderr)
         return None
-    return lat, lon
+
+
+def csd_shape(csduid):
+    cache = RAW / "csd_shape"
+    cache.mkdir(parents=True, exist_ok=True)
+    path = cache / f"{csduid}.json"
+    if not path.exists() and not get(f"{API}/boundaries/census-subdivisions/{csduid}/simple_shape", path):
+        return None
+    return json.load(open(path))
+
+
+def ontario_postal_points():
+    """(lat, lon) of every Ontario postal code in GeoNames: the population proxy used to split a
+    subdivision that straddles a riding line (a postal code covers a block face or a rural route)."""
+    pts = []
+    with open(ROOT / "data" / "raw" / "geonames" / "CA_full.txt", encoding="utf-8", newline="") as f:
+        for r in csv.reader(f, delimiter="\t"):
+            if r[4] == "ON":
+                try:
+                    pts.append((float(r[9]), float(r[10])))
+                except ValueError:
+                    continue
+    return pts
+
+
+def csd_shares(index, csduid, name, rec, postal):
+    """{riding: share of the subdivision's population}. A subdivision whose bounding box lies in one
+    riding goes there whole; one that may straddle a line is split by the postal codes inside its
+    polygon, or goes to the riding holding its centroid when it has fewer than ten."""
+    lon, lat = rec["centroid"]["coordinates"]
+    home = index.locate(lat, lon)[0]
+    x0, y0, x1, y1 = rec["extent"]
+    sampled = {index.locate(y0 + (y1 - y0) * j / 3, x0 + (x1 - x0) * i / 3)[0] for i in range(4) for j in range(4)}
+    sampled.discard(None)
+    if len(sampled) <= 1:
+        return {home: 1.0} if home else {}
+    shape = csd_shape(csduid)
+    if not shape:
+        return {home: 1.0} if home else {}
+    from geo import RidingIndex
+    poly = RidingIndex([(csduid, shape)])
+    inside = [(la, lo) for la, lo in postal if x0 <= lo <= x1 and y0 <= la <= y1 and poly.locate(la, lo)[1]]
+    hits = Counter(index.locate(la, lo)[0] for la, lo in inside)
+    hits.pop(None, None)
+    if sum(hits.values()) < 10 or len(hits) == 1:
+        return {home: 1.0} if home else {}
+    total = sum(hits.values())
+    print(f"split {name} ({csduid}) by {total} postal codes: " + ", ".join(f"{k} {100 * v / total:.0f}%" for k, v in hits.most_common()))
+    return {k: v / total for k, v in hits.items()}
 
 
 def load_population(divisions, simple):
@@ -358,14 +438,36 @@ def load_population(divisions, simple):
     fed = load_fed_population()
     index = RidingIndex([(num, simple[num]) for num in divisions if num in simple])
     csd_sum = Counter()
+    sum16 = Counter()
     unplaced = []
-    for csduid, name, pop in northern_csds():
-        pt = csd_centroid(csduid)
-        num = index.locate(*pt)[0] if pt else None
-        if num:
-            csd_sum[num] += pop
-        else:
+    postal = ontario_postal_points()
+    deferred = []
+    for csduid, name, pop, pop16 in northern_csds():
+        rec = csd_record(csduid)
+        shares = csd_shares(index, csduid, name, rec, postal) if rec else {}
+        if not shares:
             unplaced.append((csduid, name, pop))
+        if csduid in SPLIT_CALIBRATION:
+            deferred.append((csduid, name, pop, pop16, shares))
+            continue
+        for num, share in shares.items():
+            csd_sum[num] += pop * share
+            sum16[num] += pop16 * share
+    for csduid, name, pop, pop16, shares in deferred:
+        # The city's share in the calibrated riding is whatever that riding's 2016 count leaves after
+        # the subdivisions already placed there; the postal-code split only decides the other ridings.
+        anchor = SPLIT_CALIBRATION[csduid]
+        share = max(0.0, min(1.0, (EO_2016[anchor] - sum16[anchor]) / pop16)) if pop16 else shares.get(anchor, 0)
+        others = {k: v for k, v in shares.items() if k != anchor}
+        rest = sum(others.values()) or 1.0
+        calibrated = {anchor: share, **{k: (1 - share) * v / rest for k, v in others.items()}}
+        print(f"split {name} ({csduid}) calibrated to Elections Ontario's 2016 count for riding {anchor}: "
+              + ", ".join(f"{k} {100 * v:.0f}%" for k, v in sorted(calibrated.items(), key=lambda kv: -kv[1])))
+        for num, sh in calibrated.items():
+            csd_sum[num] += pop * sh
+            sum16[num] += pop16 * sh
+    csd_sum = Counter({k: round(v) for k, v in csd_sum.items()})
+    sum16 = Counter({k: round(v) for k, v in sum16.items()})
     if unplaced:
         print("subdivisions not placed:", unplaced, file=sys.stderr)
     for d in divisions.values():
@@ -373,8 +475,8 @@ def load_population(divisions, simple):
         if d["num"] in NORTH_RIDINGS:
             d["population"] = csd_sum.get(d["num"], 0)
             d["population_basis"] = BASIS_CSD
-            if n in fed:
-                print(f"check {d['name']}: subdivision sum {d['population']:,} vs federal district {fed[n]:,}")
+            print(f"check {d['name']}: 2021 subdivision sum {d['population']:,} (2016 {sum16.get(d['num'], 0):,}; Elections Ontario 2016 "
+                  f"{EO_2016.get(d['num'], 0):,}" + (f"; federal district 2021 {fed[n]:,}" if n in fed else "") + ")")
         elif n in fed:
             d["population"] = fed[n]
             d["population_basis"] = BASIS_FED

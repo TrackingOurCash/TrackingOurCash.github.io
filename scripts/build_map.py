@@ -19,7 +19,8 @@ NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.htm
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
                  "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv",
-                 "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R", "pei.html": "https://claude.ai/artifact/X4239bKZYyxRcX8ozVVZHQ"}
+                 "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R", "pei.html": "https://claude.ai/artifact/X4239bKZYyxRcX8ozVVZHQ",
+                 "ontario.html": "https://claude.ai/artifact/JXkiRVQspJBViHHJ2MDcYL", "quebec.html": "https://claude.ai/artifact/YCvZDpg18q9rNjVfrG1nGz"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -348,6 +349,39 @@ PROVINCES = {
                     ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
                     ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Prince_Edward_Island_provincial_electoral_districts")],
     },
+    "ontario": {
+        "dir": "on", "year": "2025", "region": "Ontario", "spendsUrl": "https://canadaspends.com/en/provincial/ontario", "title": "Where Ontario's payments went after the 2025 election",
+        "electionLabel": "the 27 February 2025 election", "count": 124, "gov": "PC",
+        "parties": {"PC": {"name": "Progressive Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
+                    "LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"}, "GRN": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"},
+                    "NBP": {"name": "New Blue", "light": "#5a9bd5", "dark": "#7fb3e6"}, "OP": {"name": "Ontario Party", "light": "#6a4c93", "dark": "#9b7fc4"},
+                    "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["PC", "NDP", "LIB", "GRN"], "opp": "opposition",
+        "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2025; "opposition" covers the NDP, Liberals, Greens and independents.',
+        "filterAll": "All ministries", "topProgsTitle": "Top ministries", "beforeLabel": "Last full fiscal year before the election (2023-24)",
+        "includeLabel": "Include hospitals and province-wide bodies (Ontario Health, Metrolinx, the IESO, school boards, universities) & multi-riding city and regional governments",
+        "flags": {"province-wide": "hospital or province-wide body", "other government": "other government", "supplier": "supplier, not a grant"},
+        "projection": {"parallels": [43, 50], "rotate": [84, 0]},
+        "insets": [["Toronto & GTA", [-79.85, 43.5, -79.0, 43.95]], ["Hamilton–Niagara", [-80.2, 43.0, -79.0, 43.45]], ["Kitchener–Waterloo", [-80.7, 43.3, -80.2, 43.6]],
+                   ["London", [-81.4, 42.85, -81.1, 43.1]], ["Ottawa", [-76.05, 45.2, -75.4, 45.6]], ["Windsor", [-83.15, 42.22, -82.85, 42.38]]],
+        "source": "Ontario Public Accounts, Detailed Schedule of Payments (data.ontario.ca; transfer-payment recipients of $120,000 or more and suppliers of $50,000 or more, by ministry and fiscal year; no addresses, programs or dates).",
+        "windowNote": "\"After\" is fiscal 2025-26 (April 2025 to March 2026), the first full year after the election; \"before\" is fiscal 2023-24, the last full year before it; 2024-25 straddles the vote and is skipped",
+        "placing": "Ontario publishes payee names only. Each was matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality or First Nation, or to a place name inside its own name, then located in a riding. Hospitals are placed where they stand but flagged like the other provinces' health authorities, since a teaching hospital's operating grant serves a whole region; tick the box to see them. The schedule's supplier list (goods and services) is flagged and excluded from the default view.",
+        "individualNote": "programs that pay individuals (OHIP physician billings, the Ontario Drug Benefit, student loans, assistive devices, GAINS) and accounts below the reporting thresholds",
+        "leftOut": "hospitals and province-wide bodies booked at a head office (Ontario Health, Metrolinx, the IESO and OPG, Infrastructure Ontario, school boards, universities and colleges, Legal Aid, Agricorp), the governments of Toronto, Ottawa and other cities and regions that span several ridings, suppliers of goods and services, and payments to bodies outside the province",
+        "boundaryNote": "the 124 ridings used in 2018, 2022 and 2025. 111 are the 2013 federal districts, whose 2021 census counts are used; the 13 northern ridings are not, so their counts are 2021 census subdivisions summed inside each riding (Greater Sudbury and Thunder Bay split between their two ridings). Ontario repealed its fixed election date in November 2025; the legislature expires in March 2030.",
+        "sources": [("Ontario Public Accounts: Detailed Schedule of Payments (data.ontario.ca)", "https://data.ontario.ca/dataset/56c9a95f-c7b6-40ee-a4b8-d2343e51c83d"),
+                    ("Elections Ontario 2025 official results", "https://results.elections.on.ca/en/publications"),
+                    ("Legislative Assembly of Ontario member list", "https://www.ola.org/en/members/current"),
+                    ("Statistics Canada 2021 census counts, federal electoral districts (2013 order)", "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810001001"),
+                    ("Statistics Canada 2021 census counts, census subdivisions", "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810000201"),
+                    ("Riding boundaries, Representation Act 2015 (Represent, Open North)", "https://represent.opennorth.ca/boundary-sets/ontario-electoral-districts-representation-act-2015/"),
+                    ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
+                    ("Wikipedia (riding articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Ontario_provincial_electoral_districts")],
+    },
     # Quebec publishes transfers by beneficiary category only, so its page also shows federal grants (fed_prov_spending.py qc).
     "quebec": {
         "dir": "qc", "year": "2026", "region": "Quebec",  # canadaspends.com has no Quebec page
@@ -427,11 +461,12 @@ def provincial(key):
         ridings[n] = rec
     land = land_for(P["insets"])
     gov, opp = P["gov"], P["opp"]
+    rep = {"quebec": "MNA", "ontario": "MPP"}.get(key, "MLA")
     config = {
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
-        "rep": "MNA" if key == "quebec" else "MPP" if key == "ontario" else "MLA", "electionYear": y, "spendsUrl": P.get("spendsUrl"),
+        "rep": rep, "electionYear": y, "spendsUrl": P.get("spendsUrl"),
         "popLabel": P["popLabel"].format(pop_date=pop_label()[1]) if P.get("popLabel") else "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": P.get("flags") or {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
@@ -447,7 +482,7 @@ def provincial(key):
         "projection": P["projection"], "insets": P["insets"],
         "subtitle": P["subtitle"].format(**m) if P.get("subtitle") else
                     (f"{P['region']} government payments from {P['electionLabel']} to {m['cutoff']}, placed in the {P['count']} electoral "
-                     f"{LEVEL[key][1]} and set against the {y} result. Each one wears its current MLA's party colour; "
+                     f"{LEVEL[key][1]} and set against the {y} result. Each one wears its current {rep}'s party colour; "
                      f"the deeper the colour, the more money per resident. {P['windowNote']} ({m['before_start']} to {m['before_end']})."),
         "notes": ["<b>Sources:</b> " + links(P["sources"]) + f" Data as of {m.get('generated', m['cutoff'])}."] +
                  [n.format(pop_date=pop_label()[1], unmapped_n=m["methods"].get("after|unmapped", 0), unmapped_money=fmt_money(ex.get("unmatched", 0))) for n in P["notes"]]
@@ -464,8 +499,9 @@ def provincial(key):
             ("<b>Population:</b> no census count exists for these constituencies, so per-person figures are per registered voter at the 2024 election." if key == "saskatchewan" else
              f"<b>Population:</b> no census count exists for these districts, so per-person figures use the boundary commission's estimated electors per district, scaled to Statistics Canada's {pop_label()[1]} estimate for New Brunswick." if key == "nb" else
              f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: the boundary commission's 2016 census count for each division, scaled by Manitoba's growth since then from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key == "manitoba" else
+             f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each riding's 2021 census count (the federal district's for 111 ridings, census subdivisions summed for the 13 northern ones) scaled by Ontario's growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key == "ontario" else
              f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each {LEVEL[key][0]}'s 2021 census count scaled by {P['region']}'s growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province."),
-            "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MLAs. A pattern by seat type is a signal worth checking, not proof of intent.",
+            f"<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local {rep}s. A pattern by seat type is a signal worth checking, not proof of intent.",
         ],
     }
     fine = DATA / P["dir"] / "divisions_geo_fine.json"
