@@ -72,6 +72,7 @@ def federal():
         "nav": [dict(x, current=x["href"] == "index.html") for x in NAV],
         "level": "riding", "levelPlural": "ridings", "levelTitle": "Riding", "region": "province", "regionTitle": "Prov.",
         "rep": "MP", "electionYear": "2025", "popLabel": pop_label()[0],
+        "spendsUrl": "https://canadaspends.com/en/federal/spending",
         "parties": {"LPC": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"}, "CPC": {"name": "Conservative", "light": "#1b4c9e", "dark": "#4f80d8"},
                     "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"}, "BQ": {"name": "Bloc Québécois", "light": "#1aa7bd", "dark": "#3fc0d4"},
                     "GPC": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"}, "PPC": {"name": "PPC", "light": "#4b2e83", "dark": "#8a6bc8"},
@@ -138,7 +139,7 @@ def federal():
 
 PROVINCES = {
     "alberta": {
-        "dir": "ab", "year": "2023", "region": "Alberta", "title": "Where Alberta's grants went after the 2023 election",
+        "dir": "ab", "year": "2023", "region": "Alberta", "spendsUrl": "https://canadaspends.com/en/provincial/alberta", "title": "Where Alberta's grants went after the 2023 election",
         "electionLabel": "the 29 May 2023 election", "count": 87, "gov": "UCP",
         "parties": {"UCP": {"name": "United Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
                     "AP": {"name": "Alberta Party", "light": "#5a9bd5", "dark": "#7fb3e6"}, "GPA": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"},
@@ -167,7 +168,7 @@ PROVINCES = {
                     ("Wikipedia (division articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Alberta_provincial_electoral_districts")],
     },
     "bc": {
-        "dir": "bc", "year": "2024", "region": "British Columbia", "title": "Where BC's transfers went after the 2024 election",
+        "dir": "bc", "year": "2024", "region": "British Columbia", "spendsUrl": "https://canadaspends.com/en/provincial/british-columbia", "title": "Where BC's transfers went after the 2024 election",
         "electionLabel": "the 19 October 2024 election", "count": 93, "gov": "NDP",
         "parties": {"NDP": {"name": "BC NDP", "light": "#f37021", "dark": "#f68a45"}, "BCC": {"name": "Conservative", "light": "#1b4c9e", "dark": "#4f80d8"},
                     "GPBC": {"name": "BC Green", "light": "#3d9b35", "dark": "#5cb954"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
@@ -307,7 +308,7 @@ def provincial(key):
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
-        "rep": "MLA", "electionYear": y, "popLabel": "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
+        "rep": "MLA", "electionYear": y, "spendsUrl": P.get("spendsUrl"), "popLabel": "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
         "filterAll": P["filterAll"], "filterOptions": m["programs"],
