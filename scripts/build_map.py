@@ -13,11 +13,12 @@ DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
-       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "legislatures.html", "label": "Legislatures"}]
+       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"}, {"href": "legislatures.html", "label": "Legislatures"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
-                 "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv"}
+                 "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv",
+                 "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -248,6 +249,34 @@ PROVINCES = {
                     ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
                     ("Wikipedia (division articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Manitoba_provincial_electoral_districts")],
     },
+    "nb": {
+        "dir": "nb", "year": "2024", "region": "New Brunswick", "title": "Where New Brunswick's payments went around the 2024 election",
+        "electionLabel": "the 21 October 2024 election", "count": 49, "gov": "LIB",
+        "parties": {"LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"}, "PC": {"name": "Progressive Conservative", "light": "#1b4c9e", "dark": "#4f80d8"},
+                    "GRN": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
+                    "PANB": {"name": "People's Alliance", "light": "#6a4c93", "dark": "#9b7fc4"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["LIB", "PC", "GRN"], "opp": "PC",
+        "groupNote": '"LIB" means the governing Liberals won the seat in 2024.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "beforeLabel": "Fiscal year before the election (2023-24)",
+        "includeLabel": "Include province-wide bodies (Horizon and Vitalité, NB Power, universities, school districts) & multi-district city governments",
+        "projection": {"parallels": [45, 48], "rotate": [66.5, 0]},
+        "insets": [["Moncton", [-64.9, 46.03, -64.65, 46.17]], ["Saint John", [-66.2, 45.2, -65.95, 45.35]], ["Fredericton", [-66.75, 45.88, -66.55, 46.0]]],
+        "source": "New Brunswick Public Accounts, \"Supplier and Grant Payments by Department\" (open data; payees of $25,000 or more; grants and purchases share one list).",
+        "windowNote": "The year to March 2026 is published in December, so \"after\" is fiscal 2024-25, which straddles the election (seven months before it, five after), and \"before\" is fiscal 2023-24; the page switches to 2025-26 automatically when it appears",
+        "placing": "New Brunswick publishes payee names only. Each was matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality or First Nation, or to a place name inside its own name, then located in a district. Obvious suppliers of goods and services are flagged and excluded from the default view because the list mixes them with grants.",
+        "individualNote": "payments to individuals",
+        "leftOut": "province-wide bodies booked at a head office (the Horizon and Vitalité health networks, NB Power, universities, school districts, regional service commissions), the governments of cities that span several districts, suppliers of goods and services, and payments to bodies outside the province",
+        "boundaryNote": "the 49 districts of the 2023 commission, used in 2024. No census population exists for them, so \"per person\" here means per elector as estimated by the boundary commission, scaled to Statistics Canada's July 2026 estimate for New Brunswick.",
+        "sources": [("New Brunswick Public Accounts: supplier and grant payments by department (open data)", "https://gnb.socrata.com/stories/s/kntu-qzem"),
+                    ("Elections New Brunswick 2024 results", "https://www.electionsnb.ca/content/enb/en/resources/publications/election-results.html"),
+                    ("Legislative Assembly of New Brunswick member list", "https://www.legnb.ca/en/members/current"),
+                    ("Electoral Boundaries and Representation Commission report (electors)", "https://www2.gnb.ca/content/gnb/en/corporate/promo/boundaries-representation-commission.html"),
+                    ("District boundaries (Represent, Open North)", "https://represent.opennorth.ca/boundary-sets/new-brunswick-electoral-districts-2024/"),
+                    ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_New_Brunswick_provincial_electoral_districts")],
+    },
 }
 
 
@@ -276,7 +305,7 @@ def provincial(key):
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
-        "rep": "MLA", "electionYear": y, "popLabel": "registered voters, 2024" if key == "saskatchewan" else pop_label()[0],
+        "rep": "MLA", "electionYear": y, "popLabel": "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
         "filterAll": P["filterAll"], "filterOptions": m["programs"],
@@ -298,10 +327,12 @@ def provincial(key):
             f"{fmt_money(ex.get('individual programs', 0))} went through {P['individualNote']}, {fmt_money(ex.get('individuals', 0))} to recipients who look like individuals, "
             f"{fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, "
             + (f"{fmt_money(ex.get('suppliers', 0))} to suppliers of goods and services, " if ex.get('suppliers') else "")
+            + (f"{fmt_money(ex.get('out-of-province', 0))} to bodies outside the province, " if ex.get('out-of-province') else "")
             + f"and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
             f"<b>Left out by default:</b> {P['leftOut']}. Tick the box to put them back.",
             f"<b>Boundaries:</b> {P['boundaryNote']}",
             ("<b>Population:</b> no census count exists for these constituencies, so per-person figures are per registered voter at the 2024 election." if key == "saskatchewan" else
+             f"<b>Population:</b> no census count exists for these districts, so per-person figures use the boundary commission's estimated electors per district, scaled to Statistics Canada's {pop_label()[1]} estimate for New Brunswick." if key == "nb" else
              f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: the boundary commission's 2016 census count for each division, scaled by Manitoba's growth since then from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key == "manitoba" else
              f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each {LEVEL[key][0]}'s 2021 census count scaled by {P['region']}'s growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province."),
             "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MLAs. A pattern by seat type is a signal worth checking, not proof of intent.",

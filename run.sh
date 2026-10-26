@@ -52,4 +52,6 @@ if python3 scripts/bc_prep.py && python3 scripts/bc_spending.py > data/bc/summar
 if python3 scripts/sk_prep.py && python3 scripts/sk_spending.py > data/sk/summary.json; then :; else echo "SK layer skipped"; fi
 # Manitoba layer
 if python3 scripts/mb_prep.py && python3 scripts/mb_spending.py > data/mb/summary.json; then :; else echo "MB layer skipped"; fi
+# New Brunswick layer
+if python3 scripts/nb_prep.py && python3 scripts/nb_spending.py > data/nb/summary.json; then :; else echo "NB layer skipped"; fi
 python3 scripts/build_map.py
