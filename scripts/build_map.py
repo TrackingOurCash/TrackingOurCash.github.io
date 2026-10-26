@@ -91,7 +91,14 @@ def federal():
             "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MPs. A pattern by seat type is a signal worth checking, not proof of intent.",
         ],
     }
-    payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"],
+    budget = json.load(open(DATA / "budget_by_riding.json")) if (DATA / "budget_by_riding.json").exists() else None
+    if budget:
+        config["notes"].insert(1, "<b>Budget commitments:</b> the dots and the panel's \"Budget commitments\" list come from reading "
+                               + " and ".join(f'<a href="{d["url"]}" target="_blank" rel="noopener">{d["name"]}</a>' for d in budget["documents"])
+                               + " for every measure that names a place, then locating that place in a riding. Budgets name few places: most measures are national programs, "
+                               "and the money reaches ridings later through departmental grants, which is what the map colours show. "
+                               f"Items with no amount are projects the budget names without a dollar figure. {budget['next']}")
+    payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"], "budget": budget,
                "deptBefore": sp["dept_by_riding_before"], "geo": json.load(open(DATA / "ridings_geo.json")), "land": json.load(open(DATA / "land_geo.json")),
                "geoFine": json.load(open(DATA / "ridings_geo_fine.json")) if (DATA / "ridings_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]

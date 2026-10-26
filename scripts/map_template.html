@@ -63,6 +63,10 @@ ul.grants a:hover { text-decoration-color: var(--ink); }
 .r:hover { stroke: var(--sel); stroke-width: 1.6; }
 .r.sel { stroke: var(--sel); stroke-width: 2.4; }
 .r:focus, .r:focus-visible { outline: none; }  /* the browser's box-shaped focus ring; the bold outline above marks the selection */
+.bdot { fill: var(--ink); fill-opacity: 0.85; stroke: var(--surface); stroke-width: 1; pointer-events: none; }
+.bdot.citywide { fill-opacity: 0.45; }
+ul.budget { list-style: none; padding: 0; margin: 6px 0 0; }
+ul.budget li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12px; }
 .sw-big { display: inline-block; vertical-align: middle; border-radius: 3px; border: 1px solid var(--border); }
 .insets { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin-top: 8px; }
 .inset { background: var(--water); border-radius: 8px; padding: 4px; }
@@ -128,6 +132,7 @@ tbody tr:hover { background: var(--grid); }
     <select id="dept" aria-label="Program or department"><option value="" id="deptAll"></option></select>
     <label class="chk"><input type="checkbox" id="natl"> <span id="natlLabel"></span></label>
     <label class="chk"><input type="checkbox" id="closeOnly"> Close ridings only</label>
+    <label class="chk" id="budgetLabel" hidden><input type="checkbox" id="budgetDots" checked> Budget commitments (dots)</label>
   </div>
 
   <div class="grid">
@@ -188,7 +193,8 @@ const fmt$ = v => v == null ? "–" : "$" + (Math.abs(v) >= 1e9 ? (v/1e9).toFixe
 const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleString() : v.toFixed(2));
 const fmtPct = v => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(0) + "%";
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const state = {metric: "pc", dept: "", natl: false, closeOnly: false, sel: null, sort: "pc", dir: -1, q: ""};
+const state = {metric: "pc", dept: "", natl: false, closeOnly: false, budget: true, sel: null, sort: "pc", dir: -1, q: ""};
+const BUDGET = D.budget || null;
 const recordUrl = t => C.recordUrl ? C.recordUrl.replace("{org}", encodeURIComponent(t.org)).replace("{ref}", encodeURIComponent(t.ref)) : null;
 const searchUrl = who => C.searchUrl ? C.searchUrl.replace("{q}", encodeURIComponent('"' + who + '"')) : null;
 const pill = p => `<span class="pill" style="background:var(${PVAR[p] || "--ind"})">${PARTY[p] || p}</span>`;
@@ -278,11 +284,23 @@ const paths = ridingLayer.selectAll("path").data(D.geo.features).join("path")
   .attr("class", "r").attr("d", path).attr("tabindex", 0).attr("aria-label", d => R[d.id].name)
   .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip)
   .on("click", (e, d) => select(d.id)).on("keydown", (e, d) => { if (e.key === "Enter") select(d.id); });
+// Budget commitments: one dot per riding named in a budget document, sized by the dollars named.
+const dotLayer = g.append("g").attr("class", "dots");
+function renderDots() {
+  if (!BUDGET) return;
+  const rows = state.budget ? Object.entries(BUDGET.by_riding) : [];
+  const feat = Object.fromEntries(D.geo.features.map(f => [f.id, f]));
+  dotLayer.selectAll("circle").data(rows, d => d[0]).join("circle")
+    .attr("class", d => "bdot" + (d[1].every(i => i.city_wide) ? " citywide" : ""))
+    .attr("transform", d => `translate(${path.centroid(feat[d[0]])})`)
+    // National programs that merely name a first project don't count toward the dot's size.
+    .attr("r", d => (2.5 + Math.sqrt(d3.sum(d[1], i => /^national|^program/.test(i.kind) ? 0 : (i.amount_millions || 0))) / 6) / Math.sqrt(zoomK));
+}
 let zoomK = 1;
 const zoom = d3.zoom().scaleExtent([1, 80]).on("zoom", e => {
   g.attr("transform", e.transform);
   // Keep the close-seat stripes the same width on screen whatever the zoom.
-  if (Math.abs(e.transform.k - zoomK) / zoomK > 0.15) { zoomK = e.transform.k; defs.selectAll("pattern").attr("patternTransform", `rotate(45) scale(${1 / zoomK})`); }
+  if (Math.abs(e.transform.k - zoomK) / zoomK > 0.15) { zoomK = e.transform.k; defs.selectAll("pattern").attr("patternTransform", `rotate(45) scale(${1 / zoomK})`); renderDots(); }
 });
 svg.call(zoom);
 function zoomTo(b, factor = 1) {
@@ -326,7 +344,7 @@ function render() {
   const f = d => fillFor(d.id, V[d.id]);
   paths.attr("fill", f).attr("opacity", d => state.closeOnly && !R[d.id].close ? 0.45 : 1);
   insetPaths.forEach(ps => ps.attr("fill", f));
-  renderLegend(); renderPies(); renderGroups(); renderTable();
+  renderLegend(); renderPies(); renderGroups(); renderTable(); renderDots();
   if (state.sel) select(state.sel, true);
 }
 function renderLegend() {
@@ -339,6 +357,11 @@ function renderLegend() {
     const d = row.append("div");
     d.append("div").attr("class", "ramp").selectAll("span").data(steps).join("span").style("background", t => tint(p, t));
     d.append("div").attr("class", "small").text(PARTY[p]);
+  }
+  if (BUDGET && state.budget) {
+    const bd = lg.append("div");
+    bd.append("div").attr("class", "lab").text("Budget commitments");
+    bd.append("div").attr("class", "small").html(`<svg width="14" height="14" aria-hidden="true" style="vertical-align:-2px"><circle cx="7" cy="7" r="5" class="bdot"></circle></svg> ${C.level} named in Budget 2025 or the Spring Economic Update 2026 (larger = more dollars named; faint = a city-wide item)`);
   }
   const hb = lg.append("div");
   hb.append("div").attr("class", "lab").text(`Close in ${C.electionYear} (under ${M.close_margin} pts): stripes of the top two parties`);
@@ -392,8 +415,19 @@ function select(n, quiet) {
     <dl class="kv">${r.top_progs.map(([d, x]) => `<dt class="small">${d}</dt><dd>${fmt$(x)}</dd>`).join("") || "<dt>None</dt><dd></dd>"}</dl>
     <h2 style="margin-top:14px">${C.topGrantsTitle}</h2>
     <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span></li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
-    <p class="small muted">${C.linkNote}</p>`;
+    <p class="small muted">${C.linkNote}</p>
+    ${BUDGET ? budgetSection(n) : ""}`;
   if (!quiet && innerWidth < 960) document.getElementById("panel").scrollIntoView({block: "nearest", behavior: "smooth"});
+}
+
+// ---- budget commitments naming a riding ----
+function budgetSection(n) {
+  const items = (BUDGET.by_riding[n] || []);
+  const docs = BUDGET.documents.map(d => `<a href="${d.url}" target="_blank" rel="noopener">${d.name}</a>`).join(" and ");
+  if (!items.length) return `<h2 style="margin-top:14px">Budget commitments</h2><p class="small muted">Neither ${docs} names a place in this ${C.level}.</p>`;
+  return `<h2 style="margin-top:14px">Budget commitments naming this ${C.level}</h2>
+    <ul class="budget">${items.map(i => `<li><b>${i.amount_millions == null ? "Amount not stated" : "$" + (i.amount_millions >= 1000 ? (i.amount_millions / 1000).toFixed(1) + "B" : i.amount_millions + "M")}</b>${i.years ? ` <span class="muted">· ${i.years}</span>` : ""}${i.city_wide ? ' <span class="tag">city-wide</span>' : ""} <span class="tag">${i.kind}</span><br>${i.text}<br><span class="muted">${i.department} · <a href="${i.url}" target="_blank" rel="noopener">${i.budget}, section</a></span></li>`).join("")}</ul>
+    <p class="small muted">${BUDGET.next}</p>`;
 }
 
 // ---- pies: who gets it ----
@@ -481,6 +515,7 @@ C.filterOptions.forEach(d => deptSel.add(new Option(d, d)));
 deptSel.onchange = () => { state.dept = deptSel.value; document.getElementById("natl").disabled = !!state.dept; render(); };
 document.getElementById("natl").onchange = e => { state.natl = e.target.checked; render(); };
 document.getElementById("closeOnly").onchange = e => { state.closeOnly = e.target.checked; render(); };
+if (BUDGET) { document.getElementById("budgetLabel").hidden = false; document.getElementById("budgetDots").onchange = e => { state.budget = e.target.checked; renderLegend(); renderDots(); }; }
 document.getElementById("q").oninput = e => { state.q = e.target.value; renderTable(); };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { applyPartyColors(); render(); });
 const themeBtn = document.getElementById("theme");
