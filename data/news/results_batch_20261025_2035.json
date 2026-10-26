@@ -1,0 +1,620 @@
+{
+ "ps-sp|088-2025-2026-Q4-00259": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Dakota Ojibway Tribal Council\" police service federal funding First Nations policing"
+ },
+ "tc|217-2023-2024-Q4-11887": {
+  "mainstream": {
+   "outlet": "CBC",
+   "title": "Nahanni Butte band welcomes new effort to start up N.W.T.'s Prairie Creek mine",
+   "url": "https://www.cbc.ca/news/canada/north/nahanni-butte-band-welcomes-new-effort-to-start-up-n-w-t-s-prairie-creek-mine-9.7319040"
+  },
+  "independent": {
+   "outlet": "Cabin Radio",
+   "title": "Ottawa commits $25M to build permanent road to Prairie Creek",
+   "url": "https://cabinradio.ca/189778/news/politics/ottawa-commits-25m-to-build-permanent-road-to-prairie-creek/"
+  },
+  "query": "\"Canadian Zinc\" OR \"NorZinc\" Prairie Creek road National Trade Corridors Fund"
+ },
+ "acoa-apeca|276-2025-2026-Q4-00077": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Centre for Ocean Ventures and Entrepreneurship\" Dartmouth ACOA federal funding"
+ },
+ "fednor|200-2025-2026-Q4-064": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kap Paper\" Kapuskasing mill FedNor federal funding"
+ },
+ "isc-sac|1910-2025-2026-Qrt2-0006892": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Ministry of Emergency Preparedness and Response\" Indigenous Services Canada funding evacuation First Nations"
+ },
+ "ec|099-2025-2026-Q4-00135": {
+  "mainstream": {
+   "outlet": "CBC",
+   "title": "Ottawa noncommittal on continuing N.W.T.'s lower carbon fossil fuel heating rebates",
+   "url": "https://www.cbc.ca/news/canada/north/ottawa-nwt-rebate-exemption-1.7222997"
+  },
+  "independent": {
+   "outlet": "Cabin Radio",
+   "title": "Communities invited to apply for emissions reduction funding",
+   "url": "https://cabinradio.ca/285581/news/environment/climate/communities-invited-to-apply-for-emissions-reduction-funding/"
+  },
+  "query": "\"Government of the Northwest Territories\" \"Low Carbon Economy\" fund federal funding Yellowknife"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18714": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"FPInnovations\" Forest Innovation Program federal funding Natural Resources Canada 2026"
+ },
+ "infc|278-2025-2026-Q3-00043": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Belleville\" Canada Housing Infrastructure Fund federal funding water wastewater"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0020020": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Ministry of Emergency Preparedness and Response\" Indigenous Services Canada funding evacuation First Nations"
+ },
+ "ec|099-2025-2026-Q3-00013": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Six Nations of the Grand River\" Environment and Climate Change Canada funding 2025 conservation"
+ },
+ "pch|016-2025-2026-Q3-1375135": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Coaching Association of Canada\" Sport Canada federal funding Sport Support Program"
+ },
+ "hc-sc|271-2025-2026-Q4-00054": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario Health Canada \"Shared Health Priorities\" bilateral agreement funding Ministry of Health 2026"
+ },
+ "infc|278-2025-2026-Q2-00005": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kanaka Bar\" Lytton Green and Inclusive Community Buildings federal funding"
+ },
+ "ic|033-2025-2026-Q4-820076": {
+  "mainstream": {
+   "outlet": "Castanet",
+   "title": "Feds and province partner with Telus for massive Thompson-Okanagan rural internet upgrade",
+   "url": "https://www.castanet.net/edition/news-story-619050-2-.htm"
+  },
+  "independent": null,
+  "query": "\"TELUS\" Universal Broadband Fund British Columbia federal funding 2026 rural internet"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-18273": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Focus Graphite\" federal funding Natural Resources Canada critical minerals contribution"
+ },
+ "tc|217-2025-2026-Q2-17520": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Hamilton-Oshawa Port Authority\" Green Shipping Corridor federal funding Transport Canada"
+ },
+ "cihr-irsc|236-2025-2026-Q3-00469": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Rae Yeung\" CIHR grant SickKids research funding"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00011": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"CEDEC\" Huntingdon Quebec Enabling Fund official language minority communities federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17739": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "CIM Magazine",
+   "title": "Ottawa invests in Quebec's critical minerals infrastructure",
+   "url": "https://magazine.cim.org/en/news/2025/ottawa-invests-in-quebecs-critical-minerals-infrastructure-en/"
+  },
+  "query": "\"Eskan\" Mistissini Critical Minerals Infrastructure Fund federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18615": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "CIM Magazine",
+   "title": "Ottawa invests in Quebec's critical minerals infrastructure",
+   "url": "https://magazine.cim.org/en/news/2025/ottawa-invests-in-quebecs-critical-minerals-infrastructure-en/"
+  },
+  "query": "\"Eskan\" Mistissini Critical Minerals Infrastructure Fund federal funding"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0020023": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Ministry of Emergency Preparedness and Response\" Indigenous Services Canada funding evacuation First Nations"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17425": {
+  "mainstream": {
+   "outlet": "CBC",
+   "title": "Canada and U.S. Department of Defence invest $35M in the Yukon's Mactung mine",
+   "url": "https://www.cbc.ca/news/canada/north/mactung-mine-fireweed-metals-us-department-defence-1.7412022"
+  },
+  "independent": {
+   "outlet": "Mining.com",
+   "title": "Fireweed secures US, Canadian gov't fundings for tungsten project",
+   "url": "https://www.mining.com/?p=1168181"
+  },
+  "query": "\"Fireweed Metals\" Critical Minerals Infrastructure Fund federal funding Macmillan Pass"
+ },
+ "ic|033-2025-2026-Q4-515741": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Canada invests $67 million in dual-use life sciences research",
+   "url": "https://betakit.com/canada-invests-67-million-in-dual-use-life-sciences-research/"
+  },
+  "query": "\"Qidni Labs\" Kitchener federal funding Life Sciences dialysis"
+ },
+ "ps-sp|088-2025-2026-Q4-00082": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Québec \"Sécurité publique\" programme de rachat armes à feu compensation fédéral entente Ottawa"
+ },
+ "pc|154-2025-2026-Q1-00012": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"KMKNO\" OR \"Kwilmu'kw Maw-klusuaqn\" Parks Canada youth employment federal funding Millbrook"
+ },
+ "ec|099-2025-2026-Q1-00074": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Mohawk Council of Akwesasne\" Environment and Climate Change Canada funding 2025 fuel charge proceeds"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18688": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Prince Edward Island\" \"Greener Homes Affordability\" federal funding heat pumps Charlottetown"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0063": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Socodevi\" Affaires mondiales Canada financement projet 2026"
+ },
+ "pc|154-2025-2026-Q4-00074": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ontario Conservation Accelerator\" Parks Canada federal funding Peterborough"
+ },
+ "pch|016-2025-2026-Q3-1376729": {
+  "mainstream": {
+   "outlet": "The Chronicle-Journal",
+   "title": "COC, CPC to continue lobby for sport core funding after federal budget gave none",
+   "url": "https://www.chroniclejournal.com/sports/national_sports/coc-cpc-to-continue-lobby-for-sport-core-funding-after-federal-budget-gave-none/article_223e89f5-f034-514e-93ba-4bc6049d5685.html"
+  },
+  "independent": null,
+  "query": "\"Canadian Olympic Committee\" Sport Canada federal funding Sport Support Program 2025"
+ },
+ "pch|016-2025-2026-Q3-1377054": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"National Ballet School\" Canada Arts Training Fund federal funding Canadian Heritage"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18646": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Québec Intelli-feu FireSmart Ressources naturelles Canada financement fédéral Sécurité publique feux de forêt 2026"
+ },
+ "ic|033-2025-2026-Q4-515732": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Canada invests $67 million in dual-use life sciences research",
+   "url": "https://betakit.com/canada-invests-67-million-in-dual-use-life-sciences-research/"
+  },
+  "query": "\"Avivo Biomedical\" Vancouver federal funding Life Sciences Fund"
+ },
+ "ic|033-2025-2026-Q4-515746": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Canada invests $67 million in dual-use life sciences research",
+   "url": "https://betakit.com/canada-invests-67-million-in-dual-use-life-sciences-research/"
+  },
+  "query": "\"Avivo Biomedical\" Vancouver federal funding Life Sciences Fund"
+ },
+ "ic|033-2025-2026-Q3-515536": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Bearspaw First Nation\" Universal Broadband Fund federal funding Morley internet"
+ },
+ "infc|278-2025-2026-Q3-00036": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Michipicoten First Nation\" Canada Housing Infrastructure Fund federal funding"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00044": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "'We have to be pragmatists': federal government invests almost $29M in Edmonton AI",
+   "url": "https://www.ctvnews.ca/edmonton/article/we-have-to-be-pragmatists-federal-government-invests-almost-29m-in-edmonton-ai/"
+  },
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Amii receives $9 million from feds to equip energy workers with AI skills",
+   "url": "https://betakit.com/?p=393418"
+  },
+  "query": "\"Amii\" Edmonton Sectoral Workforce Solutions Program federal funding AI talent"
+ },
+ "ic|033-2025-2026-Q2-515520": {
+  "mainstream": {
+   "outlet": "rdnewsNOW",
+   "title": "Improved high-speed internet making its way to Rocky and Clearwater County",
+   "url": "https://rdnewsnow.com/?p=543772"
+  },
+  "independent": null,
+  "query": "\"Clearwater County\" Rocky Mountain House Universal Broadband Fund federal funding internet"
+ },
+ "infc|278-2025-2026-Q4-00031": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Water Canada",
+   "title": "Canada and Nova Scotia invest in water and wastewater infrastructure in Cape Breton",
+   "url": "https://www.watercanada.net/canada-and-nova-scotia-invest-in-water-and-wastewater-infrastructure-in-cape-breton/"
+  },
+  "query": "\"Cape Breton Regional Municipality\" Canada Housing Infrastructure Fund federal funding wastewater"
+ },
+ "pacifican|240-2025-2026-Q4-00080": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Simon Fraser University\" PacifiCan federal funding 2026 Regional Economic Growth through Innovation"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0061": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Eskasoni\" Atlantic Integrated Commercial Fisheries Initiative federal funding DFO"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00087": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Conseil de développement économique de la Nouvelle-Écosse\" financement fédéral Fonds d'habilitation"
+ },
+ "infc|278-2025-2026-Q4-00070": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Ottawa announces $10 million in funding for curling club in Sydney, N.S.",
+   "url": "https://prd.ctvnews.ca/atlantic/article/ottawa-announces-10-million-in-funding-for-curling-club-in-sydney-ns"
+  },
+  "independent": {
+   "outlet": "Coastal Radio",
+   "title": "Sydney Curling Club Getting $10 Million For New Facility",
+   "url": "https://coastalradio.ca/sydney-curling-club-getting-10-million-for-new-facility/"
+  },
+  "query": "\"Sydney Curling Club\" federal funding Green and Inclusive Community Buildings"
+ },
+ "hc-sc|271-2025-2026-Q2-00034": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Mental Health Association\" New Brunswick Health Canada $10 million funding Fredericton"
+ },
+ "ced-dec|012-2025-2026-Q4-00139": {
+  "mainstream": {
+   "outlet": "Noovo Info",
+   "title": "Ottawa verse 33 M$ à des entreprises québécoises pour des projets en défense",
+   "url": "https://www.noovo.info/fils-de-presse/article/ottawa-verse-33-m-a-des-entreprises-quebecoises-pour-des-projets-en-defense/"
+  },
+  "independent": null,
+  "query": "\"Héroux-Devtek\" Longueuil DEC financement fédéral défense 10 millions"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1035263": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Wolf Advanced Technology\" Aurora NRC IRAP federal funding $10 million"
+ },
+ "feddevontario|062-2025-2026-Q4-00149": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kinectrics\" FedDev Ontario federal funding $10 million nuclear"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0097": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"World University Service of Canada\" Global Affairs Canada funding project 2026"
+ },
+ "fednor|200-2025-2026-Q3-047": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kap Paper\" Kapuskasing mill FedNor federal funding"
+ },
+ "dfatd-maecd|064-2025-2026-Q3-0048": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Canada announces new funding model to support women's equality globally",
+   "url": "https://bc.ctvnews.ca/canada-announces-new-funding-model-to-support-women-s-equality-globally-1.4448481"
+  },
+  "independent": {
+   "outlet": "Canada's National Observer",
+   "title": "Canada announces new funding model to support women's equality globally",
+   "url": "https://nationalobserver.com/2019/06/03/news/canada-announces-new-funding-model-support-womens-equality-globally"
+  },
+  "query": "\"Equality Fund\" Global Affairs Canada funding 2025 feminist"
+ },
+ "ps-sp|088-2025-2026-Q4-00241": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Ottawa police receive funding boost from federal government",
+   "url": "https://www.ctvnews.ca/ottawa/article/ottawa-police-receive-funding-boost-from-federal-government/"
+  },
+  "independent": null,
+  "query": "\"City of Ottawa\" Nation's Capital Extraordinary Policing Costs Program federal funding police"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0200": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Cowater International\" Global Affairs Canada funding project 2026"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0019": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"CANADEM\" Global Affairs Canada Peace and Stabilization Operations funding Ukraine deployment"
+ },
+ "feddevontario|062-2025-2026-Q4-00011": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "The Logic",
+   "title": "FedDev Ontario announces $53.3 million for Toronto organizations",
+   "url": "https://thelogic.co/briefing/feddev-ontario-announces-53-3-million-for-toronto-organizations/"
+  },
+  "query": "\"Toronto Global\" FedDev Ontario federal funding $10 million investment attraction"
+ },
+ "ic|033-2025-2026-Q4-819855": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Hanon Systems\" Concord Ontario Strategic Response Fund federal funding"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0154": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Catalyste+\" Global Affairs Canada funding volunteer cooperation 2026"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0020019": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Ministry of Emergency Preparedness and Response\" Indigenous Services Canada funding evacuation First Nations"
+ },
+ "prairiescan|044-2025-2026-Q4-00059": {
+  "mainstream": {
+   "outlet": "CBC",
+   "title": "$32M land development near Winnipeg airport to draw investment, jobs and housing: mayor",
+   "url": "https://www.cbc.ca/news/canada/manitoba/winnipeg-airport-land-development-9.7109448"
+  },
+  "independent": {
+   "outlet": "ReNew Canada",
+   "title": "Feds, province to fund development at Winnipeg Richardson International Airport",
+   "url": "https://www.renewcanada.net/?p=5000111487"
+  },
+  "query": "\"Winnipeg Airports Authority\" PrairiesCan federal funding $10 million 2026"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00020": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"ECO Canada\" Foreign Credential Recognition federal funding $10 million environmental professionals"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18698": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"TransAlta\" Alberta Hydro Smart Renewables and Electrification Pathways federal funding $10 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18432": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Feds put nearly $29 million toward cleantech projects across Canada",
+   "url": "https://betakit.com/feds-put-nearly-29-million-toward-cleantech-projects-across-canada/"
+  },
+  "query": "\"Carbon Alpha\" Calgary Energy Innovation Program federal funding Natural Resources Canada"
+ },
+ "hc-sc|271-2025-2026-Q2-00035": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Alberta Centre for Excellence in Youth Mental Health\" Health Canada federal funding $10 million"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt4-0000266": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kitsumkalum\" treaty implementation federal funding Crown-Indigenous Relations 2026"
+ },
+ "aandc-aadnc|0420-2026-2027-Qrt1-719388": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kitselas\" treaty implementation federal funding Crown-Indigenous Relations 2026"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00004": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Western JETS\" OR \"WJETS\" Delta Union Training and Innovation federal funding"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00007": {
+  "mainstream": {
+   "outlet": "Burnaby Now",
+   "title": "Burnaby MP announces millions to help apprentices in skill trades",
+   "url": "https://www.burnabynow.com/local-news/burnaby-mp-announces-millions-to-help-apprentices-in-skill-trades-3528898"
+  },
+  "independent": null,
+  "query": "\"SkillPlan\" Burnaby Union Training and Innovation Program federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18907": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Red Deer\" Smart Renewables and Electrification Pathways federal funding city solar"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18585": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Saint John Energy\" Smart Renewables and Electrification Pathways federal funding"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0201": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Alinea International\" Calgary Global Affairs Canada funding project"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00043": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Temiskaming Native Women's Support Group\" federal funding Sectoral Workforce Solutions"
+ },
+ "ps-sp|088-2025-2026-Q3-00007": {
+  "mainstream": null,
+  "independent": null,
+  "query": "British Columbia First Nations and Inuit Policing Program federal funding agreement Public Safety Canada 2025 B.C."
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18398": {
+  "mainstream": {
+   "outlet": "Burnaby Now",
+   "title": "Fed minister tours Burnaby clean tech company that's received $8M in government funding",
+   "url": "https://burnabynow.com/local-business/fed-minister-tours-burnaby-clean-tech-company-thats-received-8m-in-government-funding-5258399"
+  },
+  "independent": null,
+  "query": "\"Nano One\" Burnaby Natural Resources Canada Energy Innovation Program federal funding"
+ },
+ "pch|016-2025-2026-Q3-1377084": {
+  "mainstream": {
+   "outlet": "CBC",
+   "title": "Ottawa considers restoring Hockey Canada's funding after 9-month freeze",
+   "url": "https://www.cbc.ca/lite/story/1.6795229"
+  },
+  "independent": null,
+  "query": "\"Hockey Canada\" Sport Canada federal funding restored Sport Support Program"
+ },
+ "isc-sac|1910-2026-2027-Qrt1-506545": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Survivors Circle for Reproductive Justice\" Indigenous Services Canada funding forced sterilization"
+ },
+ "pacifican|240-2025-2026-Q4-00072": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "REMI Network",
+   "title": "Canada invests in cutting-edge UBC research facilities",
+   "url": "https://www.reminetwork.com/?p=39882"
+  },
+  "query": "\"University of British Columbia\" PacifiCan federal funding January 2026 $8.7 million"
+ },
+ "ps-sp|088-2025-2026-Q2-00056": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Saskatchewan Disaster Financial Assistance Arrangements federal payment 2025 Public Safety Canada"
+ },
+ "dfo-mpo|086-2025-2026-Q3-00004": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tobique First Nation\" fisheries federal funding DFO Atlantic Integrated Commercial Fisheries Initiative"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0102": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Listuguj\" Mi'gmaq fisheries federal funding DFO AICFI 2026"
+ },
+ "dnd-mdn|018-2025-2026-Q4-06-CO5026": {
+  "mainstream": {
+   "outlet": "The Globe and Mail",
+   "title": "Ottawa expands military space ambitions with launch, satellite funding",
+   "url": "https://www.theglobeandmail.com/business/article-ottawa-expands-military-space-ambitions-with-launch-satellite-funding/"
+  },
+  "independent": {
+   "outlet": "SpaceQ",
+   "title": "Aligning Defence Strategy and Private Capital for Canada's Responsive Launch Sector",
+   "url": "https://spaceq.ca/aligning-defence-strategy-and-private-capital-for-canadas-responsive-launch-sector/"
+  },
+  "query": "\"Reaction Dynamics\" IDEaS National Defence funding Saint-Hubert rocket"
+ },
+ "dnd-mdn|018-2025-2026-Q4-06-CO5003": {
+  "mainstream": {
+   "outlet": "The Globe and Mail",
+   "title": "Ottawa expands military space ambitions with launch, satellite funding",
+   "url": "https://www.theglobeandmail.com/business/article-ottawa-expands-military-space-ambitions-with-launch-satellite-funding/"
+  },
+  "independent": {
+   "outlet": "SpaceQ",
+   "title": "Transcript: National Defence Minister David McGuinty on sovereign space launch investments",
+   "url": "https://spaceq.ca/transcript-national-defence-minister-david-mcguinty-on-sovereign-space-launch-investments/"
+  },
+  "query": "\"NordSpace\" IDEaS National Defence funding Markham launch"
+ },
+ "ec|099-2025-2026-Q4-00087": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tla'amin Nation\" Environment and Climate Change Canada funding conservation protected area Powell River"
+ },
+ "pch|016-2025-2026-Q3-1375181": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Alpine Canada\" Sport Canada federal funding Sport Support Program"
+ },
+ "aafc-aac|235-2025-2026-Q4-00237": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ecocert Canada\" Agricultural Climate Solutions On-Farm Climate Action Fund federal funding"
+ },
+ "dfo-mpo|086-2025-2026-Q1-0020": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"First Nations Fisheries Council\" Pacific Integrated Commercial Fisheries Initiative federal funding DFO"
+ },
+ "dnd-mdn|018-2025-2026-Q3-09002": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "North Bay council to vote on cost and scope of cleaning contaminated soil at airport",
+   "url": "https://northernontario.ctvnews.ca/north-bay-council-to-vote-on-cost-and-scope-of-cleaning-contaminated-soil-at-airport-1.6778317"
+  },
+  "independent": {
+   "outlet": "Water Canada",
+   "title": "Department of National Defence announces funding for remediation and water treatment in North Bay",
+   "url": "https://www.watercanada.net/department-of-national-defence-announces-funding-for-remediation-and-water-treatment-in-north-bay/"
+  },
+  "query": "\"North Bay\" Jack Garland Airport remediation National Defence federal funding PFAS"
+ },
+ "feddevontario|062-2026-2027-Q1-00004": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Federal government invests over $20M in southwestern Ontario businesses to combat tariff impacts",
+   "url": "https://www.ctvnews.ca/london/article/federal-government-invests-over-20m-in-southwestern-ontario-businesses-to-combat-tariff-impacts/"
+  },
+  "independent": {
+   "outlet": "Farmtario",
+   "title": "The Grove receives $8 million in federal funding",
+   "url": "https://farmtario.com/news/the-grove-receives-8-million-in-federal-funding/"
+  },
+  "query": "\"Western Fair\" London Ontario FedDev federal funding $8 million tariff"
+ },
+ "feddevontario|062-2025-2026-Q4-00015": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Federal government pledges $40.5M to Brant County and Waterloo companies",
+   "url": "https://www.ctvnews.ca/kitchener/article/waterloo-region-and-brant-county-businesses-given-405m-in-tariff-support/"
+  },
+  "independent": {
+   "outlet": "The Logic",
+   "title": "Ottawa puts $41 million into Kitchener-Waterloo quantum computing",
+   "url": "https://thelogic.co/briefing/ottawa-puts-41-million-into-kitchener-waterloo-quantum-computing/"
+  },
+  "query": "\"Quantum Valley Ideas Lab\" FedDev Ontario Regional Defence Investment Initiative federal funding"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00047": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Progressive Intercultural Community Services\" Surrey federal funding Sectoral Workforce Solutions Program"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00020": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Conseil économique du Nouveau-Brunswick\" financement fédéral Fonds d'habilitation EDSC"
+ },
+ "isc-sac|1910-2025-2026-Qrt3-0009289": {
+  "mainstream": {
+   "outlet": "CBC",
+   "title": "New Mi'kmaw health authority receives nearly $9M in federal funding",
+   "url": "https://amp.cbc.ca/lite/story/1.6325427"
+  },
+  "independent": null,
+  "query": "\"Tajikeimik\" Mi'kmaw health Indigenous Services Canada funding Nova Scotia"
+ }
+}
