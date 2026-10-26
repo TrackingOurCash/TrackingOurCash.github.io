@@ -32,11 +32,14 @@ def fmt_money(v):
 def federal():
     sp = json.load(open(DATA / "riding_spending.json"))
     m = sp["meta"]
+    # News coverage found once per grant by the research step (scripts/merge_news.py); keyed "owner_org|ref_number".
+    news = json.load(open(DATA / "news_links.json")) if (DATA / "news_links.json").exists() else {}
     mth = m["methods"]
     placed = sum(v for k, v in mth.items() if k.startswith("after|") and "unmapped" not in k)
     ridings = {}
     for n, r in sp["ridings"].items():
         rec = {k: r[k] for k in COMMON}
+        rec["top_grants"] = [dict(g, news=news.get(f'{g["org"]}|{g["ref"]}')) if f'{g["org"]}|{g["ref"]}' in news else g for g in r["top_grants"]]
         rec.update({"num": n, "name": r["current_name"], "region": r["province"], "party_won": r["party_2025"],
                     "runnerup_party": r["runnerup_party_2025"], "winner": r["winner_2025"], "runnerup": r["runnerup_2025"],
                     "shares": r["shares_2025"], "rep": r["mp"], "rep_party": r["mp_party"], "top_progs": r["top_depts"]})
@@ -89,6 +92,7 @@ def federal():
             "<b>Left out by default:</b> national non-profits booked at a head office (\"Hockey Canada\"), other governments (provinces, cities spread over several ridings), treaty and specific-claim settlements, and foreign aid routed through Canadian partners. Tick the box to put them back. Companies are kept even when \"Canada\" is in their name.",
             f"<b>Amendments</b> are counted once, at the agreement's latest total value. <b>Reporting lag:</b> departments report quarterly, so the window ends at the last quarter that looks fully reported ({m['cutoff']}).",
             "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MPs. A pattern by seat type is a signal worth checking, not proof of intent.",
+            "<b>News links:</b> for each riding's largest grant, every grant of $10 million or more, and the top three in close seats, a web search looked for one mainstream outlet (CBC, Global, CTV, Postmedia, Torstar, La Presse and the like) and one independent outlet (Juno, Rebel, Western Standard, The Tyee, National Observer, iPolitics and others) reporting that funding. Links are kept with the data and refreshed only for new grants. \"No coverage found\" means the search found nothing that clearly matched; smaller grants were not searched.",
         ],
     }
     budget = json.load(open(DATA / "budget_by_riding.json")) if (DATA / "budget_by_riding.json").exists() else None

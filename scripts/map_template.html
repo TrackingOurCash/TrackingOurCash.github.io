@@ -204,6 +204,12 @@ const BUDGET = D.budget || null;
 // Budget documents are listed oldest first; "latest" is the most recent one.
 const LATEST_BUDGET = BUDGET ? BUDGET.documents.slice().sort((a, b) => a.date < b.date ? 1 : -1)[0] : null;
 const budgetItems = n => (BUDGET.by_riding[n] || []).filter(i => state.budgetScope === "all" || LATEST_BUDGET.name.startsWith(i.budget));
+function newsLine(t) {
+  if (!("news" in t)) return "";
+  const n = t.news || {};
+  const part = (label, a) => a ? `${label}: <a href="${a.url}" target="_blank" rel="noopener" title="${(a.title || "").replace(/"/g, "&quot;")}">${a.outlet || new URL(a.url).hostname.replace(/^www\./, "")}</a>` : `${label}: <span class="muted">none found</span>`;
+  return `<br><span class="small">${part("Mainstream", n.mainstream)} · ${part("Independent", n.independent)}</span>`;
+}
 const recordUrl = t => C.recordUrl ? C.recordUrl.replace("{org}", encodeURIComponent(t.org)).replace("{ref}", encodeURIComponent(t.ref)) : null;
 const searchUrl = who => C.searchUrl ? C.searchUrl.replace("{q}", encodeURIComponent('"' + who + '"')) : null;
 const pill = p => `<span class="pill" style="background:var(${PVAR[p] || "--ind"})">${PARTY[p] || p}</span>`;
@@ -424,7 +430,7 @@ function select(n, quiet) {
     <h2 style="margin-top:14px">${C.topProgsTitle}</h2>
     <dl class="kv">${r.top_progs.map(([d, x]) => `<dt class="small">${d}</dt><dd>${fmt$(x)}</dd>`).join("") || "<dt>None</dt><dd></dd>"}</dl>
     <h2 style="margin-top:14px">${C.topGrantsTitle}</h2>
-    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span></li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
+    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span>${newsLine(t)}</li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
     <p class="small muted">${C.linkNote}</p>
     ${BUDGET ? budgetSection(n) : ""}`;
   if (!quiet && innerWidth < 960) document.getElementById("panel").scrollIntoView({block: "nearest", behavior: "smooth"});
