@@ -120,7 +120,7 @@ tbody tr { cursor: pointer; }
 tbody tr:hover { background: var(--grid); }
 .notes { color: var(--ink-2); font-size: 13px; }
 .notes li { margin-bottom: 4px; }
-.notes a { color: var(--focus); }
+.notes a, #panel a { color: var(--focus); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -415,7 +415,7 @@ function select(n, quiet) {
   const switched = r.rep_party && r.rep_party !== r.party_won;
   document.getElementById("panel").innerHTML = `
     <h2 style="margin-bottom:2px">${r.name}</h2>
-    <div class="small muted">${r.region} · pop. ${r.population.toLocaleString()} (2021)</div>
+    <div class="small muted">${r.region} · pop. ${r.population.toLocaleString()} (2021)${r.wiki ? ` · <a href="${r.wiki}" target="_blank" rel="noopener">Wikipedia</a>` : ""}</div>
     <div class="small" style="margin-top:6px"><svg class="sw-big" width="44" height="18" aria-hidden="true"><rect width="44" height="18" fill="${fillFor(n, v)}"></rect></svg>
       <span class="muted">map colour: ${r.close ? "close seat, striped " + PARTY[r.party_won] + " / " + PARTY[r.runnerup_party] : PARTY[r.rep_party || r.party_won]}${rank ? `, ${rank === 1 ? "deepest" : "#" + rank} of ${rankOf.length} by ${state.metric === "pc" ? "$ per person" : "change vs before"}` : ""}</span></div>
     <p style="margin:10px 0 4px"><b>${r.rep}</b> ${pill(r.rep_party)}${switched ? ` <span class="tag">elected as ${PARTY[r.party_won]}</span>` : ""}</p>

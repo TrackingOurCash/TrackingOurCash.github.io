@@ -25,6 +25,11 @@ def links(items):
     return "; ".join(f'<a href="{u}" target="_blank" rel="noopener">{t}</a>' for t, u in items) + "."
 
 
+def wiki(level):
+    path = DATA / "wikipedia_links.json"
+    return json.load(open(path)).get(level, {}) if path.exists() else {}
+
+
 def fmt_money(v):
     return "$" + (f"{v / 1e9:.1f}B" if v >= 1e9 else f"{v / 1e6:.0f}M" if v >= 1e6 else f"{v:,.0f}")
 
@@ -34,11 +39,13 @@ def federal():
     m = sp["meta"]
     # News coverage found once per grant by the research step (scripts/merge_news.py); keyed "owner_org|ref_number".
     news = json.load(open(DATA / "news_links.json")) if (DATA / "news_links.json").exists() else {}
+    wk = wiki("federal")
     mth = m["methods"]
     placed = sum(v for k, v in mth.items() if k.startswith("after|") and "unmapped" not in k)
     ridings = {}
     for n, r in sp["ridings"].items():
         rec = {k: r[k] for k in COMMON}
+        rec["wiki"] = (wk.get(n) or {}).get("url")
         rec["top_grants"] = [dict(g, news=news.get(f'{g["org"]}|{g["ref"]}')) if f'{g["org"]}|{g["ref"]}' in news else g for g in r["top_grants"]]
         rec.update({"num": n, "name": r["current_name"], "region": r["province"], "party_won": r["party_2025"],
                     "runnerup_party": r["runnerup_party_2025"], "winner": r["winner_2025"], "runnerup": r["runnerup_2025"],
@@ -87,6 +94,7 @@ def federal():
                 ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
                 ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
                 ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
+                ("Wikipedia (riding articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Canadian_federal_electoral_districts"),
             ]) + f" Data as of {m.get('generated', m['cutoff'])}. Code: the pipeline is open and rebuilds the page daily.",
             f"<b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent. The dataset's own riding field is rarely filled in, so most of the {placed:,} awards since the election were placed by postal code; recipients with no postal code were matched to their address on other awards, then by city. {mth.get('after|unmapped', 0):,} awards worth {fmt_money(mth.get('after|unmapped $', 0))} are still unplaced.",
             "<b>Left out by default:</b> national non-profits booked at a head office (\"Hockey Canada\"), other governments (provinces, cities spread over several ridings), treaty and specific-claim settlements, and foreign aid routed through Canadian partners. Tick the box to put them back. Companies are kept even when \"Canada\" is in their name.",
@@ -112,9 +120,11 @@ def alberta():
     sp = json.load(open(DATA / "ab" / "division_spending.json"))
     m = sp["meta"]
     ex = m["excluded_after"]
+    wk = wiki("alberta")
     ridings = {}
     for n, r in sp["ridings"].items():
         rec = {k: r[k] for k in COMMON}
+        rec["wiki"] = (wk.get(n) or {}).get("url")
         rec.update({"num": n, "name": r["name"], "region": "Alberta", "party_won": r["party_2023"], "runnerup_party": r["runnerup_party_2023"],
                     "winner": r["winner_2023"], "runnerup": r["runnerup_2023"], "shares": r["shares_2023"], "rep": r["mla"],
                     "rep_party": r["mla_party"], "top_progs": r["top_progs"]})
@@ -155,6 +165,7 @@ def alberta():
                 ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
                 ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
                 ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                ("Wikipedia (division articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Alberta_provincial_electoral_districts"),
             ]) + f" Data as of {m.get('generated', m['cutoff'])}.",
             f"<b>Placing payments:</b> Alberta publishes recipient names but no addresses. Each recipient was matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality, or to a place name inside its own name, then located in a division. Of {fmt_money(m['total_after'])} paid since the election, {fmt_money(m['placed_after'])} was placed; {fmt_money(ex.get('individual programs', 0))} went through programs that pay individuals (physician fees, AISH, benefits, awards), {fmt_money(ex.get('individuals', 0))} to recipients who look like individuals, {fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
             "<b>Left out by default:</b> province-wide bodies booked at a head office (Alberta Health Services, universities and colleges, school divisions, agencies) and the governments of cities that span several divisions (Calgary, Edmonton and others). Tick the box to put them back.",

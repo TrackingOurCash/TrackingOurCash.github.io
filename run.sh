@@ -42,6 +42,7 @@ python3 scripts/prep_ridings.py
 python3 scripts/build_spending.py > data/summary.json
 (cd scripts && python3 budget.py)
 python3 scripts/merge_news.py
+python3 scripts/wiki_links.py || true
 # Alberta layer (skipped if the Alberta downloads are missing)
 if [[ -f data/raw/ab/grants-2025-26.csv ]]; then python3 scripts/ab_prep.py && python3 scripts/ab_spending.py > data/ab/summary.json; fi
 python3 scripts/build_map.py
