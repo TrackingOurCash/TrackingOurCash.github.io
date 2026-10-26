@@ -1,0 +1,1065 @@
+{
+ "infc|278-2025-2026-Q4-00068": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Quebec, Ottawa sign nearly $10B in infrastructure agreements",
+   "url": "https://www.cbc.ca/news/canada/montreal/quebec-ottawa-sign-deal-9.7221105"
+  },
+  "independent": {
+   "outlet": "ReNew Canada",
+   "title": "Canada and Quebec announce agreement to support accelerated housing construction",
+   "url": "https://www.renewcanada.net/canada-and-quebec-announce-agreement-to-support-accelerated-housing-construction/"
+  },
+  "query": "\"Province of Quebec\" Canada Housing Infrastructure Fund $955 million agreement"
+ },
+ "dnd-mdn|018-2025-2026-Q4-14001": {
+  "mainstream": {
+   "outlet": "The Globe and Mail",
+   "title": "Ottawa spending $1.4-billion to ramp up domestic ammunition production capacity",
+   "url": "https://www.theglobeandmail.com/business/economy/article-ottawa-spending-14-billion-domestic-ammunition-production-capacity/"
+  },
+  "independent": {
+   "outlet": "Canadian Defence Review",
+   "title": "Canada invests $1.4 billion into domestic ammunition production",
+   "url": "https://canadiandefencereview.com/canada-invests-1-4-billion-into-domestic-ammunition-production-2/"
+  },
+  "query": "\"General Dynamics\" Valleyfield Canadian Defence Industry Resilience federal funding"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0019847": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Nunavut signs interim deal on non-insured health benefits with Ottawa",
+   "url": "https://www.cbc.ca/news/canada/north/nunavut-signs-interim-deal-non-insured-health-benefits-1.7216469"
+  },
+  "independent": {
+   "outlet": "Nunatsiaq News",
+   "title": "Nunavut, Ottawa reach 'interim' deal on non-insured health benefits",
+   "url": "https://nunatsiaq.com/stories/article/nunavut-ottawa-reach-interim-deal-on-non-insured-health-benefits/"
+  },
+  "query": "\"Government of Nunavut\" Department of Health Indigenous Services Canada funding supplementary health benefits Iqaluit"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000013": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Big River First Nation\" settlement $208 million Crown-Indigenous Relations"
+ },
+ "ps-sp|088-2025-2026-Q4-00258": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Nishnawbe-Aski Police\" Thunder Bay First Nations and Inuit Policing Program federal funding"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt3-0000024": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Paul First Nation\" Duffield settlement $122 million Crown-Indigenous Relations"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt4-0000019": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Sagkeeng\" Fort Alexander settlement $100 million Crown-Indigenous Relations"
+ },
+ "ic|033-2025-2026-Q2-515545": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Cartt.ca",
+   "title": "Valley Fiber gets $96.8 million from Universal Broadband Fund for rural Manitoba",
+   "url": "https://cartt.ca/?p=388025"
+  },
+  "query": "\"Valley Fiber\" Winkler Universal Broadband Fund federal funding"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000002": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tootinaowaziibeeng\" settlement $85.69 million Crown-Indigenous Relations"
+ },
+ "ic|033-2025-2026-Q4-515751": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Blood Services\" $75 million Life Sciences federal funding plasma Ottawa"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18645": {
+  "mainstream": {
+   "outlet": "Global News",
+   "title": "Green home retrofit rebate: Ottawa relaunches Greener Homes Affordability Program in B.C.",
+   "url": "https://globalnews.ca/news/11942632/green-home-retrofit-rebate/"
+  },
+  "independent": {
+   "outlet": "Daily Hive",
+   "title": "B.C. residents can save up to $1,700 on energy bills with federal program expansion",
+   "url": "https://dailyhive.com/vancouver/bc-residents-green-program-save-energy-bills"
+  },
+  "query": "\"BC Hydro\" Canada Greener Homes Affordability Program federal funding heat pumps"
+ },
+ "dnd-mdn|018-2025-2026-Q4-14003": {
+  "mainstream": {
+   "outlet": "Le Devoir",
+   "title": "Le plan d'Ottawa pour accroître la capacité de production de munitions au Canada devrait créer plus de 356 emplois au Québec",
+   "url": "https://www.ledevoir.com/economie/970331/ottawa-promet-plus-350-emplois-production-munitions-quebec"
+  },
+  "independent": {
+   "outlet": "Canadian Defence Review",
+   "title": "Canada invests $1.4 billion into domestic ammunition production",
+   "url": "https://canadiandefencereview.com/canada-invests-1-4-billion-into-domestic-ammunition-production-2/"
+  },
+  "query": "\"General Dynamics\" Valleyfield Canadian Defence Industry Resilience federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17957": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"NB Power\" Smart Renewables and Electrification Pathways $50 million federal funding"
+ },
+ "ec|099-2025-2026-Q4-00079": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"British Columbia\" Conserving Nature $49.6 million Environment and Climate Change Canada nature agreement"
+ },
+ "pch|016-2025-2026-Q3-1375215": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Musicaction\" Fonds de la musique du Canada financement Patrimoine canadien 2025"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18672": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"BC Hydro\" Critical Minerals Infrastructure Fund federal funding transmission line northwest"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17390": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "The Manitoulin Expositor",
+   "title": "Homeowners can now access up to $25K for oil to heat pump upgrades",
+   "url": "https://www.manitoulin.com/homeowners-can-now-access-up-to-25k-for-oil-to-heat-pump-upgrades/"
+  },
+  "query": "\"IESO\" Oil to Heat Pump Affordability Program Ontario federal funding"
+ },
+ "ic|033-2025-2026-Q3-819843": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"OmniaBio\" Hamilton Strategic Innovation Fund federal funding"
+ },
+ "infc|278-2025-2026-Q4-00038": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Qikiqtani Inuit Association\" Canada Housing Infrastructure Fund $33 million"
+ },
+ "isc-sac|1910-2025-2026-Qrt2-0006893": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Emergency Preparedness and Response\" Indigenous Services Canada emergency management funding agreement First Nations"
+ },
+ "infc|278-2025-2026-Q3-00012": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Water Canada",
+   "title": "$26.8 million for water infrastructure in Torbay, Newfoundland and Labrador",
+   "url": "https://www.watercanada.net/26-8-million-for-water-infrastructure-in-torbay-newfoundland-and-labrador/"
+  },
+  "query": "\"Torbay\" Canada Housing Infrastructure Fund $26.9 million water sewer"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18603": {
+  "mainstream": {
+   "outlet": "Global News",
+   "title": "Green home retrofit rebate: Ottawa relaunches Greener Homes Affordability Program in B.C.",
+   "url": "https://globalnews.ca/news/11942632/green-home-retrofit-rebate/"
+  },
+  "independent": {
+   "outlet": "Daily Hive",
+   "title": "B.C. residents can save up to $1,700 on energy bills with federal program expansion",
+   "url": "https://dailyhive.com/vancouver/bc-residents-green-program-save-energy-bills"
+  },
+  "query": "\"FortisBC\" Canada Greener Homes Affordability Program federal funding $25 million"
+ },
+ "dfatd-maecd|064-2025-2026-Q2-00093": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Cégep de la Gaspésie et des Îles\" Affaires mondiales Canada 24,8 millions"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0020024": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Emergency Preparedness and Response\" Indigenous Services Canada emergency management funding agreement First Nations"
+ },
+ "infc|278-2025-2026-Q3-00016": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Lytton\" Green and Inclusive Community Buildings $23 million federal funding"
+ },
+ "ic|033-2025-2026-Q3-515671": {
+  "mainstream": {
+   "outlet": "The Globe and Mail",
+   "title": "Federal government funds four quantum computer developers",
+   "url": "https://theglobeandmail.com/business/article-federal-government-funds-four-quantum-computer-developers-aiming-to"
+  },
+  "independent": {
+   "outlet": "Tri-Cities Dispatch",
+   "title": "Feds award millions to Coquitlam-based quantum computer company",
+   "url": "https://tricitiesdispatch.com/feds-award-millions-to-coquitlam-based-quantum-computer-company/"
+  },
+  "query": "\"Photonic\" Coquitlam Canadian Quantum Champions Program $23 million"
+ },
+ "ic|033-2025-2026-Q4-515742": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Canada invests $67 million in dual-use life sciences research",
+   "url": "https://betakit.com/canada-invests-67-million-in-dual-use-life-sciences-research/"
+  },
+  "query": "\"Applied Pharmaceutical Innovation\" Edmonton Life Sciences Fund federal funding"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt3-0000018": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Muskowekwan First Nation\" settlement $20.5 million Crown-Indigenous Relations"
+ },
+ "hc-sc|271-2025-2026-Q4-00047": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario Ministry of Health Health Canada \"Health Care Policy and Strategies Program\" $20 million funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18625": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Mining.com",
+   "title": "Rio Tinto's gallium R&D project gets Canadian gov't backing",
+   "url": "https://www.mining.com/?p=1200635"
+  },
+  "query": "\"Rio Tinto\" Saguenay critical minerals federal funding Natural Resources Canada 2026 scandium gallium"
+ },
+ "infc|278-2025-2026-Q2-00041": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "ReNew Canada",
+   "title": "Feds help fund new net-zero Ronald McDonald House in Vancouver",
+   "url": "https://www.renewcanada.net/feds-help-fund-new-net-zero-ronald-mcdonald-house-in-vancouver/"
+  },
+  "query": "\"Children's Family House\" Vancouver Green and Inclusive Community Buildings $18 million federal"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18556": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"First Phosphate\" federal funding Natural Resources Canada critical minerals $16.7 million"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0177": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Catalyste+\" Global Affairs Canada $16 million international development funding"
+ },
+ "infc|278-2025-2026-Q4-00018": {
+  "mainstream": {
+   "outlet": "CTV News Windsor",
+   "title": "Caldwell First Nation, Leamington and ERCA to fix 'unstable' Hillman Marsh dyke",
+   "url": "https://windsor.ctvnews.ca/caldwell-first-nation-leamington-and-erca-to-fix-unstable-hillman-marsh-dyke-1.7017808"
+  },
+  "independent": {
+   "outlet": "Water Canada",
+   "title": "Caldwell First Nation and federal government partner on $15M Hillman Marsh Dyke upgrade",
+   "url": "https://www.watercanada.net/caldwell-first-nation-and-federal-government-partner-on-15m-hillman-marsh-dyke-upgrade/"
+  },
+  "query": "\"Caldwell First Nation\" Leamington Disaster Mitigation and Adaptation Fund $15.4 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18182": {
+  "mainstream": {
+   "outlet": "CTV News Regina",
+   "title": "Federal gov't invests $15M in Sask. Turning Sun Solar project",
+   "url": "https://www.ctvnews.ca/regina/article/federal-govt-invests-15m-in-sask-turning-sun-solar-project/"
+  },
+  "independent": {
+   "outlet": "pvbuzz",
+   "title": "Canada's largest solar projects secures $15 million federal investment",
+   "url": "https://pvbuzz.com/canadas-largest-solar-projects-secures-15-million-federal-investment/"
+  },
+  "query": "\"Turning Sun Solar\" Regina Smart Renewables and Electrification Pathways $15 million"
+ },
+ "tc|217-2025-2026-Q3-18061": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Inside Logistics",
+   "title": "Ottawa invests in shore power project at Port Charlottetown",
+   "url": "https://www.insidelogistics.ca/sustainability/ottawa-invests-in-shore-power-project-at-port-charlottetown/"
+  },
+  "query": "\"Charlottetown Harbour Authority\" Green Shipping Corridor $14.3 million Transport Canada"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18707": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Rio Tinto Fer et Titane\" Sorel-Tracy critical minerals federal funding $13.6 million"
+ },
+ "feddevontario|062-2026-2027-Q1-00040": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Central Wire\" Perth Ontario FedDev tariff $13.5 million federal funding"
+ },
+ "isc-sac|1910-2025-2026-Qrt3-0008571": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Apeetogosan\" Edmonton Indigenous Services Canada economic development funding $13 million"
+ },
+ "ic|033-2025-2026-Q4-515741": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ec|099-2025-2026-Q1-00074": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pc|154-2025-2026-Q4-00074": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18646": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ic|033-2025-2026-Q3-515536": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ic|033-2025-2026-Q2-515520": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dfo-mpo|086-2025-2026-Q4-0061": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-00139": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "fednor|200-2025-2026-Q3-047": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0019": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0020019": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18432": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "esdc-edsc|014-2025-2026-Q2-00004": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0201": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pch|016-2025-2026-Q3-1377084": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dfo-mpo|086-2025-2026-Q3-00004": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ec|099-2025-2026-Q4-00087": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dnd-mdn|018-2025-2026-Q3-09002": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "esdc-edsc|014-2025-2026-Q1-00020": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18620": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "cihr-irsc|236-2025-2026-Q1-00089": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ps-sp|088-2025-2026-Q4-00254": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17423": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "infc|278-2025-2026-Q2-00057": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "isc-sac|1910-2025-2026-Qrt3-0008631": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pch|016-2025-2026-Q3-1375258": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18734": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aafc-aac|235-2025-2026-Q4-00232": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17378": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "infc|278-2025-2026-Q3-00041": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt3-0000023": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18529": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aafc-aac|235-2026-2027-00020": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18726": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "feddevontario|062-2025-2026-Q4-00023": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aafc-aac|235-2025-2026-Q4-00421": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ec|099-2025-2026-Q3-00024": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q4-00045": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aafc-aac|235-2025-2026-Q4-00409": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "prairiescan|044-2025-2026-Q4-00143": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18323": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17854": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ic|033-2025-2026-Q4-515693": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pch|016-2025-2026-Q3-1375127": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pch|016-2025-2026-Q3-1375194": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1033015": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pch|016-2025-2026-Q3-1375180": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039041": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "esdc-edsc|014-2025-2026-Q2-00019": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aafc-aac|235-2026-2027-00017": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039241": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ic|033-2025-2026-Q4-515713": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-00077": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18058": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040466": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aafc-aac|235-2025-2026-Q3-00658": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "prairiescan|044-2026-2027-Q1-00007": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ec|099-2025-2026-Q4-00011": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "hc-sc|271-2025-2026-Q4-00042": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17521": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "esdc-edsc|014-2025-2026-Q1-00024": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18708": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dfatd-maecd|064-2025-2026-Q2-00079": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "aafc-aac|235-2024-2025-Q3-00008": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dnd-mdn|018-2025-2026-Q4-0301": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17792": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "hc-sc|271-2025-2026-Q4-00076": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-2025-2026-Q4-18204": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040665": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q1-00157": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "fednor|200-2025-2026-Q4-066": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pacifican|240-2025-2026-Q4-00111": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040605": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "feddevontario|062-2025-2026-Q4-00167": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "hc-sc|271-2025-2026-Q4-00066": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1037985": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pc|154-2025-2026-Q1-00018": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "cihr-irsc|236-2025-2026-Q3-00633": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17211": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-YYYY-YYYY-Q2-90697": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q2-00206": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|093-2025-2026-Q3-00198": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-01282": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-00142": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-00027": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "csa-asc|003-2025-2026-Q3-00001": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "feddevontario|062-2025-2026-Q4-00057": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "prairiescan|044-2025-2026-Q2-00014": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ec|099-2025-2026-Q4-00137": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1037615": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-00033": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ec|099-2025-2026-Q4-00012": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2026-2027-Q2-18929": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17241": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "esdc-edsc|014-2025-2026-Q1-00006": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dnd-mdn|018-2025-2026-Q4-15-27": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q4-00136": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17223": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "cwa-aec|001-2025-2026-Q3-00004": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "hc-sc|271-2025-2026-Q2-00022": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q2-00209": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17387": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "feddevontario|062-2026-2027-Q1-00061": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "hc-sc|271-2025-2026-Q2-00003": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q2-00338": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-YYYY-YYYY-Q2-90672": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nserc-crsng|110_2025_2026_Q4_573": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|093-2025-2026-Q3-00298": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "pch|016-2025-2026-Q4-1378837": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "polar-polaire|171-2025-2026-Q4-P0022": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1041085": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-00024": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q3-00113": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "acoa-apeca|276-2025-2026-Q1-00249": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "jus|119-2025-2026-Q4-00301": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-2025-2026-Q4-90011": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1033995": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|093-2025-2026-Q2-00103": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17952": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-YYYY-YYYY-Q2-90757": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-2025-2026-Q4-90105": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17343": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "ced-dec|012-2025-2026-Q4-00059": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "dnd-mdn|018-2025-2026-Q4-0310": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-YYYY-YYYY-Q2-90398": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "tc|217-YYYY-YYYY-Q2-90896": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18013": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17841": {
+  "mainstream": null,
+  "independent": null,
+  "query": null,
+  "searched": false
+ }
+}

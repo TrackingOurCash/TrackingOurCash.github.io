@@ -1,0 +1,561 @@
+{
+ "ic|033-2025-2026-Q4-515512": {
+  "mainstream": {
+   "outlet": "The Globe and Mail",
+   "title": "Ottawa grants Ford $464-million to refit shuttered truck plant",
+   "url": "https://www.theglobeandmail.com/business/article-ottawa-gives-ford-motor-co-464-million-to-refit-shuttered-truck-plant/"
+  },
+  "independent": {
+   "outlet": "Drive Tesla Canada",
+   "title": "Ford Gets $464M From Canada After Pivoting Oakville Plant Away From EVs",
+   "url": "https://driveteslacanada.ca/news/ford-oakville-super-duty-truck-plant-funding/"
+  },
+  "query": "\"Ford of Canada\" Oakville Strategic Response Fund federal"
+ },
+ "ec|099-2025-2026-Q3-00129": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Indigenous governments in the N.W.T. sign $375M deal to protect their land",
+   "url": "https://www.cbc.ca/lite/story/1.7383465"
+  },
+  "independent": {
+   "outlet": "Cabin Radio",
+   "title": "$300M in federal funding to start flowing to NWT conservation trust",
+   "url": "https://cabinradio.ca/250042/news/politics/300m-in-federal-funding-to-start-flowing-to-nwt-conservation-trust/"
+  },
+  "query": "\"Our Land for the Future\" Northwest Territories $300 million federal"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt3-0000016": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"George Gordon First Nation\" settlement $213 million"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt4-0000018": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Washagamis Bay\" Keewatin settlement federal $135 million"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000007": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "3 Sask. First Nations reach cows and plows settlements with federal government",
+   "url": "https://www.cbc.ca/news/canada/saskatchewan/3-first-nations-cows-plows-settlements-1.7598720"
+  },
+  "independent": {
+   "outlet": "Prince Albert Daily Herald",
+   "title": "One Arrow First Nation and Canada reach farming benefits settlement",
+   "url": "https://paherald.sk.ca/one-arrow-first-nation-and-canada-reach-farming-benefits-settlement/"
+  },
+  "query": "\"One Arrow First Nation\" settlement $124 million"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000010": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "MBC Radio",
+   "title": "MBC Radio report on Fishing Lake First Nation agricultural benefits settlement",
+   "url": "https://www.mbcradio.com/?p=73308"
+  },
+  "query": "\"Fishing Lake First Nation\" settlement $101 million Canada"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18280": {
+  "mainstream": null,
+  "independent": null,
+  "query": "British Columbia \"2 Billion Trees\" federal agreement $97 million Natural Resources Canada"
+ },
+ "ic|033-2025-2026-Q4-819417": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Northwestel\" Universal Broadband Fund Yukon $87 million"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000011": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Big Island Lake Cree Nation\" settlement $76 million"
+ },
+ "infc|278-2025-2026-Q3-00027": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"City of St. John's\" federal infrastructure funding $69 million 2025"
+ },
+ "hc-sc|271-2025-2026-Q4-00053": {
+  "mainstream": null,
+  "independent": null,
+  "query": "New Brunswick Health Canada $60 million Shared Health Priorities agreement Fredericton"
+ },
+ "ps-sp|088-2025-2026-Q2-00053": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Québec Disaster Financial Assistance Arrangements $56 million Public Safety Canada 2025"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18724": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"BC Hydro\" Smart Renewables and Electrification Pathways $50 million federal"
+ },
+ "ic|033-2025-2026-Q4-820074": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"TELUS\" Universal Broadband Fund Prince George Peace River $44 million federal"
+ },
+ "aafc-aac|235-2025-2026-Q4-00238": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Saskatchewan Association of Watersheds\" Agricultural Climate Solutions $40 million federal"
+ },
+ "ic|033-2025-2026-Q4-820073": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"TELUS\" Universal Broadband Fund Prince George Peace River $44 million federal"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt4-0000556": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tsilhqot'in National Government\" $36 million federal funding Williams Lake 2025"
+ },
+ "infc|278-2025-2026-Q4-00051": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Water Canada",
+   "title": "Lincoln to deploy 6-km erosion buffer system along Lake Ontario shoreline",
+   "url": "https://www.watercanada.net/lincoln-to-deploy-6-km-erosion-buffer-system-along-lake-ontario-shoreline/"
+  },
+  "query": "\"Town of Lincoln\" Beamsville Disaster Mitigation and Adaptation Fund $33 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17454": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Federal greener homes program returns with focus on affordability",
+   "url": "https://www.cbc.ca/lite/story/1.7632659"
+  },
+  "independent": {
+   "outlet": "The Narwhal",
+   "title": "Greener homes energy retrofits Manitoba",
+   "url": "https://thenarwhal.ca/greener-homes-energy-retrofits-manitoba/"
+  },
+  "query": "\"Efficiency Manitoba\" Canada Greener Homes Affordability Program federal funding"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt3-0000014": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fishing Lake First Nation\" $27 million settlement Canada December 2025"
+ },
+ "infc|278-2025-2026-Q2-00029": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ville de Montréal\" grands parcs Fonds d'atténuation et d'adaptation en matière de catastrophes 25 millions fédéral"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18629": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Inside Logistics",
+   "title": "Funding aims to unlock critical minerals in northern British Columbia and Yukon",
+   "url": "https://www.insidelogistics.ca/government-funding/funding-aims-to-unlock-critical-minerals-in-northern-british-columbia-and-yukon/"
+  },
+  "query": "\"BC Hydro\" Critical Minerals Infrastructure Fund $25 million federal Natural Resources Canada"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0020022": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Ministry of Emergency Preparedness and Response\" Indigenous Services Canada $24 million funding"
+ },
+ "isc-sac|1910-2026-2027-Qrt1-159572": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Louis Riel Capital Corporation\" Indigenous Services Canada $23 million federal funding Winnipeg"
+ },
+ "ic|033-2025-2026-Q3-515672": {
+  "mainstream": {
+   "outlet": "The Globe and Mail",
+   "title": "Federal government funds four quantum computer developers",
+   "url": "https://theglobeandmail.com/business/article-federal-government-funds-four-quantum-computer-developers-aiming-to"
+  },
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Canada launches its own quantum research program to rival DARPA initiative",
+   "url": "https://betakit.com/canada-launches-it-own-quantum-research-program-to-rival-darpa-initiative"
+  },
+  "query": "\"Xanadu\" Canadian Quantum Champions Program $23 million Toronto"
+ },
+ "tc|217-2025-2026-Q4-18347": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"EverWind\" Green Shipping Corridor Program $22.5 million Transport Canada Halifax"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt3-0000011": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kahkewistahaw\" settlement $20.7 million Canada 2025"
+ },
+ "ic|033-2025-2026-Q4-820201": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Ottawa commits $20M to Electra cobalt refinery in northern Ont.",
+   "url": "https://www.ctvnews.ca/northern-ontario/article/ottawa-commits-20m-to-electra-cobalt-refinery-in-northern-ont/"
+  },
+  "independent": {
+   "outlet": "The Logic",
+   "title": "Federal government commits $20 million to Electra Battery cobalt refinery",
+   "url": "https://thelogic.co/news/exclusive/federal-government-commits-20-million-electra-battery-cobalt-refinery/"
+  },
+  "query": "\"Electra Battery Materials\" Strategic Response Fund $20 million federal"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00037": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pathways to Education\" Supports for Student Learning Program $19 million federal 2025"
+ },
+ "dfatd-maecd|064-2025-2026-Q4-0253": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"CARE Canada\" Global Affairs Canada $18.5 million funding 2026"
+ },
+ "infc|278-2025-2026-Q3-00032": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"City of Brandon\" Disaster Mitigation and Adaptation Fund $17 million federal"
+ },
+ "infc|278-2025-2026-Q4-00052": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Bradford West Gwillimbury\" Disaster Mitigation and Adaptation Fund $16 million federal"
+ },
+ "pch|016-2025-2026-Q3-1377092": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Swimming Canada\" Sport Canada funding $15 million 2025 Canadian Heritage"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-18055": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Federal govt invests $15M in Sask. Turning Sun Solar project",
+   "url": "https://www.ctvnews.ca/regina/article/federal-govt-invests-15m-in-sask-turning-sun-solar-project/"
+  },
+  "independent": {
+   "outlet": "pvbuzz",
+   "title": "Canada's largest solar projects secures $15 million federal investment",
+   "url": "https://pvbuzz.com/canadas-largest-solar-projects-secures-15-million-federal-investment/"
+  },
+  "query": "\"Turning Sun Solar\" Regina $15 million federal Smart Renewables"
+ },
+ "wage|190-2025-2026-Q4-00002": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Women's Foundation\" Women and Gender Equality Canada $14.5 million funding 2026"
+ },
+ "aandc-aadnc|0420-2026-2027-Qrt1-895471": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Spuzzum First Nation\" settlement $13.7 million Canada 2026"
+ },
+ "isc-sac|1910-2025-2026-Qrt3-0009920": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Métis Financial Corporation of British Columbia\" Indigenous Services Canada $13.5 million funding Kelowna"
+ },
+ "ic|033-2025-2026-Q4-819416": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "The Wire Report",
+   "title": "Feds to help connect over 800 homes in N.W.T. to high-speed internet with $13 million investment",
+   "url": "https://www.thewirereport.ca/2026/05/15/feds-to-help-connect-over-800-homes-in-n-w-t-to-high-speed-internet-with-13-million-investment/"
+  },
+  "query": "\"Northwestel\" Universal Broadband Fund $13 million Northwest Territories Indigenous households"
+ },
+ "pch|016-2025-2026-Q2-1377468": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"News Media Canada\" Local Journalism Initiative $12.5 million Canadian Heritage 2025"
+ },
+ "ps-sp|088-2025-2026-Q3-00042": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Memorial Grant Program for First Responders Public Safety Canada $11.7 million 2025"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00035": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Carbon capture training programs launch as energy deal accelerates demand for skilled workers",
+   "url": "https://www.ctvnews.ca/calgary/article/carbon-capture-training-programs-launch-as-energy-deal-accelerates-demand-for-skilled-workers/"
+  },
+  "independent": null,
+  "query": "\"Carbon Management Canada\" Sectoral Workforce Solutions Program $11 million federal Calgary"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00045": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Atlantic Colleges Atlantique\" Sectoral Workforce Solutions Program $11 million federal"
+ },
+ "prairiescan|044-2025-2026-Q3-00011": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "CKUA receives 'life-changing' $11M in federal funding",
+   "url": "https://www.ctvnews.ca/edmonton/article/ckua-receives-life-changing-11m-in-federal-funding/"
+  },
+  "independent": null,
+  "query": "\"CKUA\" PrairiesCan $11 million federal funding Edmonton 2025"
+ },
+ "isc-sac|1910-2025-2026-Qrt2-0006909": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Saskatchewan Virtual Health Hub gets additional $5.4 million in funding",
+   "url": "https://www.ctvnews.ca/saskatoon/article/saskatchewan-virtual-health-hub-gets-additional-54-million-in-funding/"
+  },
+  "independent": null,
+  "query": "\"Virtual Health Hub\" Saskatoon Indigenous Services Canada $10.3 million federal"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00015": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Conseil économique et coopératif de la Saskatchewan\" Fonds d'habilitation financement fédéral 10 millions"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000006": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Canada to pay $713M to 3 Sask. First Nations for historical amalgamation scheme",
+   "url": "https://www.ctvnews.ca/saskatoon/article/canada-to-pay-713m-to-3-sask-first-nations-for-historical-amalgamation-scheme/"
+  },
+  "independent": {
+   "outlet": "Prince Albert Daily Herald",
+   "title": "James Smith Cree Nation leaders welcome $700-million settlement with federal government",
+   "url": "https://paherald.sk.ca/james-smith-cree-nation-leaders-welcome-700-million-settlement-with-federal-government/"
+  },
+  "query": "\"James Smith Cree Nation\" settlement Crown-Indigenous Relations treaty claim 2025"
+ },
+ "dnd-mdn|018-2025-2026-Q4-14002": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Feds earmark money for munitions factories in Quebec, Ontario",
+   "url": "https://www.ctvnews.ca/politics/article/feds-earmark-money-for-munitions-factories-in-quebec-ontario/"
+  },
+  "independent": {
+   "outlet": "The Logic",
+   "title": "Federal government pledges $1.4B to boost domestic production of artillery shells",
+   "url": "https://thelogic.co/briefing/federal-government-pledges-1-4b-to-boost-domestic-production-of-artillery-shells/"
+  },
+  "query": "\"IMT Precision\" Ingersoll defence industry funding National Defence"
+ },
+ "isc-sac|1910-2026-2027-Qrt1-317239": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Ministry of Emergency Preparedness and Response\" Indigenous Services Canada funding First Nations emergency"
+ },
+ "dfo-mpo|086-2025-2026-Q2-0219": {
+  "mainstream": {
+   "outlet": "Radio Canada International",
+   "title": "Ottawa signs $270-million agreement for Inuit-led conservation efforts in Nunavut",
+   "url": "https://www.rcinet.ca/eye-on-the-arctic/?p=188981"
+  },
+  "independent": {
+   "outlet": "The Narwhal",
+   "title": "$270-million SINAA agreement funds Nunavut conservation",
+   "url": "https://thenarwhal.ca/qikiqtani-inuit-sinaa-agreement/"
+  },
+  "query": "\"Aajuraq\" Qikiqtani Project Finance for Permanence $200 million Fisheries and Oceans"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt4-0000415": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"National Council for Reconciliation\" $125 million endowment funding"
+ },
+ "isc-sac|1910-2026-2027-Qrt1-935765": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Government of the Northwest Territories\" Indigenous Services Canada supplementary health benefits funding agreement"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000009": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "3 Sask. First Nations reach cows and plows settlements with federal government",
+   "url": "https://www.cbc.ca/1.7598720"
+  },
+  "independent": {
+   "outlet": "MBC Radio",
+   "title": "Muscowpetung First Nation reaches cows and plows settlement",
+   "url": "https://www.mbcradio.com/2025/07/muscowpetung-first-nation-reaches-cows-and-plows-settlement"
+  },
+  "query": "\"Muscowpetung\" settlement agreement Canada 2025 $98 million"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000005": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Key First Nation\" settlement Canada 2025 $88 million"
+ },
+ "ic|033-2025-2026-Q4-820313": {
+  "mainstream": {
+   "outlet": "The Globe and Mail",
+   "title": "Aspect Biosystems secures $79-million in federal funding to advance 3-D tissue printing technology",
+   "url": "https://www.theglobeandmail.com/business/technology/article-aspect-biosystems-secures-79-million-in-federal-funding-to-advance-3-d/"
+  },
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Feds invest $79 million in Aspect Biosystems to develop 3D-printed tissue treatment",
+   "url": "https://betakit.com/?p=402694"
+  },
+  "query": "\"Aspect Biosystems\" Vancouver Strategic Response Fund $79 million federal"
+ },
+ "ic|033-2025-2026-Q4-819815": {
+  "mainstream": {
+   "outlet": "Radio-Canada",
+   "title": "Après l'annonce d'une nouvelle usine de cuivre, Granby face au manque de logements",
+   "url": "https://ici.radio-canada.ca/nouvelle/2008480/usine-cuivre-granby-batteries-electriques"
+  },
+  "independent": {
+   "outlet": "The Logic",
+   "title": "Feds award $70 million to Volta copper plant",
+   "url": "https://thelogic.co/news/feds-award-70-million-volta-copper-plant/"
+  },
+  "query": "\"Volta Energy Solutions\" Granby federal funding $70 million"
+ },
+ "infc|278-2025-2026-Q4-00046": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Federal government pledges $62M in transit funding for Hamilton",
+   "url": "https://www.cbc.ca/1.7450110"
+  },
+  "independent": null,
+  "query": "\"City of Hamilton\" \"Canada Public Transit Fund\" federal funding transit"
+ },
+ "wage|190-2025-2026-Q3-00003": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Period products headed to northern and remote communities",
+   "url": "https://www.cbc.ca/news/canada/north/period-products-headed-to-northern-and-remote-communities-1.7207968"
+  },
+  "independent": null,
+  "query": "\"Food Banks Canada\" menstrual equity fund Women and Gender Equality Canada funding"
+ },
+ "prairiescan|044-2025-2026-Q2-00018": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "ReNew Canada",
+   "title": "Feds announce $175M for the Hudson Bay Railway and Port of Churchill",
+   "url": "https://www.renewcanada.net/feds-announce-175m-for-the-hudson-bay-railway-and-port-of-churchill/"
+  },
+  "query": "\"Arctic Gateway Group\" $50 million federal funding PrairiesCan Churchill"
+ },
+ "ic|033-2025-2026-Q4-820041": {
+  "mainstream": {
+   "outlet": "Castanet",
+   "title": "Ottawa earmarks $125 million for B.C. life sciences",
+   "url": "https://www.castanet.net/news/BC/606843/Ottawa-earmarks-125-million-for-B-C-life-sciences"
+  },
+  "independent": {
+   "outlet": "Techcouver",
+   "title": "Investment to fuel tech innovation lab at St. Paul's",
+   "url": "https://techcouver.com/2026/04/07/investment-fuel-tech-innovation-lab-st-pauls/"
+  },
+  "query": "\"Providence Health Care\" Vancouver $48 million Strategic Response Fund biomanufacturing"
+ },
+ "aafc-aac|235-2025-2026-Q4-00236": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Farms.com",
+   "title": "Watershed Climate Program Extended Until 2028",
+   "url": "https://m.farms.com/news/watershed-climate-program-extended-until-2028-223450.aspx"
+  },
+  "query": "\"Manitoba Association of Watersheds\" Agricultural Climate Solutions federal funding $40 million"
+ },
+ "esdc-edsc|014-2025-2026-Q3-00007": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Youth Employment Services\" Montreal \"Enabling Fund\" official language minority communities funding"
+ },
+ "ps-sp|088-2025-2026-Q4-00256": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Treaty Three Police\" Kenora new facility federal funding Public Safety"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18563": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Federal greener homes program returns with focus on affordability",
+   "url": "https://www.cbc.ca/1.7632659"
+  },
+  "independent": {
+   "outlet": "The Narwhal",
+   "title": "Greener Homes energy retrofits in Manitoba",
+   "url": "https://thenarwhal.ca/greener-homes-energy-retrofits-manitoba/"
+  },
+  "query": "\"Efficiency Manitoba\" \"Greener Homes Affordability\" federal funding"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00027": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Benefits and Pensions Monitor",
+   "title": "Personal support workers set to save $40 million with new retirement pilot",
+   "url": "https://www.benefitsandpensionsmonitor.com/news/industry-news/personal-support-workers-set-to-save-40-million-with-new-retirement-pilot/392436"
+  },
+  "query": "\"Common Wealth\" personal support worker retirement savings federal funding ESDC"
+ },
+ "infc|278-2025-2026-Q3-00005": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Feds invest $28 million to boost housing development in Greater Sudbury",
+   "url": "https://ctvnews.ca/northern-ontario/article/feds-invest-28-million-to-boost-housing-development-in-greater-sudbury"
+  },
+  "independent": null,
+  "query": "\"Greater Sudbury\" \"Canada Housing Infrastructure Fund\" $28 million federal"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000003": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Gambler First Nation\" settlement Canada 2025 agricultural benefits"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17468": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"BC Hydro\" \"Critical Minerals Infrastructure Fund\" $25 million federal"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0020021": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario \"Ministry of Emergency Preparedness and Response\" Indigenous Services Canada funding First Nations emergency"
+ },
+ "isc-sac|1910-2025-2026-Qrt3-0008606": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Louis Riel Capital Corporation\" Indigenous Services Canada economic development funding $23 million"
+ },
+ "ic|033-2025-2026-Q3-515664": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Canada launches its own quantum research program to rival DARPA initiative",
+   "url": "https://betakit.com/canada-launches-it-own-quantum-research-program-to-rival-darpa-initiative"
+  },
+  "query": "\"Nord Quantique\" Sherbrooke Canadian Quantum Champions Program $23 million"
+ },
+ "ic|033-2025-2026-Q4-820077": {
+  "mainstream": {
+   "outlet": "Castanet",
+   "title": "Feds and province partner with Telus for massive Thompson-Okanagan rural internet upgrade",
+   "url": "https://www.castanet.net/edition/news-story-619050-2-.htm"
+  },
+  "independent": null,
+  "query": "TELUS \"Universal Broadband Fund\" British Columbia federal funding 2026 rural"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000018": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ts'uubaa-asatx\" Lake Cowichan settlement Canada $21 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18754": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Canadian Mortgage Trends",
+   "title": "Ottawa set to relaunch greener homes retrofit program in four provinces",
+   "url": "https://www.canadianmortgagetrends.com/2026/06/ottawa-set-to-relaunch-greener-homes-retrofit-program-in-four-provinces/"
+  },
+  "query": "Nova Scotia \"Greener Homes Affordability\" $20 million federal agreement"
+ },
+ "infc|278-2025-2026-Q4-00023": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Port Colborne\" \"Canada Housing Infrastructure Fund\" $19 million federal"
+ },
+ "ec|099-2025-2026-Q4-00088": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Wolastoqey Nation\" New Brunswick conservation $18.7 million Environment and Climate Change Canada"
+ }
+}
