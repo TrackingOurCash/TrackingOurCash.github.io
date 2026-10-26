@@ -145,6 +145,12 @@ WINDOW_NOTE = {
           "before = FY2023-24 (1 April 2023 to 31 March 2024), the last full fiscal year before it; FY2024-25 straddles the "
           "election and is skipped; annual data, no payment dates",
 }
+# Internet Archive copies of the volumes (the official host refuses connections from here);
+# top_grants.src links these, opened at the page the payee's line was parsed from. FY2022-23
+# (pa-supplementary-2023.pdf) has no archived copy, so its rows link the official URL.
+ARCHIVE_TIMESTAMPS = {2024: "20260413123039", 2025: "20260416080444"}
+SOURCE_URLS = {fye: f"https://web.archive.org/web/{ts}/{OFFICIAL_URL.format(fye=fye)}" for fye, ts in ARCHIVE_TIMESTAMPS.items()}
+SEARCH_URL = "https://duckduckgo.com/?q={q}+Nova+Scotia+grant"  # {q}: the recipient, URL-encoded by the page
 USED_SECTIONS = {"Grants and Contributions", "Other"}
 # Whole chapters that hold no payees.
 AGGREGATE_DEPTS = re.compile(r"^(Refundable Tax Credits|Restructuring Costs|Pension Valuation Adjustment|Finance and Treasury Board-Debt Servicing Costs|"
@@ -561,9 +567,16 @@ def load_volume(fye):
     rows = []
     with open(csv_path, newline="") as f:
         for r in csv.DictReader(f):
-            rows.append({"Recipient": r["payee"], "Dept": r["department"], "Section": r["section"], "Amount": float(r["amount"]), "fye": fye})
+            rows.append({"Recipient": r["payee"], "Dept": r["department"], "Section": r["section"], "Amount": float(r["amount"]), "fye": fye,
+                         "Page": int(r.get("page") or 0)})
     check = json.load(open(check_path)) if check_path.exists() else {}
     return rows, check
+
+
+def source_url(r):
+    """The Volume 3 PDF of the row's year, opened at the page the row was parsed from."""
+    url = SOURCE_URLS.get(r["fye"]) or OFFICIAL_URL.format(fye=r["fye"])
+    return f'{url}#page={r["Page"]}' if r.get("Page") else url
 
 
 def look_for_next_volume(fye=2026):
@@ -587,6 +600,7 @@ def look_for_next_volume(fye=2026):
                 blob = r.read()
             if blob[:5] == b"%PDF-":
                 path.write_bytes(blob)
+                SOURCE_URLS[fye] = candidate
                 print("fetched", path.name, "from", candidate, file=sys.stderr)
                 return True
         except Exception as e:  # noqa: BLE001
@@ -887,11 +901,13 @@ def main():
         pop = dv["population"] or 1
         a, b = p["after"], p["before"]
         rec = dict(dv)
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "src_v": 0.0, "src": None})
         for v, r, fl, how in p["grants"]:
             g = by_recipient[r["Recipient"]]
             g["v"] += v
             g["n"] += 1
+            if v > g["src_v"]:  # the link points at the recipient's largest row
+                g["src_v"], g["src"] = v, source_url(r)
             g["progs"][r["Dept"]] += v
             g["formula"] = g["formula"] or r["formula"]
             g["flag"], g["how"], g["last"] = fl, how, fy_label[r["fye"]]
@@ -906,7 +922,8 @@ def main():
             "gov_won": dv["party_2024"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
+                            **({"src": g["src"]} if g["src"] else {})} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"][fye]) for fye in series_fyes]
@@ -934,6 +951,7 @@ def main():
                     "Salaries, Travel and External Secondments dropped",
         "population_basis": next(iter(divisions.values())).get("population_basis", ""),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "search_url": SEARCH_URL,
         "series": {"kind": "fiscal year", "labels": [f"{fye - 1}-{str(fye)[2:]}" for fye in series_fyes], "complete": len(series_fyes),
                    "election_index": max([i for i, fye in enumerate(series_fyes) if date(fye, 3, 31) < ELECTION], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},

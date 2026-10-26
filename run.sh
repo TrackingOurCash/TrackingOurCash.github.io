@@ -65,4 +65,6 @@ if python3 scripts/ns_prep.py && python3 scripts/ns_spending.py > data/ns/summar
 if python3 scripts/qc_prep.py && python3 scripts/fed_prov_spending.py qc > data/qc/summary.json; then :; else echo "QC layer skipped"; fi
 # Newfoundland and Labrador layer (federal grants on the provincial districts; NL publishes no payee list)
 if python3 scripts/nl_prep.py && python3 scripts/fed_prov_spending.py nl > data/nl/summary.json; then :; else echo "NL layer skipped"; fi
+# Territories (federal grants on the territorial districts)
+for t in yt nt nu; do if python3 scripts/${t}_prep.py && python3 scripts/fed_prov_spending.py $t > data/$t/summary.json; then :; else echo "$t layer skipped"; fi; done
 python3 scripts/build_map.py

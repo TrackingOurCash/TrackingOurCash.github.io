@@ -8,6 +8,7 @@
  "windows": "after = fiscal year ending 31 March 2026 (FYE2026); before = FYE2024, the last full fiscal year before the 19 October 2024 election; annual data, no payment dates",
  "close_margin": 10.0,
  "median_pc_after": 504.22,
+ "search_url": "https://duckduckgo.com/?q={q}+British+Columbia+grant",
  "series": {
   "kind": "fiscal year",
   "labels": [

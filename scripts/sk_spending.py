@@ -67,9 +67,10 @@ ELECTION = date(2024, 10, 28)
 CLOSE_MARGIN = 10.0
 GOV_PARTY = "SP"
 VOLUMES = {
-    "2023-24": "https://saskatchewan.ca/-/media/news-release-backgrounders/2024/oct/2023-24-public-accounts-volume-2.pdf",
+    "2023-24": "https://www.saskatchewan.ca/-/media/news-release-backgrounders/2024/oct/2023-24-public-accounts-volume-2.pdf",
     "2024-25": "https://www.saskatchewan.ca/-/media/news-release-backgrounders/2025/oct/2024-25-volume-2---5155.pdf",
 }
+SEARCH_URL = "https://duckduckgo.com/?q={q}+Saskatchewan+grant"  # {q}: the recipient, URL-encoded by the page
 PUBLICATIONS_CATEGORY = "https://publications.saskatchewan.ca/api/v1/categories/893"  # Public Accounts Documents
 
 INDIVIDUAL_PROGRAMS = re.compile(
@@ -171,12 +172,21 @@ def check_2025_26():
             m = re.search(r'href="([^"]+)"[^>]*>\s*Volume 2\s*<', desc)
             if m:
                 url = m.group(1).replace("../", "https://publications.saskatchewan.ca/")
+                VOLUMES["2025-26"] = url  # so top_grants.src can point at it
                 return fetch(url, target)
             print("publications centre: 2025-26 Volume 2 not available yet", file=sys.stderr)
     return False
 
 
 # ------------------------------------------------------------------ PDF parsing
+
+def source_url(r):
+    """The Volume 2 PDF, opened at the page the row was parsed from (None when the volume's URL is unknown)."""
+    url = VOLUMES.get(r["fiscal_year"])
+    if not url:
+        return None
+    return f'{url}#page={r["page"]}' if r.get("page") else url
+
 
 def parse_schedule(pages):
     """Schedule of Expense by Object -> ({vote: ministry}, {ministry: transfers $})."""
@@ -233,7 +243,7 @@ def parse_transfers(path, fy):
     recipient, amount. stats: per-ministry counts and the schedule totals."""
     pages = pdf_pages(path, split=300, sizes=True)
     votes, schedule = parse_schedule(pages)
-    lines = [(text.strip(), size) for page in pages for text, size in page]
+    lines = [(text.strip(), size, pno) for pno, page in enumerate(pages, 1) for text, size in page]
     rows = []
     bad = Counter()
     ministry = vote = None
@@ -256,7 +266,7 @@ def parse_transfers(path, fy):
         head_buf = []
 
     by_name = {re.sub(r"\W", "", k).lower(): k for k in schedule}
-    for text, size in lines:
+    for text, size, pno in lines:
         m = re.search(r"\(Vote\s*(\d+)?\s*\)?\s*$", text)
         if m and size >= 10 and len(text) > 6:
             vote = m.group(1)
@@ -303,7 +313,7 @@ def parse_transfers(path, fy):
             if name:
                 rows.append({"fiscal_year": fy, "ministry": ministry, "vote": vote, "program": program or "",
                              "subprogram": sub or "", "recipient": name,
-                             "amount": int(m.group("amt").replace(",", ""))})
+                             "amount": int(m.group("amt").replace(",", "")), "page": pno})
             else:
                 bad[(ministry, "amount without name")] += 1
             continue
@@ -313,7 +323,7 @@ def parse_transfers(path, fy):
             pend_from_leader = False
             rows.append({"fiscal_year": fy, "ministry": ministry, "vote": vote, "program": program or "",
                          "subprogram": sub or "", "recipient": " ".join(pend_name),
-                         "amount": int(m.group("amt").replace(",", ""))})
+                         "amount": int(m.group("amt").replace(",", "")), "page": pno})
             pend_name = []
             continue
         if size < 10:
@@ -351,7 +361,7 @@ def load_rows(fy, path):
     cache = SK / f"transfers_{fy}.csv"
     rows, stats = parse_transfers(path, fy)
     with open(cache, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["fiscal_year", "ministry", "vote", "program", "subprogram", "recipient", "amount"])
+        w = csv.DictWriter(f, fieldnames=["fiscal_year", "ministry", "vote", "program", "subprogram", "recipient", "amount", "page"])
         w.writeheader()
         w.writerows(rows)
     by_min = defaultdict(lambda: [0, 0])
@@ -554,11 +564,13 @@ def main():
         pop = dv["population"] or 1
         a, b = p["after"], p["before"]
         rec = dict(dv)
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "src_v": 0.0, "src": None})
         for v, r, fl, how, program in p["grants"]:
             g = by_recipient[r["recipient"]]
             g["v"] += v
             g["n"] += 1
+            if v > g["src_v"]:  # the link points at the recipient's largest row
+                g["src_v"], g["src"] = v, source_url(r)
             g["progs"][f'{program} ({r["ministry"]})'] += v
             g["formula"] = g["formula"] or r["formula"]
             g["flag"], g["how"], g["last"] = fl, how, max(g["last"], r["fiscal_year"])
@@ -573,7 +585,8 @@ def main():
             "gov_won": dv["party_2024"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
+                            **({"src": g["src"]} if g["src"] else {})} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"][fy]) for fy in series_fys]
@@ -601,6 +614,7 @@ def main():
         "window_note": window_note,
         "population_basis": next(iter(divisions.values())).get("population_basis", ""),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "search_url": SEARCH_URL,
         "series": {"kind": "fiscal year", "labels": series_fys, "complete": len(series_fys),
                    "election_index": max([i for i, fy in enumerate(series_fys) if fy_end(fy) < ELECTION.isoformat()], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},

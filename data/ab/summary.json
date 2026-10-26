@@ -7,6 +7,7 @@
  "years_per_window": 2.839,
  "close_margin": 10.0,
  "median_pc_after": 331.31,
+ "search_url": "https://duckduckgo.com/?q={q}+Alberta+grant",
  "methods": {
   "before|postal code from federal or charity records": 130033,
   "before|place name in recipient (approx.)": 26885,

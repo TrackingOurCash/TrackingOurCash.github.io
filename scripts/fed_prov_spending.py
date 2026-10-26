@@ -45,8 +45,9 @@ PROFILES = {
     "nl": {"dir": "nl", "prov": "NL", "postal": "A", "year": "2025", "gov": "PC", "opp": "opposition", "provincial_election": "2025-10-14",
            "multi_city": ["St. John's", "Mount Pearl", "Conception Bay South", "Paradise", "Corner Brook"]},
     "yt": {"dir": "yt", "prov": "YT", "postal": "Y", "year": "2025", "gov": "YP", "opp": "opposition", "provincial_election": "2025-11-03", "multi_city": ["Whitehorse"]},
-    "nt": {"dir": "nt", "prov": "NT", "postal": "X", "year": "2023", "gov": "IND", "opp": "opposition", "provincial_election": "2023-11-14", "multi_city": ["Yellowknife"]},
-    "nu": {"dir": "nu", "prov": "NU", "postal": "X", "year": "2025", "gov": "IND", "opp": "opposition", "provincial_election": "2025-10-27", "multi_city": ["Iqaluit"]},
+    # Consensus governments: no parties, so the "government" side is the cabinet (data/ministers.json) and the rest are regular members.
+    "nt": {"dir": "nt", "prov": "NT", "postal": "X", "year": "2023", "gov": "cabinet", "opp": "regular members", "consensus": True, "provincial_election": "2023-11-14", "multi_city": ["Yellowknife"]},
+    "nu": {"dir": "nu", "prov": "NU", "postal": "X", "year": "2025", "gov": "cabinet", "opp": "regular members", "consensus": True, "provincial_election": "2025-10-27", "multi_city": ["Iqaluit"]},
     "qc": {"dir": "qc", "prov": "QC", "postal": "GHJ", "year": "2026", "gov": "PQ", "opp": "opposition", "provincial_election": "2026-10-05",
            "multi_city": ["Montréal", "Québec", "Laval", "Gatineau", "Longueuil", "Sherbrooke", "Lévis", "Saguenay", "Trois-Rivières", "Terrebonne",
                           "Repentigny", "Brossard", "Saint-Jean-sur-Richelieu", "Drummondville", "Saint-Jérôme", "Granby", "Blainville", "Mirabel", "Châteauguay"]},
@@ -60,6 +61,10 @@ def main():
     OUT = ROOT / "data" / P["dir"]
     GOV_PARTY, OPP_PARTY, YEAR = P["gov"], P["opp"], P["year"]
     divisions = json.load(open(OUT / "divisions.json"))
+    cabinet = set()
+    if P.get("consensus"):
+        mpath = ROOT / "data" / "ministers.json"
+        cabinet = set((json.load(open(mpath))["levels"].get(P["dir"]) or {}).get("ministers", {})) if mpath.exists() else set()
     geo = json.load(open(OUT / "divisions_geo.json"))
     index = RidingIndex([(f["id"], f["geometry"]) for f in geo["features"]])
     fed = json.load(open(ROOT / "data" / "riding_spending.json"))["meta"]
@@ -194,7 +199,7 @@ def main():
             "after_total": round(a["total"]), "after_n": a["n"], "after_adj": round(a["adj"]), "after_adj_n": a["adj_n"],
             "before_total": round(b["total"]), "before_adj": round(b["adj"]), "after_formula": round(a["formula"]), "before_formula": round(b["formula"]),
             "pc_after": round(a["adj"] / pop / years, 2), "pc_after_all": round(a["total"] / pop / years, 2), "pc_before": round(b["adj"] / pop / years, 2),
-            "close": dv["margin_pts"] < CLOSE_MARGIN, "gov_won": dv[f"party_{YEAR}"] == GOV_PARTY,
+            "close": dv["margin_pts"] < CLOSE_MARGIN, "gov_won": (num in cabinet) if P.get("consensus") else dv[f"party_{YEAR}"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["depts"].most_common(4)],
             "top_grants": [{"v": round(v), "who": g["recipient"][:80], "dept": g["dept"][:60], "prog": g["program"][:80], "date": g["start"],
                             "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"], "formula": g.get("formula", False)}

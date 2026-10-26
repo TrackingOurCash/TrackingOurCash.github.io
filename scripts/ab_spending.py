@@ -42,6 +42,24 @@ from build_spending import recipient_table, formula_matcher  # noqa: E402
 
 ELECTION = date(2023, 5, 29)
 CLOSE_MARGIN = 10.0
+# open.alberta.ca "Grant payments disclosure": one CSV resource per fiscal year. The alberta.ca
+# disclosure table has no recipient deep link (its search form posts), so top_grants.src is the
+# resource page of the year of the recipient's largest payment.
+RESOURCES = {
+    "2020-21": "ef6f0f85-7f5e-449e-8a54-3d45e37f3dc4", "2021-22": "bda2903e-8106-47be-824e-2b22636c8a05",
+    "2022-23": "a9a92ce7-c005-418d-a411-b663254c601a", "2023-24": "0c7e93c1-1c28-460d-92eb-f6934e9ba4a8",
+    "2024-25": "f4197a5a-b3c3-4045-b2ce-7f77d700935f", "2025-26": "1e95ba75-b4b1-44df-9426-988d60b6cff7",
+}
+DATASET_URL = "https://open.alberta.ca/dataset/grant-disclosure"
+SEARCH_URL = "https://duckduckgo.com/?q={q}+Alberta+grant"  # {q}: the recipient, URL-encoded by the page
+
+
+def source_url(r):
+    """The disclosure CSV's page for the fiscal year of the payment (the dataset page when the year is not listed)."""
+    d = r["date"]
+    start = d.year if d.month >= 4 else d.year - 1
+    rid = RESOURCES.get(f"{start}-{str(start + 1)[2:]}")
+    return f"{DATASET_URL}/resource/{rid}" if rid else DATASET_URL
 
 INDIVIDUAL_PROGRAMS = re.compile(
     r"FFS|FEE.FOR.SERVICE|PHYSICIAN|AISH|INCOME SUPPORT|SENIORS? (DRUG )?BENEFIT|SENIORS BENEFIT|ALBERTA SENIORS|"
@@ -272,11 +290,13 @@ def main():
         a, b = p["after"], p["before"]
         rec = dict(dv)
         # Group the largest recipients rather than listing every payment.
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "src_v": 0.0, "src": None})
         for v, r, fl, how in p["grants"]:
             g = by_recipient[r["Recipient"]]
             g["v"] += v
             g["n"] += 1
+            if v > g["src_v"]:  # the link points at the recipient's largest row
+                g["src_v"], g["src"] = v, source_url(r)
             g["formula"] = g["formula"] or bool(r.get("formula"))
             g["progs"][f'{r["Program"].title()} ({r["Ministry"].title()})'] += v
             g["flag"], g["how"], g["last"] = fl, how, max(g["last"], r["date"].isoformat())
@@ -290,7 +310,8 @@ def main():
             "gov_won": dv["party_2023"] == "UCP",
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
+                            **({"src": g["src"]} if g["src"] else {})} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"].get(qlabel(q), 0)) for q in quarters]
@@ -312,6 +333,7 @@ def main():
         "generated": date.today().isoformat(), "election": ELECTION.isoformat(), "cutoff": cutoff.isoformat(),
         "before_start": before_start.isoformat(), "before_end": ELECTION.isoformat(), "years_per_window": round(years, 3),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "search_url": SEARCH_URL,
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},
         "excluded_after": {m: round(v) for (w, m), v in excluded.items() if w == "after"},
         "placed_after": round(sum(x["after_total"] for x in out.values())),

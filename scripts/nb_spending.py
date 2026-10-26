@@ -112,6 +112,7 @@ import unicodedata
 from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlencode
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -138,6 +139,20 @@ PERSON = re.compile(r"^[A-Z'\-]+( [A-Z'\-]+){0,2}, [A-Z'\-.]+( [A-Z'\-.]+){0,3}$
 NOT_PERSON = re.compile(r"\b(INC|LTD|LTEE|LLP|LLC|LP|LIMITED|CORP|CO|DIVISION|PLAN|OFFICE|SERVICES?|GROUP|TRUST|PARTNERS|CONSULTANTS?|CONSULTING|"
                         r"ASSOCIATES|CANADA|NB|NEW BRUNSWICK|CENTRE|CENTER|FARMS?|HOLDINGS|ENTERPRISES|AGENCY|CLINIC|"
                         r"PHARMACY|PHARMACIE|FOUNDATION|DEPARTMENT|EXCHEQUER|HOSPITALS?|UNIVERSITY|CITY|TOWN|VILLAGE)\b")
+# gnb.socrata.com "Supplier and Grant Payments by Department", one dataset per fiscal year ending;
+# top_grants.src is a SODA query of that dataset for the recipient's exact supplier name.
+DATASETS = {2021: "3ctu-s8ip", 2022: "wn4e-kwa9", 2023: "gewh-3myv", 2024: "8dbf-suub", 2025: "s6c2-tumt"}
+SEARCH_URL = "https://duckduckgo.com/?q={q}+New+Brunswick+grant"  # {q}: the recipient, URL-encoded by the page
+
+
+def source_url(r):
+    """The row's lines in the open-data portal (None for a year whose dataset id is not listed)."""
+    ds = DATASETS.get(r["fye"])
+    if not ds:
+        return None
+    return f"https://gnb.socrata.com/resource/{ds}.json?" + urlencode({"supplier_name_nom_du": r["Recipient"]})
+
+
 OUT_OF_PROVINCE = re.compile(
     r"RECEIVER GENERAL|CANADA REVENUE|GOVERNMENT OF (CANADA|ALBERTA|YUKON|ONTARIO|QUEBEC|NOVA SCOTIA|MANITOBA|SASKATCHEWAN|BRITISH COLUMBIA|"
     r"PRINCE EDWARD|NEWFOUNDLAND|NUNAVUT|NORTHWEST)|MINISTER OF FINANCE - |MINISTRY OF|MINISTERE DE|HOSPITALS - |"
@@ -629,11 +644,13 @@ def main():
         pop = dv["population"] or 1
         a, b = p["after"], p["before"]
         rec = dict(dv)
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "src_v": 0.0, "src": None})
         for v, r, fl, how in p["grants"]:
             g = by_recipient[r["Recipient"]]
             g["v"] += v
             g["n"] += 1
+            if v > g["src_v"]:  # the link points at the recipient's largest row
+                g["src_v"], g["src"] = v, source_url(r)
             g["progs"][r["Dept"]] += v
             g["formula"] = g["formula"] or r["formula"]
             g["flag"], g["how"], g["last"] = fl, how, fy_label[r["fye"]]
@@ -648,7 +665,8 @@ def main():
             "gov_won": dv["party_2024"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
+                            **({"src": g["src"]} if g["src"] else {})} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"][fye]) for fye in series_fyes]
@@ -674,6 +692,7 @@ def main():
         "straddles_election": after_fy == 2025,
         "population_basis": next(iter(divisions.values())).get("population_basis", ""),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "search_url": SEARCH_URL,
         "series": {"kind": "fiscal year", "labels": [f"{fye - 1}-{str(fye)[2:]}" for fye in series_fyes], "complete": len(series_fyes),
                    "election_index": max([i for i, fye in enumerate(series_fyes) if date(fye, 3, 31) < ELECTION], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},

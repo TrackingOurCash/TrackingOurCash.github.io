@@ -78,6 +78,19 @@ ELECTION = date(2024, 10, 19)
 CUTOFF = date(2026, 3, 31)
 BEFORE_START, BEFORE_END = date(2023, 4, 1), date(2024, 3, 31)
 WINDOWS = {2026: "after", 2024: "before"}  # fiscal year ending -> window
+# BC Data Catalogue "CRF Detailed Schedules of Payments - Government Transfers": one CSV resource per
+# fiscal year ending. top_grants.src is that year's resource page (the per-ministry PDFs on
+# www2.gov.bc.ca could not be reached from here to confirm a URL pattern).
+DATASET_URL = "https://catalogue.data.gov.bc.ca/dataset/crf-detailed-schedules-of-payments-government-transfers"
+RESOURCES = {2023: "356b01e0-9972-4760-82d9-689c85d71e51", 2024: "ad965b50-5f87-4442-b753-d45d33656917",
+             2025: "bb8595a9-6a6f-4265-821e-30b36d60b628", 2026: "c5eecccf-3f4f-4144-8d8d-de3a51e65a54"}
+SEARCH_URL = "https://duckduckgo.com/?q={q}+British+Columbia+grant"  # {q}: the recipient, URL-encoded by the page
+
+
+def source_url(r):
+    """The catalogue page of the schedule the row came from."""
+    rid = RESOURCES.get(r["fye"])
+    return f"{DATASET_URL}/resource/{rid}" if rid else DATASET_URL
 YEARS = 1.0
 CLOSE_MARGIN = 10.0
 GOV_PARTY = "NDP"
@@ -335,11 +348,13 @@ def main():
         a, b = p["after"], p["before"]
         rec = dict(dv)
         # Group the largest recipients rather than listing every payment.
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "src_v": 0.0, "src": None})
         for v, r, fl, how in p["grants"]:
             g = by_recipient[r["Recipient"]]
             g["v"] += v
             g["n"] += 1
+            if v > g["src_v"]:  # the link points at the recipient's largest row
+                g["src_v"], g["src"] = v, source_url(r)
             g["progs"][r["Ministry"].title()] += v
             g["formula"] = g["formula"] or r["formula"]
             g["flag"], g["how"], g["last"] = fl, how, "FY2025-26"
@@ -354,7 +369,8 @@ def main():
             "gov_won": dv["party_2024"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
+                            **({"src": g["src"]} if g["src"] else {})} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"][fye]) for fye in series_fyes]
@@ -377,6 +393,7 @@ def main():
         "before_start": BEFORE_START.isoformat(), "before_end": BEFORE_END.isoformat(), "years_per_window": YEARS,
         "windows": "after = fiscal year ending 31 March 2026 (FYE2026); before = FYE2024, the last full fiscal year before the 19 October 2024 election; annual data, no payment dates",
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "search_url": SEARCH_URL,
         "series": {"kind": "fiscal year", "labels": [f"{fye - 1}-{str(fye)[2:]}" for fye in series_fyes], "complete": len(series_fyes),
                    "election_index": max([i for i, fye in enumerate(series_fyes) if date(fye, 3, 31) < ELECTION], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},

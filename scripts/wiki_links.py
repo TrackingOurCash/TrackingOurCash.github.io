@@ -30,6 +30,9 @@ QUERIES = {
     "quebec": "{name} provincial electoral district Quebec",
     "ns": "{name} provincial electoral district Nova Scotia",
     "nl": "{name} provincial electoral district Newfoundland and Labrador",
+    "yukon": "{name} territorial electoral district Yukon",
+    "nwt": "{name} territorial electoral district Northwest Territories",
+    "nunavut": "{name} territorial electoral district Nunavut",
 }
 SOURCES = {
     "federal": (DATA / "ridings.json", "current_name"),
@@ -43,6 +46,9 @@ SOURCES = {
     "quebec": (DATA / "qc" / "divisions.json", "name"),
     "ns": (DATA / "ns" / "divisions.json", "name"),
     "nl": (DATA / "nl" / "divisions.json", "name"),
+    "yukon": (DATA / "yt" / "divisions.json", "name"),
+    "nwt": (DATA / "nt" / "divisions.json", "name"),
+    "nunavut": (DATA / "nu" / "divisions.json", "name"),
 }
 
 

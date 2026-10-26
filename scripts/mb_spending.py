@@ -113,6 +113,7 @@ STATEMENTS = {
     "2022-23": "https://manitoba.ca/asset_library/en/publicaccounts2023/VendorPaymentsover50k2022-2023.pdf",
 }
 CGN_URL = "https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/geobase_cgn_toponyme/prov_csv_eng/cgn_mb_csv_eng.zip"
+SEARCH_URL = "https://duckduckgo.com/?q={q}+Manitoba+grant"  # {q}: the recipient, URL-encoded by the page
 COLUMN_SPLIT = 300  # x coordinate of the gutter between the two columns
 
 NOT_COUNTED = re.compile(r"^PUBLIC DEBT$")  # payments to banks and bondholders: left out of the totals altogether
@@ -299,6 +300,14 @@ def load_places():
 
 # ------------------------------------------------------------------ PDF parsing
 
+def source_url(r):
+    """The vendor-payments PDF of the row's year, opened at the page the row was parsed from."""
+    url = STATEMENTS.get(r["fiscal_year"])
+    if not url:
+        return None
+    return f'{url}#page={r["page"]}' if r.get("page") else url
+
+
 def join_items(line_items):
     """Join the strings on one baseline in one column, deciding spaces from the gaps."""
     s, end_x = "", None
@@ -335,6 +344,7 @@ def parse_statement(path, fy):
     department = None
     soa = False
     pending = []
+    page = 0  # the PDF page being read, for top_grants.src
 
     def flush_pending(reason):
         nonlocal pending
@@ -362,9 +372,9 @@ def parse_statement(path, fy):
         if department is None:
             bad[("?", "payee before first department")] += 1
             return
-        rows.append({"fiscal_year": fy, "department": department, "payee_raw": re.sub(r"\s+", " ", name), "amount": amt})
+        rows.append({"fiscal_year": fy, "department": department, "payee_raw": re.sub(r"\s+", " ", name), "amount": amt, "page": page})
 
-    for items in pdf_items(path):
+    for page, items in enumerate(pdf_items(path), 1):
         if not items:
             continue
         segments = [[]]  # runs of payee lines between headings, each a list of (left, right) texts
@@ -487,7 +497,7 @@ def load_rows(fy, path, splitter):
     for r in rows:
         r["payee"], r["town"], r["province"] = splitter.split(r["payee_raw"])
     with open(MB / f"payees_{fy}.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["fiscal_year", "department", "payee", "town", "province", "amount", "payee_raw"])
+        w = csv.DictWriter(f, fieldnames=["fiscal_year", "department", "payee", "town", "province", "amount", "payee_raw", "page"])
         w.writeheader()
         w.writerows(rows)
     by_dept = defaultdict(lambda: [0, 0, 0, 0])
@@ -710,11 +720,13 @@ def main():
         pop = dv["population"] or 1
         a, b = p["after"], p["before"]
         rec = dict(dv)
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "town": ""})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "town": "", "src_v": 0.0, "src": None})
         for v, r, fl, how in p["grants"]:
             g = by_recipient[r["payee"]]
             g["v"] += v
             g["n"] += 1
+            if v > g["src_v"]:  # the link points at the recipient's largest row
+                g["src_v"], g["src"] = v, source_url(r)
             g["progs"][r["department"]] += v
             g["formula"] = g["formula"] or r["formula"]
             g["flag"], g["how"], g["last"], g["town"] = fl, how, max(g["last"], r["fiscal_year"]), r["town"]
@@ -730,7 +742,8 @@ def main():
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": (who + (f" ({g['town'].title()})" if g["town"] else ""))[:80], "n": g["n"],
                             "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
+                            **({"src": g["src"]} if g["src"] else {})} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"][fy]) for fy in series_fys]
@@ -758,6 +771,7 @@ def main():
         "window_note": window_note,
         "population_basis": next(iter(divisions.values())).get("population_basis", ""),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "search_url": SEARCH_URL,
         "series": {"kind": "fiscal year", "labels": series_fys, "complete": len(series_fys),
                    "election_index": max([i for i, fy in enumerate(series_fys) if fy_end(fy) < ELECTION.isoformat()], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},

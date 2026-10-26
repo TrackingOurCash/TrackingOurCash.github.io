@@ -1373,175 +1373,150 @@
    "head": "Currie Dixon",
    "source": "https://en.wikipedia.org/wiki/Executive_Council_of_Yukon (Dixon ministry, current as of Nov 2025); yukon.ca and yukonassembly.ca block automated fetches (403)",
    "ministers": {
-    "district:Copperbelt North": {
+    "1": {
      "name": "Currie Dixon",
      "title": "Premier of Yukon; Minister of the Executive Council Office; Minister of Finance",
-     "rank": "head",
-     "district": "Copperbelt North"
+     "rank": "head"
     },
-    "district:Mayo-Tatchun": {
+    "7": {
      "name": "Cory Bellmore",
      "title": "Minister of Community Services; Minister responsible for the Yukon Lottery Commission",
-     "rank": "cabinet",
-     "district": "Mayo-Tatchun"
+     "rank": "cabinet"
     },
-    "district:Whistle Bend South": {
+    "19": {
      "name": "Linda Benoit",
      "title": "Minister of Highways and Public Works",
-     "rank": "cabinet",
-     "district": "Whistle Bend South"
+     "rank": "cabinet"
     },
-    "district:Lake Laberge": {
+    "5": {
      "name": "Brad Cathers",
      "title": "Minister of Health and Social Services",
-     "rank": "cabinet",
-     "district": "Lake Laberge"
+     "rank": "cabinet"
     },
-    "district:Marsh Lake-Mount Lorne-Golden Horn": {
+    "6": {
      "name": "Jen Gehmair",
      "title": "Minister of Economic Development; Minister of Tourism and Culture; Minister of the Public Service Commission; Minister responsible for the Yukon Liquor Corporation",
-     "rank": "cabinet",
-     "district": "Marsh Lake-Mount Lorne-Golden Horn"
+     "rank": "cabinet"
     },
-    "district:Kluane": {
+    "4": {
      "name": "Wade Istchenko",
      "title": "Minister of Environment",
-     "rank": "cabinet",
-     "district": "Kluane"
+     "rank": "cabinet"
     },
-    "district:Copperbelt South": {
+    "2": {
      "name": "Scott Kent",
      "title": "Minister of Education; Minister responsible for the Yukon Housing Corporation",
-     "rank": "cabinet",
-     "district": "Copperbelt South"
+     "rank": "cabinet"
     },
-    "district:Porter Creek Centre": {
+    "9": {
      "name": "Ted Laking",
      "title": "Minister of Energy, Mines and Resources; Minister responsible for the Yukon Development Corporation; Minister responsible for the Yukon Energy Corporation",
-     "rank": "cabinet",
-     "district": "Porter Creek Centre"
+     "rank": "cabinet"
     },
-    "district:Whitehorse West": {
+    "21": {
      "name": "Laura Lang",
      "title": "Minister of Justice; Minister responsible for the French Language Services Directorate; Minister responsible for the Women and Gender Equity Directorate; Minister responsible for the Worker's Safety and Compensation Board",
-     "rank": "cabinet",
-     "district": "Whitehorse West"
+     "rank": "cabinet"
     }
    },
    "unseated": [],
-   "note": "Dixon (Yukon Party) cabinet formed after the 3 Nov 2025 election (9 members). Titles are Wikipedia wording because official sites could not be fetched. RIDING FILE NOT AVAILABLE when written: keys are \"district:<district name>\" rather than riding keys."
+   "note": "Dixon (Yukon Party) cabinet formed after the 3 Nov 2025 election (9 members). Titles are Wikipedia wording because official sites could not be fetched."
   },
   "nt": {
    "head": "R.J. Simpson",
    "source": "https://www.ntlegislativeassembly.ca/premier-and-ministers and the individual MLA profile pages (meet-members/mla/...), plus Cabin Radio (20-21 Oct 2026) for the Rodgers appointment",
    "ministers": {
-    "district:Hay River North": {
+    "4": {
      "name": "R.J. Simpson",
      "title": "Premier; Minister of Executive and Indigenous Affairs",
-     "rank": "head",
-     "district": "Hay River North"
+     "rank": "head"
     },
-    "district:Yellowknife South": {
+    "19": {
      "name": "Caroline Wawzonek",
      "title": "Deputy Premier; Minister of Finance; Minister Responsible for the Northwest Territories Power Corporation; Minister Responsible for Strategic Infrastructure, Energy and Supply Chains",
-     "rank": "cabinet",
-     "district": "Yellowknife South"
+     "rank": "cabinet"
     },
-    "district:Kam Lake": {
+    "8": {
      "name": "Caitlin Cleveland",
      "title": "Minister of Industry, Tourism and Investment; Minister of Education, Culture and Employment",
-     "rank": "cabinet",
-     "district": "Kam Lake"
+     "rank": "cabinet"
     },
-    "district:Inuvik Boot Lake": {
+    "6": {
      "name": "Denny Rodgers",
      "title": "Minister of Health and Social Services",
-     "rank": "cabinet",
-     "district": "Inuvik Boot Lake"
+     "rank": "cabinet"
     },
-    "district:Thebacha": {
-     "name": "Jay Macdonald",
+    "15": {
+     "name": "Jay MacDonald",
      "title": "Minister of Environment and Climate Change; Minister of Justice; Government House Leader",
-     "rank": "cabinet",
-     "district": "Thebacha"
+     "rank": "cabinet"
     },
-    "district:Nunakput": {
+    "12": {
      "name": "Lucy Kuptana",
      "title": "Minister Responsible for Housing Northwest Territories; Minister Responsible for the Status of Women",
-     "rank": "cabinet",
-     "district": "Nunakput"
+     "rank": "cabinet"
     },
-    "district:Hay River South": {
+    "5": {
      "name": "Vince McKay",
      "title": "Minister of Infrastructure; Minister of Municipal and Community Affairs; Minister Responsible for Workers' Safety and Compensation Commission; Minister Responsible for the Public Utilities Board",
-     "rank": "cabinet",
-     "district": "Hay River South"
+     "rank": "cabinet"
     }
    },
    "unseated": [],
-   "note": "Consensus government: Simpson executive council (premier + 6 ministers). Denny Rodgers was chosen by MLAs on 20 Oct 2026 to replace Lesa Semmler and took Health and Social Services on 21 Oct 2026. The Speaker (Shane Thompson) is not a minister. Portfolios from each minister's Legislative Assembly profile header. RIDING FILE NOT AVAILABLE when written: keys are \"district:<district name>\" rather than riding keys."
+   "note": "Consensus government: Simpson executive council (premier + 6 ministers). Denny Rodgers was chosen by MLAs on 20 Oct 2026 to replace Lesa Semmler and took Health and Social Services on 21 Oct 2026. The Speaker (Shane Thompson) is not a minister. Portfolios from each minister's Legislative Assembly profile header."
   },
   "nu": {
    "head": "John Main",
    "source": "https://assembly.nu.ca/members/mla (membership and constituencies) with portfolios from https://en.wikipedia.org/wiki/Executive_Council_of_Nunavut (as of 20 Nov 2025, citing the Government of Nunavut portfolio announcement); gov.nu.ca blocks automated fetches (403)",
    "ministers": {
-    "district:Arviat North-Whale Cove": {
+    "4": {
      "name": "John Main",
      "title": "Premier; Minister of Finance; Minister of Indigenous Affairs; Minister of Immigration; Minister of Executive and Intergovernmental Affairs; Minister responsible for the Utility Rates Review Council; Minister responsible for Seniors; Minister responsible for the Nunavut Liquor and Cannabis Commission; Minister responsible for the Nunavut Liquor and Cannabis Board",
-     "rank": "head",
-     "district": "Arviat North-Whale Cove"
+     "rank": "head"
     },
-    "district:Iqaluit-Tasiluk": {
+    "13": {
      "name": "George Hickes",
      "title": "Deputy Premier; Minister of Justice; Minister of Transportation and Infrastructure Nunavut; Minister of Labour; Minister responsible for the Human Rights Tribunal",
-     "rank": "cabinet",
-     "district": "Iqaluit-Tasiluk"
+     "rank": "cabinet"
     },
-    "district:Iqaluit-Niaqunnguu": {
+    "11": {
      "name": "David Akeeagok",
      "title": "Government House Leader; Minister of Education; Minister responsible for Nunavut Arctic College",
-     "rank": "cabinet",
-     "district": "Iqaluit-Niaqunnguu"
+     "rank": "cabinet"
     },
-    "district:Iqaluit-Sinaa": {
-     "name": "Janet Brewster",
+    "12": {
+     "name": "Janet Pitsiulaaq Brewster",
      "title": "Minister of Health; Minister responsible for Suicide Prevention",
-     "rank": "cabinet",
-     "district": "Iqaluit-Sinaa"
+     "rank": "cabinet"
     },
-    "district:Iqaluit-Manirajak": {
+    "10": {
      "name": "Gwen Healey Akearok",
      "title": "Minister of Family Services; Minister responsible for the Qulliq Energy Corporation; Minister responsible for the Status of Women; Minister responsible for Homelessness; Minister responsible for Poverty Reduction",
-     "rank": "cabinet",
-     "district": "Iqaluit-Manirajak"
+     "rank": "cabinet"
     },
-    "district:Tununiq": {
+    "21": {
      "name": "Brian Koonoo",
      "title": "Minister of Culture and Heritage; Minister of Environment; Minister of Languages; Minister responsible for Energy",
-     "rank": "cabinet",
-     "district": "Tununiq"
+     "rank": "cabinet"
     },
-    "district:Netsilik": {
+    "15": {
      "name": "Cecile Nelvana Lyall",
      "title": "Minister responsible for the Nunavut Housing Corporation",
-     "rank": "cabinet",
-     "district": "Netsilik"
+     "rank": "cabinet"
     },
-    "district:Baker Lake": {
+    "6": {
      "name": "Craig Simailak",
      "title": "Minister of Community Services; Minister responsible for the Nunavut Business Credit Corporation; Minister responsible for the Nunavut Development Corporation; Minister responsible for Mines; Minister responsible for Trade",
-     "rank": "cabinet",
-     "district": "Baker Lake"
+     "rank": "cabinet"
     },
-    "district:Rankin Inlet South": {
+    "19": {
      "name": "Annie Tattuinee",
      "title": "Minister of Human Resources; Minister responsible for the Workers' Safety and Compensation Commission",
-     "rank": "cabinet",
-     "district": "Rankin Inlet South"
+     "rank": "cabinet"
     }
    },
    "unseated": [],
-   "note": "Consensus government: Main executive council chosen by the Nunavut Leadership Forum after the 27 Oct 2025 election (premier + 8 ministers). The Speaker (David Joanasie) is not a minister. RIDING FILE NOT AVAILABLE when written: keys are \"district:<district name>\" rather than riding keys."
+   "note": "Consensus government: Main executive council chosen by the Nunavut Leadership Forum after the 27 Oct 2025 election (premier + 8 ministers). The Speaker (David Joanasie) is not a minister."
   }
  }
 }

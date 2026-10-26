@@ -14,7 +14,8 @@ OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
        {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"},
-       {"href": "pei.html", "label": "PEI"}, {"href": "ontario.html", "label": "Ontario"}, {"href": "quebec.html", "label": "Quebec"}, {"href": "ns.html", "label": "Nova Scotia"}, {"href": "nl.html", "label": "Newfoundland"}]
+       {"href": "pei.html", "label": "PEI"}, {"href": "ontario.html", "label": "Ontario"}, {"href": "quebec.html", "label": "Quebec"}, {"href": "ns.html", "label": "Nova Scotia"}, {"href": "nl.html", "label": "Newfoundland"},
+       {"href": "yukon.html", "label": "Yukon"}, {"href": "nwt.html", "label": "NWT"}, {"href": "nunavut.html", "label": "Nunavut"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
@@ -418,6 +419,117 @@ PROVINCES = {
                         ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
                         ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Newfoundland_and_Labrador_provincial_electoral_districts")],
         },
+    "yukon": {
+        "dir": "yt", "year": "2025", "region": "Yukon", "title": "Where federal grants land in Yukon's electoral districts",
+        "electionLabel": "the 3 November 2025 territorial election", "count": 21, "gov": "YP",
+        "parties": {"YP": {"name": "Yukon Party", "light": "#1b4c9e", "dark": "#4f80d8"}, "LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"},
+                    "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["YP", "NDP", "LIB"], "opp": "opposition",
+        "groupNote": '"YP" means the governing Yukon Party won the seat in 2025; "opposition" covers the NDP (official opposition) and the lone Liberal. The money is federal, so the question is whether Ottawa\'s grants land more heavily in the territory\'s close seats.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
+        "beforeLabel": "Same dates a year earlier", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
+        "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
+        "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
+        "linkNote": "Links open the government's own record of each award on open.canada.ca.",
+        "popLabel": "electors, est. {pop_date}",
+        "projection": {"parallels": [60, 69], "rotate": [135, 0]},
+        "insets": [["Whitehorse", [-135.2, 60.65, -134.9, 60.8]]],
+        "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in Yukon's 21 electoral districts.",
+        "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Yukon's 21 electoral districts "
+                     "and set against the 3 November 2025 territorial result. Each district wears its current MLA's party colour; the deeper the colour, the more federal grant money "
+                     "per resident. \"Before\" means the same dates one year earlier. Yukon publishes no list of its own payees, so territorial payments cannot be shown."),
+        "notes": [
+            "<b>Why federal money:</b> Yukon's Public Accounts stop at the program level (Schedules 1 to 11) and the territory publishes no payee list, so this page shows the federal grants that land in each district: the same awards as the federal page.",
+            "<b>Where money lands:</b> each award is placed at the recipient's address by postal code; recipients with no postal code were matched to their address on other awards, then by postal area or city (marked approximate). {unmapped_n} awards worth {unmapped_money} since the federal election are still unplaced.",
+            "<b>Left out by default:</b> national non-profits booked at a head office, other governments (the Yukon government itself, the City of Whitehorse, First Nations governments where flagged), treaty settlements and foreign aid. Tick the box to put them back.",
+            "<b>Boundaries:</b> the 21 districts of the Electoral District Boundaries Act (2024), first used on 3 November 2025 (two new Whistle Bend seats; Golden Horn, Teslin, Ross River and Faro merged into neighbours), from GeoYukon's official electoral-district layer.",
+            "<b>Population:</b> no census count exists for these districts and Whitehorse is cut into 15 of them, so per-person figures use the registered electors at the 2025 election, scaled to Statistics Canada's {pop_date} estimate for Yukon.",
+            "<b>Party is correlation, not credit:</b> federal ministers and departments approve these grants, not MLAs. A pattern by seat type is a signal worth checking, not proof of intent.",
+        ],
+        "sources": [("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
+                    ("Yukon Public Accounts 2024-25 (program-level schedules only)", "https://open.yukon.ca/data/2024-25-public-accounts"),
+                    ("Elections Yukon 2025 general election official results", "https://electionsyukon.ca/en/2025-general-election-official-results"),
+                    ("Yukon Legislative Assembly member list", "https://yukonassembly.ca/mlas"),
+                    ("Electoral district boundaries (GeoYukon, Electoral District Boundaries Act 2024)", "https://open.yukon.ca/data/yukon-electoral-districts"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Yukon_territorial_electoral_districts")],
+    },
+    "nwt": {
+        "dir": "nt", "year": "2023", "region": "Northwest Territories", "title": "Where federal grants land in the Northwest Territories' electoral districts",
+        "electionLabel": "the 14 November 2023 territorial election", "count": 19, "gov": "cabinet",
+        "parties": {"IND": {"name": "Independent (consensus government)", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["IND"], "opp": "regular members",
+        "groupNote": 'The NWT has consensus government: every MLA is an independent, so the groups are cabinet (the Premier and six ministers, dashed outlines on the map) against the regular members. The money is federal.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
+        "beforeLabel": "Same dates a year earlier", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
+        "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
+        "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
+        "linkNote": "Links open the government's own record of each award on open.canada.ca.",
+        "popLabel": "residents, est. {pop_date}",
+        "projection": {"parallels": [60, 70], "rotate": [115, 0]},
+        "insets": [["Yellowknife", [-114.45, 62.42, -114.3, 62.5]]],
+        "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), placed in the NWT's 19 electoral districts.",
+        "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in the Northwest Territories' 19 electoral districts "
+                     "and set against the 14 November 2023 territorial result. The NWT has no parties; cabinet members' districts carry a dashed outline. \"Before\" means the same dates one year earlier. "
+                     "The territory's own payee reporting covers one department, so territorial payments are not shown."),
+        "notes": [
+            "<b>Why federal money:</b> the GNWT itemises recipients only in Industry, Tourism and Investment's annual Grants and Contributions Results Report; the Public Accounts stop at the program level. This page shows the federal grants that land in each district.",
+            "<b>Where money lands:</b> each award is placed at the recipient's address by postal code; recipients with no postal code were matched to their address on other awards, then by postal area or city (marked approximate). {unmapped_n} awards worth {unmapped_money} since the federal election are still unplaced.",
+            "<b>Left out by default:</b> national non-profits booked at a head office, other governments (the GNWT itself, the City of Yellowknife, Indigenous governments where flagged), treaty settlements and foreign aid. Tick the box to put them back.",
+            "<b>Boundaries:</b> the 19 districts of the 2013 redistribution, used in 2015, 2019 and 2023, from the GNWT Centre for Geomatics.",
+            "<b>Population:</b> the 2021 census count of each district's communities (Yellowknife, Hay River and Inuvik shared between their districts by registered electors), scaled to Statistics Canada's {pop_date} estimate.",
+            "<b>Since the election:</b> Inuvik Twin Lakes has been vacant since Lesa Semmler resigned in September 2026; the by-election is on 24 November 2026.",
+        ],
+        "sources": [("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
+                    ("Elections NWT 2023 official results report", "https://www.electionsnwt.ca/en/official-voting-results-historical"),
+                    ("GNWT Premier and Cabinet", "https://www.gov.nt.ca/en/cabinet"),
+                    ("Legislative Assembly of the Northwest Territories members", "https://www.ntlegislativeassembly.ca/meet-members/all"),
+                    ("Electoral district boundaries (GNWT Centre for Geomatics)", "https://www.apps.geomatics.gov.nt.ca/arcgis/rest/services/GNWT/Boundaries_LCC/MapServer/2"),
+                    ("ITI Grants and Contributions Results Report 2023-24", "https://www.iti.gov.nt.ca/en/files/2024-grants-and-contributions-report"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Northwest_Territories_territorial_electoral_districts")],
+    },
+    "nunavut": {
+        "dir": "nu", "year": "2025", "region": "Nunavut", "title": "Where federal grants land in Nunavut's constituencies",
+        "electionLabel": "the 27 October 2025 territorial election", "count": 22, "gov": "cabinet",
+        "parties": {"IND": {"name": "Independent (consensus government)", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["IND"], "opp": "regular members",
+        "groupNote": 'Nunavut has consensus government: every MLA is an independent, so the groups are cabinet (the Premier and eight ministers chosen by the Assembly on 18 November 2025, dashed outlines on the map) against the regular members. The money is federal.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
+        "beforeLabel": "Same dates a year earlier", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
+        "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
+        "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
+        "linkNote": "Links open the government's own record of each award on open.canada.ca.",
+        "popLabel": "residents, est. {pop_date}",
+        "projection": {"parallels": [60, 80], "rotate": [85, 0]},
+        "insets": [["Iqaluit", [-68.6, 63.72, -68.45, 63.78]]],
+        "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), placed in Nunavut's 22 constituencies.",
+        "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Nunavut's 22 constituencies "
+                     "and set against the 27 October 2025 territorial result. Nunavut has no parties; cabinet members' constituencies carry a dashed outline. \"Before\" means the same dates one year earlier. "
+                     "Nunavut's Grants and Contributions Report names only municipalities and territorial corporations, so territorial payments are not shown."),
+        "notes": [
+            "<b>Why federal money:</b> the Government of Nunavut's annual Grants and Contributions Report gives totals by department, recipient category and municipality, not named recipients, and the Public Accounts stop at the program level. This page shows the federal grants that land in each constituency.",
+            "<b>Where money lands:</b> each award is placed at the recipient's address by postal code; recipients with no postal code were matched to their address on other awards, then by postal area or city (marked approximate). {unmapped_n} awards worth {unmapped_money} since the federal election are still unplaced.",
+            "<b>Left out by default:</b> national non-profits booked at a head office, other governments (the Government of Nunavut itself, the City of Iqaluit, Inuit organizations where flagged), treaty settlements and foreign aid. Tick the box to put them back.",
+            "<b>Boundaries:</b> the 22 constituencies of the 2024 amendment to the Nunavut Elections Act (from the 2023 Electoral Boundaries Commission), first used on 27 October 2025, from Elections Nunavut's GIS file; the legal boundary runs to the North Pole and is cut off at 83.3°N here.",
+            "<b>Population:</b> the 2021 census count of each constituency's communities (Iqaluit, Arviat, Rankin Inlet and Igloolik shared between their constituencies by electors), scaled to Statistics Canada's {pop_date} estimate.",
+            "<b>Since the election:</b> Aggu tied 105 to 105 and was decided by a new election on 15 December 2025 (Edward Attagutaluk); Hudson Bay changed hands at the 28 September 2026 by-election (Jason Iqaluq).",
+        ],
+        "sources": [("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
+                    ("Elections Nunavut 2025 general election results", "https://www.elections.nu.ca/en/2025-territorial-general-elections"),
+                    ("Legislative Assembly of Nunavut members", "https://assembly.nu.ca/members/mla"),
+                    ("Government of Nunavut cabinet portfolios (20 November 2025)", "https://www.gov.nu.ca/en/newsroom/premier-main-announces-cabinet-portfolios-2025-11-20"),
+                    ("Constituency boundaries (Elections Nunavut GIS shape file)", "https://www.elections.nu.ca/en/documents"),
+                    ("Government of Nunavut Grants and Contributions Report 2024-25", "https://www.gov.nu.ca/sites/default/files/documents/2025-11/2024-25_Grants_and_Contributions_Report.pdf"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (constituency articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Nunavut_territorial_electoral_districts")],
+    },
     # PEI publishes no payee list, so its page shows the federal grants that land in each provincial district (pe_spending.py).
     "pei": {
         "dir": "pe", "year": "2023", "region": "Prince Edward Island",  # canadaspends.com has no PEI page yet
@@ -554,7 +666,8 @@ PROVINCES = {
 
 LEVEL = {"alberta": ("division", "divisions"), "bc": ("district", "districts"), "saskatchewan": ("constituency", "constituencies"),
          "manitoba": ("division", "divisions"), "nb": ("district", "districts"), "pei": ("district", "districts"),
-         "ontario": ("riding", "ridings"), "quebec": ("riding", "ridings"), "ns": ("district", "districts"), "nl": ("district", "districts")}
+         "ontario": ("riding", "ridings"), "quebec": ("riding", "ridings"), "ns": ("district", "districts"), "nl": ("district", "districts"),
+         "yukon": ("district", "districts"), "nwt": ("district", "districts"), "nunavut": ("constituency", "constituencies")}
 
 
 def provincial(key):
@@ -566,7 +679,7 @@ def provincial(key):
     wk = wiki(key)
     news = json.load(open(DATA / "news_links.json")) if P.get("recordUrl") and (DATA / "news_links.json").exists() else {}
     pnews = json.load(open(DATA / "news_links_prov.json")) if (DATA / "news_links_prov.json").exists() else {}
-    mins, minfo = ministers(key)
+    mins, minfo = ministers({"yukon": "yt", "nwt": "nt", "nunavut": "nu"}.get(key, key))
     ridings = {}
     for n, r in sp["ridings"].items():
         rec = {k: r.get(k) for k in COMMON}
@@ -583,10 +696,11 @@ def provincial(key):
     land = land_for(P["insets"])
     gov, opp = P["gov"], P["opp"]
     rep = {"quebec": "MNA", "ontario": "MPP", "nl": "MHA"}.get(key, "MLA")
+    mins_level = {"yukon": "yt", "nwt": "nt", "nunavut": "nu"}.get(key, key)
     config = {
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
-        "ministers": minfo and {"head": minfo.get("head"), "source": minfo.get("source"), "note": minfo.get("note"), "as_of": json.load(open(DATA / "ministers.json"))["as_of"], "govParty": P["gov"]},
+        "ministers": minfo and {"head": minfo.get("head"), "source": minfo.get("source"), "note": minfo.get("note"), "as_of": json.load(open(DATA / "ministers.json"))["as_of"], "govParty": P["gov"] if P["gov"] in P["parties"] else "IND"},
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
         "rep": rep, "electionYear": y, "spendsUrl": P.get("spendsUrl"),
         "popLabel": P["popLabel"].format(pop_date=pop_label()[1]) if P.get("popLabel") else "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key in ("nb", "ns") else pop_label()[0],
@@ -596,7 +710,7 @@ def provincial(key):
         "includeLabel": P["includeLabel"],
         "groupTitle": "Does money follow close seats?", "groups": [f"Close {gov}", f"Close {opp}", f"Safe {gov}", f"Safe {opp}"],
         "groupNote": f'"Close" means the {y} winner led by under {m["close_margin"]} points; ' + P["groupNote"],
-        "groupParty": {f"Close {gov}": gov, f"Safe {gov}": gov, f"Close {opp}": opp if opp in P["parties"] else None, f"Safe {opp}": opp if opp in P["parties"] else None},
+        "groupParty": {f"Close {gov}": gov if gov in P["parties"] else None, f"Safe {gov}": gov if gov in P["parties"] else None, f"Close {opp}": opp if opp in P["parties"] else None, f"Safe {opp}": opp if opp in P["parties"] else None},
         "regionOrder": None, "regionGroup": {}, "regionShort": {},
         "beforeLabel": P["beforeLabel"], "topProgsTitle": P["topProgsTitle"], "topGrantsTitle": P.get("topGrantsTitle", "Largest recipients since the election"),
         "recordUrl": P.get("recordUrl"), "searchUrl": P.get("searchUrl") or m.get("search_url"), "searchLabel": P.get("searchLabel") or ("search the web for this recipient" if m.get("search_url") else ""),
@@ -628,7 +742,7 @@ def provincial(key):
         ],
     }
     fp = json.load(open(DATA / "formula_programs.json")) if (DATA / "formula_programs.json").exists() else None
-    flevel = {"pei": "federal", "quebec": "federal", "nl": "federal"}.get(key, key)
+    flevel = {"pei": "federal", "quebec": "federal", "nl": "federal", "yukon": "federal", "nwt": "federal", "nunavut": "federal"}.get(key, key)
     if fp and flevel in fp["levels"] and any("after_formula" in r for r in sp["ridings"].values()):
         lv = fp["levels"][flevel]
         config["formula"] = {"by": lv["by"], "note": fp["note"], "examples": [e["why"] for e in lv["formula"][:6]], "as_of": fp["as_of"]}

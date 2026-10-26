@@ -173,6 +173,7 @@ import unicodedata
 from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlencode
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -192,6 +193,21 @@ OPP_LABEL = "opposition"  # the NDP, Liberals, Greens and independents together,
 # Fiscal year ending -> window; 2025 (which straddles the election) is read for the coverage table and the series only.
 WINDOWS = {2026: "after", 2024: "before"}
 COVERAGE_YEARS = [2024, 2025, 2026]
+# data.ontario.ca resource ids of the English CSV for each fiscal year ending; the CSVs are loaded in
+# the CKAN datastore, so top_grants.src is a datastore_search for the recipient's exact name.
+DATASET_URL = "https://data.ontario.ca/dataset/public-accounts-detailed-schedule-of-payments"
+RESOURCES = {2024: "e594c01c-395f-4143-9a6b-bfb9bd4bcac3", 2025: "1677dc37-00e5-437a-bb39-c918b243f9a9",
+             2026: "3ab37bb7-4f51-4d90-951b-b9d566f65898"}
+SEARCH_URL = "https://duckduckgo.com/?q={q}+Ontario+grant"  # {q}: the recipient, URL-encoded by the page
+
+
+def source_url(r):
+    """The row's lines in the datastore of the year's CSV (the dataset page when the year is not listed)."""
+    rid = RESOURCES.get(r["fye"])
+    if not rid:
+        return DATASET_URL
+    return "https://data.ontario.ca/api/3/action/datastore_search?" + urlencode(
+        {"resource_id": rid, "filters": json.dumps({"Recipient": r["Recipient"]})})
 WINDOW_NOTE = ("after = FY2025-26 (1 April 2025 to 31 March 2026), the first full fiscal year after the 27 February 2025 election; "
                "before = FY2023-24 (1 April 2023 to 31 March 2024), the last full fiscal year before it; FY2024-25 straddles the "
                "election and is read for the coverage table only; annual data, no payment dates")
@@ -918,11 +934,13 @@ def main():
         pop = dv["population"] or 1
         a, b = p["after"], p["before"]
         rec = dict(dv)
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False, "src_v": 0.0, "src": None})
         for v, r, fl, how in p["grants"]:
             g = by_recipient[r["Recipient"]]
             g["v"] += v
             g["n"] += 1
+            if v > g["src_v"]:  # the link points at the recipient's largest row
+                g["src_v"], g["src"] = v, source_url(r)
             g["progs"][r["Ministry"]] += v
             g["formula"] = g["formula"] or r["formula"]
             g["flag"], g["how"], g["last"] = fl, how, fy_label[r["fye"]]
@@ -937,7 +955,8 @@ def main():
             "gov_won": dv["party_2025"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
+                            **({"src": g["src"]} if g["src"] else {})} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"][fye]) for fye in series_fyes]
@@ -966,6 +985,7 @@ def main():
                              "2021 census subdivisions summed by centroid for the 13 northern ridings, which are not federal districts; "
                              + first.get("population_basis", "").split(";")[-1].strip()),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "search_url": SEARCH_URL,
         "series": {"kind": "fiscal year", "labels": [f"{fye - 1}-{str(fye)[2:]}" for fye in series_fyes], "complete": len(series_fyes),
                    "election_index": max([i for i, fye in enumerate(series_fyes) if date(fye, 3, 31) < ELECTION], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},
