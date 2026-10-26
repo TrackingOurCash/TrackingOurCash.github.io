@@ -569,7 +569,7 @@ function renderTable() {
 // ---- controls ----
 document.querySelectorAll("#metric button").forEach(b => b.onclick = () => { document.querySelectorAll("#metric button").forEach(x => x.setAttribute("aria-pressed", x === b)); state.metric = b.dataset.m; render(); });
 const deptSel = document.getElementById("dept");
-C.filterOptions.forEach(d => deptSel.add(new Option(d, d)));
+C.filterOptions.slice().sort((a, b) => a.localeCompare(b, "en", {sensitivity: "base"})).forEach(d => deptSel.add(new Option(d, d)));
 deptSel.onchange = () => { state.dept = deptSel.value; document.getElementById("natl").disabled = !!state.dept; render(); };
 document.getElementById("natl").onchange = e => { state.natl = e.target.checked; render(); };
 document.getElementById("closeOnly").onchange = e => { state.closeOnly = e.target.checked; render(); };
