@@ -225,5 +225,433 @@
   "mainstream": null,
   "independent": null,
   "query": "\"Black Entrepreneurs & Businesses of Canada\" Vancouver PacifiCan funding"
+ },
+ "ec|099-2025-2026-Q4-00083": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Saskatchewan Ministry of Environment\" Environment and Climate Change Canada Conserving Nature funding agreement"
+ },
+ "acoa-apeca|276-2025-2026-Q4-00186": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"New Brunswick Museum\" Saint John ACOA funding $1.5 million"
+ },
+ "ced-dec|093-2025-2026-Q2-00062": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Vergers Leahy\" Franklin DEC financement 1,5 million"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040605": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Alfapur\" Innovative Solutions Canada funding"
+ },
+ "ced-dec|093-2025-2026-Q2-00100": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Idéal Canne\" Saint-Apollinaire DEC financement"
+ },
+ "hc-sc|271-2025-2026-Q4-00083": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Children's Aid Society\" Dufferin Orangeville Health Canada funding $1.5 million"
+ },
+ "fednor|200-2025-2026-Q4-042": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"ITTC\" London Ontario Regional Defence Investment Initiative FedDev funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00167": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pulp Moulded Products\" Keswick FedDev Ontario tariff funding"
+ },
+ "pacifican|240-2025-2026-Q4-00109": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Bio-Conscious Technologies\" Vancouver PacifiCan funding"
+ },
+ "nrc-cnrc|172-2024-2025-Q4-1038928": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"VEI Contracting\" Kitchener Innovative Solutions Canada funding"
+ },
+ "vac-acc|001-2025-2026-Q4-00123": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pepper Pod\" Chelsea Quebec Veteran and Family Well-being Fund funding"
+ },
+ "hc-sc|271-2025-2026-Q4-00066": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Bridgepoint Center\" Milden Saskatchewan Health Canada funding"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00050": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Russell Industries\" Niagara Falls ACOA funding"
+ },
+ "ec|099-2025-2026-Q4-00062": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Alderville First Nation\" Environment and Climate Change Canada Conserving Nature funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039874": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Aequilibrium\" Port Moody NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1037985": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Énerserv\" Granby PARI CNRC financement"
+ },
+ "aafc-aac|235-2025-2026-Q4-00035": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canada Beef\" AgriMarketing kosher halal Agriculture and Agri-Food Canada funding"
+ },
+ "ec|099-2025-2026-Q3-00041": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Whitefish River First Nation\" Environment and Climate Change Canada fuel charge proceeds funding"
+ },
+ "pc|154-2025-2026-Q1-00018": {
+  "mainstream": {
+   "outlet": "Richmond News (Glacier Media)",
+   "title": "Richmond cannery society receive $640K to conserve historic site",
+   "url": "https://richmond-news.com/local-news/richmond-cannery-society-receive-640k-to-conserve-historic-site-8505832"
+  },
+  "independent": null,
+  "query": "\"Gulf of Georgia Cannery Society\" Parks Canada funding Richmond"
+ },
+ "ced-dec|012-2025-2026-Q4-01345": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Meubles Foliot\" Saint-Jérôme DEC financement tarifs"
+ },
+ "pacifican|240-2025-2026-Q2-00007": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Adaptive Homes\" Revelstoke PacifiCan funding"
+ },
+ "phac-aspc|1480-2025-2026-Qrt4-0000142": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kinvia\" Type 2 Diabetes Prevention Challenge Public Health Agency of Canada"
+ },
+ "cihr-irsc|236-2025-2026-Q3-00633": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Dave Bergeron\" UQAR Rimouski IRSC subvention recherche"
+ },
+ "cihr-irsc|236-2025-2026-Q1-00502": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Srividya Iyer\" CIHR grant Douglas Montreal youth mental health funding"
+ },
+ "feddevontario|062-2026-2027-Q1-00066": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Rootree\" Burlington FedDev Ontario funding"
+ },
+ "ced-dec|012-2025-2026-Q4-01450": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Lauzon\" Papineauville DEC financement tarifs douaniers 1,2 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17211": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Decast\" Utopia Ontario Natural Resources Canada Green Industrial Facilities funding"
+ },
+ "phac-aspc|1480-2025-2026-Qrt4-0000128": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Cégep de Victoriaville\" Agence de la santé publique du Canada financement Fonds pour la santé des Canadiens et des communautés"
+ },
+ "ps-sp|088-2025-2026-Q3-00045": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Yorktown Family Services\" Community Resilience Fund Public Safety Canada funding"
+ },
+ "ced-dec|012-2025-2026-Q4-00118": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Centre d'expertise en fabrication métallique industrielle\" Saint-Charles-Borromée DEC financement"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00240": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"SustainaBuild\" Summerside ACOA homebuilding innovation funding"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0087": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Eel Ground First Nation\" Natoaganeg Fisheries and Oceans Canada Atlantic Integrated Commercial Fisheries Initiative funding"
+ },
+ "aafc-aac|235-2025-2026-Q3-00546": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Food Innovation Network\" Agriculture and Agri-Food Canada Strategic Priorities funding"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00206": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Livingston Steel\" Charlottetown ACOA homebuilding funding"
+ },
+ "nserc-crsng|110_2025_2026_Q2_51": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"UQAC\" Chicoutimi CRSNG subvention Alliance partenariat de recherche 2025"
+ },
+ "acoa-apeca|276-2025-2026-Q1-00052": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"McGraw Seafoods\" Tracadie ACOA funding"
+ },
+ "ced-dec|012-2025-2026-Q4-01453": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Clermond Hamel\" Saint-Éphrem-de-Beauce DEC financement tarifs"
+ },
+ "ced-dec|093-2025-2026-Q3-00198": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Robert Hydraulique\" Lanoraie DEC financement"
+ },
+ "ced-dec|093-2025-2026-Q3-00219": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fusium\" Saguenay DEC financement 1 million"
+ },
+ "sshrc-crsh|207-2025-2026-Q2-01543": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Institut de tourisme et d'hôtellerie du Québec\" CRSH subvention partenariat recherche"
+ },
+ "ced-dec|012-2025-2026-Q4-01434": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fil métallique Major\" Candiac DEC financement tarifs"
+ },
+ "ced-dec|012-2025-2026-Q4-01282": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Globe Métal\" Sainte-Catherine DEC financement tarifs"
+ },
+ "ced-dec|012-2025-2026-Q4-04017": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Machinex\" Plessisville DEC financement tarifs douaniers"
+ },
+ "ced-dec|012-2025-2026-Q4-01488": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Dienamex\" Saint-Eustache DEC financement"
+ },
+ "ced-dec|012-2025-2026-Q4-00178": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Produlith\" Boucherville DEC financement tarifs"
+ },
+ "ced-dec|012-2025-2026-Q4-00142": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Simaudio\" Boucherville DEC financement tarifs douaniers"
+ },
+ "ced-dec|093-2025-2026-Q3-00281": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Capitol Industries\" Montréal DEC financement 1 million"
+ },
+ "ced-dec|012-2025-2026-Q4-00043": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Acier Sélect\" Saint-Jean-sur-Richelieu DEC financement tarifs"
+ },
+ "ced-dec|093-2025-2026-Q3-00250": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Bolduc Leroux\" Terrebonne DEC financement 1 million"
+ },
+ "ced-dec|012-2025-2026-Q4-00027": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Cheminée Lining\" Terrebonne DEC financement tarifs"
+ },
+ "ced-dec|093-2025-2026-Q3-00207": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Airex Industries\" Laval DEC financement 1 million"
+ },
+ "infc|278-2025-2026-Q2-00024": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Region of Peel\" Natural Infrastructure Fund federal funding Brampton"
+ },
+ "feddevontario|062-2025-2026-Q4-00082": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Hooper Welding\" Hamilton FedDev Ontario tariff funding"
+ },
+ "csa-asc|003-2025-2026-Q3-00001": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"NordSpace\" Markham Canadian Space Agency STDP funding"
+ },
+ "ps-sp|088-2025-2026-Q4-00208": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "National Newswatch",
+   "title": "Feds to contribute money to the fight against extortion in southern Ontario",
+   "url": "https://nationalnewswatch.com/2026/01/13/feds-to-contribute-money-to-the-fight-against-extortion-in-southern-ontario"
+  },
+  "query": "\"Peel Regional Police\" Public Safety Canada organized crime funding $1 million"
+ },
+ "feddevontario|062-2025-2026-Q4-00103": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Fort Erie Radio",
+   "title": "Three Fort Erie manufacturers get $2.7 million in federal tariff aid",
+   "url": "https://forterieradio.ca/?p=15771"
+  },
+  "query": "\"Canada Perforating\" Fort Erie FedDev Ontario tariff funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00177": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"A.P.S. Metal\" Pickering FedDev Ontario tariff funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00057": {
+  "mainstream": {
+   "outlet": "AM800 CKLW (Bell Media)",
+   "title": "Tariff response: 14 Windsor-Essex companies to share in $20 million in FedDev funding to upgrade and diversify",
+   "url": "https://www.am800cklw.com/news/tariff-response-14-windsor-essex-companies-to-share-in-20-million-in-feddev-funding-to-upgrade-and-diversify/"
+  },
+  "independent": null,
+  "query": "\"Jahn Engineering\" Oldcastle Windsor FedDev Ontario tariff funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00070": {
+  "mainstream": {
+   "outlet": "The Western Producer (Glacier FarmMedia)",
+   "title": "Nine Saskatchewan agricultural businesses to get $10M in funding",
+   "url": "https://www.producer.com/news/nine-saskatchewan-agricultural-businesses-to-get-10m-in-funding/"
+  },
+  "independent": null,
+  "query": "\"Bioriginal\" Saskatoon PrairiesCan funding $1 million"
+ },
+ "prairiescan|044-2025-2026-Q4-00039": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Sureway Metal Systems\" Rocky View PrairiesCan funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00062": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Oyen Regional Rail\" PrairiesCan federal funding $1 million"
+ },
+ "prairiescan|044-2025-2026-Q2-00014": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"NTWIST\" Edmonton PrairiesCan funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00180": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"WBM\" Edmonton PrairiesCan Regional Economic Growth through Innovation funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00110": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Armtec\" Alberta PrairiesCan funding $1 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17876": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"WTC Trucking\" Port Coquitlam Green Freight Program Natural Resources Canada"
+ },
+ "ec|099-2025-2026-Q4-00137": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Mamele'awt Qweesome\" Housing Society Mission Low Carbon Economy Fund"
+ },
+ "pacifican|240-2025-2026-Q4-00095": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Richmond Sentinel",
+   "title": "Two Richmond businesses get federal funding",
+   "url": "https://richmondsentinel.ca/article-detail/24110/two-richmond-businesses-get-federal-funding"
+  },
+  "query": "\"Dynamix Agitators\" Richmond PacifiCan funding"
+ },
+ "pacifican|240-2025-2026-Q4-00070": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Richmond Plywood\" PacifiCan funding $1 million"
+ },
+ "pacifican|240-2025-2026-Q4-00094": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Al Industries\" Surrey PacifiCan funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q3-1037615": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Acentury\" Richmond Hill NRC IRAP funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1041183": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Voxelis\" Richmond BC NRC IRAP funding"
+ },
+ "esdc-edsc|014-2025-2026-Q4-00035": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Black Women Business Network\" Surrey Supporting Black Canadian Communities Initiative funding"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00246": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Municipality of the District of Chester\" ACOA Innovative Communities Fund funding"
+ },
+ "ced-dec|012-2025-2026-Q4-00033": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tôle Art\" Victoriaville DEC financement tarifs"
+ },
+ "tc|217-2025-2026-Q3-90043": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Applewood Chevrolet\" Mississauga iZEV incentives Transport Canada"
+ },
+ "hc-sc|271-2025-2026-Q3-00089": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Endometriosis Network Canada\" Health Canada funding"
+ },
+ "pch|016-2025-2026-Q3-1377062": {
+  "mainstream": {
+   "outlet": "Castanet (Glacier Media)",
+   "title": "En'owkin Centre in Penticton awarded $960K investment to continue supporting Indigenous artists across the country",
+   "url": "https://www.castanetkamloops.net/news/Penticton/594477/Enowkin-Centre-in-Penticton-awarded-960K-investment-to-continue-supporting-Indigenous-artists-across-the-country"
+  },
+  "independent": null,
+  "query": "\"En'owkin Centre\" Penticton Canada Arts Training Fund Canadian Heritage funding"
+ },
+ "ec|099-2025-2026-Q4-00012": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Munsee-Delaware Nation\" fuel charge proceeds Environment and Climate Change Canada funding"
+ },
+ "acoa-apeca|276-2025-2026-Q3-00178": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"MacKenzie Atlantic\" Musquodoboit Harbour ACOA tariff funding"
+ },
+ "csa-asc|003-2025-2026-Q2-00010": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"MDA\" Brampton Canadian Space Agency grant contribution 2025 funding"
  }
 }

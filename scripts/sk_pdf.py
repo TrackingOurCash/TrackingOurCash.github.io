@@ -22,10 +22,10 @@ file order.
 
 Usage from other scripts:
     from sk_pdf import pdf_pages
-    for page in pdf_pages(path, split=306):   # list of pages, each a list of lines
+    for page in pdf_pages(path, split=300):   # list of pages, each a list of lines
         ...
 Run directly to dump a file as text, one page per "=== page N" block:
-    python3 scripts/sk_pdf.py file.pdf [out.txt] [column split x, e.g. 306]
+    python3 scripts/sk_pdf.py file.pdf [out.txt] [column split x, e.g. 300]
 """
 import re
 import sys
@@ -109,9 +109,11 @@ def _objects(data):
     for m in re.finditer(rb"(?<![0-9A-Za-z])(\d+)\s+\d+\s+obj\b", data):
         num = int(m.group(1))
         start = m.end()
-        sm = re.compile(rb"stream\r?\n").search(data, start)
         eo = data.find(b"endobj", start)
-        if sm and (eo < 0 or sm.start() < eo):
+        # The stream keyword follows the dictionary, so it lies before the first
+        # "endobj" even when the binary stream data happens to contain that word.
+        sm = re.compile(rb"stream\r?\n").search(data, start, eo if eo >= 0 else len(data))
+        if sm:
             dict_part = data[start:sm.start()]
             end = data.find(b"endstream", sm.end())
             raw = data[sm.end():end]
@@ -291,8 +293,9 @@ def stream_text_items(content):
     return items
 
 
-def items_to_lines(items, y_tol=2.0):
-    """Group positioned strings into text lines, top of page first, left to right."""
+def items_to_lines(items, y_tol=2.0, sizes=False):
+    """Group positioned strings into text lines, top of page first, left to right.
+    With sizes=True each line is (text, font size of its largest string)."""
     items = sorted(items, key=lambda it: (-it[0], it[1]))
     lines = []
     cur, cur_y = [], None
@@ -309,16 +312,18 @@ def items_to_lines(items, y_tol=2.0):
         line.sort(key=lambda it: it[0])
         s = ""
         end_x = None
+        size = 0.0
         for x, fs, text in line:
-            if not text:
+            if not text.strip():
                 continue
             if end_x is not None and x - end_x > 0.25 * fs and not s.endswith(" ") and not text.startswith(" "):
                 s += " "
             s += text
             end_x = x + 0.5 * fs * len(text)
-        s = re.sub(r"[ \t ]+", " ", s).strip()
+            size = max(size, fs)
+        s = re.sub(r"[ \t\u00a0]+", " ", s).strip()
         if s:
-            out.append(s)
+            out.append((s, round(size, 1)) if sizes else s)
     return out
 
 
@@ -329,12 +334,13 @@ def _printable_share(items):
     return sum(ch.isprintable() or ch.isspace() for ch in text) / len(text)
 
 
-def pdf_pages(path, split=None, landscape_x=620):
+def pdf_pages(path, split=None, landscape_x=620, sizes=False):
     """-> list of pages, each a list of line strings, in document order.
 
     split: x coordinate of the gutter for two-column pages; lines left of it come
     first, then the right column. Pages wider than landscape_x (the summary tables)
-    are never split. Streams that are not readable text are dropped."""
+    are never split. Pages that are not readable text come back empty.
+    sizes=True gives (text, font size) pairs instead of strings."""
     data = open(path, "rb").read()
     contents = page_contents(data)
     if not contents:
@@ -346,10 +352,10 @@ def pdf_pages(path, split=None, landscape_x=620):
             pages.append([])
             continue
         if split is not None and max(x for _, x, _, _ in items) < landscape_x:
-            lines = items_to_lines([it for it in items if it[1] < split]) + \
-                items_to_lines([it for it in items if it[1] >= split])
+            lines = items_to_lines([it for it in items if it[1] < split], sizes=sizes) + \
+                items_to_lines([it for it in items if it[1] >= split], sizes=sizes)
         else:
-            lines = items_to_lines(items)
+            lines = items_to_lines(items, sizes=sizes)
         pages.append(lines)
     return pages
 
