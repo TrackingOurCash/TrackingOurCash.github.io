@@ -99,7 +99,12 @@ ul.grants li b { font-variant-numeric: tabular-nums; }
 .pies { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .pie { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 12px; align-items: center; }
 .pie svg { width: 170px; height: 170px; display: block; }
-.pie .leg { font-size: 12px; display: grid; grid-template-columns: auto 1fr auto; gap: 2px 8px; align-items: center; }
+.pie .leg { font-size: 12px; display: grid; grid-template-columns: auto 1fr auto auto; gap: 2px 8px; align-items: center; }
+.pie .leg .h { color: var(--muted); font-size: 11px; }
+.pcbars { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(90px, auto) 1fr 70px; gap: 3px 8px; align-items: center; font-size: 12px; margin-top: 6px; }
+.pcbars .bar { height: 10px; border-radius: 0 3px 3px 0; min-width: 1px; }
+.pcbars .v { text-align: right; font-variant-numeric: tabular-nums; }
+.pcbars .avg { grid-column: 1 / -1; color: var(--muted); font-size: 11px; }
 .pie .leg .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); white-space: nowrap; }
 .pie h3 { grid-column: 1 / -1; margin: 0; }
 .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
@@ -440,8 +445,10 @@ function budgetSection(n) {
 // ---- pies: who gets it ----
 const SEQ_BLUE = ["#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#256abf", "#1c5cab", "#184f95", "#104281", "#0d366b"];
 function pie(container, title, items, note) {
-  // items: [{label, value, color}], already in the order the slices should run clockwise from 12 o'clock.
+  // items: [{label, value, pop, color}], already in the order the slices should run clockwise from 12 o'clock.
   const total = d3.sum(items, d => d.value) || 1;
+  const totalPop = d3.sum(items, d => d.pop) || 1;
+  const avg = total / totalPop / YEARS;
   const box = container.append("div").attr("class", "pie");
   box.append("h3").text(title);
   const svgp = box.append("svg").attr("viewBox", "0 0 170 170").attr("role", "img").attr("aria-label", title);
@@ -454,23 +461,35 @@ function pie(container, title, items, note) {
     .attr("transform", d => `translate(${arc.centroid(d)})`).attr("text-anchor", "middle").attr("dy", "0.35em")
     .attr("font-size", 10).attr("fill", "#fff").attr("font-weight", 600).text(d => d.data.short || d.data.label);
   const leg = box.append("div").attr("class", "leg");
+  for (const t of ["", "", "share of $", "share of people"]) leg.append("span").attr("class", "h").text(t);
   for (const it of items) {
     leg.append("span").attr("class", "sw").style("background", it.color);
     leg.append("span").text(it.label);
     leg.append("span").attr("class", "n").text(`${fmt$(it.value)} · ${(100 * it.value / total).toFixed(0)}%`);
+    leg.append("span").attr("class", "n").text(`${(100 * it.pop / totalPop).toFixed(0)}%`);
   }
+  // Per resident: the fair comparison, since parties and provinces hold very different populations.
+  const bars = box.append("div").attr("class", "pcbars");
+  const maxPc = d3.max(items, it => it.value / (it.pop || 1) / YEARS) || 1;
+  for (const it of items) {
+    const pc = it.value / (it.pop || 1) / YEARS;
+    bars.append("span").text(it.label);
+    bars.append("div").attr("class", "bar").style("width", `${100 * pc / maxPc}%`).style("background", it.color);
+    bars.append("span").attr("class", "v").text(fmtPc(pc));
+  }
+  bars.append("div").attr("class", "avg").text(`Per resident per year, 2021 population. Average across all ${C.levelPlural}: ${fmtPc(avg)}.`);
   if (note) box.append("div").attr("class", "small muted").style("grid-column", "1 / -1").text(note);
 }
 function renderPies() {
   const el = d3.select("#pies").html("");
-  const byParty = {};
-  for (const n of Object.keys(R)) { const p = R[n].rep_party || "IND"; byParty[p] = (byParty[p] || 0) + V[n].after; }
-  const partyItems = Object.entries(byParty).sort((a, b) => b[1] - a[1]).map(([p, v]) => ({label: PARTY[p] || p, short: p, value: v, color: tint(p, 1)}));
-  pie(el, `By the current ${C.rep}'s party`, partyItems, `Grants since the election, summed over the ${C.levelPlural} each party now holds.`);
+  const byParty = {}, popParty = {};
+  for (const n of Object.keys(R)) { const p = R[n].rep_party || "IND"; byParty[p] = (byParty[p] || 0) + V[n].after; popParty[p] = (popParty[p] || 0) + R[n].population; }
+  const partyItems = Object.entries(byParty).sort((a, b) => b[1] - a[1]).map(([p, v]) => ({label: PARTY[p] || p, short: p, value: v, pop: popParty[p], color: tint(p, 1)}));
+  pie(el, `By the current ${C.rep}'s party`, partyItems, `Grants since the election, summed over the ${C.levelPlural} each party now holds. If money followed people evenly, each party's share of dollars would match its share of people and the per-resident bars would be level.`);
   if (C.regionOrder) {
-    const byRegion = {};
-    for (const n of Object.keys(R)) { const key = C.regionGroup[R[n].region] || R[n].region; byRegion[key] = (byRegion[key] || 0) + V[n].after; }
-    const items = C.regionOrder.filter(r => byRegion[r]).map((r, i) => ({label: r, short: C.regionShort[r] || r, value: byRegion[r], color: SEQ_BLUE[Math.round(i * (SEQ_BLUE.length - 1) / Math.max(1, C.regionOrder.length - 1))]}));
+    const byRegion = {}, popRegion = {};
+    for (const n of Object.keys(R)) { const key = C.regionGroup[R[n].region] || R[n].region; byRegion[key] = (byRegion[key] || 0) + V[n].after; popRegion[key] = (popRegion[key] || 0) + R[n].population; }
+    const items = C.regionOrder.filter(r => byRegion[r]).map((r, i) => ({label: r, short: C.regionShort[r] || r, value: byRegion[r], pop: popRegion[r], color: SEQ_BLUE[Math.round(i * (SEQ_BLUE.length - 1) / Math.max(1, C.regionOrder.length - 1))]}));
     pie(el, "By province", items, "Slices run clockwise from the North: Atlantic on the right, Quebec and Ontario at the bottom, the Prairies and BC on the left.");
   }
   document.getElementById("pieNote").textContent = `${state.dept || C.filterAll}${state.natl && !state.dept ? ", everything included" : ""}; the pies follow the filters above.`;
