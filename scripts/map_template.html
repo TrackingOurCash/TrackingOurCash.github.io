@@ -93,12 +93,13 @@ ul.budget li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12p
 .kpi.debt { border-color: var(--ink); border-width: 2px; }
 .kpi.debt .big { font-size: 32px; }
 .sub-h { font-size: 13px; margin: 6px 0 4px; }
-#compare { margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 8px; }
-#compare summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
-#compare summary::-webkit-details-marker { display: none; }
-#compare .pm { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--axis); border-radius: 4px; align-items: center; justify-content: center; font-size: 14px; color: var(--ink-2); }
-#compare .pm::before { content: "+"; }
-#compare[open] .pm::before { content: "−"; }
+#compare, #history { margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 8px; }
+#compare summary, #history summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
+#compare summary::-webkit-details-marker, #history summary::-webkit-details-marker { display: none; }
+#compare .pm, #history .pm { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--axis); border-radius: 4px; align-items: center; justify-content: center; font-size: 14px; color: var(--ink-2); }
+#compare .pm::before, #history .pm::before { content: "+"; }
+#compare[open] .pm::before, #history[open] .pm::before { content: "−"; }
+#history #historyChart { margin-top: 10px; }
 #compare .fiscbars { margin-top: 10px; }
 .hist { grid-template-columns: 64px 1fr 1fr 110px; }
 .hist .debtbar { position: relative; height: 16px; background: var(--grid); border-radius: 3px; }
@@ -219,8 +220,10 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
     <h2 id="budgetTitle"></h2>
     <p class="small muted" id="budgetSub"></p>
     <div class="kpis" id="kpis"></div>
-    <h3 class="sub-h" id="historyTitle"></h3>
-    <div id="historyChart"></div>
+    <details id="history" hidden>
+      <summary><span class="pm" aria-hidden="true"></span> <span id="historyTitle">Last five years: revenue, spending and the balance</span></summary>
+      <div id="historyChart"></div>
+    </details>
     <details id="compare" hidden>
       <summary><span class="pm" aria-hidden="true"></span> Compare with the other governments, per person</summary>
       <div class="fiscbars" id="fiscbars"></div>
@@ -632,7 +635,8 @@ function renderLegislature() {
         + pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${p[2] >= 0 ? "var(--surplus)" : "var(--deficit)"}"/>`).join("");
       return `<polyline points="${pts.map(p => p.slice(0, 2).join(",")).join(" ")}" fill="none" stroke="${sr.color}" stroke-width="1.2" stroke-dasharray="4 3"/>` + pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${sr.color}"/>`).join("");
     }).join("");
-    document.getElementById("historyTitle").textContent = "Revenue, spending and the balance, year by year ($ billions)";
+    document.getElementById("history").hidden = false;
+    document.getElementById("historyTitle").textContent = "Last five years: revenue, spending and the balance ($ billions)";
     document.getElementById("historyChart").innerHTML = `<svg viewBox="0 0 ${W2} ${H2}" role="img" aria-label="Revenue, spending and balance by year" style="width:100%;height:auto;display:block">
       ${ticks.map(t => `<line x1="${m.l}" x2="${W2 - m.r}" y1="${yS(t)}" y2="${yS(t)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${yS(t)}" dy="0.35em" text-anchor="end" font-size="10" fill="var(--muted)">${t}</text>`).join("")}
       <line x1="${m.l}" x2="${W2 - m.r}" y1="${yS(0)}" y2="${yS(0)}" stroke="var(--ink)" stroke-width="1.2"/>
