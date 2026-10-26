@@ -963,7 +963,7 @@ function openFromHash() {
 }
 window.addEventListener("hashchange", openFromHash);
 // CSV of the table as filtered: one row per riding, the live numbers (department filter and "include" box respected).
-document.getElementById("csvBtn").onclick = () => {
+document.getElementById("csvBtn").onclick = async () => {
   const q = state.q.toLowerCase();
   const ns = Object.keys(R).filter(n => (!state.closeOnly || R[n].close) && (!q || (R[n].name + " " + R[n].rep + " " + R[n].region).toLowerCase().includes(q)));
   const head = ["key", C.levelTitle, C.regionTitle, "population", C.rep, "party", `winner_${C.electionYear}`, "runner_up", "margin_votes", "margin_pts", "close", "cabinet", "group",
@@ -972,8 +972,16 @@ document.getElementById("csvBtn").onclick = () => {
   const rows = ns.map(n => { const r = R[n], v = V[n]; return [n, r.name, r.region, r.population, r.rep, r.rep_party, r.party_won, r.runnerup_party, r.margin_votes, r.margin_pts, r.close ? "yes" : "no",
     r.minister ? r.minister.title : "", r.group, Math.round(v.after), Math.round(v.before), v.pc.toFixed(2), v.pcb.toFixed(2), v.chg == null ? "" : v.chg.toFixed(1), state.dept ? "" : (state.natl ? r.after_n : r.after_adj_n)].map(esc).join(","); });
   const note = `# ${C.title}; ${state.dept || C.filterAll}; ${state.natl ? "flagged bodies included" : "adjusted totals"}; windows ${M.before_start || ""} to ${M.before_end || ""} and ${M.election} to ${M.cutoff}; generated ${M.generated || ""}`;
-  const blob = new Blob(["\ufeff" + note + "\n" + head.join(",") + "\n" + rows.join("\n")], {type: "text/csv;charset=utf-8"});
-  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = (C.title || "ridings").toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".csv"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  const csv = "\ufeff" + note + "\n" + head.join(",") + "\n" + rows.join("\n");
+  const filename = (C.title || "ridings").toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".csv";
+  // On claude.ai the page must hand the file over through the viewer's downloads capability; on the website a plain download works.
+  const dl = window.claude && claude.use ? await claude.use("downloads") : null;
+  if (dl) {
+    try { await dl.save({filename, data: csv}); } catch (e) { if (e && e.code !== "declined") alert("The download could not be offered here (" + (e.code || "unavailable") + ")."); }
+    return;
+  }
+  const blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 };
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { applyPartyColors(); render(); });
 const themeBtn = document.getElementById("theme");
