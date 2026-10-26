@@ -17,7 +17,7 @@ if [[ ! -f data/raw/geonames/CA_full.txt ]]; then
   unzip -o -q data/raw/geonames/CA_full.csv.zip -d data/raw/geonames
 fi
 mkdir -p data/raw/ne
-for f in ne_10m_admin_0_countries ne_10m_lakes ne_10m_rivers_lake_centerlines; do
+for f in ne_10m_admin_0_countries ne_10m_lakes ne_10m_rivers_lake_centerlines ne_10m_urban_areas; do
   [[ -f data/raw/ne/$f.geojson ]] || curl -sSL -o data/raw/ne/$f.geojson "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/$f.geojson"
 done
 
@@ -59,6 +59,10 @@ if python3 scripts/nb_prep.py && python3 scripts/nb_spending.py > data/nb/summar
 if python3 scripts/pe_prep.py && python3 scripts/fed_prov_spending.py pe > data/pe/summary.json; then :; else echo "PEI layer skipped"; fi
 # Ontario layer
 if python3 scripts/on_prep.py && python3 scripts/on_spending.py > data/on/summary.json; then :; else echo "ON layer skipped"; fi
+# Nova Scotia layer (archived Public Accounts supplements; the live site refuses connections)
+if python3 scripts/ns_prep.py && python3 scripts/ns_spending.py > data/ns/summary.json; then :; else echo "NS layer skipped"; fi
 # Quebec layer (federal grants on the 2026 ridings; Quebec publishes no payee list either)
 if python3 scripts/qc_prep.py && python3 scripts/fed_prov_spending.py qc > data/qc/summary.json; then :; else echo "QC layer skipped"; fi
+# Newfoundland and Labrador layer (federal grants on the provincial districts; NL publishes no payee list)
+if python3 scripts/nl_prep.py && python3 scripts/fed_prov_spending.py nl > data/nl/summary.json; then :; else echo "NL layer skipped"; fi
 python3 scripts/build_map.py

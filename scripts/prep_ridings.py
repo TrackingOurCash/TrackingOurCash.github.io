@@ -297,9 +297,18 @@ def load_land():
         lines = [[[round(x, 4), round(y, 4)] for x, y in simplify(line, 0.001)] for line in lines if len(line) > 1]
         out["features"].append({"type": "Feature", "properties": {"kind": "river", "name": f["properties"].get("name")},
                                 "geometry": {"type": "MultiLineString", "coordinates": lines}})
+    # Built-up areas (Natural Earth urban areas) inside the inset boxes: the town itself, for cities
+    # whose municipality is a vast rural one (Fort McMurray inside Wood Buffalo) or has no outline.
+    urban_path = RAW / "ne" / "ne_10m_urban_areas.geojson"
+    if urban_path.exists():
+        for f in json.load(open(urban_path))["features"]:
+            if in_inset(f["geometry"]):
+                polys = clean_polygons(polys_of(f["geometry"]), 0.001, 0.003)
+                if polys:
+                    out["features"].append({"type": "Feature", "properties": {"kind": "urban"}, "geometry": {"type": "MultiPolygon", "coordinates": polys}})
     # Municipal outlines (census subdivisions) fetched by fetch_csd.py, when present.
     for path in sorted((RAW / "csd").glob("*.json")) if (RAW / "csd").exists() else []:
-        if path.name == "index.json":
+        if path.name in ("index.json", "boxes.json"):
             continue
         c = json.load(open(path))
         if not in_inset(c["shape"]) or span(c["shape"]) > 3:

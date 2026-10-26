@@ -3,6 +3,7 @@ that publish no payee list of their own.
 
   python3 fed_prov_spending.py pe     Prince Edward Island (27 districts)
   python3 fed_prov_spending.py qc     Quebec (127 ridings of the 2026 map)
+  python3 fed_prov_spending.py nl     Newfoundland and Labrador (40 districts)
 
 PEI's Public Accounts Volume II and Quebec's Comptes publics Volume 2 itemise transfers by
 department, program and beneficiary *category* ("Operating Grant", "Pharmacare",
@@ -41,6 +42,11 @@ from geo import RidingIndex, load_centroids  # noqa: E402
 PROFILES = {
     "pe": {"dir": "pe", "prov": "PE", "postal": "C", "year": "2023", "gov": "PC", "opp": "opposition", "provincial_election": "2023-04-03",
            "multi_city": ["Charlottetown", "Summerside", "Stratford", "Cornwall"]},
+    "nl": {"dir": "nl", "prov": "NL", "postal": "A", "year": "2025", "gov": "PC", "opp": "opposition", "provincial_election": "2025-10-14",
+           "multi_city": ["St. John's", "Mount Pearl", "Conception Bay South", "Paradise", "Corner Brook"]},
+    "yt": {"dir": "yt", "prov": "YT", "postal": "Y", "year": "2025", "gov": "YP", "opp": "opposition", "provincial_election": "2025-11-03", "multi_city": ["Whitehorse"]},
+    "nt": {"dir": "nt", "prov": "NT", "postal": "X", "year": "2023", "gov": "IND", "opp": "opposition", "provincial_election": "2023-11-14", "multi_city": ["Yellowknife"]},
+    "nu": {"dir": "nu", "prov": "NU", "postal": "X", "year": "2025", "gov": "IND", "opp": "opposition", "provincial_election": "2025-10-27", "multi_city": ["Iqaluit"]},
     "qc": {"dir": "qc", "prov": "QC", "postal": "GHJ", "year": "2026", "gov": "PQ", "opp": "opposition", "provincial_election": "2026-10-05",
            "multi_city": ["Montréal", "Québec", "Laval", "Gatineau", "Longueuil", "Sherbrooke", "Lévis", "Saguenay", "Trois-Rivières", "Terrebonne",
                           "Repentigny", "Brossard", "Saint-Jean-sur-Richelieu", "Drummondville", "Saint-Jérôme", "Granby", "Blainville", "Mirabel", "Châteauguay"]},
@@ -68,7 +74,7 @@ def main():
             if None in row or row.get("owner_org_title") is None:
                 continue
             pc = clean_postal(row["recipient_postal_code"])
-            if row["recipient_province"] != P["prov"] and not (pc and pc[0] in P["postal"]):
+            if row["recipient_province"] != P["prov"] and not (pc and pc[0] in P["postal"] and P["postal"] != "X"):
                 continue
             bn = "".join(ch for ch in (row["recipient_business_number"] or "") if ch.isdigit())[:9]
             if pc:

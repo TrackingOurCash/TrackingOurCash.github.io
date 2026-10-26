@@ -14,13 +14,14 @@ OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
        {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"},
-       {"href": "pei.html", "label": "PEI"}, {"href": "ontario.html", "label": "Ontario"}, {"href": "quebec.html", "label": "Quebec"}]
+       {"href": "pei.html", "label": "PEI"}, {"href": "ontario.html", "label": "Ontario"}, {"href": "quebec.html", "label": "Quebec"}, {"href": "ns.html", "label": "Nova Scotia"}, {"href": "nl.html", "label": "Newfoundland"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
                  "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv",
                  "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R", "pei.html": "https://claude.ai/artifact/X4239bKZYyxRcX8ozVVZHQ",
-                 "ontario.html": "https://claude.ai/artifact/JXkiRVQspJBViHHJ2MDcYL", "quebec.html": "https://claude.ai/artifact/YCvZDpg18q9rNjVfrG1nGz"}
+                 "ontario.html": "https://claude.ai/artifact/JXkiRVQspJBViHHJ2MDcYL", "quebec.html": "https://claude.ai/artifact/YCvZDpg18q9rNjVfrG1nGz",
+                 "ns.html": "https://claude.ai/artifact/KZKpkXpFKx5vSGPxYMrDPX"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -71,7 +72,7 @@ def land_for(insets):
         if max(x1 - x0, y1 - y0) > 3:
             return False  # a vast rural subdivision whose box happens to cover a city
         return any(x1 > w and x0 < e and y1 > so and y0 < n for w, so, e, n in boxes)
-    land["features"] = [f for f in land["features"] if f["properties"]["kind"] not in ("muni", "lake_small", "river") or near(f["geometry"])]
+    land["features"] = [f for f in land["features"] if f["properties"]["kind"] not in ("muni", "lake_small", "river", "urban") or near(f["geometry"])]
     return land
 
 
@@ -334,6 +335,35 @@ PROVINCES = {
                     ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
                     ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_New_Brunswick_provincial_electoral_districts")],
     },
+    "ns": {
+        "dir": "ns", "year": "2024", "region": "Nova Scotia", "title": "Where Nova Scotia's grants went around the 2024 election",
+        "electionLabel": "the 26 November 2024 election", "count": 56, "gov": "PC",
+        "parties": {"PC": {"name": "Progressive Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
+                    "LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"}, "GRN": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"},
+                    "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["PC", "NDP", "LIB"], "opp": "opposition",
+        "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2024; "opposition" covers the NDP, Liberals and the independent. Chéticamp-Margarees-Pleasant Bay, created in 2026, is grouped by its June 2026 by-election.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "beforeLabel": "Fiscal year before the election (2023-24)",
+        "includeLabel": "Include province-wide bodies (Nova Scotia Health, IWK, universities, NSCC, regional centres for education) & multi-district municipalities",
+        "projection": {"parallels": [44, 47], "rotate": [63, 0]},
+        "insets": [["Halifax", [-63.85, 44.55, -63.4, 44.85]], ["Sydney", [-60.3, 46.05, -60.1, 46.2]], ["Truro", [-63.35, 45.33, -63.2, 45.4]]],
+        "source": "Nova Scotia Public Accounts, Volume 3 (Supplement to the Public Accounts): every grant and contribution and every supplier of $5,000 or more, listed by department with no address, program or date; read from the Internet Archive's copies because the province's notices site refuses connections.",
+        "windowNote": "The 2025-26 volume is published late in the following year, so \"after\" is fiscal 2024-25, which straddles the election (eight months before it, four after), and \"before\" is fiscal 2023-24; the page switches to 2025-26 automatically when that volume appears",
+        "placing": "Nova Scotia publishes payee names only. Each was matched by name to a postal code in the federal grants file or the CRA charity list, to the province's long-term care and child care directories, to a municipality or First Nation, or to a place name inside its own name, then located in a district. The volume's \"Other\" section (goods and services) is flagged as suppliers and left out of the default view, as are obvious suppliers among the grants.",
+        "individualNote": "payments to individuals",
+        "leftOut": "province-wide bodies booked at a head office (Nova Scotia Health, the IWK, universities and NSCC, regional centres for education, VON, Crown corporations), the regional, county and district municipalities that span several districts, suppliers of goods and services, the province paying its own departments, tax credits and other program totals with no named payee, and bodies outside the province",
+        "boundaryNote": "the 56 districts in force since April 2026 (the 55 of the 2019 commission used in 2024, plus Chéticamp-Margarees-Pleasant Bay, carved out of Inverness and filled at a June 2026 by-election; Inverness keeps its 2024 result). No census population exists for them, so \"per person\" here means per elector on the 2024 final list, scaled to Statistics Canada's July 2026 estimate for Nova Scotia.",
+        "sources": [("Nova Scotia Public Accounts, Volume 3 - Supplement to the Public Accounts (Internet Archive copy)", "https://web.archive.org/web/2026/https://notices.novascotia.ca/files/public-accounts/2025/pa-supplementary-2025.pdf"),
+                    ("Elections Nova Scotia 2024 poll-by-poll results", "https://electionsnovascotia.ca/files/GeneralElection_42nd/42PGE_PollbyPoll_AllEDs_TurnOut_FINAL.xlsx"),
+                    ("Elections Nova Scotia (by-election reports, district boundaries 2026)", "https://electionsnovascotia.ca/"),
+                    ("Nova Scotia House of Assembly member list", "https://nslegislature.ca/members/profiles"),
+                    ("Long-term care and child care directories (Nova Scotia open data)", "https://data.novascotia.ca/"),
+                    ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
+                    ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Nova_Scotia_provincial_electoral_districts")],
+    },
     # PEI publishes no payee list, so its page shows the federal grants that land in each provincial district (pe_spending.py).
     "pei": {
         "dir": "pe", "year": "2023", "region": "Prince Edward Island",  # canadaspends.com has no PEI page yet
@@ -470,7 +500,7 @@ PROVINCES = {
 
 LEVEL = {"alberta": ("division", "divisions"), "bc": ("district", "districts"), "saskatchewan": ("constituency", "constituencies"),
          "manitoba": ("division", "divisions"), "nb": ("district", "districts"), "pei": ("district", "districts"),
-         "ontario": ("riding", "ridings"), "quebec": ("riding", "ridings")}
+         "ontario": ("riding", "ridings"), "quebec": ("riding", "ridings"), "ns": ("district", "districts"), "nl": ("district", "districts")}
 
 
 def provincial(key):
@@ -502,7 +532,7 @@ def provincial(key):
         "ministers": minfo and {"head": minfo.get("head"), "source": minfo.get("source"), "note": minfo.get("note"), "as_of": json.load(open(DATA / "ministers.json"))["as_of"], "govParty": P["gov"]},
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
         "rep": rep, "electionYear": y, "spendsUrl": P.get("spendsUrl"),
-        "popLabel": P["popLabel"].format(pop_date=pop_label()[1]) if P.get("popLabel") else "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
+        "popLabel": P["popLabel"].format(pop_date=pop_label()[1]) if P.get("popLabel") else "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key in ("nb", "ns") else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": P.get("flags") or {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
         "filterAll": P["filterAll"], "filterOptions": m["programs"],
@@ -533,6 +563,7 @@ def provincial(key):
             f"<b>Boundaries:</b> {P['boundaryNote']}",
             ("<b>Population:</b> no census count exists for these constituencies, so per-person figures are per registered voter at the 2024 election." if key == "saskatchewan" else
              f"<b>Population:</b> no census count exists for these districts, so per-person figures use the boundary commission's estimated electors per district, scaled to Statistics Canada's {pop_label()[1]} estimate for New Brunswick." if key == "nb" else
+             f"<b>Population:</b> no census count exists for these districts, so per-person figures use the electors on the 2024 final list, scaled to Statistics Canada's {pop_label()[1]} estimate for Nova Scotia." if key == "ns" else
              f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: the boundary commission's 2016 census count for each division, scaled by Manitoba's growth since then from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key == "manitoba" else
              f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each riding's 2021 census count (the federal district's for 111 ridings, census subdivisions summed for the 13 northern ones) scaled by Ontario's growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key == "ontario" else
              f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each {LEVEL[key][0]}'s 2021 census count scaled by {P['region']}'s growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province."),
@@ -540,7 +571,7 @@ def provincial(key):
         ],
     }
     fp = json.load(open(DATA / "formula_programs.json")) if (DATA / "formula_programs.json").exists() else None
-    flevel = {"pei": "federal", "quebec": "federal"}.get(key, key)
+    flevel = {"pei": "federal", "quebec": "federal", "nl": "federal"}.get(key, key)
     if fp and flevel in fp["levels"] and any("after_formula" in r for r in sp["ridings"].values()):
         lv = fp["levels"][flevel]
         config["formula"] = {"by": lv["by"], "note": fp["note"], "examples": [e["why"] for e in lv["formula"][:6]], "as_of": fp["as_of"]}

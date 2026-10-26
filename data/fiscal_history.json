@@ -531,6 +531,301 @@
      "source": "https://www.finances.gouv.qc.ca/Budget_et_mise_a_jour/budget/documents/Budget2627_PlanBudgetaire.pdf"
     }
    ]
+  },
+  "Nova Scotia": {
+   "basis": "Consolidated financial statements of the Province (Public Accounts Volume 1); balance = Provincial Surplus (Deficit); net debt at 31 March. Nova Scotia's figures are small, so values are given to two decimals in $ billions. 2021-22 to 2025-26 are the audited, as-restated five-year series in Public Accounts 2025-26 Vol. 1 (released 24 Sep 2026; $K: 2021-22 +338,639 / 17,155,246 / 14,047,650 / 13,709,011; 2022-23 +122,805 / 17,743,504 / 15,589,233 / 15,466,428; 2023-24 +141,741 / 19,100,212 / 16,504,370 / 16,362,629; 2024-25 +264,788 / 20,843,600 / 18,220,679 / 17,955,891; 2025-26 -1,407,039 / 24,096,694 / 17,979,862 / 19,386,901). Finance Canada's Fiscal Reference Tables 2025 (Table 20) report identical balances and net debt for 2021-22 to 2024-25 but lower revenue and expense (12,675/12,847; 14,082/14,544; 15,023/15,679; 16,683/17,278) because that table is on a non-consolidated General Revenue Fund basis that excludes GBE net income and consolidation adjustments; the consolidated figures are used here. 2024-25 onward include the long-term-care accounting change that added about $0.9B to net debt in 2024-25 and about $1.4-1.5B by 2026-27. 2026-27 is Budget 2026-27 (23 Feb 2026) Table 2.1/2.3: General Revenue Fund Total Revenues 17,354.3 and Total Expenses 18,932.2 ($M), which are NOT fully consolidated totals (the budget presents a separate +386.9 Consolidation and Accounting Adjustments line, included in the balance but not in revenue/expense, so the 2026-27 revenue and expense are not strictly comparable with the actual rows); balance -1,240.9 and net debt 27,995 are after the $50M contingency (-1,190.9 and 27,945 before; net debt-to-GDP 39.4% before contingency). The 24 Sep 2026 forecast update revised the 2026-27 deficit to -1,440.3 before / -1,490.3 after contingency (revenue 17,357.0, expenses 19,193.7) and is not used here. The 2025-26 budget-year forecast in Budget 2026-27 was -1,249.1; the audited result was -1,407.0",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": 0.34,
+     "net_debt_billions": 17.16,
+     "revenue_billions": 14.05,
+     "expense_billions": 13.71,
+     "status": "actual",
+     "source": "https://notices.novascotia.ca/files/public-accounts/2026/pa-volume-1-financial-statements-2026.pdf"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": 0.12,
+     "net_debt_billions": 17.74,
+     "revenue_billions": 15.59,
+     "expense_billions": 15.47,
+     "status": "actual",
+     "source": "https://notices.novascotia.ca/files/public-accounts/2026/pa-volume-1-financial-statements-2026.pdf"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": 0.14,
+     "net_debt_billions": 19.1,
+     "revenue_billions": 16.5,
+     "expense_billions": 16.36,
+     "status": "actual",
+     "source": "https://notices.novascotia.ca/files/public-accounts/2026/pa-volume-1-financial-statements-2026.pdf"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": 0.26,
+     "net_debt_billions": 20.84,
+     "revenue_billions": 18.22,
+     "expense_billions": 17.96,
+     "status": "actual",
+     "source": "https://notices.novascotia.ca/files/public-accounts/2026/pa-volume-1-financial-statements-2026.pdf"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": -1.41,
+     "net_debt_billions": 24.1,
+     "revenue_billions": 17.98,
+     "expense_billions": 19.39,
+     "status": "actual",
+     "source": "https://notices.novascotia.ca/files/public-accounts/2026/pa-volume-1-financial-statements-2026.pdf"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": -1.24,
+     "net_debt_billions": 28.0,
+     "revenue_billions": 17.35,
+     "expense_billions": 18.93,
+     "status": "forecast",
+     "source": "https://www.novascotia.ca/sites/default/files/documents/6-4173/ftb-bfi-046-en-budget-2026-2027.pdf"
+    }
+   ]
+  },
+  "Newfoundland and Labrador": {
+   "basis": "Consolidated summary financial statements (Public Accounts Volume I); balance = annual surplus (deficit); net debt = liabilities less financial assets at 31 March, as the Province reports it. Figures are small, so values are given to two decimals in $ billions. 2021-22 to 2024-25 are Finance Canada Fiscal Reference Tables 2025 (Table 18, $M: 2021-22 -277.3 / 16,915.1 / 8,589.4 / 8,866.7; 2022-23 +321.4 / 16,503.7 / 10,190.2 / 9,868.8; 2023-24 -459.0 / 17,666.5 / 9,630.2 / 10,089.2; 2024-25 -296.6 / 18,435.9 / 10,365.3 / 10,661.9), which are identical to the five-year series in Public Accounts 2025-26. 2025-26 is the audited Public Accounts 2025-26 Volume I (tabled 16 Oct 2026; $K: deficit -377,547 / net debt 19,015,144 / revenue 11,091,027 / expense 11,468,574), versus the Budget 2026 revised forecast of -729.0 and 19,543.5. 2026-27 is Budget 2026 (29 Apr 2026) Statements and Schedules, Statements I and II: total revenue 10,837.7 (incl. net income of GBEs 393.9), total expense 11,526.2, annual deficit -688.5, net debt 20,844.3 ($M); no contingency line. Revenue and expense include net income of government business enterprises",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": -0.28,
+     "net_debt_billions": 16.92,
+     "revenue_billions": 8.59,
+     "expense_billions": 8.87,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": 0.32,
+     "net_debt_billions": 16.5,
+     "revenue_billions": 10.19,
+     "expense_billions": 9.87,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": -0.46,
+     "net_debt_billions": 17.67,
+     "revenue_billions": 9.63,
+     "expense_billions": 10.09,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": -0.3,
+     "net_debt_billions": 18.44,
+     "revenue_billions": 10.37,
+     "expense_billions": 10.66,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": -0.38,
+     "net_debt_billions": 19.02,
+     "revenue_billions": 11.09,
+     "expense_billions": 11.47,
+     "status": "actual",
+     "source": "https://www.gov.nl.ca/exec/tbs/files/Consolidated-Summary-Financial-Statements-March-31-2026-Web.pdf"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": -0.69,
+     "net_debt_billions": 20.84,
+     "revenue_billions": 10.84,
+     "expense_billions": 11.53,
+     "status": "forecast",
+     "source": "https://www.gov.nl.ca/budget/2026/wp-content/uploads/sites/10/Statements-and-Schedules-2026.pdf"
+    }
+   ]
+  },
+  "Yukon": {
+   "basis": "Small numbers, so two decimals in $ billions. 2021-22 to 2024-25 are the audited CONSOLIDATED financial statements (Public Accounts, government reporting entity incl. Yukon University, Yukon Housing, Yukon Hospital, Yukon Development and Yukon Liquor corporations), as restated: balance = annual surplus (deficit); the 'net debt' field holds Yukon's 'Net Financial Assets (Debt)' with the sign flipped, so a NEGATIVE value means net financial assets ($K: 2021-22 +52,618 / NFA +98,881 / 1,767,827 / 1,715,209; 2022-23 +122,863 / NFA +10,743 / 1,910,077 / 1,787,214; 2023-24 -3,231 / net debt 196,055 / 2,003,410 / 2,006,641; 2024-25 +175,007 / net debt 227,160 / 2,228,394 / 2,053,387; expenses net of recovery of prior years' expenses). Finance Canada's Fiscal Reference Tables 2025 Table 28 is non-consolidated (net debt 155 / 259 / 495.5 / 608 interim, $M) and is not used. Public Accounts 2025-26 had not been published by 26 Oct 2026 (2024-25's appeared 31 Oct 2025). The 2025-26 and 2026-27 rows are therefore on the Government of Yukon NON-CONSOLIDATED (departmental Main Estimates) basis, which carries more net debt than the consolidated entity (non-consolidated net debt 528.8 at 31 Mar 2025 vs consolidated 227.2): 2025-26 is the 2025-26 Supplementary Estimates No. 2 financial summary (Oct 2026): revenue 2,186.2, expenses 2,173.7, surplus 12.5, net debt 677.7 ($M); 2026-27 is Budget 2026-27 / Main Estimates tabled 19 Mar 2026: accounting deficit 81.8 and net debt 804.2 ($M), total borrowing 1,168; its accounting-basis revenue and expense totals sit in the Main Estimates financial summary on yukon.ca, which could not be retrieved (Cloudflare bot check), so they are left null. For comparison the consolidated budget estimate for 2025-26 (Mar 2025) was revenue 2,153.4, expenses 2,055.7, surplus 97.8, net debt 281.3",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": 0.05,
+     "net_debt_billions": -0.1,
+     "revenue_billions": 1.77,
+     "expense_billions": 1.72,
+     "status": "actual",
+     "source": "https://open.yukon.ca/information/08cc9dc0-7834-40cb-b0e3-d841807643fe/resource/2c72dba1-c10c-33b5-a36c-47736a6d1fc0/download/fin-2022-23-public-accounts-financial-statement-discussion-and-analysis.pdf"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": 0.12,
+     "net_debt_billions": -0.01,
+     "revenue_billions": 1.91,
+     "expense_billions": 1.79,
+     "status": "actual",
+     "source": "https://open.yukon.ca/information/39ba17b8-8dc4-42f6-85f8-74aa18115e5a/resource/110e2abc-e574-3e05-9d68-00bed776b759/download/fin-2023-24-public-accounts_1.pdf"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": -0.0,
+     "net_debt_billions": 0.2,
+     "revenue_billions": 2.0,
+     "expense_billions": 2.01,
+     "status": "actual",
+     "source": "https://open.yukon.ca/information/25581eb9-a0b5-4038-9568-b2588e861fbb/resource/a94d4e23-9992-4a9b-aea6-138844ec6141/download/fin-2024-25-public-accounts.pdf"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": 0.18,
+     "net_debt_billions": 0.23,
+     "revenue_billions": 2.23,
+     "expense_billions": 2.05,
+     "status": "actual",
+     "source": "https://open.yukon.ca/information/25581eb9-a0b5-4038-9568-b2588e861fbb/resource/a94d4e23-9992-4a9b-aea6-138844ec6141/download/fin-2024-25-public-accounts.pdf"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": 0.01,
+     "net_debt_billions": 0.68,
+     "revenue_billions": 2.19,
+     "expense_billions": 2.17,
+     "status": "forecast",
+     "source": "https://open.yukon.ca/information/644f8f82-fc1f-4e8e-9a7f-568100d4bb10/resource/4604a1b8-13fe-4375-b04a-f85937241e02/download/fin-2025-26-budget-supp-2-financial-summary.pdf"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": -0.08,
+     "net_debt_billions": 0.8,
+     "revenue_billions": null,
+     "expense_billions": null,
+     "status": "forecast",
+     "source": "https://yukon.ca/en/news/budget-2026-begins-road-fiscal-recovery"
+    }
+   ]
+  },
+  "Northwest Territories": {
+   "basis": "Small numbers, so two decimals in $ billions. 2021-22 to 2024-25 are the audited CONSOLIDATED financial statements (Public Accounts Section I), from the ten-year key-indicator table in the 2024-25 Public Accounts financial highlights, which includes later revisions: balance = annual operating surplus (deficit); net debt = liabilities less financial assets, which the GNWT does report as net debt ($M: 2021-22 +59 / 1,510 / 2,635 / 2,576; 2022-23 +106 / 1,599 / 2,804 / 2,698; 2023-24 -16.8 / 1,742 / 2,999.96 / 3,016.79; 2024-25 +46.3 / 1,836 / 3,083.56 / 3,037.27). Finance Canada's Fiscal Reference Tables 2025 Table 29 is non-consolidated (net debt 1,107 / 1,158 / 1,211 / n.a.) and is not used. Public Accounts 2025-26 had not been published by 26 Oct 2026. The 2025-26 and 2026-27 rows are the GNWT's own NON-CONSOLIDATED operating budget, from the Budget 2026-27 Fiscal Review (tabled 5 Feb 2026) medium-term outlook: 2025-26 revised projection revenue 2,659, operating expenditures 2,650, operating surplus 9 (budget had been 172); 2026-27 Main Estimates revenue 2,743, expenditures 2,723 incl. a 210 supplementary reserve, operating surplus 20 ($M). The GNWT budget reports only TOTAL debt against its federal borrowing limit (1,888 at 31 Mar 2026, 2,211 at 31 Mar 2027, limit 3,100), not net debt, so net_debt_billions is null for those rows. The separate 2026-27 Consolidated Budget (tabled 29 May 2026) gives the government reporting entity's planned revenue 3,128.5, expenses 2,894.8 and surplus 233.7 for 2026-27 (2025-26 original consolidated budget 3,020.7 / 2,820.2 / 200.5), without a net debt figure; those are not used because no revised consolidated forecast exists",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": 0.06,
+     "net_debt_billions": 1.51,
+     "revenue_billions": 2.64,
+     "expense_billions": 2.58,
+     "status": "actual",
+     "source": "https://www.fin.gov.nt.ca/sites/fin/files/resources/2024-2025_public_accounts_-_financial_highlights.pdf"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": 0.11,
+     "net_debt_billions": 1.6,
+     "revenue_billions": 2.8,
+     "expense_billions": 2.7,
+     "status": "actual",
+     "source": "https://www.fin.gov.nt.ca/sites/fin/files/resources/2024-2025_public_accounts_-_financial_highlights.pdf"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": -0.02,
+     "net_debt_billions": 1.74,
+     "revenue_billions": 3.0,
+     "expense_billions": 3.02,
+     "status": "actual",
+     "source": "https://www.fin.gov.nt.ca/sites/fin/files/resources/2024-2025_public_accounts_-_financial_highlights.pdf"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": 0.05,
+     "net_debt_billions": 1.84,
+     "revenue_billions": 3.08,
+     "expense_billions": 3.04,
+     "status": "actual",
+     "source": "https://www.fin.gov.nt.ca/sites/fin/files/resources/2024-2025_public_accounts_-_financial_highlights.pdf"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": 0.01,
+     "net_debt_billions": null,
+     "revenue_billions": 2.66,
+     "expense_billions": 2.65,
+     "status": "forecast",
+     "source": "https://www.fin.gov.nt.ca/sites/fin/files/budget_2026-27_fiscal_review_paper.pdf"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": 0.02,
+     "net_debt_billions": null,
+     "revenue_billions": 2.74,
+     "expense_billions": 2.72,
+     "status": "forecast",
+     "source": "https://www.fin.gov.nt.ca/sites/fin/files/budget_2026-27_fiscal_review_paper.pdf"
+    }
+   ]
+  },
+  "Nunavut": {
+   "basis": "Small numbers, so two decimals in $ billions. 2021-22 to 2024-25 are the audited CONSOLIDATED financial statements (Public Accounts Section II, government reporting entity incl. Nunavut Housing Corp., Qulliq Energy, Nunavut Arctic College), 2021-22 as restated in the 2022-23 accounts: balance = surplus for the year; Nunavut reports NET FINANCIAL ASSETS, not net debt, so net_debt_billions is stored NEGATIVE ($K: 2021-22 +263,460 / NFA 375,315 / 2,816,745 / 2,553,285; 2022-23 +167,299 / NFA 527,630 / 2,934,467 / 2,767,168; 2023-24 +352,092 / NFA 735,788 / 3,305,019 / 2,952,927; 2024-25 +196,930 / NFA 742,031 / 3,470,736 / 3,273,806). Finance Canada's Fiscal Reference Tables 2025 Table 30 is non-consolidated with a 2024-25 interim (net debt -603 / -632 / -757.6 / -500.7) and is not used. Public Accounts 2025-26 had not been tabled by 26 Oct 2026. The 2025-26 and 2026-27 rows are the Government of Nunavut's NON-CONSOLIDATED Main Estimates 2026-27 (Budget tabled 25 May 2026), Summary of Operations and Summary of Changes in Net Financial Assets (Debt): 2025-26 revised estimates revenue (net) 3,245.5, operations expenses 3,408.2 plus 150.0 projected supplementary requirements = 3,558.2, operating deficit -312.7, net financial assets 456.9; 2026-27 revenue 3,503.1, expenses 3,497.4 plus 175.0 contingency = 3,672.4, operating deficit -169.3, net financial assets 274.6 ($M). The non-consolidated entity holds more net financial assets than the consolidated one (835.1 vs 742.0 at 31 Mar 2025), so the last two rows are not strictly comparable with the actuals. The 2026-27 Consolidated Budget listed on gov.nu.ca could not be retrieved (Cloudflare bot check); the 2025-26 Consolidated Budget (Sep 2025) had planned revenue 3,435.9, expenses 3,499.2, deficit -63.3 and net financial assets 617.8",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": 0.26,
+     "net_debt_billions": -0.38,
+     "revenue_billions": 2.82,
+     "expense_billions": 2.55,
+     "status": "actual",
+     "source": "https://assembly.nu.ca/sites/default/files/2024-05/2022-23%20Public%20Accounts%20with%20FSDA_en%20May%207%20Signed.pdf"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": 0.17,
+     "net_debt_billions": -0.53,
+     "revenue_billions": 2.93,
+     "expense_billions": 2.77,
+     "status": "actual",
+     "source": "https://www.assembly.nu.ca/sites/default/files/2025-02/TD-346-6%282%29-EN-2023-24%20Public%20Accounts.pdf"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": 0.35,
+     "net_debt_billions": -0.74,
+     "revenue_billions": 3.31,
+     "expense_billions": 2.95,
+     "status": "actual",
+     "source": "https://www.assembly.nu.ca/sites/default/files/2026-03/TD-002-7%281%29-EN-2024-25_Public_Accounts_of_Nunavut.pdf"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": 0.2,
+     "net_debt_billions": -0.74,
+     "revenue_billions": 3.47,
+     "expense_billions": 3.27,
+     "status": "actual",
+     "source": "https://www.assembly.nu.ca/sites/default/files/2026-03/TD-002-7%281%29-EN-2024-25_Public_Accounts_of_Nunavut.pdf"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": -0.31,
+     "net_debt_billions": -0.46,
+     "revenue_billions": 3.25,
+     "expense_billions": 3.56,
+     "status": "forecast",
+     "source": "https://www.gov.nu.ca/sites/default/files/documents/2026-05/Main_Estimates_2026_2027_ENG.pdf"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": -0.17,
+     "net_debt_billions": -0.27,
+     "revenue_billions": 3.5,
+     "expense_billions": 3.67,
+     "status": "forecast",
+     "source": "https://www.gov.nu.ca/sites/default/files/documents/2026-05/Main_Estimates_2026_2027_ENG.pdf"
+    }
+   ]
   }
  }
 }

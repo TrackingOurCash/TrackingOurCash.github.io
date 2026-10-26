@@ -35,6 +35,12 @@ INSETS = [
     [-63.21, 46.22, -63.07, 46.31], [-63.85, 46.38, -63.71, 46.43],
     # Ontario-page inset that isn't a federal one (Windsor); Quebec-page insets beyond Montréal and Québec.
     [-83.15, 42.22, -82.85, 42.38], [-75.95, 45.4, -75.6, 45.55], [-72.0, 45.33, -71.8, 45.45], [-72.7, 46.3, -72.5, 46.42], [-71.3, 48.35, -70.95, 48.5],
+    # Nova Scotia-page insets beyond Halifax; Newfoundland's Corner Brook (St. John's is a federal inset).
+    [-60.3, 46.05, -60.1, 46.2], [-63.35, 45.33, -63.2, 45.4], [-58.0, 48.9, -57.85, 48.98],
+    # Manitoba's Brandon and the three New Brunswick cities (never federal insets).
+    [-100.05, 49.78, -99.85, 49.9], [-64.9, 46.03, -64.65, 46.17], [-66.2, 45.2, -65.95, 45.35], [-66.75, 45.88, -66.55, 46.0],
+    # Territorial capitals.
+    [-135.2, 60.65, -134.9, 60.8], [-114.45, 62.42, -114.3, 62.5], [-68.6, 63.72, -68.45, 63.78],
 ]
 
 
@@ -75,7 +81,30 @@ def main():
         index[num] = [{"id": o["external_id"], "name": o["name"]} for o in objs]
         json.dump(index, open(index_path, "w"))
         print(f"{i + 1}/{len(touching)} riding {num}: {len(objs)} subdivisions", flush=True)
+    # Second pass: Represent's intersects query misses some cities inside large ridings, so probe each
+    # inset box with a grid of points ("contains") and add whatever subdivision each point falls in.
+    probe_path = CACHE / "boxes.json"
+    probed = json.load(open(probe_path)) if probe_path.exists() else {}
+    for w, so, e, n in INSETS:
+        key = f"{w},{so},{e},{n}"
+        if key in probed:
+            continue
+        found = {}
+        for i in range(4):
+            for j in range(4):
+                lon, lat = w + (e - w) * (i + 0.5) / 4, so + (n - so) * (j + 0.5) / 4
+                try:
+                    objs = get(f"{API}/boundaries/census-subdivisions/?contains={lat:.4f},{lon:.4f}&format=json")["objects"]
+                except Exception as ex:
+                    print("probe", key, lat, lon, "failed:", ex, file=sys.stderr)
+                    continue
+                for o in objs:
+                    found[o["external_id"]] = o["name"]
+        probed[key] = [{"id": k, "name": v} for k, v in found.items()]
+        json.dump(probed, open(probe_path, "w"))
+        print(f"box {key}: {len(found)} subdivisions", flush=True)
     wanted = {c["id"]: c["name"] for cs in index.values() for c in cs}
+    wanted.update({c["id"]: c["name"] for cs in probed.values() for c in cs})
     for j, (cid, name) in enumerate(sorted(wanted.items())):
         out = CACHE / f"{cid}.json"
         if out.exists():

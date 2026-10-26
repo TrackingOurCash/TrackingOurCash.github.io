@@ -28,6 +28,8 @@ QUERIES = {
     "pei": "{name} provincial electoral district Prince Edward Island",
     "ontario": "{name} provincial electoral district Ontario",
     "quebec": "{name} provincial electoral district Quebec",
+    "ns": "{name} provincial electoral district Nova Scotia",
+    "nl": "{name} provincial electoral district Newfoundland and Labrador",
 }
 SOURCES = {
     "federal": (DATA / "ridings.json", "current_name"),
@@ -39,6 +41,8 @@ SOURCES = {
     "pei": (DATA / "pe" / "divisions.json", "name"),
     "ontario": (DATA / "on" / "divisions.json", "name"),
     "quebec": (DATA / "qc" / "divisions.json", "name"),
+    "ns": (DATA / "ns" / "divisions.json", "name"),
+    "nl": (DATA / "nl" / "divisions.json", "name"),
 }
 
 

@@ -380,6 +380,45 @@
     "total_dollars_since_2024": 16104560640,
     "formula_share_pct": 49.4
    }
+  },
+  "ns": {
+   "by": "recipient",
+   "match": "department | payee name (Grants and Contributions section)",
+   "formula": [
+    {
+     "re": "\\| (THE )?(TOWN|VILLAGE|MUNICIPALITY|REGION|REGIONAL MUNICIPALITY|COUNTY|DISTRICT|VILLAGE COMMISSION) (OF|OF THE)\\b|\\b(REGIONAL MUNICIPALITY|MUNICIPALITY OF THE (COUNTY|DISTRICT))\\b",
+     "why": "Municipal Financial Capacity Grant, equalization and offset grants to towns and county/district municipalities"
+    },
+    {
+     "re": "\\b(FIRST NATIONS?|INDIAN BAND|BAND COUNCIL|MI'?KMA[QW] NATION)\\b",
+     "why": "Gaming, tax and education agreements with the 13 Mi'kmaw bands"
+    },
+    {
+     "re": "Seniors and Long-Term Care \\| .*(NURSING HOME|MANOR|VILLA\\b|LODGE|HAVEN|REST HOME|GUEST HOME|SPECIAL CARE|CONTINUING CARE|ENHANCED CARE|LONG.TERM CARE|CARE (CENTRE|CENTER|FACILITY|RESIDENCE|HOME)|SENIORS?'? ?(RESIDENCE|HOME|CITIZENS)|ELMS|TERRACE|ESTATES|GARDENS|FOYER|ODD FELLOWS|HOME CORP|COURT\\b|PLACE\\b|HALL\\b|THE MIRA|THE BIRCHES|PARKLAND|HOUSING CORP)",
+     "why": "Nursing home and residential care per-bed approved budgets"
+    },
+    {
+     "re": "Seniors and Long-Term Care \\| .*(HOME SUPPORT|HOMEMAKERS?|HOME ?CARE|RESPITE|\\bVON\\b|CONTINUING CARE ASSISTANT)",
+     "why": "Home support agency per-hour service rates"
+    },
+    {
+     "re": "Opportunities and Social Development \\| .*(RESIDENTIAL|REHABILITATION|COMMUNITY LIVING|ABILITY CENTRE|SMALL OPTIONS|OPTIONS\\b|SUPPORT(ED|IVE)? (SERVICES|LIVING)|GROUP HOME|ADULT SERVICE|WORK ACTIVITY|L'ARCHE|ENHANCED LIVING|RESI-CARE|HOMES? (CORP|SOCIETY|ASSOC)|GUEST HOME|HOUSING (ASSOC|CORP|SOCIETY)|TRANSITION HOUSE|SHELTER)",
+     "why": "Disability Support Program and shelter per-diem funding to residential operators"
+    },
+    {
+     "re": "Education and Early Childhood Development \\| .*(CHILD ?CARE|DAY ?CARE|GARDERIE|EARLY LEARNING|EARLY CHILDHOOD|PRESCHOOL|PRE-PRIMARY|LEARNING CENTRE|KIDS|CHILDREN'?S|ENFANTS|PETITE ENFANCE|ACADEMY|MONTESSORI|NURSERY|PLAYSCHOOL|TOTS|LITTLE|CENTRE|CENTER|YMCA|YWCA)",
+     "why": "Canada-wide child care operating and wage grants per licensed space"
+    },
+    {
+     "re": "Communities, Culture, Tourism and Heritage \\| .*(LIBRAR(Y|IES)|BIBLIOTH)",
+     "why": "Regional library board per-capita funding"
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 1427167146,
+    "total_dollars_since_2024": 1777639829,
+    "formula_share_pct": 80.3
+   }
   }
  }
 }
