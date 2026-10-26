@@ -1,0 +1,188 @@
+<title>Legislatures at a Glance</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<style>
+/* Layout: one row per legislature, seat bar on the left, who leads it on the right; fiscal small multiples below. */
+:root {
+  color-scheme: light;
+  --page: #f6f6f3; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10); --focus: #2a78d6; --vacant: #d9d8d2;
+  --bar: #52514e; --bar2: #2a78d6; --bar3: #898781; --surplus: #0ca30c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0f0f0e; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --focus: #3987e5; --vacant: #3a3a37;
+    --bar: #c3c2b7; --bar2: #3987e5; --bar3: #898781; --surplus: #3fae63;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0f0f0e; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --focus: #3987e5; --vacant: #3a3a37;
+  --bar: #c3c2b7; --bar2: #3987e5; --bar3: #898781; --surplus: #3fae63;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 20px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font: 600 26px/1.2 "Source Serif 4", Georgia, serif; margin: 0 0 6px; text-wrap: balance; }
+h2 { font-size: 16px; margin: 0 0 10px; }
+h3 { font-size: 15px; margin: 0; }
+a { color: var(--focus); }
+.sub { color: var(--ink-2); margin: 0 0 16px; max-width: 900px; }
+.topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+#theme { font: inherit; font-size: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-2); border-radius: 999px; padding: 4px 12px; cursor: pointer; white-space: nowrap; }
+.nav { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+.nav a { font-size: 13px; color: var(--ink-2); text-decoration: none; border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; background: var(--surface); }
+.nav a[aria-current="page"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 16px; min-width: 0; }
+.leg { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 10px 20px; padding: 12px 0; border-top: 1px solid var(--grid); }
+.leg:first-of-type { border-top: 0; }
+@media (max-width: 760px) { .leg { grid-template-columns: 1fr; } }
+.seatbar { display: flex; height: 26px; border-radius: 6px; overflow: hidden; margin: 6px 0 4px; background: var(--vacant); }
+.seatbar span { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: 600; min-width: 0; overflow: hidden; white-space: nowrap; text-shadow: 0 0 2px rgba(0,0,0,.4); }
+.seatbar span.vac { color: var(--ink-2); text-shadow: none; }
+.majline { position: relative; height: 0; }
+.majline::before { content: ""; position: absolute; left: var(--x); top: -30px; height: 34px; border-left: 2px dashed var(--ink); opacity: .6; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--ink-2); }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 4px; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 13px; }
+.kv dt { color: var(--ink-2); white-space: nowrap; }
+.kv dd { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.pill { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; border-radius: 999px; padding: 1px 7px; vertical-align: 1px; }
+.fiscal { display: grid; grid-template-columns: 170px repeat(3, minmax(0, 1fr)); gap: 6px 14px; align-items: center; font-size: 13px; }
+.fiscal .h { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+.fiscal .name { font-weight: 600; }
+.bar { position: relative; height: 14px; background: var(--grid); border-radius: 3px; overflow: visible; }
+.bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 3px; background: var(--bar); }
+.bar i.b2 { background: var(--bar2); }
+.bar i.b3 { background: var(--bar3); }
+.bar i.surplus { background: var(--surplus); }
+.bar b { position: absolute; left: calc(var(--w) + 6px); top: -1px; font-size: 12px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) { .fiscal { grid-template-columns: 110px repeat(3, minmax(0, 1fr)); font-size: 12px; } .bar b { font-size: 11px; } }
+.note { font-size: 12px; color: var(--ink-2); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { color: var(--ink-2); font-weight: 600; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tablewrap { overflow-x: auto; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <div class="topbar"><h1>Legislatures at a glance</h1><button id="theme" type="button" aria-pressed="false">Dark mode</button></div>
+  <nav class="nav" id="nav" aria-label="Pages"></nav>
+  <p class="sub" id="subtitle"></p>
+
+  <div class="card">
+    <h2>Who holds the seats</h2>
+    <p class="small muted">Current standings, head of government and opposition leader with their ridings, and the last and next election. The dashed line marks a majority.</p>
+    <div id="legs"></div>
+  </div>
+
+  <div class="card">
+    <h2>Budgets and debt, per person</h2>
+    <p class="small muted" id="fiscalNote"></p>
+    <div class="fiscal" id="fiscal"></div>
+    <p class="note" id="canadaNote"></p>
+  </div>
+
+  <div class="card">
+    <h2>The numbers behind the charts</h2>
+    <div class="tablewrap"><table id="tbl"><thead><tr><th>Government</th><th>Latest budget</th><th class="n">Deficit</th><th>Latest update</th><th class="n">Net debt</th><th class="n">Debt / GDP</th><th>Measure</th><th>Sources</th></tr></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="card note" id="notes"></div>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const J = D.jurisdictions, C = D.config;
+const COLORS = {
+  "Liberal": "#d71920", "Conservative": "#1b4c9e", "Progressive Conservative": "#1b4c9e", "United Conservative": "#1b4c9e",
+  "Saskatchewan Party": "#1b7a3e", "Yukon Party": "#1b4c9e", "NDP": "#f37021", "Bloc Québécois": "#1aa7bd", "Green": "#3d9b35",
+  "Parti Québécois": "#0f3b8c", "Coalition Avenir Québec": "#5fa8dc", "Québec solidaire": "#e87d1e", "Progressive Tory": "#6a4c93",
+  "Independent": "#6f6e69", "Vacant": "var(--vacant)",
+};
+const dark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+const color = p => COLORS[p] || (p && p.startsWith("Conservative") ? COLORS.Conservative : "#6f6e69");
+const fmtDate = s => s ? new Date(s + "T12:00:00").toLocaleDateString("en-CA", {year: "numeric", month: "long", day: "numeric"}) : "–";
+const fmtB = v => v == null ? "–" : (Math.abs(v) >= 1 ? `$${v.toFixed(1)}B` : `$${Math.round(v * 1000)}M`);
+const fmtPer = v => v == null ? "–" : "$" + Math.round(v).toLocaleString();
+const pill = (p, text) => `<span class="pill" style="background:${color(p)}">${text || p}</span>`;
+
+document.getElementById("nav").innerHTML = C.nav.map(n => `<a href="${n.href}"${n.current ? ' aria-current="page"' : ""}>${n.label}</a>`).join("");
+document.getElementById("subtitle").textContent = `Parliament, the ten provincial legislatures and the three territories as of ${fmtDate(D.as_of)}. Population figures are Statistics Canada's ${fmtDate(D.population_date)} estimates.`;
+
+// ---- seats ----
+const legs = document.getElementById("legs");
+for (const j of J) {
+  const total = j.seats_total;
+  const segs = j.standings.slice().sort((a, b) => b.seats - a.seats);
+  const bar = segs.map(s => `<span style="flex:${s.seats};background:${color(s.party)}" title="${s.party}: ${s.seats}">${s.seats}</span>`).join("")
+    + (j.vacant ? `<span class="vac" style="flex:${j.vacant}" title="vacant: ${j.vacant}">${j.vacant}</span>` : "");
+  const consensus = !j.standings.length;
+  const hog = j.head_of_government || {};
+  const opp = j.opposition_leader;
+  const others = (j.other_leaders || []).map(l => `${l.name} ${l.party ? pill(l.party, l.party.split(" (")[0]) : ""} ${l.riding ? `· ${l.riding}` : '<span class="muted">· no seat</span>'}${l.note ? ` <span class="muted small">(${l.note})</span>` : ""}`).join("<br>");
+  legs.insertAdjacentHTML("beforeend", `<div class="leg">
+    <div>
+      <h3>${j.name} <span class="muted small">· ${j.legislature}${consensus ? "" : ` · ${total} seats`}</span></h3>
+      ${consensus ? `<p class="small muted">Consensus government, no parties. ${total} members.</p>` : `<div class="seatbar">${bar}</div><div class="majline" style="--x:${100 * (Math.floor(total / 2) + 1) / total}%"></div>
+      <div class="legend">${segs.map(s => `<span><span class="sw" style="background:${color(s.party)}"></span>${s.party} ${s.seats}</span>`).join("")}${j.vacant ? `<span><span class="sw" style="background:var(--vacant)"></span>vacant ${j.vacant}</span>` : ""}</div>`}
+      ${j.standings_note ? `<p class="small muted" style="margin:4px 0 0">${j.standings_note}</p>` : ""}
+    </div>
+    <dl class="kv">
+      <dt>${j.name === "Canada" ? "Prime Minister" : "Premier"}</dt><dd><b>${hog.name || "–"}</b> ${hog.party ? pill(hog.party) : ""}${hog.riding ? ` · ${hog.riding}` : ""}</dd>
+      ${opp ? `<dt>Opposition</dt><dd>${opp.name || '<span class="muted">to be named</span>'} ${opp.party ? pill(opp.party) : ""}${opp.riding ? ` · ${opp.riding}` : ""}${opp.note ? ` <span class="muted small">(${opp.note})</span>` : ""}</dd>` : ""}
+      ${others ? `<dt>Other leaders</dt><dd>${others}</dd>` : ""}
+      <dt>Last election</dt><dd>${fmtDate(j.last_election)}</dd>
+      <dt>Next election</dt><dd>${j.next_election ? fmtDate(j.next_election) : "No fixed date"}${j.next_election_note ? ` <span class="muted small">${j.next_election_note}</span>` : ""}</dd>
+    </dl></div>`);
+}
+
+// ---- fiscal ----
+const F = J.filter(j => j.budget && j.population);
+const perDef = j => 1e9 * j.budget.deficit_billions / j.population;
+const perDebt = j => j.budget.net_debt_billions == null ? null : 1e9 * j.budget.net_debt_billions / j.population;
+const maxDef = Math.max(...F.map(perDef)), maxDebt = Math.max(...F.map(j => perDebt(j) || 0)), maxGdp = Math.max(...F.map(j => j.budget.debt_to_gdp_pct || 0));
+const fis = document.getElementById("fiscal");
+fis.innerHTML = `<div class="h">Government</div><div class="h">Deficit per person (budget)</div><div class="h">Net debt per person</div><div class="h">Net debt to GDP</div>`;
+for (const j of F) {
+  const b = j.budget, d = perDef(j), nd = perDebt(j), g = b.debt_to_gdp_pct;
+  const surplusNow = /SURPLUS/i.test(b.deficit_note || "");
+  fis.insertAdjacentHTML("beforeend", `
+    <div class="name">${j.name}<div class="small muted" style="font-weight:400">${b.year}</div></div>
+    <div class="bar" title="${fmtB(b.deficit_billions)} deficit"><i class="${surplusNow ? "surplus" : ""}" style="width:${100 * d / maxDef}%"></i><b style="--w:${100 * d / maxDef}%">${fmtPer(d)}${surplusNow ? " → surplus" : ""}</b></div>
+    <div class="bar" title="${fmtB(b.net_debt_billions)}"><i class="b2" style="width:${nd ? 100 * nd / maxDebt : 0}%"></i><b style="--w:${nd ? 100 * nd / maxDebt : 0}%">${fmtPer(nd)}</b></div>
+    <div class="bar" title="${g}% of GDP"><i class="b3" style="width:${g ? 100 * g / maxGdp : 0}%"></i><b style="--w:${g ? 100 * g / maxGdp : 0}%">${g == null ? "–" : g + "%"}</b></div>`);
+}
+const ca = J.find(j => j.name === "Canada");
+document.getElementById("fiscalNote").textContent = "Deficit and net debt are each government's own latest budget figure divided by its population; where a quarterly update has moved the number since, the table below says so. Green marks a budget deficit that the latest update has turned into a surplus.";
+document.getElementById("canadaNote").innerHTML = ca ? `<b>Canada, two ways.</b> The federal bar is the federal debt (accumulated deficit), ${fmtB(ca.budget.net_debt_billions)} or ${ca.budget.debt_to_gdp_pct}% of GDP. Counting every level of government together and netting off their financial assets, including the Canada and Quebec Pension Plan funds, the IMF's general-government net debt is ${ca.budget.general_government_net_debt_to_gdp_pct}% of GDP. The first is what Ottawa owes; the second is what Canada's public sector as a whole owes after what it owns, which is why Canada ranks low on international debt tables.` : "";
+
+// ---- table ----
+document.querySelector("#tbl tbody").innerHTML = F.map(j => { const b = j.budget, s = j.sources || {}; return `<tr>
+  <td><b>${j.name}</b></td><td>${fmtDate(b.date)}<div class="small muted">${b.title || ""}</div></td>
+  <td class="n">${fmtB(b.deficit_billions)}</td><td class="small">${b.deficit_note || ""}</td>
+  <td class="n">${fmtB(b.net_debt_billions)}</td><td class="n">${b.debt_to_gdp_pct == null ? "–" : b.debt_to_gdp_pct + "%"}</td>
+  <td class="small">${b.debt_measure || ""}</td>
+  <td class="small">${["standings", "budget", "population"].filter(k => s[k]).map(k => `<a href="${s[k]}" target="_blank" rel="noopener">${k}</a>`).join(" · ")}</td></tr>`; }).join("");
+
+document.getElementById("notes").innerHTML = `<h2>Notes</h2><ul>
+  <li><b>Standings</b> are from each legislature's member list as of ${fmtDate(D.as_of)}. British Columbia voted on 24 October 2026; its standings are Elections BC's preliminary count until the final results on 18 November 2026. Quebec's assembly grew to 127 seats in 2026 and one seat is under judicial recount.</li>
+  <li><b>Budgets</b> are the most recent budget tabled by each government; Canada's is the Spring Economic Update of 28 April 2026, with Budget 2026 due on 5 November 2026. Deficits are the budget's own projection for the current fiscal year; the "latest update" column records any quarterly revision (Alberta's first-quarter update, for example, turned a $9.4 billion deficit into a $2 billion surplus on higher oil revenue).</li>
+  <li><b>Debt measures differ by government</b>: Ontario, Quebec, Manitoba and the Atlantic provinces report net debt; BC reports taxpayer-supported debt; Alberta reports net financial debt; Canada reports the accumulated deficit. The "Measure" column says which, so compare ratios with care.</li>
+  <li><b>Per-person figures</b> divide by Statistics Canada's ${fmtDate(D.population_date)} population estimates (table 17-10-0009-01).</li>
+  <li>Figures were compiled from official budget documents, quarterly reports and member lists, with Wikipedia and major media used for leaders and dates; the sources column links to each. Territorial budgets are not shown.</li></ul>`;
+
+// ---- theme ----
+const themeBtn = document.getElementById("theme");
+function syncTheme() { const d = dark(); themeBtn.textContent = d ? "Light mode" : "Dark mode"; themeBtn.setAttribute("aria-pressed", d); }
+themeBtn.onclick = () => { const next = dark() ? "light" : "dark"; document.documentElement.dataset.theme = next; try { localStorage.setItem("theme", next); } catch (e) {} syncTheme(); };
+try { const saved = localStorage.getItem("theme"); if (saved && !document.documentElement.dataset.theme) document.documentElement.dataset.theme = saved; } catch (e) {}
+syncTheme();
+</script>

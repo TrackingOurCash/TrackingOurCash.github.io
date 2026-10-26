@@ -13,10 +13,11 @@ DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
-       {"href": "saskatchewan.html", "label": "Saskatchewan"}]
+       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "legislatures.html", "label": "Legislatures"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
-                 "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6"}
+                 "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
+                 "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -311,8 +312,31 @@ def write_csv(rows, cols, path):
             w.writerow([r.get(c) for c in cols])
 
 
+def legislatures():
+    """The legislatures-at-a-glance page from data/legislatures.json."""
+    src = DATA / "legislatures.json"
+    if not src.exists():
+        return
+    d = json.load(open(src))
+    tpl = (ROOT / "scripts" / "legislatures_template.html").read_text()
+
+    def page(nav_urls):
+        nav = [dict(n, href=(nav_urls or {}).get(n["href"], n["href"]), current=n["href"] == "legislatures.html") for n in NAV]
+        payload = dict(d, config={"nav": nav})
+        return tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False, separators=(",", ":")))
+
+    html = page(None)
+    full = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            + html.replace('<div class="wrap">', '</head>\n<body>\n<div class="wrap">', 1) + "</body>\n</html>\n")
+    (OUTDIR / "legislatures.html").write_text(full)
+    (OUTDIR / "artifact_legislatures.html").write_text(page(ARTIFACT_URLS))
+    print(OUTDIR / "legislatures.html", f"{len(full) / 1e6:.2f} MB")
+
+
 def main():
     OUTDIR.mkdir(exist_ok=True)
+    legislatures()
     payload, raw = federal()
     fragment = write_page(payload, "index")
     (OUTDIR / "artifact.html").write_text(fragment)

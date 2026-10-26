@@ -27,8 +27,8 @@ jobs:
       - name: Stage the site
         run: |
           mkdir -p site
-          cp output/riding_spending_map.html site/index.html
-          cp output/riding_spending.csv output/unmapped_after_election.csv data/summary.json site/
+          cp output/index.html output/alberta.html output/bc.html output/saskatchewan.html output/legislatures.html site/ 2>/dev/null || cp output/riding_spending_map.html site/index.html
+          cp output/*.csv data/summary.json site/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
