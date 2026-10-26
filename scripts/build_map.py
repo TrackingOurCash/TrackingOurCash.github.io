@@ -13,12 +13,13 @@ DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
-       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"}]
+       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"},
+       {"href": "pei.html", "label": "PEI"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
                  "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv",
-                 "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R"}
+                 "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R", "pei.html": "https://claude.ai/artifact/X4239bKZYyxRcX8ozVVZHQ"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -280,11 +281,58 @@ PROVINCES = {
                     ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
                     ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_New_Brunswick_provincial_electoral_districts")],
     },
+    # PEI publishes no payee list, so its page shows the federal grants that land in each provincial district (pe_spending.py).
+    "pei": {
+        "dir": "pe", "year": "2023", "region": "Prince Edward Island",  # canadaspends.com has no PEI page yet
+        "title": "Where federal grants land in PEI's provincial districts",
+        "electionLabel": "the 3 April 2023 provincial election", "count": 27, "gov": "PC",
+        "parties": {"PC": {"name": "Progressive Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"},
+                    "GRN": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
+                    "ISL": {"name": "Island Party", "light": "#8b5a2b", "dark": "#c0894f"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["PC", "LIB", "GRN"], "opp": "LIB",
+        "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2023. The money is federal, so the question here is whether Ottawa\'s grants land more heavily in the Island\'s close provincial seats.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
+        "beforeLabel": "Same dates a year earlier",
+        "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
+        "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
+        "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
+        "linkNote": "Links open the government's own record of each award on open.canada.ca.",
+        "popLabel": "electors, est. {pop_date}",
+        "projection": {"parallels": [46, 47], "rotate": [63.2, 0]},
+        "insets": [["Charlottetown", [-63.21, 46.22, -63.07, 46.31]], ["Summerside", [-63.85, 46.38, -63.71, 46.43]]],
+        "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in PEI's provincial districts.",
+        "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in PEI's 27 provincial districts "
+                     "and set against the 3 April 2023 provincial result. Each district wears its current MLA's party colour; the deeper the colour, the more federal grant money "
+                     "per resident. \"Before\" means the same dates one year earlier. PEI publishes no list of its own payees, so provincial payments cannot be shown."),
+        "notes": [
+            "<b>Why federal money:</b> PEI's Public Accounts Volume II itemises spending by department and program only (\"Operating Grant\", \"Pharmacare\", \"Miscellaneous\") and "
+            "the province publishes no payee list, so provincial payments cannot be placed in a district. This page therefore shows the federal grants that land in each "
+            "district: the same awards as the federal page, cut along provincial lines.",
+            "<b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent, by postal code; recipients with no postal code were "
+            "matched to their address on other awards, then by postal area or city (marked approximate). {unmapped_n} awards worth {unmapped_money} since the federal election are still unplaced.",
+            "<b>Left out by default:</b> national non-profits booked at a head office, other governments (the Province of PEI itself, Charlottetown and Summerside, which span several districts), "
+            "treaty settlements and foreign aid. Tick the box to put them back.",
+            "<b>Boundaries:</b> the 27 districts of the 2017 commission, used in 2019 and 2023, from the province's GeoLinc map service (polling divisions, merged here).",
+            "<b>Population:</b> no census count exists for these districts, so per-person figures use the registered electors at the 2023 election, scaled to Statistics Canada's "
+            "{pop_date} estimate for PEI.",
+            "<b>Party is correlation, not credit:</b> federal ministers and departments approve these grants, not MLAs. A pattern by provincial seat type is a signal worth checking, not proof of intent.",
+        ],
+        "sources": [("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
+                    ("PEI Public Accounts (Volume II stops at the program level)", "https://www.princeedwardisland.ca/en/topic/public-accounts"),
+                    ("Elections PEI 2023 general election results", "https://www.electionspei.ca/"),
+                    ("Legislative Assembly of Prince Edward Island member list", "https://www.assembly.pe.ca/members"),
+                    ("District boundaries, 2017 commission (GeoLinc map service)", "https://geolinc.gov.pe.ca/server/rest/services/Provincial_Electoral_Districts_2017_ELC/MapServer/0"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
+                    ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Prince_Edward_Island_provincial_electoral_districts")],
+    },
 }
 
 
 LEVEL = {"alberta": ("division", "divisions"), "bc": ("district", "districts"), "saskatchewan": ("constituency", "constituencies"),
-         "manitoba": ("division", "divisions"), "nb": ("district", "districts")}
+         "manitoba": ("division", "divisions"), "nb": ("district", "districts"), "pei": ("district", "districts")}
 
 
 def provincial(key):
@@ -294,10 +342,13 @@ def provincial(key):
     m = sp["meta"]
     ex = m["excluded_after"]
     wk = wiki(key)
+    news = json.load(open(DATA / "news_links.json")) if P.get("recordUrl") and (DATA / "news_links.json").exists() else {}
     ridings = {}
     for n, r in sp["ridings"].items():
         rec = {k: r[k] for k in COMMON}
         rec["wiki"] = (wk.get(n) or {}).get("url")
+        if news:  # federal awards carry open.canada.ca keys, so the federal page's news links apply
+            rec["top_grants"] = [dict(g, news=news[f'{g["org"]}|{g["ref"]}']) if f'{g.get("org")}|{g.get("ref")}' in news else g for g in r["top_grants"]]
         rec.update({"num": n, "name": r["name"], "region": P["region"], "party_won": r[f"party_{y}"], "runnerup_party": r[f"runnerup_party_{y}"],
                     "winner": r[f"winner_{y}"], "runnerup": r[f"runnerup_{y}"], "shares": r[f"shares_{y}"], "rep": r["mla"],
                     "rep_party": r["mla_party"], "top_progs": r["top_progs"]})
@@ -308,23 +359,27 @@ def provincial(key):
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
-        "rep": "MLA", "electionYear": y, "spendsUrl": P.get("spendsUrl"), "popLabel": "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
+        "rep": "MLA", "electionYear": y, "spendsUrl": P.get("spendsUrl"),
+        "popLabel": P["popLabel"].format(pop_date=pop_label()[1]) if P.get("popLabel") else "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
-        "flags": {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
+        "flags": P.get("flags") or {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
         "filterAll": P["filterAll"], "filterOptions": m["programs"],
         "includeLabel": P["includeLabel"],
         "groupTitle": "Does money follow close seats?", "groups": [f"Close {gov}", f"Close {opp}", f"Safe {gov}", f"Safe {opp}"],
         "groupNote": f'"Close" means the {y} winner led by under {m["close_margin"]} points; ' + P["groupNote"],
         "groupParty": {f"Close {gov}": gov, f"Safe {gov}": gov, f"Close {opp}": opp, f"Safe {opp}": opp},
         "regionOrder": None, "regionGroup": {}, "regionShort": {},
-        "beforeLabel": P["beforeLabel"], "topProgsTitle": P["topProgsTitle"], "topGrantsTitle": "Largest recipients since the election",
-        "recordUrl": None, "searchUrl": None, "searchLabel": "",
-        "linkNote": "Source: " + P["source"],
+        "beforeLabel": P["beforeLabel"], "topProgsTitle": P["topProgsTitle"], "topGrantsTitle": P.get("topGrantsTitle", "Largest recipients since the election"),
+        "recordUrl": P.get("recordUrl"), "searchUrl": P.get("searchUrl"), "searchLabel": P.get("searchLabel", ""),
+        "linkNote": P.get("linkNote") or "Source: " + P["source"],
         "projection": P["projection"], "insets": P["insets"],
-        "subtitle": (f"{P['region']} government payments from {P['electionLabel']} to {m['cutoff']}, placed in the {P['count']} electoral "
+        "subtitle": P["subtitle"].format(**m) if P.get("subtitle") else
+                    (f"{P['region']} government payments from {P['electionLabel']} to {m['cutoff']}, placed in the {P['count']} electoral "
                      f"{LEVEL[key][1]} and set against the {y} result. Each one wears its current MLA's party colour; "
                      f"the deeper the colour, the more money per resident. {P['windowNote']} ({m['before_start']} to {m['before_end']})."),
-        "notes": [
+        "notes": ["<b>Sources:</b> " + links(P["sources"]) + f" Data as of {m.get('generated', m['cutoff'])}."] +
+                 [n.format(pop_date=pop_label()[1], unmapped_n=m["methods"].get("after|unmapped", 0), unmapped_money=fmt_money(ex.get("unmatched", 0))) for n in P["notes"]]
+                 if P.get("notes") else [
             "<b>Sources:</b> " + links(P["sources"]) + f" Data as of {m.get('generated', m['cutoff'])}.",
             f"<b>Placing payments:</b> {P['placing']} Of {fmt_money(m['total_after'])} paid in the \"after\" window, {fmt_money(m['placed_after'])} was placed; "
             f"{fmt_money(ex.get('individual programs', 0))} went through {P['individualNote']}, {fmt_money(ex.get('individuals', 0))} to recipients who look like individuals, "

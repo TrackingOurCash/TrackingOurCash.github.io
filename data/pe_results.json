@@ -1,0 +1,1017 @@
+{
+ "as_of": "2026-10-26",
+ "election": "2023-04-03",
+ "sources": [
+  {
+   "title": "Elections PEI - Provincial General Election April 3, 2023: Report of the Chief Electoral Officer (PDF, via Wayback Machine)",
+   "url": "https://web.archive.org/web/2025/https://www.electionspei.ca/sites/www.electionspei.ca/files/2023%20PGE_CEO_Report_FINAL.pdf"
+  },
+  {
+   "title": "Elections PEI - 2023 Province-Wide Summary (official results, via Wayback Machine)",
+   "url": "https://web.archive.org/web/20230419165220/https://www.electionspei.ca/2023-province-wide-summary"
+  },
+  {
+   "title": "Elections PEI - 2023 election results by district (results.electionspei.ca/districtN.html, via Wayback Machine)",
+   "url": "https://web.archive.org/web/2023/https://results.electionspei.ca/district1.html"
+  },
+  {
+   "title": "Legislative Assembly of Prince Edward Island - Members (current)",
+   "url": "https://www.assembly.pe.ca/members"
+  },
+  {
+   "title": "Wikipedia - 2023 Prince Edward Island general election",
+   "url": "https://en.wikipedia.org/wiki/2023_Prince_Edward_Island_general_election"
+  },
+  {
+   "title": "Wikipedia - 67th General Assembly of Prince Edward Island",
+   "url": "https://en.wikipedia.org/wiki/67th_General_Assembly_of_Prince_Edward_Island"
+  },
+  {
+   "title": "Wikipedia - Legislative Assembly of Prince Edward Island",
+   "url": "https://en.wikipedia.org/wiki/Legislative_Assembly_of_Prince_Edward_Island"
+  },
+  {
+   "title": "Wikipedia - per-district 2023 result templates (Template:2023 Prince Edward Island general election/<district>) and district articles (by-election boxes)",
+   "url": "https://en.wikipedia.org/wiki/Template:2023_Prince_Edward_Island_general_election/Souris-Elmira"
+  },
+  {
+   "title": "Wikipedia - Gilles Arsenault",
+   "url": "https://en.wikipedia.org/wiki/Gilles_Arsenault"
+  }
+ ],
+ "districts": {
+  "1": {
+   "name": "Souris-Elmira",
+   "registered": 3811,
+   "valid_votes": 2876,
+   "turnout_pct": 75.9,
+   "candidates": [
+    {
+     "name": "Robin Croucher",
+     "party": "PC",
+     "votes": 1593
+    },
+    {
+     "name": "Boyd Leard",
+     "party": "GRN",
+     "votes": 757
+    },
+    {
+     "name": "Amber Dennis",
+     "party": "LIB",
+     "votes": 481
+    },
+    {
+     "name": "Gordon Gay",
+     "party": "NDP",
+     "votes": 29
+    },
+    {
+     "name": "Ahava Kálnássy de Kálnás",
+     "party": "ISL",
+     "votes": 16
+    }
+   ],
+   "mla": {
+    "name": "Robin Croucher",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "2": {
+   "name": "Georgetown-Pownal",
+   "registered": 3850,
+   "valid_votes": 2810,
+   "turnout_pct": 73.3,
+   "candidates": [
+    {
+     "name": "Steven Myers",
+     "party": "PC",
+     "votes": 1961
+    },
+    {
+     "name": "Patrick Brothers",
+     "party": "GRN",
+     "votes": 352
+    },
+    {
+     "name": "Allister Veinot",
+     "party": "LIB",
+     "votes": 340
+    },
+    {
+     "name": "Edith Perry",
+     "party": "NDP",
+     "votes": 79
+    },
+    {
+     "name": "Lucy Robbins",
+     "party": "ISL",
+     "votes": 78
+    }
+   ],
+   "mla": {
+    "name": "Brendan Curran",
+    "party": "PC",
+    "since": "2025-12-08",
+    "note": "Won the 8 Dec 2025 by-election (PC hold; 986 votes, 46.8%) after Steven Myers (PC) resigned 3 Oct 2025."
+   }
+  },
+  "3": {
+   "name": "Montague-Kilmuir",
+   "registered": 3945,
+   "valid_votes": 2631,
+   "turnout_pct": 66.8,
+   "candidates": [
+    {
+     "name": "Cory Deagle",
+     "party": "PC",
+     "votes": 1847
+    },
+    {
+     "name": "Norma Dingwell",
+     "party": "GRN",
+     "votes": 379
+    },
+    {
+     "name": "Nick Sheppard",
+     "party": "LIB",
+     "votes": 271
+    },
+    {
+     "name": "Angela Reine Barton",
+     "party": "IND",
+     "votes": 58
+    },
+    {
+     "name": "Robert Lethbridge",
+     "party": "NDP",
+     "votes": 38
+    },
+    {
+     "name": "Gary Robbins",
+     "party": "ISL",
+     "votes": 38
+    }
+   ],
+   "mla": {
+    "name": "Cory Deagle",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "4": {
+   "name": "Belfast-Murray River",
+   "registered": 3933,
+   "valid_votes": 2574,
+   "turnout_pct": 66.0,
+   "candidates": [
+    {
+     "name": "Darlene Compton",
+     "party": "PC",
+     "votes": 1510
+    },
+    {
+     "name": "Katherine Bryson",
+     "party": "LIB",
+     "votes": 520
+    },
+    {
+     "name": "Laverne MacInnis",
+     "party": "GRN",
+     "votes": 420
+    },
+    {
+     "name": "Michelle Hodgson",
+     "party": "NDP",
+     "votes": 124
+    }
+   ],
+   "mla": {
+    "name": "Darlene Compton",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "5": {
+   "name": "Mermaid-Stratford",
+   "registered": 4006,
+   "valid_votes": 2749,
+   "turnout_pct": 68.8,
+   "candidates": [
+    {
+     "name": "Jenn Redmond",
+     "party": "PC",
+     "votes": 1245
+    },
+    {
+     "name": "Michele Beaton",
+     "party": "GRN",
+     "votes": 1207
+    },
+    {
+     "name": "Gail MacDonald",
+     "party": "LIB",
+     "votes": 254
+    },
+    {
+     "name": "Lawrence Millar",
+     "party": "NDP",
+     "votes": 43
+    }
+   ],
+   "mla": {
+    "name": "Jenn Redmond",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "6": {
+   "name": "Stratford-Keppoch",
+   "registered": 3927,
+   "valid_votes": 2829,
+   "turnout_pct": 72.2,
+   "candidates": [
+    {
+     "name": "Jill Burridge",
+     "party": "PC",
+     "votes": 1479
+    },
+    {
+     "name": "Lana Beth Barkhouse",
+     "party": "GRN",
+     "votes": 847
+    },
+    {
+     "name": "Greg Arsenault",
+     "party": "LIB",
+     "votes": 471
+    },
+    {
+     "name": "Olalekan Faromika",
+     "party": "NDP",
+     "votes": 32
+    }
+   ],
+   "mla": {
+    "name": "Jill Burridge",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "7": {
+   "name": "Morell-Donagh",
+   "registered": 3983,
+   "valid_votes": 2689,
+   "turnout_pct": 67.9,
+   "candidates": [
+    {
+     "name": "Sidney MacEwen",
+     "party": "PC",
+     "votes": 1899
+    },
+    {
+     "name": "John Allen MacLean",
+     "party": "GRN",
+     "votes": 349
+    },
+    {
+     "name": "Terry MacDonald",
+     "party": "LIB",
+     "votes": 282
+    },
+    {
+     "name": "Kevin Trainor",
+     "party": "NDP",
+     "votes": 115
+    },
+    {
+     "name": "Christopher Landry",
+     "party": "ISL",
+     "votes": 44
+    }
+   ],
+   "mla": {
+    "name": "Sidney MacEwen",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "8": {
+   "name": "Stanhope-Marshfield",
+   "registered": 4290,
+   "valid_votes": 2775,
+   "turnout_pct": 65.8,
+   "candidates": [
+    {
+     "name": "Bloyce Thompson",
+     "party": "PC",
+     "votes": 2209
+    },
+    {
+     "name": "Marian White",
+     "party": "NDP",
+     "votes": 566
+    }
+   ],
+   "mla": {
+    "name": "Bloyce Thompson",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "9": {
+   "name": "Charlottetown-Hillsborough Park",
+   "registered": 4261,
+   "valid_votes": 2681,
+   "turnout_pct": 63.2,
+   "candidates": [
+    {
+     "name": "Natalie Jameson",
+     "party": "PC",
+     "votes": 1660
+    },
+    {
+     "name": "Adina Nault",
+     "party": "GRN",
+     "votes": 523
+    },
+    {
+     "name": "Dellon Paul",
+     "party": "LIB",
+     "votes": 352
+    },
+    {
+     "name": "Tristan Mitchell",
+     "party": "NDP",
+     "votes": 125
+    },
+    {
+     "name": "Cari Barbour",
+     "party": "ISL",
+     "votes": 21
+    }
+   ],
+   "mla": {
+    "name": "Carolyn Simpson",
+    "party": "LIB",
+    "since": "2025-08-12",
+    "note": "Won the 12 Aug 2025 by-election (Liberal gain from PC; 979 votes, 47.8%) after Natalie Jameson (PC) resigned 11 Feb 2025 to run federally."
+   }
+  },
+  "10": {
+   "name": "Charlottetown-Winsloe",
+   "registered": 4314,
+   "valid_votes": 3073,
+   "turnout_pct": 71.5,
+   "candidates": [
+    {
+     "name": "Zack Bell",
+     "party": "PC",
+     "votes": 1861
+    },
+    {
+     "name": "Charles Sanderson",
+     "party": "GRN",
+     "votes": 553
+    },
+    {
+     "name": "Judy Hughes",
+     "party": "LIB",
+     "votes": 540
+    },
+    {
+     "name": "Campbell Webster",
+     "party": "NDP",
+     "votes": 78
+    },
+    {
+     "name": "Georgina Bassett",
+     "party": "IND",
+     "votes": 41
+    }
+   ],
+   "mla": {
+    "name": "Zack Bell",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "11": {
+   "name": "Charlottetown-Belvedere",
+   "registered": 4175,
+   "valid_votes": 2775,
+   "turnout_pct": 66.8,
+   "candidates": [
+    {
+     "name": "Susie Dillon",
+     "party": "PC",
+     "votes": 1418
+    },
+    {
+     "name": "Joanna Morrison",
+     "party": "GRN",
+     "votes": 639
+    },
+    {
+     "name": "Marcia Carroll",
+     "party": "LIB",
+     "votes": 560
+    },
+    {
+     "name": "Aidin Mousavian",
+     "party": "NDP",
+     "votes": 133
+    },
+    {
+     "name": "Jayne McAskill",
+     "party": "ISL",
+     "votes": 25
+    }
+   ],
+   "mla": {
+    "name": "Susie Dillon",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "12": {
+   "name": "Charlottetown-Victoria Park",
+   "registered": 4123,
+   "valid_votes": 2505,
+   "turnout_pct": 61.0,
+   "candidates": [
+    {
+     "name": "Karla Bernard",
+     "party": "GRN",
+     "votes": 1052
+    },
+    {
+     "name": "Tim Keizer",
+     "party": "PC",
+     "votes": 978
+    },
+    {
+     "name": "Barb MacLeod",
+     "party": "LIB",
+     "votes": 293
+    },
+    {
+     "name": "Joe Byrne",
+     "party": "NDP",
+     "votes": 150
+    },
+    {
+     "name": "Danni Moher",
+     "party": "ISL",
+     "votes": 32
+    }
+   ],
+   "mla": {
+    "name": "Karla Bernard",
+    "party": "GRN",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "13": {
+   "name": "Charlottetown-Brighton",
+   "registered": 3995,
+   "valid_votes": 2724,
+   "turnout_pct": 68.5,
+   "candidates": [
+    {
+     "name": "Rob Lantz",
+     "party": "PC",
+     "votes": 1171
+    },
+    {
+     "name": "Janice Harper",
+     "party": "GRN",
+     "votes": 864
+    },
+    {
+     "name": "Sandra Sunil",
+     "party": "LIB",
+     "votes": 487
+    },
+    {
+     "name": "Michelle Neill",
+     "party": "NDP",
+     "votes": 202
+    }
+   ],
+   "mla": {
+    "name": "Rob Lantz",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": "Premier since 9 Feb 2026 (interim premier 21 Feb-12 Dec 2025)."
+   }
+  },
+  "14": {
+   "name": "Charlottetown-West Royalty",
+   "registered": 4194,
+   "valid_votes": 2677,
+   "turnout_pct": 64.4,
+   "candidates": [
+    {
+     "name": "Gord McNeilly",
+     "party": "LIB",
+     "votes": 1207
+    },
+    {
+     "name": "Kristi MacKay",
+     "party": "PC",
+     "votes": 1042
+    },
+    {
+     "name": "Nick LeClair",
+     "party": "GRN",
+     "votes": 301
+    },
+    {
+     "name": "Simone Webster",
+     "party": "NDP",
+     "votes": 63
+    },
+    {
+     "name": "Jessica Simmonds",
+     "party": "IND",
+     "votes": 36
+    },
+    {
+     "name": "Bill Cann",
+     "party": "ISL",
+     "votes": 28
+    }
+   ],
+   "mla": {
+    "name": "Gord McNeilly",
+    "party": "LIB",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "15": {
+   "name": "Brackley-Hunter River",
+   "registered": 3981,
+   "valid_votes": 2790,
+   "turnout_pct": 70.5,
+   "candidates": [
+    {
+     "name": "Dennis King",
+     "party": "PC",
+     "votes": 1903
+    },
+    {
+     "name": "Greg Bradley",
+     "party": "GRN",
+     "votes": 483
+    },
+    {
+     "name": "Nicole Ford",
+     "party": "LIB",
+     "votes": 321
+    },
+    {
+     "name": "Leah-Jane Hayward",
+     "party": "NDP",
+     "votes": 83
+    }
+   ],
+   "mla": {
+    "name": "Kent Dollar",
+    "party": "PC",
+    "since": "2025-08-12",
+    "note": "Won the 12 Aug 2025 by-election (PC hold; 1,140 votes, 50.3%) after Dennis King (PC, then premier) resigned 21 Feb 2025."
+   }
+  },
+  "16": {
+   "name": "Cornwall-Meadowbank",
+   "registered": 4690,
+   "valid_votes": 3196,
+   "turnout_pct": 68.5,
+   "candidates": [
+    {
+     "name": "Mark McLane",
+     "party": "PC",
+     "votes": 1750
+    },
+    {
+     "name": "Tayte Willows",
+     "party": "GRN",
+     "votes": 775
+    },
+    {
+     "name": "Don Leary",
+     "party": "LIB",
+     "votes": 611
+    },
+    {
+     "name": "Larry Hale",
+     "party": "NDP",
+     "votes": 60
+    }
+   ],
+   "mla": {
+    "name": "Tayte Willows",
+    "party": "GRN",
+    "since": "2026-07-13",
+    "note": "Won the 13 Jul 2026 by-election (Green gain from PC; 1,184 votes, 39.7%) after Mark McLane (PC) died in office 17 Mar 2026."
+   }
+  },
+  "17": {
+   "name": "New Haven-Rocky Point",
+   "registered": 4521,
+   "valid_votes": 3408,
+   "turnout_pct": 75.6,
+   "candidates": [
+    {
+     "name": "Peter Bevan-Baker",
+     "party": "GRN",
+     "votes": 1457
+    },
+    {
+     "name": "Donalda Docherty",
+     "party": "PC",
+     "votes": 1351
+    },
+    {
+     "name": "Sharon Cameron",
+     "party": "LIB",
+     "votes": 502
+    },
+    {
+     "name": "Douglas Dahn",
+     "party": "NDP",
+     "votes": 49
+    },
+    {
+     "name": "Neil Emery",
+     "party": "ISL",
+     "votes": 49
+    }
+   ],
+   "mla": {
+    "name": "Peter Bevan-Baker",
+    "party": "GRN",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "18": {
+   "name": "Rustico-Emerald",
+   "registered": 4511,
+   "valid_votes": 3183,
+   "turnout_pct": 70.8,
+   "candidates": [
+    {
+     "name": "Brad Trivers",
+     "party": "PC",
+     "votes": 1990
+    },
+    {
+     "name": "Ranald MacFarlane",
+     "party": "GRN",
+     "votes": 559
+    },
+    {
+     "name": "Flory Sanderson",
+     "party": "LIB",
+     "votes": 532
+    },
+    {
+     "name": "David Wilson",
+     "party": "NDP",
+     "votes": 102
+    }
+   ],
+   "mla": {
+    "name": "Brad Trivers",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": "Speaker since 25 Mar 2026."
+   }
+  },
+  "19": {
+   "name": "Borden-Kinkora",
+   "registered": 4233,
+   "valid_votes": 2858,
+   "turnout_pct": 68.0,
+   "candidates": [
+    {
+     "name": "Jamie Fox",
+     "party": "PC",
+     "votes": 1719
+    },
+    {
+     "name": "Matt MacFarlane",
+     "party": "GRN",
+     "votes": 995
+    },
+    {
+     "name": "Carole MacFarlane",
+     "party": "NDP",
+     "votes": 83
+    },
+    {
+     "name": "Paul Smitz",
+     "party": "ISL",
+     "votes": 61
+    }
+   ],
+   "mla": {
+    "name": "Matt MacFarlane",
+    "party": "GRN",
+    "since": "2024-02-07",
+    "note": "Won the 7 Feb 2024 by-election (Green gain from PC; 1,226 votes, 49.0%) after Jamie Fox (PC) resigned 11 Nov 2023 to run federally. Green Party leader since 7 Jun 2025."
+   }
+  },
+  "20": {
+   "name": "Kensington-Malpeque",
+   "registered": 4241,
+   "valid_votes": 2993,
+   "turnout_pct": 70.9,
+   "candidates": [
+    {
+     "name": "Matthew MacKay",
+     "party": "PC",
+     "votes": 2294
+    },
+    {
+     "name": "Hunter Guindon",
+     "party": "GRN",
+     "votes": 463
+    },
+    {
+     "name": "Richard Schroeter",
+     "party": "LIB",
+     "votes": 169
+    },
+    {
+     "name": "Maggie Larocque",
+     "party": "NDP",
+     "votes": 67
+    }
+   ],
+   "mla": {
+    "name": "Matthew MacKay",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "21": {
+   "name": "Summerside-Wilmot",
+   "registered": 4366,
+   "valid_votes": 2910,
+   "turnout_pct": 66.9,
+   "candidates": [
+    {
+     "name": "Tyler DesRoches",
+     "party": "PC",
+     "votes": 1651
+    },
+    {
+     "name": "Lynne Lund",
+     "party": "GRN",
+     "votes": 981
+    },
+    {
+     "name": "Don Reid",
+     "party": "LIB",
+     "votes": 214
+    },
+    {
+     "name": "Cassie MacKay",
+     "party": "NDP",
+     "votes": 45
+    },
+    {
+     "name": "Eriena O'Reilly",
+     "party": "ISL",
+     "votes": 19
+    }
+   ],
+   "mla": {
+    "name": "Tyler DesRoches",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "22": {
+   "name": "Summerside-South Drive",
+   "registered": 4488,
+   "valid_votes": 2584,
+   "turnout_pct": 57.9,
+   "candidates": [
+    {
+     "name": "Barb Ramsay",
+     "party": "PC",
+     "votes": 1378
+    },
+    {
+     "name": "Steve Howard",
+     "party": "GRN",
+     "votes": 739
+    },
+    {
+     "name": "Nancy Beth Guptill",
+     "party": "LIB",
+     "votes": 397
+    },
+    {
+     "name": "Kathryn Yule",
+     "party": "NDP",
+     "votes": 70
+    }
+   ],
+   "mla": {
+    "name": "Barb Ramsay",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "23": {
+   "name": "Tyne Valley-Sherbrooke",
+   "registered": 4023,
+   "valid_votes": 2588,
+   "turnout_pct": 64.7,
+   "candidates": [
+    {
+     "name": "Hilton MacLennan",
+     "party": "PC",
+     "votes": 1326
+    },
+    {
+     "name": "Trish Altass",
+     "party": "GRN",
+     "votes": 964
+    },
+    {
+     "name": "Wayne Cobb",
+     "party": "LIB",
+     "votes": 212
+    },
+    {
+     "name": "Wayne Biggar",
+     "party": "IND",
+     "votes": 49
+    },
+    {
+     "name": "Carol Rybinski",
+     "party": "NDP",
+     "votes": 37
+    }
+   ],
+   "mla": {
+    "name": "Hilton MacLennan",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "24": {
+   "name": "Evangeline-Miscouche",
+   "registered": 3235,
+   "valid_votes": 2243,
+   "turnout_pct": 69.7,
+   "candidates": [
+    {
+     "name": "Gilles Arsenault",
+     "party": "PC",
+     "votes": 1384
+    },
+    {
+     "name": "Pat MacLellan",
+     "party": "LIB",
+     "votes": 543
+    },
+    {
+     "name": "Jason Charette",
+     "party": "GRN",
+     "votes": 271
+    },
+    {
+     "name": "Charles Turriff",
+     "party": "NDP",
+     "votes": 45
+    }
+   ],
+   "mla": {
+    "name": "Gilles Arsenault",
+    "party": "IND",
+    "since": "2023-04-03",
+    "note": "Elected as PC. Dismissed from cabinet 28 Mar 2026 and suspended from the PC caucus 29 Mar 2026 (conflict-of-interest matter, RCMP investigation); sits as an Independent and has been on a formal leave of absence from the House since 22 May 2026."
+   }
+  },
+  "25": {
+   "name": "O'Leary-Inverness",
+   "registered": 3399,
+   "valid_votes": 2406,
+   "turnout_pct": 71.3,
+   "candidates": [
+    {
+     "name": "Robert Henderson",
+     "party": "LIB",
+     "votes": 894
+    },
+    {
+     "name": "Daniel MacDonald",
+     "party": "PC",
+     "votes": 738
+    },
+    {
+     "name": "Herb Dickieson",
+     "party": "NDP",
+     "votes": 702
+    },
+    {
+     "name": "Richard Lush",
+     "party": "GRN",
+     "votes": 72
+    }
+   ],
+   "mla": {
+    "name": "Robert Henderson",
+    "party": "LIB",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "26": {
+   "name": "Alberton-Bloomfield",
+   "registered": 3625,
+   "valid_votes": 2662,
+   "turnout_pct": 73.8,
+   "candidates": [
+    {
+     "name": "Ernie Hudson",
+     "party": "PC",
+     "votes": 1532
+    },
+    {
+     "name": "Pat Murphy",
+     "party": "LIB",
+     "votes": 896
+    },
+    {
+     "name": "Ron McConnell",
+     "party": "GRN",
+     "votes": 132
+    },
+    {
+     "name": "Kester Nurse",
+     "party": "NDP",
+     "votes": 102
+    }
+   ],
+   "mla": {
+    "name": "Ernie Hudson",
+    "party": "PC",
+    "since": "2023-04-03",
+    "note": ""
+   }
+  },
+  "27": {
+   "name": "Tignish-Palmer Road",
+   "registered": 3467,
+   "valid_votes": 2603,
+   "turnout_pct": 75.7,
+   "candidates": [
+    {
+     "name": "Hal Perry",
+     "party": "LIB",
+     "votes": 1527
+    },
+    {
+     "name": "April Delaney",
+     "party": "PC",
+     "votes": 939
+    },
+    {
+     "name": "Gail Kinch",
+     "party": "NDP",
+     "votes": 137
+    }
+   ],
+   "mla": {
+    "name": "Hal Perry",
+    "party": "LIB",
+    "since": "2023-04-03",
+    "note": "Leader of the Official Opposition since 12 Apr 2023."
+   }
+  }
+ }
+}

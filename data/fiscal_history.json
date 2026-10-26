@@ -354,6 +354,65 @@
      "source": "https://www.gnb.ca/content/dam/GNB3/org/ftb-fct/doc/2026-2027-first-quarter.pdf"
     }
    ]
+  },
+  "Prince Edward Island": {
+   "basis": "Consolidated surplus/(deficit) and net debt per PEI Public Accounts Volume I (consolidated financial statements), 2021-22 to 2024-25 as tabulated in Finance Canada's Fiscal Reference Tables (Table 19); billions to TWO decimals because PEI's numbers are small. 2025-26: balance and net debt are the audited Public Accounts 2025-26 results as reported in the press (CBC, 2 Oct 2026: deficit $355.5M, net debt about $3.7B, rounded); revenue and expense for 2025-26 are the Budget 2026-27 revised forecast (TD Economics table: 3,271 / 3,720) because Volume I was not retrievable, so they do not reconcile to the audited balance. 2026-27 is Budget 2026-27 (14 Apr 2026) as read by Scotiabank/TD: revenue 3,386, expenditure 3,796, deficit 409.9, net debt 4,505",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": 0.08,
+     "net_debt_billions": 2.35,
+     "revenue_billions": 2.65,
+     "expense_billions": 2.57,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": 0.01,
+     "net_debt_billions": 2.44,
+     "revenue_billions": 2.88,
+     "expense_billions": 2.86,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": -0.01,
+     "net_debt_billions": 2.65,
+     "revenue_billions": 3.02,
+     "expense_billions": 3.03,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": -0.16,
+     "net_debt_billions": 3.03,
+     "revenue_billions": 3.12,
+     "expense_billions": 3.29,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": -0.36,
+     "net_debt_billions": 3.7,
+     "revenue_billions": 3.27,
+     "expense_billions": 3.72,
+     "status": "actual",
+     "source": "https://www.cbc.ca/news/canada/prince-edward-island/pei-audited-financial-statements-budget-overspending-9.7367491"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": -0.41,
+     "net_debt_billions": 4.5,
+     "revenue_billions": 3.39,
+     "expense_billions": 3.8,
+     "status": "forecast",
+     "source": "https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.fiscal-policy.fiscal-pulse.provincial-budget-analyses-and-updates.prince-edward-island-.prince-edward-island-2026-27-budget--april-14--2026-.html"
+    }
+   ]
   }
  }
 }

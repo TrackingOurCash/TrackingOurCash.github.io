@@ -1,7 +1,7 @@
 """Find the Wikipedia article for each riding or division, once, via the Wikipedia search API.
 
 Usage: python3 wiki_links.py <level> <json with name per record> ...
-  level is "federal", "alberta", "bc" or "saskatchewan"; records are read from
+  level is "federal", "alberta", "bc", "saskatchewan", "manitoba", "nb" or "pei"; records are read from
   data/ridings.json (federal) or data/<prov>/divisions.json and the links are cached in
   data/wikipedia_links.json as {level: {num: {"title": ..., "url": ...}}}. Reruns only
   look up ridings that have no link yet.
@@ -25,6 +25,7 @@ QUERIES = {
     "saskatchewan": "{name} provincial electoral district Saskatchewan",
     "manitoba": "{name} provincial electoral district Manitoba",
     "nb": "{name} provincial electoral district New Brunswick",
+    "pei": "{name} provincial electoral district Prince Edward Island",
 }
 SOURCES = {
     "federal": (DATA / "ridings.json", "current_name"),
@@ -33,6 +34,7 @@ SOURCES = {
     "saskatchewan": (DATA / "sk" / "divisions.json", "name"),
     "manitoba": (DATA / "mb" / "divisions.json", "name"),
     "nb": (DATA / "nb" / "divisions.json", "name"),
+    "pei": (DATA / "pe" / "divisions.json", "name"),
 }
 
 

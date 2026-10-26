@@ -8,5 +8,6 @@ data/*/
 !data/poliwave_links.json
 !data/news_links.json
 !data/equalization.json
+!data/pe_results.json
 output/
 .claude/
