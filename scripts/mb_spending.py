@@ -28,7 +28,10 @@ March) and undated, so no finer split is possible: "after" = fiscal 2025-26
 (1 April 2025 to 31 March 2026, the latest statement), "before" = fiscal 2022-23
 (1 April 2022 to 31 March 2023, the last full year before the election);
 years_per_window = 1.0. 2023-24 (which straddles the election) and 2024-25 are
-parsed too, for the CSVs and the coverage table, but not used in the totals.
+parsed too, for the CSVs and the coverage table, but not used in the window totals.
+Every year parsed feeds a per-division time series of adjusted dollars
+(ridings[num].series, aligned to meta.series.labels), placed and flagged exactly as
+the windows are.
 
 Placing a payee:
   1. with a town: the town's centroid, located in a division by point-in-polygon
@@ -95,6 +98,7 @@ DL = MB / "dl"
 OUT = ROOT / "data" / "mb"
 sys.path.insert(0, str(ROOT / "scripts"))
 from geo import RidingIndex, load_centroids  # noqa: E402
+from build_spending import recipient_table  # noqa: E402
 from mb_pdf import pdf_items  # noqa: E402
 
 ELECTION = date(2023, 10, 3)
@@ -620,13 +624,12 @@ def main():
 
     rows = []
     for fy in sorted(years):
-        parsed = load_rows(fy, years[fy], splitter)
-        if fy in (before_fy, after_fy):
-            rows += parsed
+        rows += load_rows(fy, years[fy], splitter)
     windows = {before_fy: "before", after_fy: "after"}
     years_per_window = 1.0
+    series_fys = sorted(years)  # every fiscal year parsed, windows or not
 
-    per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": []} for num in divisions}
+    per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": [], "series": Counter()} for num in divisions}
     method_counts = Counter()
     excluded = Counter()
     flagged_total = Counter()
@@ -636,44 +639,53 @@ def main():
     not_counted = Counter()
     for r in rows:
         v = float(r["amount"])
-        window = windows.get(r["fiscal_year"])
-        if v <= 0 or not window:
+        window = windows.get(r["fiscal_year"])  # None for years outside the windows: placed for the series only
+        if v <= 0:
             continue
         u = upper(r["payee"])
         if NOT_COUNTED.match(upper(r["department"])):
-            not_counted[(window, r["department"])] += v
+            if window:
+                not_counted[(window, r["department"])] += v
             continue
+        skip = None  # an exclusion bucket that applies before placing
         if EXCLUDED_DEPARTMENTS.match(upper(r["department"])) or PENSIONS.search(u):
-            excluded[(window, "pensions and tax credits")] += v
-            continue
-        if INDIVIDUAL_PROGRAMS.search(u):
-            excluded[(window, "individual programs")] += v
-            continue
-        if INTERNAL.search(u):
-            excluded[(window, "refunds and trust funds")] += v
-            continue
-        if looks_individual(r["payee"]):
-            excluded[(window, "individuals")] += v
+            skip = "pensions and tax credits"
+        elif INDIVIDUAL_PROGRAMS.search(u):
+            skip = "individual programs"
+        elif INTERNAL.search(u):
+            skip = "refunds and trust funds"
+        elif looks_individual(r["payee"]):
+            skip = "individuals"
+        if skip:
+            if window:
+                excluded[(window, skip)] += v
             continue
         pw = PROVINCEWIDE.search(upper(r["payee"])) or OTHER_GOVERNMENT.search(upper(r["payee"]))
         if not pw and is_supplier(r["payee"]):
-            excluded[(window, "suppliers")] += v
-            if window == "after":
-                suppliers[r["payee"]] += v
+            if window:
+                excluded[(window, "suppliers")] += v
+                if window == "after":
+                    suppliers[r["payee"]] += v
             continue
         num, how = place(r)
         if how == "outside Manitoba":
-            excluded[(window, "outside Manitoba")] += v
+            if window:
+                excluded[(window, "outside Manitoba")] += v
             continue
         if num is None:
             kind = "province-wide bodies" if pw else "unmatched"
-            excluded[(window, kind)] += v
-            if window == "after" and kind == "unmatched":
-                unmatched[r["payee"]] += v
+            if window:
+                excluded[(window, kind)] += v
+                if window == "after" and kind == "unmatched":
+                    unmatched[r["payee"]] += v
             continue
         flag = flag_for(r, how)
-        method_counts[(window, how)] += 1
         p = per[num]
+        if not flag:
+            p["series"][r["fiscal_year"]] += v
+        if not window:
+            continue
+        method_counts[(window, how)] += 1
         p[window]["total"] += v
         p[window]["n"] += 1
         if not flag:
@@ -715,6 +727,7 @@ def main():
                             "date": g["last"], "flag": g["flag"], "how": g["how"]} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
+        rec["series"] = [round(p["series"][fy]) for fy in series_fys]
         out[num] = rec
     med = statistics.median(x["pc_after"] for x in out.values())
     for x in out.values():
@@ -739,6 +752,8 @@ def main():
         "window_note": window_note,
         "population_basis": next(iter(divisions.values())).get("population_basis", ""),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "series": {"kind": "fiscal year", "labels": series_fys, "complete": len(series_fys),
+                   "election_index": max([i for i, fy in enumerate(series_fys) if fy_end(fy) < ELECTION.isoformat()], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},
         "excluded_after": {m: round(v) for (w, m), v in excluded.items() if w == "after"},
         "placed_after": round(sum(x["after_total"] for x in out.values())),
@@ -749,7 +764,7 @@ def main():
         "not_counted_after": {f"{d} (payments to banks and bondholders, left out of total_after)": round(v) for (w, d), v in not_counted.items() if w == "after"},
         "programs": sorted(prog_totals, key=lambda d: -sum(prog_totals[d].values()))[:60],
     }
-    json.dump({"meta": meta, "groups": groups, "ridings": out,
+    json.dump({"meta": meta, "groups": groups, "ridings": out, "recipients": recipient_table(per, lambda g: (g["payee"] + (f" ({g['town'].title()})" if g["town"] else ""))[:80]),
                "prog_by_riding": {k: {n: round(v) for n, v in m.items()} for k, m in prog_totals.items() if k in meta["programs"]}},
               open(OUT / "division_spending.json", "w"), ensure_ascii=False)
     print(json.dumps({k: v for k, v in meta.items() if k not in ("programs",)}, indent=1, ensure_ascii=False))

@@ -46,7 +46,10 @@ So:
     2025-26 (1 April 2025 to 31 March 2026), the first full year after the vote; "before"
     is fiscal 2023-24 (1 April 2023 to 31 March 2024), the last full year before it.
     Fiscal 2024-25 straddles the election (eleven months before, one after) and is read
-    only for the coverage table (meta.coverage, totals by category for each year).
+    for the coverage table (meta.coverage, totals by category for each year) and the
+    series, not the windows. Every year read feeds a per-riding time series of adjusted
+    dollars (ridings[num].series, aligned to meta.series.labels), placed and flagged
+    exactly as the windows are.
     years_per_window = 1.0. meta: election 2025-02-27, cutoff 2026-03-31,
     before_start/before_end = the before year.
 
@@ -177,6 +180,7 @@ DL = RAW / "on" / "dl"
 OUT = ROOT / "data" / "on"
 sys.path.insert(0, str(ROOT / "scripts"))
 from geo import RidingIndex, load_centroids  # noqa: E402
+from build_spending import recipient_table  # noqa: E402
 
 ELECTION = date(2025, 2, 27)
 CUTOFF = date(2026, 3, 31)
@@ -185,7 +189,7 @@ YEARS = 1.0
 CLOSE_MARGIN = 10.0
 GOV_PARTY = "PC"
 OPP_LABEL = "opposition"  # the NDP, Liberals, Greens and independents together, as on the federal page
-# Fiscal year ending -> window; 2025 (which straddles the election) is read for the coverage table only.
+# Fiscal year ending -> window; 2025 (which straddles the election) is read for the coverage table and the series only.
 WINDOWS = {2026: "after", 2024: "before"}
 COVERAGE_YEARS = [2024, 2025, 2026]
 WINDOW_NOTE = ("after = FY2025-26 (1 April 2025 to 31 March 2026), the first full fiscal year after the 27 February 2025 election; "
@@ -617,7 +621,7 @@ def ministry_label(s):
 
 
 def read_rows():
-    """Grant and supplier rows for the two windows, plus the coverage table for every year."""
+    """Grant and supplier rows for every year (those outside the windows feed the series only), plus the coverage table."""
     rows = []
     other = Counter()
     coverage = {}
@@ -638,14 +642,13 @@ def read_rows():
                 detail = re.sub(r"\s+", " ", r[3]).strip()
                 cats[cat] += v
                 n[cat] += 1
-                if not window:
-                    continue
                 if cat == "Transfer Payments" or (cat == "Statutory Payments" and detail == "Transfer Payments"):
                     kind = "transfer"
                 elif cat == "Other Payments":
                     kind = "other"
                 else:
-                    other[(window, cat)] += v
+                    if window:
+                        other[(window, cat)] += v
                     continue
                 rows.append({"Recipient": re.sub(r"\s+", " ", r[4]).strip(), "Ministry": ministry_label(r[1]), "Detail": detail,
                              "Kind": kind, "Amount": v, "fye": fy})
@@ -741,9 +744,9 @@ def main():
 
     def place(name):
         """-> (riding number or None, method)."""
+        if name in loc_cache:  # keyed by the spelling as written: the rules below read the raw name
+            return loc_cache[name]
         n = norm(name)
-        if n in loc_cache:
-            return loc_cache[n]
         res = (None, "unmatched")
         u = upper(name)
         if not n or "WITHHELD" in n or "CONFIDENTIAL" in n:
@@ -787,7 +790,7 @@ def main():
                     if d:
                         res = (d, "place name in recipient (approx.)")
                         break
-        loc_cache[n] = res
+        loc_cache[name] = res
         return res
 
     def spans_districts(key, limit=60):
@@ -844,7 +847,8 @@ def main():
         return ""
 
     rows, other_types, coverage = read_rows()
-    per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": []} for num in divisions}
+    series_fyes = sorted({r["fye"] for r in rows})  # every fiscal year read, windows or not
+    per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": [], "series": Counter()} for num in divisions}
     method_counts = Counter()
     excluded = Counter()
     buckets = Counter()
@@ -855,32 +859,36 @@ def main():
     audit = []  # every row's classification, written to $ON_PLACEMENTS when set (for checking the rules)
     for r in rows:
         v = r["Amount"]
-        window = WINDOWS.get(r["fye"])
-        if v <= 0 or not window:
+        window = WINDOWS.get(r["fye"])  # None for years outside the windows: placed for the series only
+        if v <= 0:
             continue
         program = r["Ministry"]
         num, how = place(r["Recipient"])
         flag = "" if how in ("withheld", "individual", "out-of-province", "under threshold") else flag_for(r["Recipient"], r["Kind"], r["Detail"])
-        audit.append([window, program, r["Kind"], r["Recipient"], round(v), num or "", how, flag])
-        if how in ("withheld", "out-of-province", "under threshold"):
-            kind = {"withheld": "withheld", "out-of-province": "out-of-province", "under threshold": "accounts under threshold"}[how]
-            excluded[(window, kind)] += v
-            buckets[(window, kind)] += v
-            continue
-        if how == "individual":
-            excluded[(window, "individuals")] += v
-            buckets[(window, "individuals")] += v
+        if window:
+            audit.append([window, program, r["Kind"], r["Recipient"], round(v), num or "", how, flag])
+        if how in ("withheld", "individual", "out-of-province", "under threshold"):
+            if window:
+                kind = {"withheld": "withheld", "individual": "individuals", "out-of-province": "out-of-province",
+                        "under threshold": "accounts under threshold"}[how]
+                excluded[(window, kind)] += v
+                buckets[(window, kind)] += v
             continue
         if num is None:
             kind = {"province-wide": "province-wide bodies", "supplier": "suppliers", "other government": "other governments"}.get(flag, "unmatched")
-            excluded[(window, kind)] += v
-            buckets[(window, flag or "unmatched")] += v
-            if window == "after" and kind == "unmatched":
-                unmatched[r["Recipient"]] += v
+            if window:
+                excluded[(window, kind)] += v
+                buckets[(window, flag or "unmatched")] += v
+                if window == "after" and kind == "unmatched":
+                    unmatched[r["Recipient"]] += v
+            continue
+        p = per[num]
+        if not flag:
+            p["series"][r["fye"]] += v
+        if not window:
             continue
         method_counts[(window, how)] += 1
         buckets[(window, flag or "counted")] += v
-        p = per[num]
         p[window]["total"] += v
         p[window]["n"] += 1
         if not flag:
@@ -926,6 +934,7 @@ def main():
                             "date": g["last"], "flag": g["flag"], "how": g["how"]} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
+        rec["series"] = [round(p["series"][fye]) for fye in series_fyes]
         out[num] = rec
     med = statistics.median(x["pc_after"] for x in out.values())
     for x in out.values():
@@ -951,6 +960,8 @@ def main():
                              "2021 census subdivisions summed by centroid for the 13 northern ridings, which are not federal districts; "
                              + first.get("population_basis", "").split(";")[-1].strip()),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "series": {"kind": "fiscal year", "labels": [f"{fye - 1}-{str(fye)[2:]}" for fye in series_fyes], "complete": len(series_fyes),
+                   "election_index": max([i for i, fye in enumerate(series_fyes) if date(fye, 3, 31) < ELECTION], default=-1)},
         "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},
         "excluded_after": {m: round(v) for (w, m), v in excluded.items() if w == "after"},
         "buckets_after": {m: round(v) for (w, m), v in sorted(buckets.items(), key=lambda kv: -kv[1]) if w == "after"},
@@ -962,7 +973,7 @@ def main():
         "top_unmatched": [[k, round(v)] for k, v in unmatched.most_common(40)],
         "programs": sorted(prog_totals, key=lambda d: -sum(prog_totals[d].values()))[:60],
     }
-    json.dump({"meta": meta, "groups": groups, "ridings": out,
+    json.dump({"meta": meta, "groups": groups, "ridings": out, "recipients": recipient_table(per, lambda g: g["Recipient"][:80]),
                "prog_by_riding": {k: {n: round(v) for n, v in m.items()} for k, m in prog_totals.items() if k in meta["programs"]}},
               open(OUT / "division_spending.json", "w"), ensure_ascii=False)
     print(json.dumps({k: v for k, v in meta.items() if k not in ("programs",)}, indent=1, ensure_ascii=False))

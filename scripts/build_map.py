@@ -24,7 +24,7 @@ ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXg
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
-          "group", "top_grants"]
+          "group", "top_grants", "series"]
 
 
 def links(items):
@@ -34,6 +34,15 @@ def links(items):
 def wiki(level):
     path = DATA / "wikipedia_links.json"
     return json.load(open(path)).get(level, {}) if path.exists() else {}
+
+
+def ministers(level):
+    """Cabinet ministers by riding key for one government (data/ministers.json, curated), or {}."""
+    path = DATA / "ministers.json"
+    if not path.exists():
+        return {}, None
+    lv = json.load(open(path))["levels"].get(level) or {}
+    return lv.get("ministers", {}), lv
 
 
 def pop_label():
@@ -79,11 +88,13 @@ def federal():
     pw = json.load(open(DATA / "poliwave_links.json")) if (DATA / "poliwave_links.json").exists() else {}
     mth = m["methods"]
     placed = sum(v for k, v in mth.items() if k.startswith("after|") and "unmapped" not in k)
+    mins, minfo = ministers("federal")
     ridings = {}
     for n, r in sp["ridings"].items():
-        rec = {k: r[k] for k in COMMON}
+        rec = {k: r.get(k) for k in COMMON}
         rec["wiki"] = (wk.get(n) or {}).get("url")
         rec["poliwave"] = pw.get(n)
+        rec["minister"] = mins.get(n)
         rec["top_grants"] = [dict(g, news=news.get(f'{g["org"]}|{g["ref"]}')) if f'{g["org"]}|{g["ref"]}' in news else g for g in r["top_grants"]]
         rec.update({"num": n, "name": r["current_name"], "region": r["province"], "party_won": r["party_2025"],
                     "runnerup_party": r["runnerup_party_2025"], "winner": r["winner_2025"], "runnerup": r["runnerup_2025"],
@@ -92,6 +103,7 @@ def federal():
     config = {
         "title": "Where federal grants went after the 2025 election",
         "nav": [dict(x, current=x["href"] == "index.html") for x in NAV],
+        "ministers": minfo and {"head": minfo.get("head"), "source": minfo.get("source"), "note": minfo.get("note"), "as_of": json.load(open(DATA / "ministers.json"))["as_of"], "govParty": "LPC"},
         "level": "riding", "levelPlural": "ridings", "levelTitle": "Riding", "region": "province", "regionTitle": "Prov.",
         "rep": "MP", "electionYear": "2025", "popLabel": pop_label()[0],
         "spendsUrl": "https://canadaspends.com/en/federal/spending",
@@ -154,7 +166,7 @@ def federal():
     config["legislatureInGrid"] = True  # the federal inset grid has room for it
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"], "budget": budget,
                "legislature": legislature_for("Canada"),
-               "deptBefore": sp["dept_by_riding_before"], "geo": json.load(open(DATA / "ridings_geo.json")), "land": land_for(config["insets"]),
+               "deptBefore": sp["dept_by_riding_before"], "recipients": sp.get("recipients", []), "geo": json.load(open(DATA / "ridings_geo.json")), "land": land_for(config["insets"]),
                "geoFine": json.load(open(DATA / "ridings_geo_fine.json")) if (DATA / "ridings_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]
 
@@ -449,10 +461,12 @@ def provincial(key):
     ex = m["excluded_after"]
     wk = wiki(key)
     news = json.load(open(DATA / "news_links.json")) if P.get("recordUrl") and (DATA / "news_links.json").exists() else {}
+    mins, minfo = ministers(key)
     ridings = {}
     for n, r in sp["ridings"].items():
-        rec = {k: r[k] for k in COMMON}
+        rec = {k: r.get(k) for k in COMMON}
         rec["wiki"] = (wk.get(n) or {}).get("url")
+        rec["minister"] = mins.get(n)
         if news:  # federal awards carry open.canada.ca keys, so the federal page's news links apply
             rec["top_grants"] = [dict(g, news=news[f'{g["org"]}|{g["ref"]}']) if f'{g.get("org")}|{g.get("ref")}' in news else g for g in r["top_grants"]]
         rec.update({"num": n, "name": r["name"], "region": P["region"], "party_won": r[f"party_{y}"], "runnerup_party": r[f"runnerup_party_{y}"],
@@ -465,6 +479,7 @@ def provincial(key):
     config = {
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
+        "ministers": minfo and {"head": minfo.get("head"), "source": minfo.get("source"), "note": minfo.get("note"), "as_of": json.load(open(DATA / "ministers.json"))["as_of"], "govParty": P["gov"]},
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
         "rep": rep, "electionYear": y, "spendsUrl": P.get("spendsUrl"),
         "popLabel": P["popLabel"].format(pop_date=pop_label()[1]) if P.get("popLabel") else "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
@@ -506,7 +521,7 @@ def provincial(key):
     }
     fine = DATA / P["dir"] / "divisions_geo_fine.json"
     config["legislatureInGrid"] = False  # provinces: below the city insets
-    payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["prog_by_riding"], "deptBefore": {},
+    payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["prog_by_riding"], "deptBefore": {}, "recipients": sp.get("recipients", []),
                "legislature": legislature_for(P["region"]),
                "geo": json.load(open(DATA / P["dir"] / "divisions_geo.json")), "land": land,
                "geoFine": json.load(open(fine)) if fine.exists() else {"features": []}}

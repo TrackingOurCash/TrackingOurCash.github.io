@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-25",
+ "generated": "2026-10-26",
  "election": "2024-10-19",
  "cutoff": "2026-03-31",
  "before_start": "2023-04-01",
@@ -8,6 +8,17 @@
  "windows": "after = fiscal year ending 31 March 2026 (FYE2026); before = FYE2024, the last full fiscal year before the 19 October 2024 election; annual data, no payment dates",
  "close_margin": 10.0,
  "median_pc_after": 504.22,
+ "series": {
+  "kind": "fiscal year",
+  "labels": [
+   "2022-23",
+   "2023-24",
+   "2024-25",
+   "2025-26"
+  ],
+  "complete": 4,
+  "election_index": 1
+ },
  "methods": {
   "before|postal code from federal or charity records": 7105,
   "before|place name in recipient (approx.)": 857,

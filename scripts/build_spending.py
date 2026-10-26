@@ -107,6 +107,24 @@ def to_float(v):
         return 0.0
 
 
+def recipient_table(per, name_of, cap=5000, floor=100000):
+    """Every recipient's after-window total across ridings: [name, total, awards, flag, {riding: dollars}],
+    largest first, for the page's recipient search and top-50 list."""
+    agg = {}
+    for num, p in per.items():
+        for v, g, flag, how in p["grants"]:
+            name = name_of(g)
+            a = agg.setdefault(name, {"v": 0.0, "n": 0, "flag": flag, "r": {}})
+            a["v"] += v
+            a["n"] += 1
+            a["r"][num] = a["r"].get(num, 0) + v
+            if flag:
+                a["flag"] = flag
+    rows = sorted(agg.items(), key=lambda kv: -kv[1]["v"])
+    return [[k, round(a["v"]), a["n"], a["flag"], {n: round(v) for n, v in sorted(a["r"].items(), key=lambda kv: -kv[1])[:12]}]
+            for i, (k, a) in enumerate(rows[:cap]) if a["v"] >= floor or i < 500]
+
+
 def amend_no(v):
     try:
         return int(float(v))
@@ -280,7 +298,10 @@ def main():
     span = (cutoff - ELECTION).days + 1
     years = span / 365.25
 
-    per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "grants": []} for num in ridings}
+    per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "grants": [], "series": Counter()} for num in ridings}
+    quarters = sorted({(int(r["start"][:4]), (int(r["start"][5:7]) - 1) // 3) for r in agreements.values()})
+    quarters = [q for q in quarters if q <= (date.today().year, (date.today().month - 1) // 3)]  # a few agreements carry start dates in the future
+    qlabel = lambda q: f"{q[0]}Q{q[1] + 1}"
     dept_totals = defaultdict(lambda: defaultdict(float))
     dept_before = defaultdict(lambda: defaultdict(float))
     method_counts = Counter()
@@ -297,7 +318,7 @@ def main():
         elif ELECTION <= d <= cutoff:
             window = "after"
         else:
-            continue
+            window = None  # still counted in the quarterly series
         num, method = rec["riding"], "riding field"
         if not num and rec["pc"] in postal_to_riding:
             num, method = postal_to_riding[rec["pc"]], "recipient's address on other awards" if rec.get("pc_borrowed") else "postal code"
@@ -306,13 +327,18 @@ def main():
         if not num and (norm(rec["city"]), rec["prov"]) in city_to_riding:
             num, method = city_to_riding[(norm(rec["city"]), rec["prov"])], "city (approx.)"
         if not num:
-            method_counts[(window, "unmapped")] += 1
-            method_counts[(window, "unmapped $")] += rec["value"]
+            if window:
+                method_counts[(window, "unmapped")] += 1
+                method_counts[(window, "unmapped $")] += rec["value"]
             if window == "after":
                 unmapped.append(rec)
             continue
-        method_counts[(window, method)] += 1
         flagged = flag_reason(rec, multi_riding_cities)
+        if not flagged:
+            per[num]["series"][qlabel((d.year, (d.month - 1) // 3))] += rec["value"]
+        if not window:
+            continue
+        method_counts[(window, method)] += 1
         if flagged and window == "after":
             natl_examples[rec["recipient"]] += rec["value"]
         p = per[num]
@@ -351,6 +377,7 @@ def main():
                 for v, g, fl, how in sorted(p["grants"], key=lambda t: -t[0])[:10]
             ],
         })
+        rec["series"] = [round(p["series"].get(qlabel(q), 0)) for q in quarters]
         rec["change_pc"] = round(rec["pc_after"] - rec["pc_before"], 2)
         rec["change_pct"] = (round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None)
         out[num] = rec
@@ -380,6 +407,10 @@ def main():
         "median_pc_after": med_pc, "stats": dict(stats),
         "methods": {f"{w}|{m}": round(v) for (w, m), v in method_counts.items()},
         "fsas_used": len(fsa_to_riding), "cities_used": len(city_to_riding),
+        # Quarterly series of adjusted dollars per riding (rec["series"]), every quarter in the file since KEEP_FROM;
+        # quarters after the cutoff are shown but marked as still filling in.
+        "series": {"kind": "quarter", "labels": [qlabel(q) for q in quarters], "complete": sum(1 for q in quarters if date(q[0], q[1] * 3 + 1, 1) <= cutoff),
+                   "election_index": sum(1 for q in quarters if date(q[0], q[1] * 3 + 1, 1) <= ELECTION) - 1},
         "top_flagged_recipients": [[k, round(v)] for k, v in natl_examples.most_common(25)],
         "departments": sorted(dept_totals, key=lambda d: -sum(dept_totals[d].values())),
     }
@@ -392,7 +423,7 @@ def main():
     dept_matrix = {d: {n: round(v) for n, v in m.items()} for d, m in dept_totals.items()}
     dept_matrix_before = {d: {n: round(v) for n, v in m.items()} for d, m in dept_before.items()}
     json.dump({"meta": meta, "groups": groups, "ridings": out, "dept_by_riding": dept_matrix,
-               "dept_by_riding_before": dept_matrix_before},
+               "dept_by_riding_before": dept_matrix_before, "recipients": recipient_table(per, lambda g: g["recipient"][:80])},
               open(OUT / "riding_spending.json", "w"), ensure_ascii=False)
     print(json.dumps({"meta": {k: v for k, v in meta.items() if k != "departments"}, "groups": groups}, indent=1, ensure_ascii=False))
 

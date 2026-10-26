@@ -37,7 +37,8 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "data" / "ab"
 sys.path.insert(0, str(ROOT / "scripts"))
-from geo import RidingIndex, load_centroids  # noqa: E402
+from geo import RidingIndex, load_centroids
+from build_spending import recipient_table  # noqa: E402
 
 ELECTION = date(2023, 5, 29)
 CLOSE_MARGIN = 10.0
@@ -197,7 +198,10 @@ def main():
     before_start = ELECTION - timedelta(days=span)
     years = span / 365.25
 
-    per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": []} for num in divisions}
+    per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": [], "series": Counter()} for num in divisions}
+    quarters = sorted({(r["date"].year, (r["date"].month - 1) // 3) for r in rows if r["date"]})
+    quarters = [q for q in quarters if q <= (date.today().year, (date.today().month - 1) // 3)]  # a few agreements carry start dates in the future
+    qlabel = lambda q: f"{q[0]}Q{q[1] + 1}"
     method_counts = Counter()
     excluded = Counter()
     flagged_total = Counter()
@@ -213,26 +217,34 @@ def main():
         elif ELECTION < d <= cutoff:
             window = "after"
         else:
-            continue
+            window = None  # outside both windows, but still part of the quarterly series
         program = r["Program"]
         if INDIVIDUAL_PROGRAMS.search(program):
-            excluded[(window, "individual programs")] += v
+            if window:
+                excluded[(window, "individual programs")] += v
             continue
         num, how = place(r["Recipient"])
         if how == "withheld":
-            excluded[(window, "withheld")] += v
+            if window:
+                excluded[(window, "withheld")] += v
             continue
         if how == "individual":
-            excluded[(window, "individuals")] += v
+            if window:
+                excluded[(window, "individuals")] += v
             continue
         if num is None:
             # Province-wide bodies with no match still don't belong to any one division.
             kind = "province-wide bodies" if PROVINCEWIDE.search(upper(r["Recipient"])) else "unmatched"
-            excluded[(window, kind)] += v
+            if window:
+                excluded[(window, kind)] += v
             if window == "after" and kind == "unmatched":
                 unmatched[r["Recipient"]] += v
             continue
         flag = flag_for(r["Recipient"], how)
+        if not flag:
+            per[num]["series"][qlabel((d.year, (d.month - 1) // 3))] += v
+        if not window:
+            continue
         method_counts[(window, how)] += 1
         p = per[num]
         p[window]["total"] += v
@@ -276,6 +288,7 @@ def main():
                             "date": g["last"], "flag": g["flag"], "how": g["how"]} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
+        rec["series"] = [round(p["series"].get(qlabel(q), 0)) for q in quarters]
         out[num] = rec
     med = statistics.median(x["pc_after"] for x in out.values())
     for x in out.values():
@@ -298,11 +311,13 @@ def main():
         "excluded_after": {m: round(v) for (w, m), v in excluded.items() if w == "after"},
         "placed_after": round(sum(x["after_total"] for x in out.values())),
         "total_after": round(total_after),
+        "series": {"kind": "quarter", "labels": [qlabel(q) for q in quarters], "complete": sum(1 for q in quarters if date(q[0], q[1] * 3 + 1, 1) <= cutoff),
+                   "election_index": sum(1 for q in quarters if date(q[0], q[1] * 3 + 1, 1) <= ELECTION) - 1},
         "top_flagged": [[k, round(v)] for (w, k), v in sorted(flagged_total.items(), key=lambda kv: -kv[1]) if w == "after"][:20],
         "top_unmatched": [[k, round(v)] for k, v in unmatched.most_common(40)],
         "programs": sorted(prog_totals, key=lambda d: -sum(prog_totals[d].values()))[:60],
     }
-    json.dump({"meta": meta, "groups": groups, "ridings": out,
+    json.dump({"meta": meta, "groups": groups, "ridings": out, "recipients": recipient_table(per, lambda g: g["Recipient"][:80]),
                "prog_by_riding": {k: {n: round(v) for n, v in m.items()} for k, m in prog_totals.items() if k in meta["programs"]}},
               open(OUT / "division_spending.json", "w"), ensure_ascii=False)
     print(json.dumps({k: v for k, v in meta.items() if k not in ("programs",)}, indent=1, ensure_ascii=False))

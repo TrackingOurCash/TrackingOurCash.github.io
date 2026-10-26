@@ -11,3 +11,4 @@ data/*/
 !data/pe_results.json
 output/
 .claude/
+__pycache__/
