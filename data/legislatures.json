@@ -16,7 +16,7 @@
      "seats": 137
     },
     {
-     "party": "Bloc QuÃ©bÃ©cois",
+     "party": "Bloc Québécois",
      "seats": 21
     },
     {
@@ -37,13 +37,13 @@
    "opposition_leader": {
     "name": "Pierre Poilievre",
     "party": "Conservative",
-    "riding": "Battle RiverâCrowfoot"
+    "riding": "Battle River—Crowfoot"
    },
    "other_leaders": [
     {
-     "name": "Yves-FranÃ§ois Blanchet",
-     "party": "Bloc QuÃ©bÃ©cois",
-     "riding": "BeloeilâChambly"
+     "name": "Yves-François Blanchet",
+     "party": "Bloc Québécois",
+     "riding": "Beloeil—Chambly"
     },
     {
      "name": "Avi Lewis",
@@ -54,7 +54,7 @@
     {
      "name": "Elizabeth May",
      "party": "Green",
-     "riding": "SaanichâGulf Islands"
+     "riding": "Saanich—Gulf Islands"
     }
    ],
    "last_election": "2025-04-28",
@@ -100,7 +100,7 @@
     }
    ],
    "vacant": 0,
-   "standings_note": "PRELIMINARY â Elections BC initial count, 99.96% of boxes reporting as of 25 Oct 2026 17:04 PT (Wikipedia: Con 61 won + 3 leading, NDP 26 + 1 leading). Final count 6â10 Nov; final results 18 Nov 2026.",
+   "standings_note": "PRELIMINARY – Elections BC initial count, 99.96% of boxes reporting as of 25 Oct 2026 17:04 PT (Wikipedia: Con 61 won + 3 leading, NDP 26 + 1 leading). Final count 6–10 Nov; final results 18 Nov 2026.",
    "head_of_government": {
     "name": "Lorne Doerkson (premier-designate; David Eby remains premier until sworn in)",
     "party": "Conservative",
@@ -285,7 +285,7 @@
    "opposition_leader": {
     "name": "Konrad Narth (interim PC leader)",
     "party": "Progressive Conservative",
-    "riding": "La VÃ©rendrye"
+    "riding": "La Vérendrye"
    },
    "other_leaders": [
     {
@@ -395,7 +395,7 @@
    "seats_total": 127,
    "standings": [
     {
-     "party": "Parti QuÃ©bÃ©cois",
+     "party": "Parti Québécois",
      "seats": 60
     },
     {
@@ -407,11 +407,11 @@
      "seats": 19
     },
     {
-     "party": "QuÃ©bec solidaire",
+     "party": "Québec solidaire",
      "seats": 9
     },
     {
-     "party": "Coalition Avenir QuÃ©bec",
+     "party": "Coalition Avenir Québec",
      "seats": 0
     }
    ],
@@ -419,7 +419,7 @@
    "standings_note": "Seats raised from 125 to 127 by June 2026 law. Champlain (PCQ by 191 votes) under judicial recount; Vachon flipped to PQ by 3 votes on recount (Liberals appealing). PQ minority (64 needed).",
    "head_of_government": {
     "name": "Paul St-Pierre Plamondon",
-    "party": "Parti QuÃ©bÃ©cois",
+    "party": "Parti Québécois",
     "riding": "Camille-Laurin"
    },
    "opposition_leader": {
@@ -429,20 +429,20 @@
    },
    "other_leaders": [
     {
-     "name": "Ãric Duhaime",
+     "name": "Éric Duhaime",
      "party": "Conservative",
      "riding": "Bellechasse"
     },
     {
      "name": "Ruba Ghazal (co-spokesperson, parliamentary leader)",
-     "party": "QuÃ©bec solidaire",
+     "party": "Québec solidaire",
      "riding": "Mercier"
     },
     {
-     "name": "Christine FrÃ©chette",
-     "party": "Coalition Avenir QuÃ©bec",
+     "name": "Christine Fréchette",
+     "party": "Coalition Avenir Québec",
      "riding": null,
-     "note": "Lost Trois-RiviÃ¨res; CAQ has no seats"
+     "note": "Lost Trois-Rivières; CAQ has no seats"
     }
    ],
    "last_election": "2026-10-05",

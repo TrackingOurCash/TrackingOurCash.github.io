@@ -14,7 +14,7 @@ OUTDIR = ROOT / "output"
 
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
        {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"},
-       {"href": "pei.html", "label": "PEI"}]
+       {"href": "pei.html", "label": "PEI"}, {"href": "ontario.html", "label": "Ontario"}, {"href": "quebec.html", "label": "Quebec"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
@@ -43,6 +43,26 @@ def pop_label():
     y, m = d["latest_date"][:7].split("-")
     month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][int(m) - 1]
     return f"est. {month} {y}", f"{month} {y}"
+
+
+def land_for(insets):
+    """The land file with the inset-only layers (municipal outlines, small lakes, rivers) cut to this
+    page's inset boxes, so a page does not carry every other page's city outlines."""
+    land = json.load(open(DATA / "land_geo.json"))
+    boxes = [b for _, b in insets]
+
+    def near(geom):
+        coords = geom["coordinates"]
+        pts = [pt for poly in coords for pt in poly[0]] if geom["type"] == "MultiPolygon" else [pt for line in coords for pt in line]
+        if not pts:
+            return False
+        x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)
+        y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+        if max(x1 - x0, y1 - y0) > 3:
+            return False  # a vast rural subdivision whose box happens to cover a city
+        return any(x1 > w and x0 < e and y1 > so and y0 < n for w, so, e, n in boxes)
+    land["features"] = [f for f in land["features"] if f["properties"]["kind"] not in ("muni", "lake_small", "river") or near(f["geometry"])]
+    return land
 
 
 def fmt_money(v):
@@ -133,7 +153,7 @@ def federal():
     config["legislatureInGrid"] = True  # the federal inset grid has room for it
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"], "budget": budget,
                "legislature": legislature_for("Canada"),
-               "deptBefore": sp["dept_by_riding_before"], "geo": json.load(open(DATA / "ridings_geo.json")), "land": json.load(open(DATA / "land_geo.json")),
+               "deptBefore": sp["dept_by_riding_before"], "geo": json.load(open(DATA / "ridings_geo.json")), "land": land_for(config["insets"]),
                "geoFine": json.load(open(DATA / "ridings_geo_fine.json")) if (DATA / "ridings_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]
 
@@ -289,8 +309,8 @@ PROVINCES = {
         "parties": {"PC": {"name": "Progressive Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "LIB": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"},
                     "GRN": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
                     "ISL": {"name": "Island Party", "light": "#8b5a2b", "dark": "#c0894f"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
-        "legendParties": ["PC", "LIB", "GRN"], "opp": "LIB",
-        "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2023. The money is federal, so the question here is whether Ottawa\'s grants land more heavily in the Island\'s close provincial seats.',
+        "legendParties": ["PC", "LIB", "GRN"], "opp": "opposition",
+        "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2023; "opposition" covers the Liberals, Greens and independents. The money is federal, so the question here is whether Ottawa\'s grants land more heavily in the Island\'s close provincial seats.',
         "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
         "beforeLabel": "Same dates a year earlier",
         "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
@@ -328,11 +348,63 @@ PROVINCES = {
                     ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
                     ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Prince_Edward_Island_provincial_electoral_districts")],
     },
+    # Quebec publishes transfers by beneficiary category only, so its page also shows federal grants (fed_prov_spending.py qc).
+    "quebec": {
+        "dir": "qc", "year": "2026", "region": "Quebec",  # canadaspends.com has no Quebec page
+        "title": "Where federal grants land in Quebec's provincial ridings",
+        "electionLabel": "the 5 October 2026 provincial election", "count": 127, "gov": "PQ",
+        "parties": {"PQ": {"name": "Parti Québécois", "light": "#1b4c9e", "dark": "#4f80d8"}, "PLQ": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"},
+                    "PCQ": {"name": "Conservative", "light": "#6a4c93", "dark": "#9b7fc4"}, "QS": {"name": "Québec solidaire", "light": "#f37021", "dark": "#f68a45"},
+                    "CAQ": {"name": "Coalition Avenir Québec", "light": "#1aa7bd", "dark": "#3fc0d4"}, "PVQ": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"},
+                    "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["PQ", "PLQ", "PCQ", "QS"], "opp": "opposition",
+        "groupNote": '"PQ" means the governing Parti Québécois won the seat in 2026; "opposition" covers the Liberals, Conservatives and Québec solidaire. The money is federal, so the question here is whether Ottawa\'s grants land more heavily in Quebec\'s close provincial seats.',
+        "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
+        "beforeLabel": "Same dates a year earlier",
+        "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
+        "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
+        "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
+        "linkNote": "Links open the government's own record of each award on open.canada.ca.",
+        "popLabel": "electors, est. {pop_date}",
+        "projection": {"parallels": [46, 50], "rotate": [71.5, 0]},
+        "insets": [["Montréal", [-74.05, 45.38, -73.4, 45.75]], ["Québec", [-71.55, 46.68, -71.1, 46.98]], ["Gatineau", [-75.95, 45.4, -75.6, 45.55]],
+                   ["Sherbrooke", [-72.0, 45.33, -71.8, 45.45]], ["Trois-Rivières", [-72.7, 46.3, -72.5, 46.42]], ["Saguenay", [-71.3, 48.35, -70.95, 48.5]]],
+        "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in Quebec's provincial ridings.",
+        "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Quebec's 127 provincial ridings "
+                     "and set against the 5 October 2026 provincial result. Each riding wears its current MNA's party colour; the deeper the colour, the more federal grant money "
+                     "per resident. \"Before\" means the same dates one year earlier. Quebec publishes no list of its own payees, so provincial payments cannot be shown."),
+        "notes": [
+            "<b>Why federal money:</b> Quebec's Comptes publics (Volume 2) report transfer spending by portfolio and by seven categories of beneficiary (municipalities, non-profits, "
+            "health and education institutions, private firms, government bodies, individuals), never by named recipient, and no payee list exists. This page therefore shows "
+            "the federal grants that land in each riding: the same awards as the federal page, cut along the 2026 provincial lines.",
+            "<b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent, by postal code; recipients with no postal code were "
+            "matched to their address on other awards, then by postal area or city (marked approximate). {unmapped_n} awards worth {unmapped_money} since the federal election are still unplaced.",
+            "<b>Left out by default:</b> national non-profits booked at a head office, other governments (the Gouvernement du Québec itself is the big one, plus the cities that span several ridings), "
+            "treaty settlements and foreign aid. Tick the box to put them back.",
+            "<b>Boundaries:</b> the 127 ridings of the 2026 electoral map (the Commission de la représentation électorale's delimitation, amended by the June 2026 law that kept 127 seats), "
+            "first used on 5 October 2026. Champlain's result is under judicial recount; Vachon's is the post-recount count (3 votes).",
+            "<b>Population:</b> no census count exists for these ridings, so per-person figures use the registered electors at the 2026 election, scaled to Statistics Canada's "
+            "{pop_date} estimate for Quebec.",
+            "<b>Party is correlation, not credit:</b> federal ministers and departments approve these grants, not MNAs. A pattern by provincial seat type is a signal worth checking, not proof of intent.",
+        ],
+        "sources": [("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
+                    ("Comptes publics du Québec, Volume 2 (transfers by beneficiary category only)", "https://www.donneesquebec.ca/recherche/dataset/comptes-publics-du-gouvernement-volume-2"),
+                    ("Élections Québec, 2026 general election results", "https://www.electionsquebec.qc.ca/resultats-et-statistiques/resultats-elections-generales-provinciales-en-direct/"),
+                    ("Élections Québec open data: 2026 riding boundaries and list", "https://www.dgeq.org/donnees.html"),
+                    ("Élections Québec, revision of the electoral map", "https://www.electionsquebec.qc.ca/cartes-electorales/revision-de-la-carte-electorale-du-quebec/"),
+                    ("Assemblée nationale du Québec member list", "https://www.assnat.qc.ca/fr/deputes/index.html"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Census subdivisions (municipal boundaries, via Represent)", "https://represent.opennorth.ca/boundary-sets/census-subdivisions/"),
+                    ("Wikipedia (riding articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Quebec_provincial_electoral_districts")],
+    },
 }
 
 
 LEVEL = {"alberta": ("division", "divisions"), "bc": ("district", "districts"), "saskatchewan": ("constituency", "constituencies"),
-         "manitoba": ("division", "divisions"), "nb": ("district", "districts"), "pei": ("district", "districts")}
+         "manitoba": ("division", "divisions"), "nb": ("district", "districts"), "pei": ("district", "districts"),
+         "ontario": ("riding", "ridings"), "quebec": ("riding", "ridings")}
 
 
 def provincial(key):
@@ -353,13 +425,13 @@ def provincial(key):
                     "winner": r[f"winner_{y}"], "runnerup": r[f"runnerup_{y}"], "shares": r[f"shares_{y}"], "rep": r["mla"],
                     "rep_party": r["mla_party"], "top_progs": r["top_progs"]})
         ridings[n] = rec
-    land = json.load(open(DATA / "land_geo.json"))
+    land = land_for(P["insets"])
     gov, opp = P["gov"], P["opp"]
     config = {
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
-        "rep": "MLA", "electionYear": y, "spendsUrl": P.get("spendsUrl"),
+        "rep": "MNA" if key == "quebec" else "MPP" if key == "ontario" else "MLA", "electionYear": y, "spendsUrl": P.get("spendsUrl"),
         "popLabel": P["popLabel"].format(pop_date=pop_label()[1]) if P.get("popLabel") else "registered voters, 2024" if key == "saskatchewan" else ("electors, est. " + pop_label()[1]) if key == "nb" else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": P.get("flags") or {"province-wide": "province-wide body", "other government": "other government", "supplier": "supplier, not a grant", "winnipeg (approx.)": "Winnipeg, location approx."},
@@ -367,7 +439,7 @@ def provincial(key):
         "includeLabel": P["includeLabel"],
         "groupTitle": "Does money follow close seats?", "groups": [f"Close {gov}", f"Close {opp}", f"Safe {gov}", f"Safe {opp}"],
         "groupNote": f'"Close" means the {y} winner led by under {m["close_margin"]} points; ' + P["groupNote"],
-        "groupParty": {f"Close {gov}": gov, f"Safe {gov}": gov, f"Close {opp}": opp, f"Safe {opp}": opp},
+        "groupParty": {f"Close {gov}": gov, f"Safe {gov}": gov, f"Close {opp}": opp if opp in P["parties"] else None, f"Safe {opp}": opp if opp in P["parties"] else None},
         "regionOrder": None, "regionGroup": {}, "regionShort": {},
         "beforeLabel": P["beforeLabel"], "topProgsTitle": P["topProgsTitle"], "topGrantsTitle": P.get("topGrantsTitle", "Largest recipients since the election"),
         "recordUrl": P.get("recordUrl"), "searchUrl": P.get("searchUrl"), "searchLabel": P.get("searchLabel", ""),

@@ -256,6 +256,12 @@ def load_land():
             polys = [p for p in polys_of(f["geometry"]) if max(pt[1] for pt in p[0]) > 40 and min(pt[0] for pt in p[0]) < -45 and max(pt[0] for pt in p[0]) > -170]
             out["features"].append({"type": "Feature", "properties": {"kind": "other"},
                                     "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys, 0.01, 0.05)}})
+    def span(geom):
+        """Largest extent of a shape in degrees; city outlines are small, unorganized territories are not."""
+        polys = polys_of(geom)
+        pts = [pt for poly in polys for pt in poly[0]]
+        return max(max(p[0] for p in pts) - min(p[0] for p in pts), max(p[1] for p in pts) - min(p[1] for p in pts))
+
     def in_inset(geom):
         coords = geom["coordinates"]
         if geom["type"] == "MultiPolygon":
@@ -296,8 +302,8 @@ def load_land():
         if path.name == "index.json":
             continue
         c = json.load(open(path))
-        if not in_inset(c["shape"]):
-            continue  # the riding touched an inset box but this municipality is far outside it
+        if not in_inset(c["shape"]) or span(c["shape"]) > 3:
+            continue  # the riding touched an inset box but this municipality is far outside it, or is a vast rural one
         out["features"].append({"type": "Feature", "properties": {"kind": "muni", "name": c["name"]},
                                 "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys_of(c["shape"]), 0.0015, 0.003)}})
     return out

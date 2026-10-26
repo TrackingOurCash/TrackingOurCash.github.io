@@ -26,6 +26,8 @@ QUERIES = {
     "manitoba": "{name} provincial electoral district Manitoba",
     "nb": "{name} provincial electoral district New Brunswick",
     "pei": "{name} provincial electoral district Prince Edward Island",
+    "ontario": "{name} provincial electoral district Ontario",
+    "quebec": "{name} provincial electoral district Quebec",
 }
 SOURCES = {
     "federal": (DATA / "ridings.json", "current_name"),
@@ -35,6 +37,8 @@ SOURCES = {
     "manitoba": (DATA / "mb" / "divisions.json", "name"),
     "nb": (DATA / "nb" / "divisions.json", "name"),
     "pei": (DATA / "pe" / "divisions.json", "name"),
+    "ontario": (DATA / "on" / "divisions.json", "name"),
+    "quebec": (DATA / "qc" / "divisions.json", "name"),
 }
 
 

@@ -413,6 +413,124 @@
      "source": "https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.fiscal-policy.fiscal-pulse.provincial-budget-analyses-and-updates.prince-edward-island-.prince-edward-island-2026-27-budget--april-14--2026-.html"
     }
    ]
+  },
+  "Ontario": {
+   "basis": "Consolidated surplus/(deficit) and net debt per the Public Accounts of Ontario consolidated financial statements; 2021-22 to 2024-25 as tabulated in Finance Canada's Fiscal Reference Tables 2025 (Table 23). 2024-25 shown as originally reported (revenue 226,161 / expense 227,251); Public Accounts 2025-26 reclassify it to 224,945 / 226,035 with the deficit (-1,090) and net debt (427,050) unchanged. 2025-26 is the audited Public Accounts 2025-26 (24 Sep 2026). 2026-27 is the Budget 2026 (26 Mar 2026) plan, Table 3.12: the -13.8 deficit is after a 1.5 reserve (231,856 revenue less 244,200 expense less 1,500 reserve); from 2026-27 Ontario's net debt is aligned with net financial liabilities under the new PSAS standard and is not directly comparable with earlier years",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": 2.0,
+     "net_debt_billions": 382.8,
+     "revenue_billions": 185.8,
+     "expense_billions": 183.8,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": -5.9,
+     "net_debt_billions": 399.8,
+     "revenue_billions": 194.4,
+     "expense_billions": 200.3,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": -0.7,
+     "net_debt_billions": 409.8,
+     "revenue_billions": 209.0,
+     "expense_billions": 209.7,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": -1.1,
+     "net_debt_billions": 427.1,
+     "revenue_billions": 226.2,
+     "expense_billions": 227.3,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": -13.0,
+     "net_debt_billions": 455.0,
+     "revenue_billions": 223.3,
+     "expense_billions": 236.3,
+     "status": "actual",
+     "source": "https://www.ontario.ca/files/2026-09/tbs-annual-report-and-consolidated-financial-statements-2025-2026-en-2026-09-23-v3.pdf"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": -13.8,
+     "net_debt_billions": 485.1,
+     "revenue_billions": 231.9,
+     "expense_billions": 244.2,
+     "status": "forecast",
+     "source": "https://budget.ontario.ca/2026/chapter-3.html"
+    }
+   ]
+  },
+  "Quebec": {
+   "basis": "Consolidated results per the Comptes publics du Québec; balance = budgetary balance within the meaning of the Balanced Budget Act, i.e. the accounting surplus/(deficit) AFTER deposits of dedicated revenues in the Generations Fund, which is the deficit Quebec itself reports. It differs from the accounting balance before Generations Fund deposits (2021-22 +2,567; 2022-23 -3,126; 2023-24 -5,994; 2024-25 -5,175; 2025-26 -5,502; 2026-27 -6,265, $M). Finance Canada's Fiscal Reference Tables 2025 (Table 22) give the before-deposit balance and, as 'reported balance', the balance after use of the since-abolished stabilization reserve (2021-22: 0; 2022-23: -5,635); Quebec's own series (Budget 2026-2027 Table F.23) gives -772 and -6,084 for those years, used here; later years are identical in both. Revenue and expense are consolidated totals excluding the contingency provision (2,000 in 2026-27, which is included in the balance). 2025-26 is the audited Comptes publics 2025-2026 Vol. 1 (revenue 160,428 / expense 165,930 / budgetary balance -7,791 / net debt 245,907). 2026-27 is Budget 2026-2027 (18 Mar 2026) Tables F.2 and G.1, net debt at 31 Mar 2027; the 17 Aug 2026 pre-election report later revised the 2026-27 accounting deficit to 5.2B and is not used here",
+   "years": [
+    {
+     "year": "2021-22",
+     "balance_billions": -0.8,
+     "net_debt_billions": 196.8,
+     "revenue_billions": 138.8,
+     "expense_billions": 136.3,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2022-23",
+     "balance_billions": -6.1,
+     "net_debt_billions": 208.8,
+     "revenue_billions": 144.2,
+     "expense_billions": 147.4,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2023-24",
+     "balance_billions": -8.0,
+     "net_debt_billions": 220.0,
+     "revenue_billions": 145.5,
+     "expense_billions": 151.5,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2024-25",
+     "balance_billions": -7.6,
+     "net_debt_billions": 236.2,
+     "revenue_billions": 156.1,
+     "expense_billions": 161.3,
+     "status": "actual",
+     "source": "https://www.canada.ca/en/department-finance/services/publications/fiscal-reference-tables/2025.html"
+    },
+    {
+     "year": "2025-26",
+     "balance_billions": -7.8,
+     "net_debt_billions": 245.9,
+     "revenue_billions": 160.4,
+     "expense_billions": 165.9,
+     "status": "actual",
+     "source": "https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/finances/publications-adm/Comptes-publics/FR/CPTFR_vol1-2025-2026.pdf"
+    },
+    {
+     "year": "2026-27",
+     "balance_billions": -8.6,
+     "net_debt_billions": 259.5,
+     "revenue_billions": 166.5,
+     "expense_billions": 170.8,
+     "status": "forecast",
+     "source": "https://www.finances.gouv.qc.ca/Budget_et_mise_a_jour/budget/documents/Budget2627_PlanBudgetaire.pdf"
+    }
+   ]
   }
  }
 }

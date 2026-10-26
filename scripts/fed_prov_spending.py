@@ -1,22 +1,28 @@
-"""Prince Edward Island: federal grants and contributions placed in the 27 provincial districts.
+"""Federal grants and contributions placed in a province's provincial ridings, for provinces
+that publish no payee list of their own.
 
-PEI publishes no payee list: its Public Accounts Volume II itemises spending by department
-and program ("Operating Grant", "Pharmacare", "Miscellaneous"), so provincial payments cannot
-be placed in a district. The PEI page therefore shows where *federal* money lands, district by
-district, set against the 2023 provincial result. The data, windows and flags are exactly the
+  python3 fed_prov_spending.py pe     Prince Edward Island (27 districts)
+  python3 fed_prov_spending.py qc     Quebec (127 ridings of the 2026 map)
+
+PEI's Public Accounts Volume II and Quebec's Comptes publics Volume 2 itemise transfers by
+department, program and beneficiary *category* ("Operating Grant", "Pharmacare",
+"Municipalités", "Organismes à but non lucratif"), never by named recipient, so provincial
+payments cannot be placed. These pages therefore show where *federal* money lands, riding by
+riding, set against the latest provincial result. The data, windows and flags are exactly the
 federal page's (build_spending.py); only the shapes differ:
 
-  * agreements from data/raw/grants.csv whose recipient is in PEI (province PE, or a
-    C-series postal code), amendments merged as on the federal page;
-  * placed by the recipient postal code's GeoNames centroid inside the district shapes
-    (data/pe/divisions_geo.json), else the postal area's (FSA) centroid, else the city's
-    centroid when the city sits in one district ("approx.");
-  * "after" = election day (28 April 2025) to the federal page's cutoff (the last quarter that
-    looks fully reported); "before" = the same dates a year earlier; both annualized;
-  * flags as on the federal page: national bodies, other governments (the Province of PEI
-    itself is the big one), treaty settlements and foreign aid are left out of the adjusted
-    totals. Writes data/pe/division_spending.json in the provincial-page schema, with the
-    open.canada.ca record keys (org, ref) kept on each grant so the page can link them.
+  * agreements from data/raw/grants.csv whose recipient is in the province (province code, or
+    a postal code with the province's first letter), amendments merged as on the federal page;
+  * placed by the recipient postal code's GeoNames centroid inside the riding shapes
+    (data/<dir>/divisions_geo.json), else the postal area's (FSA) centroid, else the city's
+    centroid when the city sits in one riding ("approx.");
+  * "after" = federal election day (28 April 2025) to the federal page's cutoff (the last
+    quarter that looks fully reported); "before" = the same dates a year earlier; both
+    annualized;
+  * flags as on the federal page: national bodies, other governments (the province itself is
+    the big one), treaty settlements and foreign aid are left out of the adjusted totals.
+Writes data/<dir>/division_spending.json in the provincial-page schema, with the
+open.canada.ca record keys (org, ref) kept on each grant so the page can link them.
 """
 import csv
 import json
@@ -28,17 +34,25 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
-OUT = ROOT / "data" / "pe"
 sys.path.insert(0, str(ROOT / "scripts"))
-from build_spending import ELECTION, KEEP_FROM, CLOSE_MARGIN, PROVINCES, norm, first, flag_reason, clean_postal, to_float, amend_no  # noqa: E402
+from build_spending import ELECTION, KEEP_FROM, CLOSE_MARGIN, norm, first, flag_reason, clean_postal, to_float, amend_no  # noqa: E402
 from geo import RidingIndex, load_centroids  # noqa: E402
 
-GOV_PARTY, OPP_PARTY = "PC", "LIB"
+PROFILES = {
+    "pe": {"dir": "pe", "prov": "PE", "postal": "C", "year": "2023", "gov": "PC", "opp": "opposition", "provincial_election": "2023-04-03",
+           "multi_city": ["Charlottetown", "Summerside", "Stratford", "Cornwall"]},
+    "qc": {"dir": "qc", "prov": "QC", "postal": "GHJ", "year": "2026", "gov": "PQ", "opp": "opposition", "provincial_election": "2026-10-05",
+           "multi_city": ["Montréal", "Québec", "Laval", "Gatineau", "Longueuil", "Sherbrooke", "Lévis", "Saguenay", "Trois-Rivières", "Terrebonne",
+                          "Repentigny", "Brossard", "Saint-Jean-sur-Richelieu", "Drummondville", "Saint-Jérôme", "Granby", "Blainville", "Mirabel", "Châteauguay"]},
+}
 
 csv.field_size_limit(sys.maxsize)
 
 
 def main():
+    P = PROFILES[sys.argv[1] if len(sys.argv) > 1 else "pe"]
+    OUT = ROOT / "data" / P["dir"]
+    GOV_PARTY, OPP_PARTY, YEAR = P["gov"], P["opp"], P["year"]
     divisions = json.load(open(OUT / "divisions.json"))
     geo = json.load(open(OUT / "divisions_geo.json"))
     index = RidingIndex([(f["id"], f["geometry"]) for f in geo["features"]])
@@ -54,7 +68,7 @@ def main():
             if None in row or row.get("owner_org_title") is None:
                 continue
             pc = clean_postal(row["recipient_postal_code"])
-            if row["recipient_province"] != "PE" and not pc.startswith("C"):
+            if row["recipient_province"] != P["prov"] and not (pc and pc[0] in P["postal"]):
                 continue
             bn = "".join(ch for ch in (row["recipient_business_number"] or "") if ch.isdigit())[:9]
             if pc:
@@ -90,11 +104,11 @@ def main():
     centroids = load_centroids()
     fsa_pts, place_pts = defaultdict(list), defaultdict(list)
     for pc, pt in centroids.items():
-        if pc.startswith("C"):
+        if pc[0] in P["postal"]:
             fsa_pts[pc[:3]].append(pt)
     with open(RAW / "geonames" / "CA_full.txt", encoding="utf-8", newline="") as f:
         for row in csv.reader(f, delimiter="\t"):
-            if row[4] == "PE":
+            if row[4] == P["prov"]:
                 try:
                     place_pts[norm(row[2])].append((float(row[9]), float(row[10])))
                 except (IndexError, ValueError):
@@ -120,7 +134,7 @@ def main():
         return None, "unmapped"
 
     # City governments spanning several districts can't be pinned to one.
-    multi = {(norm(c), "PE") for c in ("Charlottetown", "Summerside", "Stratford", "Cornwall")}
+    multi = {(norm(c), P["prov"]) for c in P["multi_city"]}
     per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "grants": []} for num in divisions}
     dept_totals = defaultdict(lambda: defaultdict(float))
     methods, excluded, flagged_total, unmatched = Counter(), Counter(), Counter(), Counter()
@@ -164,7 +178,7 @@ def main():
             "after_total": round(a["total"]), "after_n": a["n"], "after_adj": round(a["adj"]), "after_adj_n": a["adj_n"],
             "before_total": round(b["total"]), "before_adj": round(b["adj"]),
             "pc_after": round(a["adj"] / pop / years, 2), "pc_after_all": round(a["total"] / pop / years, 2), "pc_before": round(b["adj"] / pop / years, 2),
-            "close": dv["margin_pts"] < CLOSE_MARGIN, "gov_won": dv["party_2023"] == GOV_PARTY,
+            "close": dv["margin_pts"] < CLOSE_MARGIN, "gov_won": dv[f"party_{YEAR}"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["depts"].most_common(4)],
             "top_grants": [{"v": round(v), "who": g["recipient"][:80], "dept": g["dept"][:60], "prog": g["program"][:80], "date": g["start"],
                             "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"]}
@@ -187,7 +201,7 @@ def main():
     flagged_after = sum(x["after_total"] - x["after_adj"] for x in out.values())
     meta = {
         "generated": date.today().isoformat(), "election": ELECTION.isoformat(), "federal_election": ELECTION.isoformat(),
-        "provincial_election": "2023-04-03", "cutoff": cutoff.isoformat(),
+        "provincial_election": P["provincial_election"], "cutoff": cutoff.isoformat(),
         "before_start": before_start.isoformat(), "before_end": before_end.isoformat(), "years_per_window": years,
         "population_basis": next(iter(divisions.values())).get("population_basis", ""),
         "close_margin": CLOSE_MARGIN, "median_pc_after": med,

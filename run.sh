@@ -55,5 +55,9 @@ if python3 scripts/mb_prep.py && python3 scripts/mb_spending.py > data/mb/summar
 # New Brunswick layer
 if python3 scripts/nb_prep.py && python3 scripts/nb_spending.py > data/nb/summary.json; then :; else echo "NB layer skipped"; fi
 # Prince Edward Island layer (federal grants on the provincial districts; PEI publishes no payee list)
-if python3 scripts/pe_prep.py && python3 scripts/pe_spending.py > data/pe/summary.json; then :; else echo "PEI layer skipped"; fi
+if python3 scripts/pe_prep.py && python3 scripts/fed_prov_spending.py pe > data/pe/summary.json; then :; else echo "PEI layer skipped"; fi
+# Ontario layer
+if python3 scripts/on_prep.py && python3 scripts/on_spending.py > data/on/summary.json; then :; else echo "ON layer skipped"; fi
+# Quebec layer (federal grants on the 2026 ridings; Quebec publishes no payee list either)
+if python3 scripts/qc_prep.py && python3 scripts/fed_prov_spending.py qc > data/qc/summary.json; then :; else echo "QC layer skipped"; fi
 python3 scripts/build_map.py
