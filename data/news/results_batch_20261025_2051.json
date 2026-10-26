@@ -1,0 +1,1032 @@
+{
+ "nrcan-rncan|115-2025-2026-Q3-17783": {
+  "mainstream": {
+   "outlet": "Noovo Info",
+   "title": "Québec demande d'abattre une partie des 2 milliards d'arbres du fédéral pour l'industrie",
+   "url": "https://www.noovo.info/nouvelle/quebec-demande-dabattre-une-partie-des-2-milliards-darbres-du-federal-pour-lindustrie.html"
+  },
+  "independent": null,
+  "query": "\"Ressources naturelles et des Forêts\" Québec 2 milliards d'arbres entente fédérale"
+ },
+ "ic|033-2025-2026-Q3-515675": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "The Federal and Ontario governments are giving Kap Paper $28 million in loans to help it resume operations",
+   "url": "https://www.cbc.ca/news/canada/sudbury/kapuskasing-paper-mill-resuming-operations-9.6943395"
+  },
+  "independent": {
+   "outlet": "Paper Advance",
+   "title": "Canada Backs Kap Paper MDF Study in Northeast Ontario",
+   "url": "https://www.paperadvance.com/news/industry-news/canada-backs-kap-paper-mdf-study-in-northeast-ontario.html"
+  },
+  "query": "\"Kap Paper\" Kapuskasing Strategic Response Fund federal"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18620": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"DNAL\" Huntsville Natural Resources Canada forest industry transformation funding"
+ },
+ "ps-sp|088-2025-2026-Q2-00001": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Lesser Slave Lake Indian Regional Council\" policing facility federal funding"
+ },
+ "pch|016-2025-2026-Q4-1379891": {
+  "mainstream": null,
+  "independent": null,
+  "query": "British Columbia minority language education federal funding Canadian Heritage agreement francophone 2025"
+ },
+ "ic|033-2025-2026-Q3-515674": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Broadband North\" Ohsweken Universal Broadband Fund"
+ },
+ "cihr-irsc|236-2025-2026-Q1-00089": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Turtle Island News",
+   "title": "LU researcher co-leading 'trust-based' project to improve Indigenous youth mental health",
+   "url": "https://theturtleislandnews.com/index.php/2025/09/10/lu-researcher-co-leading-trust-based-project-to-improve-indigenous-youth-mental-health/"
+  },
+  "query": "\"Mushquash\" Thunder Bay CIHR research funding"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0093": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Acadia First Nation\" fisheries DFO funding agreement"
+ },
+ "ced-dec|012-2026-2027-Q1-00033": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Rayonier\" Témiscaming federal funding tariff response CED"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00029": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tropicana Community Services\" Scarborough federal funding Black communities"
+ },
+ "ps-sp|088-2025-2026-Q4-00254": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pakua Shipi\" poste de police financement fédéral Sécurité publique"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18404": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Scandium Canada\" Natural Resources Canada critical minerals funding"
+ },
+ "tc|217-2025-2026-Q4-90119": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Holand Leasing\" Mont-Royal iZEV Transport Canada zero-emission vehicles incentive"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00014": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Townshippers\" Sherbrooke federal funding Enabling Fund official language minority"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17423": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "How an old Toronto apartment building is getting a second life — without moving tenants out",
+   "url": "https://www.cbc.ca/news/canada/toronto/old-toronto-apartment-building-second-life-9.7263092"
+  },
+  "independent": null,
+  "query": "\"WoodGreen\" Toronto Natural Resources Canada energy innovation retrofit funding"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0059": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Elsipogtog First Nation\" fisheries DFO funding $6.5 million"
+ },
+ "tc|217-2025-2026-Q1-16763": {
+  "mainstream": {
+   "outlet": "Times Colonist",
+   "title": "Ogden Point to get $22.5 million for shore power so cruise ships can plug in",
+   "url": "https://www.timescolonist.com/local-news/ogden-point-to-get-225-million-for-shore-power-so-cruise-ships-can-plug-in-10221360"
+  },
+  "independent": {
+   "outlet": "Business Examiner",
+   "title": "Seaspan and GVHA among Green Shipping Corridor Program recipients",
+   "url": "https://businessexaminer.ca/victoria-articles/item/seaspan-and-gvha-among-green-shipping-corridor-program-recipients/"
+  },
+  "query": "\"Seaspan Ferries\" Green Shipping Corridor Program Transport Canada funding"
+ },
+ "infc|278-2025-2026-Q4-00055": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "The Laker",
+   "title": "Federal government announces $6.3 million for Lantz wastewater infrastructure to support housing",
+   "url": "https://thelaker.ca/?p=53219"
+  },
+  "query": "\"East Hants\" Canada Housing Infrastructure Fund federal funding wastewater"
+ },
+ "infc|278-2025-2026-Q2-00057": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Link2Build",
+   "title": "Thorold to convert fire station into historical museum",
+   "url": "https://link2build.ca/news/articles/2024/april/thorold-to-convert-fire-station-into-historical-museum"
+  },
+  "query": "\"Thorold\" Green and Inclusive Community Buildings federal funding $6.2 million"
+ },
+ "ic|033-2025-2026-Q4-515743": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Canada invests $67 million in dual-use life sciences research",
+   "url": "https://betakit.com/canada-invests-67-million-in-dual-use-life-sciences-research/"
+  },
+  "query": "\"Northern RNA\" Calgary Life Sciences federal funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00123": {
+  "mainstream": {
+   "outlet": "CTV News Windsor",
+   "title": "Feds invest $20 million into Windsor-Essex businesses",
+   "url": "https://www.ctvnews.ca/windsor/article/feds-invest-20-million-into-windsor-essex-businesses/"
+  },
+  "independent": null,
+  "query": "\"Service Mold\" Windsor FedDev Ontario defence investment funding"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0103": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Millbrook First Nation\" fisheries DFO funding $6 million"
+ },
+ "isc-sac|1910-2025-2026-Qrt3-0008631": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"First Nations Capital and Infrastructure Agency of Saskatchewan\" Indigenous Services Canada funding"
+ },
+ "ec|099-2025-2026-Q4-00138": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Nuxalk Nation\" Bella Coola Low Carbon Economy Fund federal funding"
+ },
+ "aandc-aadnc|0420-2026-2027-Qrt1-546404": {
+  "mainstream": {
+   "outlet": "Global News",
+   "title": "B.C. tables implementation legislation after 30-year negotiation with First Nation",
+   "url": "https://globalnews.ca/news/11801484/bc-tables-implementation-legislation-30-year-negotiation-first-nation/"
+  },
+  "independent": {
+   "outlet": "Canada's National Observer",
+   "title": "BC tables another First Nation treaty ratification, but overlap concerns remain",
+   "url": "https://www.nationalobserver.com/2026/04/16/news/bc-tables-another-first-nation-treaty-ratification-overlap-concerns-remain"
+  },
+  "query": "\"K'ómoks First Nation\" treaty implementation federal funding Courtenay"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00017": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"CDEM\" Winnipeg Enabling Fund official language minority federal funding employment"
+ },
+ "pch|016-2025-2026-Q3-1375258": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Curling Canada\" Sport Support Program federal funding Sport Canada"
+ },
+ "pacifican|240-2025-2026-Q4-00076": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"PMF Brands\" Surrey PacifiCan federal funding"
+ },
+ "pacifican|240-2025-2026-Q4-00075": {
+  "mainstream": {
+   "outlet": "Nanaimo News Bulletin",
+   "title": "Harmac receives federal funding boost",
+   "url": "https://www.nanaimobulletin.com/news/harmac-receives-federal-funding-boost/"
+  },
+  "independent": {
+   "outlet": "Paper Advance",
+   "title": "Canada invests C$5.5M in Harmac Pacific mill",
+   "url": "https://www.paperadvance.com/news/industry-news/canada-invests-c-5-5m-in-harmac-pacific-mill.html"
+  },
+  "query": "\"Nanaimo Forest Products\" PacifiCan federal funding Harmac"
+ },
+ "pacifican|240-2025-2026-Q4-00096": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kalesnikoff\" Castlegar PacifiCan federal funding $5.5 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18734": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Bavarian Millwork\" Chemainus Natural Resources Canada funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18535": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Calumix\" London Ontario Natural Resources Canada energy innovation funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00262": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Alexander Tubular\" Edmonton PrairiesCan federal funding"
+ },
+ "pacifican|240-2025-2026-Q4-00082": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"BC Wood\" Specialties Group PacifiCan federal funding Langley"
+ },
+ "aafc-aac|235-2025-2026-Q4-00232": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "GuelphToday",
+   "title": "Feds announce $8M to help agrifood producers adopt new green tech",
+   "url": "https://guelphtoday.com/local-news/feds-announce-8m-to-help-agrifood-producers-adopt-new-green-tech-9360833"
+  },
+  "query": "\"Bioenterprise\" Guelph Agricultural Clean Technology federal funding"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0070": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Wagmatcook First Nation\" fisheries DFO funding"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0101": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"We'koqma'q\" fisheries DFO funding commercial"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0057": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pictou Landing First Nation\" fisheries DFO funding commercial"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17378": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Naut'sa mawt Tribal Council\" Indigenous Advisory and Monitoring Committee Natural Resources Canada funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18601": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Glacies\" Québec Natural Resources Canada energy innovation funding $5 million"
+ },
+ "ced-dec|012-2025-2026-Q4-01479": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Mecaer America\" Laval federal funding defence investment DEC"
+ },
+ "aafc-aac|235-2025-2026-Q4-00413": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Volailles des Cantons\" Roxton financement fédéral gestion de l'offre"
+ },
+ "infc|278-2025-2026-Q3-00041": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Aboriginal Experiences\" Ottawa Green and Inclusive Community Buildings federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18409": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kinectrics\" Natural Resources Canada funding $5 million small modular reactor research"
+ },
+ "feddevontario|062-2025-2026-Q4-00111": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Cyclic Materials\" Kingston FedDev Ontario federal funding $5 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17779": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Frog Lake\" Kanata power plant Clean Fuels Program Natural Resources Canada funding"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt3-0000023": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Piikani Nation\" federal funding agreement Crown-Indigenous Relations $5 million"
+ },
+ "pacifican|240-2025-2026-Q4-00046": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Musora\" Abbotsford PacifiCan federal funding $5 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17700": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Nano One\" Burnaby Natural Resources Canada Energy Innovation Program $5 million"
+ },
+ "pacifican|240-2025-2026-Q4-00113": {
+  "mainstream": {
+   "outlet": "CBC News",
+   "title": "Nanaimo, B.C., food bank receives $5 million in federal funding for new warehouse",
+   "url": "https://www.cbc.ca/news/canada/british-columbia/nanaimo-food-bank-federal-funding-5-million-9.7078585"
+  },
+  "independent": {
+   "outlet": "Inside Logistics",
+   "title": "Ottawa invests in Nanaimo food recovery distribution warehouse",
+   "url": "https://www.insidelogistics.ca/food/ottawa-invests-in-nanaimo-food-recovery-distribution-warehouse"
+  },
+  "query": "\"Loaves and Fishes\" Nanaimo PacifiCan federal funding $5 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18529": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Mining.com",
+   "title": "PH7 secures C$5M from Natural Resources Canada for copper extraction technology",
+   "url": "https://www.mining.com/?p=1209730"
+  },
+  "query": "\"pH7 Technologies\" Vancouver Natural Resources Canada funding $5 million"
+ },
+ "prairiescan|044-2025-2026-Q4-00138": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Polykar\" Edmonton PrairiesCan federal funding"
+ },
+ "tc|217-2025-2026-Q1-16608": {
+  "mainstream": {
+   "outlet": "CTV News Windsor",
+   "title": "Federal funding for Windsor's Sterling Fuels to bring biofuels to the Great Lakes shipping industry",
+   "url": "https://windsor.ctvnews.ca/federal-funding-for-windsor-s-sterling-fuels-to-bring-biofuels-to-the-great-lakes-shipping-industry-1.7107712"
+  },
+  "independent": null,
+  "query": "\"Sterling Fuels\" Windsor Green Shipping Corridor Transport Canada funding"
+ },
+ "aafc-aac|235-2025-2026-Q4-00234": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "AgriNews",
+   "title": "Organizations selected to administer ACT Accelerator funding",
+   "url": "https://agrinews.ca/organizations-selected-to-administer-act-accelerator-funding/"
+  },
+  "query": "\"CAAIN\" Edmonton Agricultural Clean Technology federal funding accelerator"
+ },
+ "aafc-aac|235-2026-2027-00020": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "AgriNews",
+   "title": "Organizations selected to administer ACT Accelerator funding",
+   "url": "https://agrinews.ca/organizations-selected-to-administer-act-accelerator-funding/"
+  },
+  "query": "\"CAAIN\" Edmonton Agricultural Clean Technology federal funding accelerator"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17394": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"SureCharge\" Calgary Natural Resources Canada ZEVIP EV charging funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17433": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Ontario government ZEVIP Natural Resources Canada EV chargers St. Catharines federal funding $4.7 million"
+ },
+ "ec|099-2025-2026-Q4-00093": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ontario Land Trust Alliance\" Canada Nature Fund federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18726": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Coopérative régionale d'électricité\" Saint-Jean-Baptiste-de-Rouville financement fédéral Ressources naturelles Canada"
+ },
+ "pch|016-2025-2026-Q3-1375260": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Rowing Canada\" Sport Support Program federal funding Sport Canada"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17703": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Salient Energy\" Dartmouth Natural Resources Canada funding $4.5 million"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1038480": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Sonele\" Markham IRAP National Research Council funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00023": {
+  "mainstream": {
+   "outlet": "CTV News Windsor",
+   "title": "Feds invest $20 million into Windsor-Essex businesses",
+   "url": "https://www.ctvnews.ca/windsor/article/feds-invest-20-million-into-windsor-essex-businesses/"
+  },
+  "independent": null,
+  "query": "\"Ennova Facades\" Windsor FedDev Ontario tariff response federal funding"
+ },
+ "fin|060-2025-2026-Q3-0029": {
+  "mainstream": {
+   "outlet": "CTV News",
+   "title": "Feds moving forward on long-awaited sustainable investment guidelines",
+   "url": "https://www.ctvnews.ca/climate-and-environment/article/feds-moving-forward-on-long-awaited-sustainable-investment-guidelines/"
+  },
+  "independent": null,
+  "query": "\"Canadian Climate Institute\" sustainable finance taxonomy Finance Canada funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17267": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"DP World\" Vancouver Natural Resources Canada ZEVIP electric terminal equipment funding"
+ },
+ "ec|099-2025-2026-Q4-00133": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Nunatsiavut Government\" Low Carbon Economy Fund federal funding Nain"
+ },
+ "aafc-aac|235-2025-2026-Q4-00421": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ferme Avicole Laviolette\" Saint-Isidore federal funding Supply Management Processing Investment Fund"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0088": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Wolastoqiyik Wahsipekuk\" Cacouna pêches financement fédéral MPO"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0083": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Micmac de Gespeg\" pêches commerciales financement fédéral MPO"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00032": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Academica",
+   "title": "Postsecondary institutions among recipients of federal Foreign Credential Recognition Program funding",
+   "url": "https://academica.ca/?p=12008"
+  },
+  "query": "\"McMaster University\" Foreign Credential Recognition federal funding ESDC internationally educated"
+ },
+ "ec|099-2025-2026-Q3-00024": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Oneida Nation of the Thames\" Environment and Climate Change Canada funding $4 million"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00023": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"RDÉE\" Île-du-Prince-Édouard Fonds d'habilitation financement fédéral emploi"
+ },
+ "cihr-irsc|236-2025-2026-Q3-00748": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Stephanie Sinclair\" Winnipeg CIHR research grant"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18349": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Festival Hydro\" Stratford Natural Resources Canada Smart Renewables federal funding"
+ },
+ "acoa-apeca|276-2025-2026-Q4-00045": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Solace Power\" Mount Pearl ACOA federal funding defence"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17695": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Electrify Canada\" Natural Resources Canada ZEVIP funding $4 million chargers"
+ },
+ "prairiescan|044-2025-2026-Q4-00046": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Southland Trailer\" Lethbridge PrairiesCan federal funding $4 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18546": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Business Examiner",
+   "title": "Federal funding enables Atlas to add robotics",
+   "url": "https://businessexaminer.ca/?p=59483"
+  },
+  "query": "\"Atlas Engineered Products\" Nanaimo Natural Resources Canada funding forest industry transformation"
+ },
+ "aafc-aac|235-2025-2026-Q4-00409": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Westco\" Saint-François-de-Madawaska federal funding Supply Management Processing Investment Fund poultry"
+ },
+ "aandc-aadnc|0420-2025-2026-Qrt2-0000017": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ka:'yu:'k't'h'/Che:k:tles7et'h'\" First Nations treaty federal funding Kyuquot"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0018791": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Louis Riel Capital Corporation\" Indigenous Services Canada economic development funding Winnipeg"
+ },
+ "prairiescan|044-2025-2026-Q4-00143": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "PrairiesCan invests $7.9 million in funding to support Co.Labs, local AI firms",
+   "url": "https://betakit.com/prairiescan-invests-7-9-million-in-funding-to-support-co-labs-local-ai-firms/"
+  },
+  "query": "\"Saskatchewan Collaborates\" Saskatoon PrairiesCan federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18144": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ventra\" Windsor Natural Resources Canada Energy Innovation Program funding"
+ },
+ "ec|099-2025-2026-Q3-00086": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Siksika Nation\" Environment and Climate Change Canada fuel charge proceeds funding"
+ },
+ "ec|099-2025-2026-Q3-00090": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ermineskin Cree Nation\" Environment and Climate Change Canada funding Maskwacis"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18323": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"UBC Okanagan\" Natural Resources Canada Energy Innovation Program funding $3.65 million"
+ },
+ "hc-sc|271-2025-2026-Q3-00020": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Maamwesying\" Health Canada Emergency Treatment Fund funding Cutler"
+ },
+ "hc-sc|271-2025-2026-Q3-00105": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Oral Health Group",
+   "title": "$35M in new grants to expand dental students' training as CDCP enrolment hits six million",
+   "url": "https://www.oralhealthgroup.com/dental-governance-regulations/35m-in-new-grants-to-expand-dental-students-training-as-cdcp-enrolment-hits-six-million-1003991956/"
+  },
+  "query": "\"University of Manitoba\" Oral Health Access Fund Health Canada dental funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00129": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Piston Automotive\" Mississauga FedDev Ontario federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-17854": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Moment Energy\" Coquitlam Natural Resources Canada funding $3.5 million"
+ },
+ "hc-sc|271-2025-2026-Q4-00089": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Georgian College\" Oral Health Access Fund Health Canada dental funding Barrie"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18324": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"NanoXplore\" Natural Resources Canada Energy Innovation Program funding Saint-Laurent"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17264": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"DP World\" Fraser Surrey Natural Resources Canada ZEVIP funding electric"
+ },
+ "isc-sac|1910-2025-2026-Qrt4-0021731": {
+  "mainstream": null,
+  "independent": null,
+  "query": "Indigenous Services Canada Social Development \"Batch Report\" Gatineau funding"
+ },
+ "ic|033-2025-2026-Q4-515693": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Myant\" Mississauga AI Compute Access Fund federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q3-19127": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Renew Farms\" Clean Fuels Program Natural Resources Canada funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18037": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Vedder Transport\" Abbotsford Green Freight Program Natural Resources Canada funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18622": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Vedder Transport\" Abbotsford Green Freight Program Natural Resources Canada funding"
+ },
+ "pch|016-2025-2026-Q3-1375127": {
+  "mainstream": {
+   "outlet": "CBC Sports",
+   "title": "Canada Basketball, Wheelchair Basketball Canada to receive $5.6 million in federal funding",
+   "url": "https://www.cbc.ca/1.6647235"
+  },
+  "independent": null,
+  "query": "\"Canada Basketball\" Sport Support Program federal funding Sport Canada"
+ },
+ "hc-sc|271-2025-2026-Q3-00108": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Oral Health Group",
+   "title": "$35M in new grants to expand dental students' training as CDCP enrolment hits six million",
+   "url": "https://www.oralhealthgroup.com/dental-governance-regulations/35m-in-new-grants-to-expand-dental-students-training-as-cdcp-enrolment-hits-six-million-1003991956/"
+  },
+  "query": "\"University of Saskatchewan\" Oral Health Access Fund Health Canada dental funding"
+ },
+ "aafc-aac|235-2025-2026-Q4-00422": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fromagerie Boivin\" La Baie financement fédéral Agriculture Canada"
+ },
+ "prairiescan|044-2025-2026-Q4-00240": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Zavisha Sawmills\" Hines Creek PrairiesCan federal funding"
+ },
+ "pch|016-2025-2026-Q3-1375194": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Sport Institute Ontario\" Sport Canada federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17388": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"HPQ Silicon\" Natural Resources Canada Energy Innovation Program funding $3 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18673": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"HPQ Silicon\" Natural Resources Canada Energy Innovation Program funding $3 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17692": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"DNAL\" Huntsville Natural Resources Canada forest industry transformation funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q2-1033015": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"WellnessLiving\" Thornhill IRAP National Research Council funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00098": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Calgary Tech Journal",
+   "title": "$9.3 million in federal funding backs six Alberta defence tech companies",
+   "url": "https://calgarytechjournal.com/p/9-3-million-in-federal-funding-backs-six-alberta-defence-tech-companies"
+  },
+  "query": "\"Canadian UAVs\" Calgary PrairiesCan federal funding $3 million"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17501": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"SensorUp\" Calgary Natural Resources Canada funding methane emissions"
+ },
+ "pacifican|240-2025-2026-Q4-00048": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"IGV Housing\" Vancouver PacifiCan federal funding $3 million"
+ },
+ "pch|016-2025-2026-Q3-1375180": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Judo Canada\" Sport Support Program federal funding Sport Canada"
+ },
+ "infc|278-2025-2026-Q4-00074": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Pikwàkanagàn\" Green and Inclusive Community Buildings federal funding"
+ },
+ "aafc-aac|235-2023-2024-Q2-00043": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Canadian Poultry Magazine",
+   "title": "Federal government invests in Nova Scotia poultry processor",
+   "url": "https://www.canadianpoultrymag.com/federal-government-invests-in-nova-scotia-poultry-processor/"
+  },
+  "query": "\"Eden Valley Poultry\" Berwick federal funding Supply Management Processing Investment Fund"
+ },
+ "infc|278-2025-2026-Q4-00015": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Chippewas of Nawash\" Green and Inclusive Community Buildings federal funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039041": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Loop\" Terrebonne IRAP National Research Council funding plastics"
+ },
+ "infc|278-2025-2026-Q2-00047": {
+  "mainstream": {
+   "outlet": "CTV News Barrie",
+   "title": "Simcoe County to see improved transit in rural communities",
+   "url": "https://www.ctvnews.ca/barrie/article/simcoe-county-to-see-improved-transit-in-rural-communities/"
+  },
+  "independent": null,
+  "query": "\"County of Simcoe\" Canada Public Transit Fund federal funding LINX"
+ },
+ "feddevontario|062-2025-2026-Q4-00059": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"CDN Buildings\" Delhi Ontario FedDev tariff response federal funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040653": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"QMC Metering\" Port Coquitlam IRAP National Research Council funding"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00019": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"HMC Connections\" Oakville Foreign Credential Recognition federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18320": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Niagara Peninsula Energy\" Natural Resources Canada Smart Renewables federal funding"
+ },
+ "prairiescan|044-2025-2026-Q4-00233": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Calgary Tech Journal",
+   "title": "Federal government invests $2.7 million in Calgary's ZS2 Technologies",
+   "url": "https://calgarytechjournal.com/p/federal-government-invests-2-7-million-in-calgary-s-zs2-technologies"
+  },
+  "query": "\"ZS2 Technologies\" Calgary PrairiesCan federal funding"
+ },
+ "aafc-aac|235-2025-2026-Q4-00231": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Zone Agtech\" L'Assomption financement fédéral technologies propres agricoles"
+ },
+ "aafc-aac|235-2026-2027-00017": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Zone Agtech\" L'Assomption financement fédéral technologies propres agricoles"
+ },
+ "acoa-apeca|276-2025-2026-Q4-00112": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"MDS Coating\" Slemon Park ACOA federal funding defence"
+ },
+ "dfo-mpo|086-2025-2026-Q4-0091": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Bear River First Nation\" fisheries DFO funding commercial"
+ },
+ "ps-sp|088-2025-2026-Q4-00231": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "The Canadian Jewish News",
+   "title": "Ottawa announces $10 million for security measures in the Jewish community",
+   "url": "https://thecjn.ca/?p=273241"
+  },
+  "query": "\"Fédération CJA\" Canada Community Security Program federal funding Public Safety"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1039241": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"mode40\" Steinbach IRAP National Research Council funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q1-17125": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Purolator\" Natural Resources Canada ZEVIP federal funding electric vehicle chargers"
+ },
+ "nrcan-rncan|115-2026-2027-Q3-19099": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Purolator\" Natural Resources Canada ZEVIP federal funding electric vehicle chargers"
+ },
+ "infc|278-2025-2026-Q2-00001": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Water Canada",
+   "title": "Federal govt, Halifax Regional Municipality partner on flood protections",
+   "url": "https://www.watercanada.net/federal-govt-halifax-regional-municipality-partner-on-flood-protections/"
+  },
+  "query": "\"Halifax Regional Municipality\" Disaster Mitigation and Adaptation Fund federal funding"
+ },
+ "ic|033-2025-2026-Q4-515713": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tulip\" Kitchener AI Compute Access Fund federal funding retail"
+ },
+ "ec|099-2025-2026-Q3-00096": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Frog Lake First Nation\" Environment and Climate Change Canada fuel charge proceeds funding"
+ },
+ "acoa-apeca|276-2025-2026-Q2-00249": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Shoreline Aggregates\" Baie Verte ACOA federal funding"
+ },
+ "ced-dec|012-2025-2026-Q4-01379": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Entosystème\" Drummondville financement fédéral DEC"
+ },
+ "ced-dec|012-2025-2026-Q4-00077": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Kinova\" Boisbriand federal funding defence investment DEC"
+ },
+ "ced-dec|012-2025-2026-Q4-00003": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Yoplait\" Liberté Saint-Hyacinthe financement fédéral DEC"
+ },
+ "feddevontario|062-2026-2027-Q1-00006": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"City of Brampton\" FedDev Ontario Regional Tariff Response Initiative federal funding"
+ },
+ "feddevontario|062-2025-2026-Q4-00064": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Eco Guardian\" Aurora FedDev Ontario federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18058": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Heavy Equipment Guide",
+   "title": "MacLean secures $2.5M in funding for battery-electric mining innovations",
+   "url": "https://www.heavyequipmentguide.ca/article/44333/maclean-secures-dollar25m-in-funding-for-battery-electric-mining-innovations"
+  },
+  "query": "\"MacLean Engineering\" Collingwood Natural Resources Canada funding battery electric mining"
+ },
+ "pacifican|240-2025-2026-Q4-00014": {
+  "mainstream": {
+   "outlet": "Castanet",
+   "title": "Kelowna manufacturer MAKR Group receives $2.5M from federal investment organization",
+   "url": "https://forums.castanet.net/viewtopic.php?p=3815829"
+  },
+  "independent": null,
+  "query": "\"MAKR Group\" Kelowna PacifiCan federal funding"
+ },
+ "nrcan-rncan|115-2025-2026-Q4-18327": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"EQUS\" Innisfail Natural Resources Canada Energy Innovation funding"
+ },
+ "ps-sp|088-2025-2026-Q4-00096": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fort William First Nation\" Crime Prevention Action Fund Public Safety Canada funding"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040466": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Innoserres\" Île-d'Orléans PARI CNRC financement"
+ },
+ "prairiescan|044-2025-2026-Q4-00100": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "BetaKit",
+   "title": "Edmonton businesses get federal funding to automate homebuilding, manufacturing",
+   "url": "https://betakit.com/edmonton-businesses-get-federal-funding-to-automate-homebuilding-manufacturing/"
+  },
+  "query": "\"Flexxaire\" Edmonton PrairiesCan federal funding"
+ },
+ "ec|099-2025-2026-Q3-00028": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Fort William First Nation\" Environment and Climate Change Canada funding $2.4 million"
+ },
+ "dfo-mpo|086-2025-2026-Q3-00017": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Esgenoopetitj\" fisheries DFO funding Burnt Church"
+ },
+ "aafc-aac|235-2025-2026-Q3-00658": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Bakers Journal",
+   "title": "Quebec cheese factory receives federal funding to expand",
+   "url": "https://www.bakersjournal.com/quebec-cheese-factory-receives-federal-funding-to-expand/"
+  },
+  "query": "\"trappe à fromage\" Outaouais financement fédéral Agriculture Canada"
+ },
+ "nrc-cnrc|172-2025-2026-Q4-1040147": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"eCAMION\" Scarborough IRAP National Research Council funding"
+ },
+ "ps-sp|088-2025-2026-Q4-00185": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Brokenhead Ojibway Nation\" policing facility federal funding Public Safety"
+ },
+ "prairiescan|044-2025-2026-Q4-00204": {
+  "mainstream": {
+   "outlet": "The Western Producer",
+   "title": "Nine Saskatchewan agricultural businesses to get $10M in funding",
+   "url": "https://www.producer.com/news/nine-saskatchewan-agricultural-businesses-to-get-10m-in-funding/"
+  },
+  "independent": null,
+  "query": "\"Bioriginal\" Saskatoon PrairiesCan federal funding"
+ },
+ "prairiescan|044-2026-2027-Q1-00007": {
+  "mainstream": {
+   "outlet": "The Western Producer",
+   "title": "Nine Saskatchewan agricultural businesses to get $10M in funding",
+   "url": "https://www.producer.com/news/nine-saskatchewan-agricultural-businesses-to-get-10m-in-funding/"
+  },
+  "independent": null,
+  "query": "\"Bioriginal\" Saskatoon PrairiesCan federal funding"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00076": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Progressive Intercultural Community Services\" Surrey Community Workforce Development Program federal funding"
+ },
+ "aafc-aac|235-2025-2026-Q3-00544": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "Canadian Grocer",
+   "title": "Government of Canada invests in improved halal beef processing and packaging in P.E.I.",
+   "url": "https://canadiangrocer.com/government-canada-invests-improved-halal-beef-processing-and-packaging-pei"
+  },
+  "query": "\"Atlantic Beef Products\" Kosher and Halal Investment Program federal funding"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00033": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Centre for Skills Development\" Burlington Foreign Credential Recognition federal funding"
+ },
+ "ec|099-2025-2026-Q4-00011": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Chippewas of the Thames\" Environment and Climate Change Canada fuel charge proceeds grant"
+ },
+ "infc|278-2025-2026-Q4-00069": {
+  "mainstream": null,
+  "independent": {
+   "outlet": "QCNA",
+   "title": "Historical society gets federal grant for museum extension",
+   "url": "https://qcna.qc.ca/historical-society-gets-federal-grant-for-museum-extension/"
+  },
+  "query": "\"Brome County Historical Society\" federal funding Green and Inclusive Community Buildings museum"
+ },
+ "infc|278-2025-2026-Q2-00027": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Notre-Dame-de-l'Île-Perrot\" Fonds d'atténuation et d'adaptation en matière de catastrophes financement fédéral"
+ },
+ "aafc-aac|235-2025-2026-Q4-00067": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"St. Helen's Meat Packers\" Kosher and Halal Investment Program federal funding"
+ },
+ "hc-sc|271-2025-2026-Q4-00042": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Canadian Alliance of Physiotherapy Regulators\" Health Canada funding internationally educated physiotherapists"
+ },
+ "infc|278-2025-2026-Q2-00044": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Quinte West\" Canada Public Transit Fund federal funding transit"
+ },
+ "ec|099-2025-2026-Q1-00086": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Nipissing First Nation\" Environment and Climate Change Canada fuel charge proceeds funding"
+ },
+ "ps-sp|088-2025-2026-Q3-00057": {
+  "mainstream": {
+   "outlet": "Castanet Kamloops",
+   "title": "Strengthening cultural reconnection: Federal government pouring $2.14 million in funds to support Okanagan Indian Band's youth empowerment programs",
+   "url": "https://www.castanetkamloops.net/news/Vernon/601680/Strengthening-cultural-reconnection-Federal-government-pouring-214-million-in-funds-to-support-Okanagan-Indian-Bands-youth-empowerment-programs"
+  },
+  "independent": null,
+  "query": "\"Okanagan Indian Band\" Crime Prevention Action Fund Public Safety Canada youth funding Vernon"
+ },
+ "nrcan-rncan|115-2025-2026-Q2-17521": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Cota Aviation\" Parksville Natural Resources Canada funding"
+ },
+ "acoa-apeca|276-2025-2026-Q3-00209": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Tire Recycling Atlantic Canada\" Minto ACOA federal funding"
+ },
+ "esdc-edsc|014-2025-2026-Q2-00001": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"BAC Local 1\" Newfoundland Union Training and Innovation Program federal funding bricklayers"
+ },
+ "aafc-aac|235-2025-2026-Q3-00656": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Premier Kosher\" Caistor Centre federal funding Supply Management Processing Investment Fund"
+ },
+ "esdc-edsc|014-2025-2026-Q1-00024": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Centre communautaire régional de Sarnia\" Fonds d'habilitation financement fédéral emploi"
+ },
+ "ced-dec|012-2025-2026-Q4-01426": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Industries GRC\" Saguenay financement fédéral DEC tarifs"
+ },
+ "ced-dec|012-2026-2027-Q1-00336": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Cégep de Trois-Rivières\" CMQ défense financement fédéral DEC"
+ },
+ "ced-dec|012-2025-2026-Q4-01435": {
+  "mainstream": null,
+  "independent": null,
+  "query": "\"Ropack\" Anjou financement fédéral DEC productivité"
+ }
+}
