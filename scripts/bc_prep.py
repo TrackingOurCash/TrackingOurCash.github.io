@@ -47,7 +47,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "bc"
 OUT = ROOT / "data" / "bc"
 sys.path.insert(0, str(ROOT / "scripts"))
-from prep_ridings import clean_polygons, polys_of  # noqa: E402
+from prep_ridings import scale_population, clean_polygons, polys_of  # noqa: E402
 
 PARTY = {"BC NDP": "NDP", "Conservative Party": "BCC", "BC Green Party": "GPBC", "Independent": "IND", "": "IND",
          "Freedom Party of BC": "FPBC", "Libertarian": "LBT", "Communist Party of BC": "CPBC",
@@ -167,6 +167,7 @@ def main():
     divisions = load_results()
     load_mlas(divisions)
     load_population(divisions)
+    scale_population(divisions, lambda r: "British Columbia")
     divisions = dict(sorted(divisions.items()))
     geo = load_shapes(divisions, 0.002, 0.005)
     json.dump(divisions, open(OUT / "divisions.json", "w"), ensure_ascii=False, indent=1)

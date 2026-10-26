@@ -303,8 +303,24 @@ def load_land():
     return out
 
 
+def scale_population(records, province_of):
+    """Replace the 2021 census count with an estimate for today: the census count scaled by
+    the province's growth since 2021 (data/population_scale.json from population.py).
+    The census figure is kept as population_2021."""
+    path = OUT / "population_scale.json"
+    if not path.exists():
+        return None
+    scale = json.load(open(path))
+    for r in records.values():
+        f = scale["provinces"].get(province_of(r), {}).get("factor", 1.0)
+        r["population_2021"] = r["population"]
+        r["population"] = round(r["population"] * f)
+    return scale["latest_date"]
+
+
 def main():
     ridings = load_results()
+    pop_date = scale_population(ridings, lambda r: r["province"])
     unmatched = load_mps(ridings)
     geo = load_shapes(ridings)
     fine = load_fine_shapes(RAW / "shape", ridings)
@@ -313,7 +329,7 @@ def main():
     json.dump(geo, open(OUT / "ridings_geo.json", "w"), separators=(",", ":"))
     json.dump(land, open(OUT / "land_geo.json", "w"), separators=(",", ":"))
     json.dump(fine, open(OUT / "ridings_geo_fine.json", "w"), separators=(",", ":"))
-    print(f"{len(ridings)} ridings, {sum(r['mp'] != 'Vacant' for r in ridings.values())} with a current MP")
+    print(f"{len(ridings)} ridings, {sum(r['mp'] != 'Vacant' for r in ridings.values())} with a current MP; population scaled to {pop_date}")
     print("MP constituencies not matched:", unmatched)
     print("geo bytes:", (OUT / "ridings_geo.json").stat().st_size, "land bytes:", (OUT / "land_geo.json").stat().st_size,
           "fine shapes:", len(fine["features"]), (OUT / "ridings_geo_fine.json").stat().st_size)

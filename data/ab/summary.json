@@ -6,7 +6,7 @@
  "before_end": "2023-05-29",
  "years_per_window": 2.839,
  "close_margin": 10.0,
- "median_pc_after": 396.48,
+ "median_pc_after": 331.31,
  "methods": {
   "before|postal code from federal or charity records": 130033,
   "before|place name in recipient (approx.)": 26885,
@@ -271,29 +271,29 @@
 {
  "Close UCP": {
   "ridings": 9,
-  "median_pc_after": 154.53,
-  "median_pc_before": 100.6,
+  "median_pc_after": 129.13,
+  "median_pc_before": 84.06,
   "median_change_pct": 8.6,
   "total_adj_after": 272139489
  },
  "Close NDP": {
   "ridings": 9,
-  "median_pc_after": 562.18,
-  "median_pc_before": 399.94,
+  "median_pc_after": 469.78,
+  "median_pc_before": 334.2,
   "median_change_pct": 11.0,
   "total_adj_after": 845962431
  },
  "Safe UCP": {
   "ridings": 40,
-  "median_pc_after": 555.61,
-  "median_pc_before": 451.95,
+  "median_pc_after": 464.28,
+  "median_pc_before": 377.66,
   "median_change_pct": 19.0,
   "total_adj_after": 3041022595
  },
  "Safe NDP": {
   "ridings": 29,
-  "median_pc_after": 237.84,
-  "median_pc_before": 198.54,
+  "median_pc_after": 198.74,
+  "median_pc_before": 165.91,
   "median_change_pct": 13.1,
   "total_adj_after": 2548647914
  }

@@ -426,7 +426,7 @@ function select(n, quiet) {
   const switched = r.rep_party && r.rep_party !== r.party_won;
   document.getElementById("panel").innerHTML = `
     <h2 style="margin-bottom:2px">${r.name}</h2>
-    <div class="small muted">${r.region} · pop. ${r.population.toLocaleString()} (2021)${r.wiki ? ` · <a href="${r.wiki}" target="_blank" rel="noopener">Wikipedia</a>` : ""}${r.poliwave ? ` · <a href="${r.poliwave}" target="_blank" rel="noopener">Poliwave projection</a>` : ""}</div>
+    <div class="small muted">${r.region} · pop. ${r.population.toLocaleString()} (${C.popLabel})${r.wiki ? ` · <a href="${r.wiki}" target="_blank" rel="noopener">Wikipedia</a>` : ""}${r.poliwave ? ` · <a href="${r.poliwave}" target="_blank" rel="noopener">Poliwave projection</a>` : ""}</div>
     <div class="small" style="margin-top:6px"><svg class="sw-big" width="44" height="18" aria-hidden="true"><rect width="44" height="18" fill="${fillFor(n, v)}"></rect></svg>
       <span class="muted">map colour: ${r.close ? "close seat, striped " + PARTY[r.party_won] + " / " + PARTY[r.runnerup_party] : PARTY[r.rep_party || r.party_won]}${rank ? `, ${rank === 1 ? "deepest" : "#" + rank} of ${rankOf.length} by ${state.metric === "pc" ? "$ per person" : "change vs before"}` : ""}</span></div>
     <p style="margin:10px 0 4px"><b>${r.rep}</b> ${pill(r.rep_party)}${switched ? ` <span class="tag">elected as ${PARTY[r.party_won]}</span>` : ""}</p>
@@ -499,7 +499,7 @@ function pie(container, title, items, note) {
     bars.append("div").attr("class", "bar").style("width", `${100 * pc / maxPc}%`).style("background", it.color);
     bars.append("span").attr("class", "v").text(fmtPc(pc));
   }
-  bars.append("div").attr("class", "avg").text(`Per resident per year, 2021 population. Average across all ${C.levelPlural}: ${fmtPc(avg)}.`);
+  bars.append("div").attr("class", "avg").text(`Per resident per year, population ${C.popLabel}. Average across all ${C.levelPlural}: ${fmtPc(avg)}.`);
   if (note) box.append("div").attr("class", "small muted").style("grid-column", "1 / -1").text(note);
 }
 function renderPies() {

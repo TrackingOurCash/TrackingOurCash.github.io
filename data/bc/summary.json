@@ -1,0 +1,302 @@
+{
+ "generated": "2026-10-25",
+ "election": "2024-10-19",
+ "cutoff": "2026-03-31",
+ "before_start": "2023-04-01",
+ "before_end": "2024-03-31",
+ "years_per_window": 1.0,
+ "windows": "after = fiscal year ending 31 March 2026 (FYE2026); before = FYE2024, the last full fiscal year before the 19 October 2024 election; annual data, no payment dates",
+ "close_margin": 10.0,
+ "median_pc_after": 504.22,
+ "methods": {
+  "before|postal code from federal or charity records": 7105,
+  "before|place name in recipient (approx.)": 857,
+  "before|municipality": 113,
+  "after|postal code from federal or charity records": 5884,
+  "after|place name in recipient (approx.)": 720,
+  "after|municipality": 104
+ },
+ "excluded_after": {
+  "unmatched": 2253857952,
+  "individuals": 294352611,
+  "individual programs": 11203955130,
+  "province-wide bodies": 6786771868,
+  "withheld": 110000
+ },
+ "placed_after": 49260013153,
+ "total_after": 69799060714,
+ "top_flagged": [
+  [
+   "FRASER HEALTH AUTHORITY",
+   7375035861
+  ],
+  [
+   "VANCOUVER COASTAL HEALTH AUTHORITY",
+   6517157854
+  ],
+  [
+   "PROVINCIAL HEALTH SERVICES AUTHORITY",
+   5432144718
+  ],
+  [
+   "VANCOUVER ISLAND HEALTH AUTHORITY",
+   4612549050
+  ],
+  [
+   "INTERIOR HEALTH AUTHORITY",
+   4127723022
+  ],
+  [
+   "BRITISH COLUMBIA HOUSING MANAGEMENT COMMISSION",
+   1946078273
+  ],
+  [
+   "NORTHERN HEALTH AUTHORITY",
+   1724700509
+  ],
+  [
+   "UNIVERSITY OF BRITISH COLUMBIA",
+   1479790232
+  ],
+  [
+   "SCHOOL DISTRICT NO 36 SURREY",
+   1139799641
+  ],
+  [
+   "THE BOARD OF EDUCATION OF SCHOOL DISTRICT NO. 39 (VANCOUVER)",
+   733197077
+  ],
+  [
+   "SIMON FRASER UNIVERSITY",
+   538311930
+  ],
+  [
+   "SCHOOL DISTRICT NO 43 COQUITLAM",
+   518956852
+  ],
+  [
+   "SCHOOL DISTRICT NO 35 LANGLEY",
+   460903517
+  ],
+  [
+   "SCHOOL DISTRICT NO 41 BURNABY",
+   408227090
+  ],
+  [
+   "UNIVERSITY OF VICTORIA",
+   396195754
+  ],
+  [
+   "THE BOARD OF EDUCATION OF SCHOOL DISTRICT NO. 38 (RICHMOND)",
+   373621523
+  ],
+  [
+   "THE CANADIAN BLOOD SERVICES",
+   306871146
+  ],
+  [
+   "SCHOOL DISTRICT NO 61 GREATER VICTORIA",
+   298341040
+  ],
+  [
+   "SCHOOL DISTRICT NO 34 ABBOTSFORD",
+   288742084
+  ],
+  [
+   "BRITISH COLUMBIA INSTITUTE OF TECHNOLOGY",
+   280992922
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "AXIS FAMILY RESOURCES LTD.",
+   107825651
+  ],
+  [
+   "CLEARESULT CANADA INC.",
+   89375814
+  ],
+  [
+   "TN INTEREST TRUSTEE INC.",
+   75000000
+  ],
+  [
+   "BLUEBERRY RIVER RESTORATION SOCIETY",
+   52049543
+  ],
+  [
+   "NORTHRIVER MIDSTREAM INC.",
+   49182715
+  ],
+  [
+   "TOURMALINE OIL CORP.",
+   34960405
+  ],
+  [
+   "MILIEU CHILDREN & FAMILY SERVICES INC.",
+   32374008
+  ],
+  [
+   "WCG INTERNATIONAL CONSULTANTS LTD.",
+   28206050
+  ],
+  [
+   "MAXIMUS CANADA EMPLOYMENT SERVICES INC.",
+   25551986
+  ],
+  [
+   "PACIFIC CANBRIAM ENERGY LIMITED",
+   24828189
+  ],
+  [
+   "PACIFIC COAST CHILDREN'S RESOURCES INC.",
+   20465585
+  ],
+  [
+   "M.O.S.A.I.C. MULTI-LINGUAL ORIENTATION SERVICE ASSOC. FOR IMMIGRANT COMMUNITIES",
+   19288048
+  ],
+  [
+   "HEIDELBERG MATERIALS CANADA LIMITED / MATERIAUX HEIDELBERG CANADA LIMITEE",
+   19188460
+  ],
+  [
+   "STIKEMAN ELLIOTT LLP",
+   19022363
+  ],
+  [
+   "LIFE READY FACILITATED CARE LTD.",
+   17755010
+  ],
+  [
+   "TAPROOT COMMUNITY SUPPORT SERVICES LTD.",
+   17729177
+  ],
+  [
+   "KIDS & COMPANY LTD.",
+   15835663
+  ],
+  [
+   "LMSCL LOWER MAINLAND SOCIETY FOR COMMUNITY LIVING",
+   15371974
+  ],
+  [
+   "COMPASS GROUP CANADA LTD.",
+   13962291
+  ],
+  [
+   "SPECTRUM LEARNING CENTRE INC.",
+   13281385
+  ],
+  [
+   "IDM YOUTH SERVICES INC.",
+   12635216
+  ],
+  [
+   "INDEPENDENT MAGNET SCHOOLS SOCIETY",
+   11612909
+  ],
+  [
+   "BINKADI COMMUNITY SERVICES CCC CORP.",
+   11549216
+  ],
+  [
+   "SERENITY RESOURCES LIMITED",
+   11291119
+  ],
+  [
+   "APPLEGATE RESIDENTIAL PROGRAMS LTD.",
+   10171983
+  ],
+  [
+   "CANADIAN CANCER SOCIETY - SOCIETE CANADIENNE DU CANCER",
+   10082253
+  ],
+  [
+   "MONARCH HOUSE LTD.",
+   9883608
+  ],
+  [
+   "S.U.C.C.E.S.S. (A/K/A UNITED CHINESE COMMUNITY ENRICHMENT SERVICES SOCIETY)",
+   9736317
+  ],
+  [
+   "LITTLE MUNCHKIN DAYCARE LTD.",
+   9581410
+  ],
+  [
+   "PIVOT POINT FAMILY GROWTH CENTRE INC.",
+   9386716
+  ],
+  [
+   "ACTIVE CARE YOUTH AND ADULT SERVICES LTD.",
+   9295762
+  ],
+  [
+   "NEZUL BE HUNUYEH CHILD & FAMILY SERVICES SOCIETY",
+   9263048
+  ],
+  [
+   "MOTION LP",
+   8966880
+  ],
+  [
+   "EMPATHWAY SERVICES LTD.",
+   8272367
+  ],
+  [
+   "CHILDREN MATTER COMMUNITY SERVICES (C.M.C.S.) INC.",
+   8240302
+  ],
+  [
+   "BRIGHTPATH KIDS CORP.",
+   8155564
+  ],
+  [
+   "ARCUS COMMUNITY RESOURCES LTD.",
+   7826416
+  ],
+  [
+   "EAGLE NEST COMMUNITY AND ABORIGINAL SERVICES LTD.",
+   7335116
+  ],
+  [
+   "NATIONAL SEATING & MOBILITY LTD.",
+   7116023
+  ],
+  [
+   "INDEPENDENCE NETWORKING SERVICES INC.",
+   7072863
+  ]
+ ]
+}
+{
+ "Close NDP": {
+  "ridings": 16,
+  "median_pc_after": 466.22,
+  "median_pc_before": 291.77,
+  "median_change_pct": 1.5,
+  "total_adj_after": 567691440
+ },
+ "Close BCC": {
+  "ridings": 20,
+  "median_pc_after": 401.35,
+  "median_pc_before": 438.23,
+  "median_change_pct": 6.8,
+  "total_adj_after": 677446080
+ },
+ "Safe NDP": {
+  "ridings": 31,
+  "median_pc_after": 389.45,
+  "median_pc_before": 374.53,
+  "median_change_pct": 7.5,
+  "total_adj_after": 971332812
+ },
+ "Safe BCC": {
+  "ridings": 26,
+  "median_pc_after": 600.25,
+  "median_pc_before": 688.82,
+  "median_change_pct": -0.7,
+  "total_adj_after": 1358938410
+ }
+}

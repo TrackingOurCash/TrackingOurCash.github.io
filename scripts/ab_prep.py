@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw" / "ab"
 OUT = ROOT / "data" / "ab"
 sys.path.insert(0, str(ROOT / "scripts"))
-from prep_ridings import clean_polygons, load_fine_shapes, polys_of  # noqa: E402
+from prep_ridings import scale_population, clean_polygons, load_fine_shapes, polys_of  # noqa: E402
 
 # Ballot party codes -> short labels used on the map.
 PARTY = {"UCP": "UCP", "NDP": "NDP", "AP": "AP", "GPA": "GPA", "IND": "IND", "WLC": "WLC", "SM": "SM", "SPA": "SPA",
@@ -144,6 +144,7 @@ def main():
     divisions = load_results()
     load_mlas(divisions)
     load_population(divisions)
+    scale_population(divisions, lambda r: "Alberta")
     geo = load_shapes(divisions)
     json.dump(divisions, open(OUT / "divisions.json", "w"), ensure_ascii=False, indent=1)
     json.dump(geo, open(OUT / "divisions_geo.json", "w"), separators=(",", ":"))

@@ -19,7 +19,8 @@
   "name": "Calgary-Acadia",
   "mla": "Diana Batten",
   "mla_party": "NDP",
-  "population": 47585
+  "population": 56945,
+  "population_2021": 47585
  },
  "2": {
   "num": "2",
@@ -41,7 +42,8 @@
   "name": "Calgary-Beddington",
   "mla": "Amanda Chapman",
   "mla_party": "NDP",
-  "population": 48020
+  "population": 57466,
+  "population_2021": 48020
  },
  "3": {
   "num": "3",
@@ -63,7 +65,8 @@
   "name": "Calgary-Bow",
   "mla": "Demetrios Nicolaides",
   "mla_party": "UCP",
-  "population": 53150
+  "population": 63605,
+  "population_2021": 53150
  },
  "4": {
   "num": "4",
@@ -85,7 +88,8 @@
   "name": "Calgary-Buffalo",
   "mla": "Joe Ceci",
   "mla_party": "NDP",
-  "population": 58395
+  "population": 69881,
+  "population_2021": 58395
  },
  "5": {
   "num": "5",
@@ -107,7 +111,8 @@
   "name": "Calgary-Cross",
   "mla": "Mickey Amery, KC",
   "mla_party": "UCP",
-  "population": 48285
+  "population": 57783,
+  "population_2021": 48285
  },
  "6": {
   "num": "6",
@@ -129,7 +134,8 @@
   "name": "Calgary-Currie",
   "mla": "Janet Eremenko",
   "mla_party": "NDP",
-  "population": 49740
+  "population": 59524,
+  "population_2021": 49740
  },
  "7": {
   "num": "7",
@@ -151,7 +157,8 @@
   "name": "Calgary-East",
   "mla": "Peter Singh",
   "mla_party": "UCP",
-  "population": 49200
+  "population": 58878,
+  "population_2021": 49200
  },
  "8": {
   "num": "8",
@@ -173,7 +180,8 @@
   "name": "Calgary-Edgemont",
   "mla": "Julia Hayter",
   "mla_party": "NDP",
-  "population": 48230
+  "population": 57717,
+  "population_2021": 48230
  },
  "9": {
   "num": "9",
@@ -195,7 +203,8 @@
   "name": "Calgary-Elbow",
   "mla": "Samir Kayande",
   "mla_party": "NDP",
-  "population": 49420
+  "population": 59141,
+  "population_2021": 49420
  },
  "10": {
   "num": "10",
@@ -217,7 +226,8 @@
   "name": "Calgary-Falconridge",
   "mla": "Parmeet Boparai",
   "mla_party": "NDP",
-  "population": 48870
+  "population": 58483,
+  "population_2021": 48870
  },
  "11": {
   "num": "11",
@@ -239,7 +249,8 @@
   "name": "Calgary-Fish Creek",
   "mla": "Myles McDougall",
   "mla_party": "UCP",
-  "population": 45560
+  "population": 54522,
+  "population_2021": 45560
  },
  "12": {
   "num": "12",
@@ -261,7 +272,8 @@
   "name": "Calgary-Foothills",
   "mla": "Court Ellingson",
   "mla_party": "NDP",
-  "population": 57685
+  "population": 69032,
+  "population_2021": 57685
  },
  "13": {
   "num": "13",
@@ -282,7 +294,8 @@
   "name": "Calgary-Glenmore",
   "mla": "Nagwan Al-Guneid",
   "mla_party": "NDP",
-  "population": 47115
+  "population": 56383,
+  "population_2021": 47115
  },
  "14": {
   "num": "14",
@@ -304,7 +317,8 @@
   "name": "Calgary-Hays",
   "mla": "Ric McIver",
   "mla_party": "UCP",
-  "population": 52650
+  "population": 63006,
+  "population_2021": 52650
  },
  "15": {
   "num": "15",
@@ -326,7 +340,8 @@
   "name": "Calgary-Klein",
   "mla": "Lizette Tejada",
   "mla_party": "NDP",
-  "population": 50540
+  "population": 60481,
+  "population_2021": 50540
  },
  "16": {
   "num": "16",
@@ -348,7 +363,8 @@
   "name": "Calgary-Lougheed",
   "mla": "Eric Bouchard",
   "mla_party": "UCP",
-  "population": 42710
+  "population": 51111,
+  "population_2021": 42710
  },
  "17": {
   "num": "17",
@@ -368,7 +384,8 @@
   "name": "Calgary-Bhullar-McCall",
   "mla": "Irfan Sabir",
   "mla_party": "NDP",
-  "population": 51790
+  "population": 61977,
+  "population_2021": 51790
  },
  "18": {
   "num": "18",
@@ -390,7 +407,8 @@
   "name": "Calgary-Mountain View",
   "mla": "Kathleen Ganley",
   "mla_party": "NDP",
-  "population": 51370
+  "population": 61474,
+  "population_2021": 51370
  },
  "19": {
   "num": "19",
@@ -410,7 +428,8 @@
   "name": "Calgary-North",
   "mla": "Muhammad Yaseen",
   "mla_party": "UCP",
-  "population": 45040
+  "population": 53899,
+  "population_2021": 45040
  },
  "20": {
   "num": "20",
@@ -430,7 +449,8 @@
   "name": "Calgary-North East",
   "mla": "Gurinder Brar",
   "mla_party": "NDP",
-  "population": 65530
+  "population": 78420,
+  "population_2021": 65530
  },
  "21": {
   "num": "21",
@@ -452,7 +472,8 @@
   "name": "Calgary-North West",
   "mla": "Rajan Sawhney",
   "mla_party": "UCP",
-  "population": 48010
+  "population": 57454,
+  "population_2021": 48010
  },
  "22": {
   "num": "22",
@@ -473,7 +494,8 @@
   "name": "Calgary-Peigan",
   "mla": "Tanya Fir",
   "mla_party": "UCP",
-  "population": 43705
+  "population": 52302,
+  "population_2021": 43705
  },
  "23": {
   "num": "23",
@@ -494,7 +516,8 @@
   "name": "Calgary-Shaw",
   "mla": "Kyle Campbell",
   "mla_party": "NDP",
-  "population": 55875
+  "population": 66866,
+  "population_2021": 55875
  },
  "24": {
   "num": "24",
@@ -516,7 +539,8 @@
   "name": "Calgary-South East",
   "mla": "Matt Jones",
   "mla_party": "UCP",
-  "population": 56760
+  "population": 67925,
+  "population_2021": 56760
  },
  "25": {
   "num": "25",
@@ -538,7 +562,8 @@
   "name": "Calgary-Varsity",
   "mla": "Luanne Metz",
   "mla_party": "NDP",
-  "population": 45570
+  "population": 54534,
+  "population_2021": 45570
  },
  "26": {
   "num": "26",
@@ -559,7 +584,8 @@
   "name": "Calgary-West",
   "mla": "Mike Ellis",
   "mla_party": "UCP",
-  "population": 45975
+  "population": 55018,
+  "population_2021": 45975
  },
  "27": {
   "num": "27",
@@ -581,7 +607,8 @@
   "name": "Edmonton-Beverly-Clareview",
   "mla": "Peggy Wright",
   "mla_party": "NDP",
-  "population": 46010
+  "population": 55060,
+  "population_2021": 46010
  },
  "28": {
   "num": "28",
@@ -602,7 +629,8 @@
   "name": "Edmonton-Castle Downs",
   "mla": "Nicole Goehring",
   "mla_party": "NDP",
-  "population": 51830
+  "population": 62025,
+  "population_2021": 51830
  },
  "29": {
   "num": "29",
@@ -623,7 +651,8 @@
   "name": "Edmonton-City Centre",
   "mla": "David Shepherd",
   "mla_party": "NDP",
-  "population": 48685
+  "population": 58261,
+  "population_2021": 48685
  },
  "30": {
   "num": "30",
@@ -645,7 +674,8 @@
   "name": "Edmonton-Decore",
   "mla": "Sharif Haji",
   "mla_party": "NDP",
-  "population": 47890
+  "population": 57310,
+  "population_2021": 47890
  },
  "31": {
   "num": "31",
@@ -666,7 +696,8 @@
   "name": "Edmonton-Ellerslie",
   "mla": "Gurtej Brar",
   "mla_party": "NDP",
-  "population": 68000
+  "population": 81376,
+  "population_2021": 68000
  },
  "32": {
   "num": "32",
@@ -688,7 +719,8 @@
   "name": "Edmonton-Glenora",
   "mla": "Sarah Hoffman",
   "mla_party": "NDP",
-  "population": 44845
+  "population": 53666,
+  "population_2021": 44845
  },
  "33": {
   "num": "33",
@@ -710,7 +742,8 @@
   "name": "Edmonton-Gold Bar",
   "mla": "Marlin Schmidt",
   "mla_party": "NDP",
-  "population": 44490
+  "population": 53241,
+  "population_2021": 44490
  },
  "34": {
   "num": "34",
@@ -732,7 +765,8 @@
   "name": "Edmonton-Highlands-Norwood",
   "mla": "Janis Irwin",
   "mla_party": "NDP",
-  "population": 41800
+  "population": 50022,
+  "population_2021": 41800
  },
  "35": {
   "num": "35",
@@ -753,7 +787,8 @@
   "name": "Edmonton-Manning",
   "mla": "Heather Sweet",
   "mla_party": "NDP",
-  "population": 56305
+  "population": 67380,
+  "population_2021": 56305
  },
  "36": {
   "num": "36",
@@ -775,7 +810,8 @@
   "name": "Edmonton-McClung",
   "mla": "Lorne Dach",
   "mla_party": "NDP",
-  "population": 42075
+  "population": 50351,
+  "population_2021": 42075
  },
  "37": {
   "num": "37",
@@ -796,7 +832,8 @@
   "name": "Edmonton-Meadows",
   "mla": "Jasvir Deol",
   "mla_party": "NDP",
-  "population": 54395
+  "population": 65094,
+  "population_2021": 54395
  },
  "38": {
   "num": "38",
@@ -816,7 +853,8 @@
   "name": "Edmonton-Mill Woods",
   "mla": "Christina Gray",
   "mla_party": "NDP",
-  "population": 47745
+  "population": 57136,
+  "population_2021": 47745
  },
  "39": {
   "num": "39",
@@ -837,7 +875,8 @@
   "name": "Edmonton-North West",
   "mla": "David Eggen",
   "mla_party": "NDP",
-  "population": 48905
+  "population": 58525,
+  "population_2021": 48905
  },
  "40": {
   "num": "40",
@@ -859,7 +898,8 @@
   "name": "Edmonton-Riverview",
   "mla": "Lori Sigurdson",
   "mla_party": "NDP",
-  "population": 42760
+  "population": 51171,
+  "population_2021": 42760
  },
  "41": {
   "num": "41",
@@ -880,7 +920,8 @@
   "name": "Edmonton-Rutherford",
   "mla": "Jodi Calahoo Stonehouse",
   "mla_party": "NDP",
-  "population": 45510
+  "population": 54462,
+  "population_2021": 45510
  },
  "42": {
   "num": "42",
@@ -901,7 +942,8 @@
   "name": "Edmonton-South",
   "mla": "Rhiannon Hoyle",
   "mla_party": "NDP",
-  "population": 68950
+  "population": 82512,
+  "population_2021": 68950
  },
  "43": {
   "num": "43",
@@ -922,7 +964,8 @@
   "name": "Edmonton-South West",
   "mla": "Nathan Ip",
   "mla_party": "NDP",
-  "population": 65795
+  "population": 78737,
+  "population_2021": 65795
  },
  "44": {
   "num": "44",
@@ -944,7 +987,8 @@
   "name": "Edmonton-Strathcona",
   "mla": "Naheed Nenshi",
   "mla_party": "NDP",
-  "population": 44685
+  "population": 53475,
+  "population_2021": 44685
  },
  "45": {
   "num": "45",
@@ -966,7 +1010,8 @@
   "name": "Edmonton-West Henday",
   "mla": "Brooks Arcand-Paul",
   "mla_party": "NDP",
-  "population": 54735
+  "population": 65501,
+  "population_2021": 54735
  },
  "46": {
   "num": "46",
@@ -988,7 +1033,8 @@
   "name": "Edmonton-Whitemud",
   "mla": "Rakhi Pancholi",
   "mla_party": "NDP",
-  "population": 45480
+  "population": 54426,
+  "population_2021": 45480
  },
  "47": {
   "num": "47",
@@ -1010,7 +1056,8 @@
   "name": "Airdrie-Cochrane",
   "mla": "Pete Guthrie",
   "mla_party": "PTP",
-  "population": 63765
+  "population": 76308,
+  "population_2021": 63765
  },
  "48": {
   "num": "48",
@@ -1031,7 +1078,8 @@
   "name": "Airdrie-East",
   "mla": "Angela Pitt",
   "mla_party": "UCP",
-  "population": 56790
+  "population": 67961,
+  "population_2021": 56790
  },
  "49": {
   "num": "49",
@@ -1051,7 +1099,8 @@
   "name": "Athabasca-Barrhead-Westlock",
   "mla": "Glenn van Dijken",
   "mla_party": "UCP",
-  "population": 44910
+  "population": 53744,
+  "population_2021": 44910
  },
  "50": {
   "num": "50",
@@ -1073,7 +1122,8 @@
   "name": "Banff-Kananaskis",
   "mla": "Sarah Elmeligi",
   "mla_party": "NDP",
-  "population": 44965
+  "population": 53810,
+  "population_2021": 44965
  },
  "51": {
   "num": "51",
@@ -1093,7 +1143,8 @@
   "name": "Bonnyville-Cold Lake-St. Paul",
   "mla": "Scott Cyr",
   "mla_party": "UCP",
-  "population": 50245
+  "population": 60128,
+  "population_2021": 50245
  },
  "52": {
   "num": "52",
@@ -1114,7 +1165,8 @@
   "name": "Brooks-Medicine Hat",
   "mla": "Danielle Smith",
   "mla_party": "UCP",
-  "population": 51125
+  "population": 61181,
+  "population_2021": 51125
  },
  "53": {
   "num": "53",
@@ -1136,7 +1188,8 @@
   "name": "Camrose",
   "mla": "Jackie Lovely",
   "mla_party": "UCP",
-  "population": 43370
+  "population": 51901,
+  "population_2021": 43370
  },
  "54": {
   "num": "54",
@@ -1158,7 +1211,8 @@
   "name": "Cardston-Siksika",
   "mla": "Joseph Schow",
   "mla_party": "UCP",
-  "population": 44100
+  "population": 52774,
+  "population_2021": 44100
  },
  "55": {
   "num": "55",
@@ -1180,7 +1234,8 @@
   "name": "Central Peace-Notley",
   "mla": "Todd Loewen",
   "mla_party": "UCP",
-  "population": 27155
+  "population": 32496,
+  "population_2021": 27155
  },
  "56": {
   "num": "56",
@@ -1202,7 +1257,8 @@
   "name": "Chestermere-Strathmore",
   "mla": "Chantelle de Jonge",
   "mla_party": "UCP",
-  "population": 51495
+  "population": 61624,
+  "population_2021": 51495
  },
  "57": {
   "num": "57",
@@ -1224,7 +1280,8 @@
   "name": "Cypress-Medicine Hat",
   "mla": "Justin Wright",
   "mla_party": "UCP",
-  "population": 50280
+  "population": 60170,
+  "population_2021": 50280
  },
  "58": {
   "num": "58",
@@ -1246,7 +1303,8 @@
   "name": "Drayton Valley-Devon",
   "mla": "Andrew Boitchenko",
   "mla_party": "UCP",
-  "population": 45625
+  "population": 54599,
+  "population_2021": 45625
  },
  "59": {
   "num": "59",
@@ -1268,7 +1326,8 @@
   "name": "Drumheller-Stettler",
   "mla": "Nate Horner",
   "mla_party": "UCP",
-  "population": 40065
+  "population": 47946,
+  "population_2021": 40065
  },
  "60": {
   "num": "60",
@@ -1289,7 +1348,8 @@
   "name": "Fort McMurray-Lac La Biche",
   "mla": "Brian Jean, KC",
   "mla_party": "UCP",
-  "population": 42085
+  "population": 50363,
+  "population_2021": 42085
  },
  "61": {
   "num": "61",
@@ -1310,7 +1370,8 @@
   "name": "Fort McMurray-Wood Buffalo",
   "mla": "Tany Yao",
   "mla_party": "UCP",
-  "population": 42765
+  "population": 51177,
+  "population_2021": 42765
  },
  "62": {
   "num": "62",
@@ -1332,7 +1393,8 @@
   "name": "Fort Saskatchewan-Vegreville",
   "mla": "Jackie Armstrong-Homeniuk",
   "mla_party": "UCP",
-  "population": 53965
+  "population": 64580,
+  "population_2021": 53965
  },
  "63": {
   "num": "63",
@@ -1354,7 +1416,8 @@
   "name": "Grande Prairie",
   "mla": "Nolan Dyck",
   "mla_party": "UCP",
-  "population": 46830
+  "population": 56041,
+  "population_2021": 46830
  },
  "64": {
   "num": "64",
@@ -1375,7 +1438,8 @@
   "name": "Grande Prairie-Wapiti",
   "mla": "Ron Wiebe",
   "mla_party": "UCP",
-  "population": 50075
+  "population": 59925,
+  "population_2021": 50075
  },
  "65": {
   "num": "65",
@@ -1396,7 +1460,8 @@
   "name": "Highwood",
   "mla": "R.J. Sigurdson",
   "mla_party": "UCP",
-  "population": 50540
+  "population": 60481,
+  "population_2021": 50540
  },
  "66": {
   "num": "66",
@@ -1418,7 +1483,8 @@
   "name": "Innisfail-Sylvan Lake",
   "mla": "Devin Dreeshen",
   "mla_party": "UCP",
-  "population": 48780
+  "population": 58375,
+  "population_2021": 48780
  },
  "67": {
   "num": "67",
@@ -1440,7 +1506,8 @@
   "name": "Lac Ste. Anne-Parkland",
   "mla": "Shane Getson",
   "mla_party": "UCP",
-  "population": 45180
+  "population": 54067,
+  "population_2021": 45180
  },
  "68": {
   "num": "68",
@@ -1462,7 +1529,8 @@
   "name": "Lacombe-Ponoka",
   "mla": "Jennifer Johnson",
   "mla_party": "UCP",
-  "population": 46400
+  "population": 55527,
+  "population_2021": 46400
  },
  "69": {
   "num": "69",
@@ -1484,7 +1552,8 @@
   "name": "Leduc-Beaumont",
   "mla": "Brandon Lunty",
   "mla_party": "UCP",
-  "population": 56525
+  "population": 67643,
+  "population_2021": 56525
  },
  "70": {
   "num": "70",
@@ -1505,7 +1574,8 @@
   "name": "Lesser Slave Lake",
   "mla": "Scott Sinclair",
   "mla_party": "UCP",
-  "population": 26715
+  "population": 31970,
+  "population_2021": 26715
  },
  "71": {
   "num": "71",
@@ -1526,7 +1596,8 @@
   "name": "Lethbridge-East",
   "mla": "Nathan Neudorf",
   "mla_party": "UCP",
-  "population": 47615
+  "population": 56981,
+  "population_2021": 47615
  },
  "72": {
   "num": "72",
@@ -1548,7 +1619,8 @@
   "name": "Lethbridge-West",
   "mla": "Rob Miyashiro",
   "mla_party": "NDP",
-  "population": 50790
+  "population": 60780,
+  "population_2021": 50790
  },
  "73": {
   "num": "73",
@@ -1570,7 +1642,8 @@
   "name": "Livingstone-Macleod",
   "mla": "Chelsae Petrovic",
   "mla_party": "UCP",
-  "population": 49870
+  "population": 59679,
+  "population_2021": 49870
  },
  "74": {
   "num": "74",
@@ -1592,7 +1665,8 @@
   "name": "Maskwacis-Wetaskiwin",
   "mla": "Rick Wilson",
   "mla_party": "UCP",
-  "population": 44320
+  "population": 53038,
+  "population_2021": 44320
  },
  "75": {
   "num": "75",
@@ -1614,7 +1688,8 @@
   "name": "Morinville-St. Albert",
   "mla": "Dale Nally",
   "mla_party": "UCP",
-  "population": 51825
+  "population": 62019,
+  "population_2021": 51825
  },
  "76": {
   "num": "76",
@@ -1636,7 +1711,8 @@
   "name": "Olds-Didsbury-Three Hills",
   "mla": "Tara Sawyer",
   "mla_party": "UCP",
-  "population": 50005
+  "population": 59841,
+  "population_2021": 50005
  },
  "77": {
   "num": "77",
@@ -1658,7 +1734,8 @@
   "name": "Peace River",
   "mla": "Dan Williams",
   "mla_party": "UCP",
-  "population": 41390
+  "population": 49531,
+  "population_2021": 41390
  },
  "78": {
   "num": "78",
@@ -1680,7 +1757,8 @@
   "name": "Red Deer-North",
   "mla": "Adriana LaGrange",
   "mla_party": "UCP",
-  "population": 47705
+  "population": 57089,
+  "population_2021": 47705
  },
  "79": {
   "num": "79",
@@ -1702,7 +1780,8 @@
   "name": "Red Deer-South",
   "mla": "Jason Stephan",
   "mla_party": "UCP",
-  "population": 53140
+  "population": 63593,
+  "population_2021": 53140
  },
  "80": {
   "num": "80",
@@ -1723,7 +1802,8 @@
   "name": "Rimbey-Rocky Mountain House-Sundre",
   "mla": "Jason Nixon",
   "mla_party": "UCP",
-  "population": 44860
+  "population": 53684,
+  "population_2021": 44860
  },
  "81": {
   "num": "81",
@@ -1745,7 +1825,8 @@
   "name": "Sherwood Park",
   "mla": "Kyle Kasawski",
   "mla_party": "NDP",
-  "population": 47885
+  "population": 57304,
+  "population_2021": 47885
  },
  "82": {
   "num": "82",
@@ -1767,7 +1848,8 @@
   "name": "Spruce Grove-Stony Plain",
   "mla": "Searle Turton",
   "mla_party": "UCP",
-  "population": 55610
+  "population": 66548,
+  "population_2021": 55610
  },
  "83": {
   "num": "83",
@@ -1788,7 +1870,8 @@
   "name": "St. Albert",
   "mla": "Marie Renaud",
   "mla_party": "NDP",
-  "population": 49115
+  "population": 58776,
+  "population_2021": 49115
  },
  "84": {
   "num": "84",
@@ -1809,7 +1892,8 @@
   "name": "Strathcona-Sherwood Park",
   "mla": "Nate Glubish",
   "mla_party": "UCP",
-  "population": 47345
+  "population": 56658,
+  "population_2021": 47345
  },
  "85": {
   "num": "85",
@@ -1831,7 +1915,8 @@
   "name": "Taber-Warner",
   "mla": "Grant Hunter",
   "mla_party": "UCP",
-  "population": 44885
+  "population": 53714,
+  "population_2021": 44885
  },
  "86": {
   "num": "86",
@@ -1853,7 +1938,8 @@
   "name": "Vermilion-Lloydminster-Wainwright",
   "mla": "Garth Rowswell",
   "mla_party": "UCP",
-  "population": 45415
+  "population": 54348,
+  "population_2021": 45415
  },
  "87": {
   "num": "87",
@@ -1873,6 +1959,7 @@
   "name": "West Yellowhead",
   "mla": "Martin Long",
   "mla_party": "UCP",
-  "population": 49440
+  "population": 59165,
+  "population_2021": 49440
  }
 }

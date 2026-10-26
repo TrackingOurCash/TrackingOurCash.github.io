@@ -32,6 +32,16 @@ def wiki(level):
     return json.load(open(path)).get(level, {}) if path.exists() else {}
 
 
+def pop_label():
+    path = DATA / "population_scale.json"
+    if not path.exists():
+        return "2021 census", None
+    d = json.load(open(path))
+    y, m = d["latest_date"][:7].split("-")
+    month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][int(m) - 1]
+    return f"est. {month} {y}", f"{month} {y}"
+
+
 def fmt_money(v):
     return "$" + (f"{v / 1e9:.1f}B" if v >= 1e9 else f"{v / 1e6:.0f}M" if v >= 1e6 else f"{v:,.0f}")
 
@@ -59,7 +69,7 @@ def federal():
         "title": "Where federal grants went after the 2025 election",
         "nav": [dict(x, current=x["href"] == "index.html") for x in NAV],
         "level": "riding", "levelPlural": "ridings", "levelTitle": "Riding", "region": "province", "regionTitle": "Prov.",
-        "rep": "MP", "electionYear": "2025",
+        "rep": "MP", "electionYear": "2025", "popLabel": pop_label()[0],
         "parties": {"LPC": {"name": "Liberal", "light": "#d71920", "dark": "#ea3a40"}, "CPC": {"name": "Conservative", "light": "#1b4c9e", "dark": "#4f80d8"},
                     "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"}, "BQ": {"name": "Bloc Québécois", "light": "#1aa7bd", "dark": "#3fc0d4"},
                     "GPC": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"}, "PPC": {"name": "PPC", "light": "#4b2e83", "dark": "#8a6bc8"},
@@ -104,6 +114,7 @@ def federal():
             f"<b>Where money lands:</b> each award is placed at the recipient's address, not where the money is spent. The dataset's own riding field is rarely filled in, so most of the {placed:,} awards since the election were placed by postal code; recipients with no postal code were matched to their address on other awards, then by city. {mth.get('after|unmapped', 0):,} awards worth {fmt_money(mth.get('after|unmapped $', 0))} are still unplaced.",
             "<b>Left out by default:</b> national non-profits booked at a head office (\"Hockey Canada\"), other governments (provinces, cities spread over several ridings), treaty and specific-claim settlements, and foreign aid routed through Canadian partners. Tick the box to put them back. Companies are kept even when \"Canada\" is in their name.",
             f"<b>Amendments</b> are counted once, at the agreement's latest total value. <b>Reporting lag:</b> departments report quarterly, so the window ends at the last quarter that looks fully reported ({m['cutoff']}).",
+            f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each riding's 2021 census count scaled by its province's growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01, the figures behind the population clock). Growth is assumed even within a province, so fast-growing suburbs are still somewhat undercounted.",
             "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MPs. A pattern by seat type is a signal worth checking, not proof of intent.",
             "<b>News links:</b> for each riding's largest grant, every grant of $10 million or more, and the top three in close seats, a web search looked for one mainstream outlet (CBC, Global, CTV, Postmedia, Torstar, La Presse and the like) and one independent outlet (Juno, Rebel, Western Standard, The Tyee, National Observer, iPolitics and others) reporting that funding. Links are kept with the data and refreshed only for new grants. \"No coverage found\" means the search found nothing that clearly matched; smaller grants were not searched.",
         ],
@@ -234,7 +245,7 @@ def provincial(key):
         "title": P["title"],
         "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
         "level": LEVEL[key][0], "levelPlural": LEVEL[key][1], "levelTitle": LEVEL[key][0].capitalize(), "region": "province", "regionTitle": "Prov.",
-        "rep": "MLA", "electionYear": y,
+        "rep": "MLA", "electionYear": y, "popLabel": "registered voters, 2024" if key == "saskatchewan" else pop_label()[0],
         "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": {"province-wide": "province-wide body", "other government": "other government"},
         "filterAll": P["filterAll"], "filterOptions": m["programs"],
@@ -257,6 +268,8 @@ def provincial(key):
             f"{fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
             f"<b>Left out by default:</b> {P['leftOut']}. Tick the box to put them back.",
             f"<b>Boundaries:</b> {P['boundaryNote']}",
+            (f"<b>Population:</b> per-person figures use an estimate for {pop_label()[1]}: each {LEVEL[key][0]}'s 2021 census count scaled by {P['region']}'s growth since the census, from Statistics Canada's quarterly estimates (table 17-10-0009-01). Growth is assumed even within the province." if key != "saskatchewan" else
+             "<b>Population:</b> no census count exists for these constituencies, so per-person figures are per registered voter at the 2024 election."),
             "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MLAs. A pattern by seat type is a signal worth checking, not proof of intent.",
         ],
     }
