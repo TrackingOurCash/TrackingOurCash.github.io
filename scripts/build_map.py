@@ -280,6 +280,8 @@ def write_page(payload, name):
             + html.replace('<div class="wrap">', '</head>\n<body>\n<div class="wrap">', 1) + "</body>\n</html>\n")
     out = OUTDIR / (("riding_spending_map" if name == "index" else name) + ".html")
     out.write_text(full)
+    if name == "index":
+        (OUTDIR / "index.html").write_text(full)  # the nav links point here, on the website and when opened locally
     print(out, f"{out.stat().st_size / 1e6:.2f} MB")
     fragment = render(payload, ARTIFACT_URLS)
     return fragment if name == "index" else fragment.replace("<title>Riding Spending Map</title>", f"<title>{payload['config']['title']}</title>", 1)
