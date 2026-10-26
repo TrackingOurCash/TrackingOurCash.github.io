@@ -1,0 +1,385 @@
+{
+ "as_of": "2026-10-26",
+ "note": "Formula money is allocated by a statutory or published rule rather than by project-by-project decision: per-capita or per-student grants, revenue sharing, per-bed or per-space operating rates, entitlement rebates, cost-share policing and health agreements, core First Nation funding under comprehensive funding arrangements or self-government agreements, and riding-quota programs such as Canada Summer Jobs. Everything else, including peer-reviewed research competitions, application-based infrastructure and business funds, settlement and social-service contracts and named-recipient grants, is treated as discretionary: when in doubt a program is left discretionary. For 'by':'program' levels each regex is matched case-insensitively against 'Department | Program' (Alberta and Saskatchewan: the ministry-prefixed program label); for 'by':'recipient' levels (BC, Manitoba, New Brunswick, Ontario, whose public accounts carry no program) it is matched against 'Department | Recipient name' so a class can be limited to one department. share_check counts adjusted dollars in each page's after window; the first matching regex wins. PEI and Quebec use the federal entry.",
+ "levels": {
+  "federal": {
+   "by": "program",
+   "match": "owner_org_title | prog_name_en",
+   "window": "agreements starting 2024-01-01 or later, amendments merged, individuals, foreign and flagged recipients excluded",
+   "formula": [
+    {
+     "re": "^Indigenous Services Canada \\| [^|]*,",
+     "why": "ISC comprehensive funding arrangements bundling several core authorities",
+     "dollars": 20573327885
+    },
+    {
+     "re": "^Indigenous Services Canada \\| (NFR - Grant|Indian Government Support|Governance|Education|Social Development|Supplementary Health Benefits|Child and Family Services|Individual Affairs)$",
+     "why": "ISC core band programs: nominal-roll, income assistance, band support, NFR grant",
+     "dollars": 5102206484
+    },
+    {
+     "re": "^Crown-Indigenous Relations and Northern Affairs Canada \\| (Implementation|CIRNAC - Implementation|Other Program Reporting, Implementation|Implementation, Other Program Reporting|CIRNAC - Governance and Institutions of Government)",
+     "why": "Self-government fiscal financing and treaty implementation agreements",
+     "dollars": 2217581633
+    },
+    {
+     "re": "^Indigenous Services Canada \\| CIRNAC - Governance and Institutions of Government",
+     "why": "Band support and tribal council core funding formula",
+     "dollars": 136826860
+    },
+    {
+     "re": "^Employment and Social Development Canada \\| Youth - Canada Summer Jobs",
+     "why": "Riding-level allocation formula, MP-reviewed within quota",
+     "dollars": 622128890
+    },
+    {
+     "re": "Research Council[^|]* \\| Research Support Fund",
+     "why": "Institutional indirect-cost formula on tri-agency funding",
+     "dollars": 938540154
+    },
+    {
+     "re": "^Department of Justice Canada \\| Legal Aid",
+     "why": "Provincial allocation formula for legal aid",
+     "dollars": 726390519
+    },
+    {
+     "re": "^Health Canada \\| (Shared Health Priorities|Universal Access to Contraception|National Strategy for Drugs for Rare Diseases|Working Together to Improve Health Care)",
+     "why": "Per-capita bilateral health agreements with provinces",
+     "dollars": 2443319150
+    },
+    {
+     "re": "^Public Safety Canada \\| \\((FNIPP|FNIPFP|FFNIPF|PDPP|NCEPCP|DFAA|MGP)\\)",
+     "why": "Cost-share policing agreements, statutory disaster and memorial grants",
+     "dollars": 1181404026
+    },
+    {
+     "re": "^Transport Canada \\| Incentives for Zero-emission vehicles",
+     "why": "Per-vehicle rebate entitlement, no discretion",
+     "dollars": 1579221719
+    },
+    {
+     "re": "^Royal Canadian Mounted Police \\| Grant to Compensate Members",
+     "why": "Statutory compensation entitlement",
+     "dollars": 204834204
+    },
+    {
+     "re": "^Employment and Social Development Canada \\| Apprenticeship (Incentive|Completion) Grant",
+     "why": "Entitlement grants to apprentices",
+     "dollars": 81180000
+    },
+    {
+     "re": "^Canadian Heritage \\| Athlete Assistance Program",
+     "why": "Carded-athlete entitlement at set rates",
+     "dollars": 59798255
+    },
+    {
+     "re": "^Canadian Heritage \\| Canada Periodical Fund - CPF - Aid to Publishers",
+     "why": "Formula on circulation and editorial costs",
+     "dollars": 121673189
+    },
+    {
+     "re": "^Canadian Heritage \\| Canada Book Fund - Support for Publishers",
+     "why": "Formula on eligible sales",
+     "dollars": 66384500
+    },
+    {
+     "re": "^Canadian Heritage \\| (Development of Official Language Communities Program - Minority Language Education|Enhancement of Official Languages Program - Second Language Learning)",
+     "why": "Official Languages in Education Program, provincial protocol allocations",
+     "dollars": 70355229
+    },
+    {
+     "re": "^Innovation, Science and Economic Development Canada \\| Canadian Digital Adoption Program Boost",
+     "why": "Fixed micro-grant to any eligible SME",
+     "dollars": 245252906
+    },
+    {
+     "re": "^Environment and Climate Change Canada \\| Grant program to return fuel charge proceeds to Indigenous governments",
+     "why": "Statutory return of fuel charge proceeds",
+     "dollars": 23198144
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 36393623748,
+    "total_dollars_since_2024": 110309857507,
+    "formula_share_pct": 33.0
+   }
+  },
+  "alberta": {
+   "by": "program",
+   "match": "the 'Ministry: Program' label",
+   "window": "after-election window to 2026-03-31, adjusted (placed, unflagged) payments",
+   "formula": [
+    {
+     "re": "^Municipal Affairs: (Municipal Sustainability Initiative|Local Government Fiscal Framework|Canada Community-Building Fund|Grants In Place Of Taxes|Library Services)",
+     "why": "Per-capita and statutory municipal and library transfers",
+     "dollars": 855789953
+    },
+    {
+     "re": "^(Education|Education And Childcare): (Base Instruction|Program Support|Operations (&|And) Maintenance|Transportation|System Admin|Fnmi Reserve|Supports Funding|Asff|Alberta School Foundation|Governance And Administration|Supplemental Enrolment|Stabilization Funding|Teachers Retirement|Teacher Salary|School Facilities|Lease And Other Costs|Community Grant|Support To Schools|Student Well Being|K-12 Fiscal)",
+     "why": "K-12 funding manual: per-student and weighted grants to school authorities",
+     "dollars": 1293857925
+    },
+    {
+     "re": "Child Care - Quality (Wage Top-Ups|Family Day Homes)|Child Care - Cwelcc",
+     "why": "Per-hour wage top-ups and per-space child care grants",
+     "dollars": 89893538
+    },
+    {
+     "re": "^Advanced Education: Psi Oper & Prog Support",
+     "why": "Post-secondary base operating grant",
+     "dollars": 160847861
+    },
+    {
+     "re": "^Indigenous Relations: First Nations Development Fund",
+     "why": "Statutory share of First Nations casino revenue",
+     "dollars": 346830590
+    },
+    {
+     "re": "\\bFcss\\b",
+     "why": "FCSS 80/20 per-capita formula to municipalities",
+     "dollars": 76627470
+    },
+    {
+     "re": ": Lodges\\s*$",
+     "why": "Lodge Assistance Program per-resident rate",
+     "dollars": 138803268
+    },
+    {
+     "re": "Direct To Tenant Rent Supplement|Private Landlord - Cost Shared",
+     "why": "Rent supplement entitlement by household income",
+     "dollars": 131867553
+    },
+    {
+     "re": "(Community|Seniors) Housing Prov(iders)?\\b|Municipal Owned (Operations|Op|Non-Profit)|Private Non-Profit Full Def|Municipal Fixed Rate",
+     "why": "Housing operator deficit subsidies under standing agreements",
+     "dollars": 124792741
+    },
+    {
+     "re": "^Agriculture And Irrigation: (Agriculture Service Board|Agricultural Societies)$",
+     "why": "Standard legislated grants per board or society",
+     "dollars": 44154101
+    },
+    {
+     "re": "^Public Safety And Emergency Services: (911 Call Centres Support|Imptsg Policing Support|Police Funding)",
+     "why": "Levy-share and policing formula grants",
+     "dollars": 24758787
+    },
+    {
+     "re": "Ccs Grants - Statutory|Surface Rights Board Comp",
+     "why": "Statutory payments",
+     "dollars": 69148674
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 3357372460,
+    "total_dollars_since_2024": 6707772432,
+    "formula_share_pct": 50.1
+   }
+  },
+  "saskatchewan": {
+   "by": "program",
+   "match": "the 'Ministry: Program - Subprogram' label",
+   "window": "fiscal 2024-25 adjusted payments",
+   "formula": [
+    {
+     "re": "Municipal Relations - (Urban|Rural|Northern) Revenue Sharing",
+     "why": "Statutory share of PST revenue",
+     "dollars": 63304197
+    },
+    {
+     "re": "Municipal Relations - (Canada Community ?-? ?Building Fund|Grants-in-Lieu of Property Taxes|Transit Assistance for People with Disabilities)",
+     "why": "Per-capita and statutory municipal transfers",
+     "dollars": 8644443
+    },
+    {
+     "re": "First Nations Gaming Agreements",
+     "why": "Statutory gaming revenue share",
+     "dollars": 11718704
+    },
+    {
+     "re": "^Education: Early Years - Child Care",
+     "why": "Per-space operating grants under CWELCC",
+     "dollars": 204787089
+    },
+    {
+     "re": "^Education: Provincial Library and Literacy - Libraries",
+     "why": "Per-capita library operating grants",
+     "dollars": 11478773
+    },
+    {
+     "re": "^Advanced Education: Post-Secondary Education - (Universities|Operational Support|Technical Institutes|Regional Colleges)",
+     "why": "Post-secondary base operating grants",
+     "dollars": 2582395
+    },
+    {
+     "re": "^Highways: Strategic Municipal Infrastructure - Urban Connectors",
+     "why": "Per-kilometre urban highway connector payments",
+     "dollars": 529888
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 303045489,
+    "total_dollars_since_2024": 906109245,
+    "formula_share_pct": 33.4
+   }
+  },
+  "bc": {
+   "by": "recipient",
+   "match": "ministry | recipient name (BC's transfer schedule carries ministries only)",
+   "window": "FYE2026 adjusted payments",
+   "formula": [
+    {
+     "re": "\\| (THE )?(CORPORATION OF (THE )?)?(CITY|TOWN|VILLAGE|DISTRICT|TOWNSHIP|DISTRICT MUNICIPALITY|RESORT MUNICIPALITY|MOUNTAIN RESORT MUNICIPALITY|ISLAND MUNICIPALITY|MUNICIPALITY|REGIONAL DISTRICT) OF\\b|REGIONAL MUNICIPALITY$",
+     "why": "Local government grants: small community, traffic fines, climate action, Growing Communities",
+     "dollars": 270434135
+    },
+    {
+     "re": "\\b(FIRST NATIONS?|INDIAN BAND|BAND COUNCIL|TRIBAL COUNCIL|TRIBES|NATION COUNCIL|NATIONAL GOVERNMENT|NATION GOVERNMENT|NATION ALLIANCE|CENTRAL GOVERNMENT|HEREDITARY CHIEFS|TREATY SOCIETY|TREATY GROUP)\\b|\\bNATION$|\\bBAND$",
+     "why": "Revenue-sharing, treaty and reconciliation agreements with First Nations",
+     "dollars": 787186464
+    },
+    {
+     "re": "Education and Child Care \\| .*\\b(SCHOOL|SCHOOLS|ACADEMY|ACADEMIE|ÉCOLE|ECOLE|EDUCATIONAL INSTITUTE|LEARNING FOUNDATION|CHRISTIAN CENT(ER|RE)|COLLEGIATE|MONTESSORI)\\b",
+     "why": "Independent school per-student grants at 50/35 percent",
+     "dollars": 353530916
+    },
+    {
+     "re": "Education and Child Care \\| .*(CHILD ?CARE|DAY ?CARE|CHILDREN'S CENT(RE|ER)|PRESCHOOL|EARLY LEARNING|EARLY CHILDHOOD|DAYHOME|FAMILY DAY)",
+     "why": "Child Care Operating Funding and fee reduction per space",
+     "dollars": 178994873
+    },
+    {
+     "re": "\\b(PUBLIC )?LIBRARY\\b",
+     "why": "Per-capita public library grants",
+     "dollars": 12096563
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 1602242951,
+    "total_dollars_since_2024": 3575408742,
+    "formula_share_pct": 44.8
+   }
+  },
+  "manitoba": {
+   "by": "recipient",
+   "match": "department | payee name",
+   "window": "fiscal 2025-26 adjusted payments",
+   "formula": [
+    {
+     "re": "\\| (CITY|TOWN|VILLAGE|R ?M|RURAL MUNICIPALITY|MUNICIPALITY|L ?G ?D|LOCAL GOVERNMENT DISTRICT|INCORPORATED COMMUNITY|NORTHERN AFFAIRS COMMUNITY) OF\\b|\\b(MUNICIPALITY|COMMUNITY COUNCIL)$",
+     "why": "Municipal operating and basket funding, VLT and policing shares",
+     "dollars": 283302609
+    },
+    {
+     "re": "\\b(FIRST NATION|CREE NATION|OJIBWAY NATION|DAKOTA NATION|ANISHINAABE NATION|INDIAN BAND|TRIBAL COUNCIL)\\b|\\bBAND$",
+     "why": "First Nation policing, roads and gaming agreements",
+     "dollars": 37765217
+    },
+    {
+     "re": "Education and Early Childhood Learning \\| .*(CHILD ?CARE|DAY ?CARE|NURSERY|PRESCHOOL|EARLY LEARNING|MONTESSORI|KIDS|CHILDREN'S CENTRE|FAMILY CENTRE|DAY NURSERY)",
+     "why": "Child care operating grants per funded space",
+     "dollars": 239793345
+    },
+    {
+     "re": "Education and Early Childhood Learning \\| .*\\b(SCHOOL|ACADEMY|COLLEGIATE|COLLEGE|MENNONITE|CHRISTIAN|ÉCOLE|ECOLE|YESHIVA|INSTITUTE)\\b",
+     "why": "Funded independent schools at 50 percent per-pupil",
+     "dollars": 101781774
+    },
+    {
+     "re": "\\b(PUBLIC )?LIBRARY\\b|LIBRARIES",
+     "why": "Per-capita library grants",
+     "dollars": 4726746
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 667369691,
+    "total_dollars_since_2024": 1716166165,
+    "formula_share_pct": 38.9
+   }
+  },
+  "nb": {
+   "by": "recipient",
+   "match": "department | supplier name",
+   "window": "FY2024-25 adjusted payments",
+   "formula": [
+    {
+     "re": "\\| (THE )?(CORPORATION OF )?(CITY|TOWN|VILLAGE|MUNICIPALITY|MUNICIPAL DISTRICT|RURAL COMMUNITY|REGIONAL MUNICIPALITY|RURAL DISTRICT|DISTRICT|COMMUNITY|VILLE|MUNICIPALITÉ|MUNICIPALITE|COMMUNAUTÉ RURALE|COMMUNAUTE RURALE|DISTRICT RURAL) (OF|OF THE|DE|DES|DU|D'|RÉGIONALE DE|REGIONALE DE)\\b|\\b(RURAL COMMUNITY|COMMUNAUTÉ RURALE|COMMUNAUTE RURALE|RURAL DISTRICT|DISTRICT RURAL)\\b",
+     "why": "Community Funding and Equalization Grant to local governments",
+     "dollars": 35933837
+    },
+    {
+     "re": "\\| (?:Campbellton|Belle-Baie|Baie-des-Hérons / Heron Bay|Heron Bay|Grand-Sault / Grand Falls|Grand Falls|Caraquet|Sussex|Rivière-du-Nord|Shippagan|Vallée-des-Rivières|Haut-Madawaska|Eastern Charlotte|Tantramar|Bois-Joli|Shediac|Miramichi River Valley|Beaurivage|Ile de Lamèque|Île-de-Lamèque|Grand-Bouctouche|Nouvelle-Arcadie|Valley Waters|Fundy Albert|Arcadia|Cap-Acadie|Hartland|Nackawic-Millville|Fundy St Martins|Fundy-St\\. Martins|Alnwick|Five Rivers|Strait Shores|Hanwell(?: \\(.*\\))?|Beausoleil(?: \\(.*\\))?|Moncton|Dieppe|Fredericton|Saint John|Bathurst|Edmundston|Miramichi|Quispamsis|Riverview|Rothesay|Oromocto|Woodstock|Hampton|Grand Bay-Westfield|Saint Andrews|Saint-Quentin|Kedgwick|Belledune|Neguac|Doaktown|McAdam|Grand Lake|Carleton North|Tobique Valley|Southern Victoria|Hautes-Terres|Three Rivers|Lakeland Ridges|Sunbury-York South|Butternut Valley|Maple Hills|Nashwaak|Upper Miramichi|Grand Manan|Campobello|Champdoré|New Maryland|Harvey|Fredericton Junction|Tracy|Salisbury|Memramcook|Fundy Shores)(?: \\(.*\\))?$",
+     "why": "Local governments listed by bare name in the payee file",
+     "dollars": 41762115
+    },
+    {
+     "re": "\\b(FIRST NATION|PREMIÈRE NATION|PREMIERE NATION|INDIAN BAND|BAND COUNCIL)\\b",
+     "why": "Tax and education agreements with First Nations",
+     "dollars": 40110579
+    },
+    {
+     "re": "Social Development \\| .*(NURSING HOME|MANOR|VILLA\\b|FOYER|RÉSIDENCES? |RESIDENCES? |LODGE|CARE CENTRE|HOME INC|HOME FOR|LONG TERM CARE|LIFECARE|LIFE CARE)",
+     "why": "Nursing home per-bed approved budgets",
+     "dollars": 345746690
+    },
+    {
+     "re": "Education and Early Childhood Development \\| .*(CHILD ?CARE|DAY ?CARE|GARDERIE|EARLY LEARNING|PRESCHOOL|PRÉSCOLAIRE|LEARNING CENTRE|KIDS|ENFANTS|PETITE ENFANCE|ACADEMY)",
+     "why": "Designated child care operating and wage grants per space",
+     "dollars": 64398907
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 527952128,
+    "total_dollars_since_2024": 875085215,
+    "formula_share_pct": 60.3
+   }
+  },
+  "ontario": {
+   "by": "recipient",
+   "match": "ministry | recipient name",
+   "window": "FY2025-26 adjusted payments",
+   "formula": [
+    {
+     "re": "\\| (THE )?(CORPORATION OF (THE )?|CORP\\.? OF (THE )?|MUNICIPAL CORPORATION OF (THE )?)?(CITY|TOWN|TOWNSHIP|VILLAGE|MUNICIPALITY|COUNTY|UNITED COUNTIES|REGIONAL MUNICIPALITY|DISTRICT MUNICIPALITY|UNITED TOWNSHIPS|VILLE|CANTON|MUNICIPALITÉ|MUNICIPALITE|CITÉ|CITE|REGION) (OF|DE|DES|DU|D')\\b|\\| (THE )?[A-Za-z'.-]+( [A-Za-z'.-]+)? COUNTY$",
+     "why": "OMPF and cost-shared municipal program transfers",
+     "dollars": 2259555919
+    },
+    {
+     "re": "DISTRICT SOCIAL SERVICES ADMINISTRATION BOARD|SERVICES ADMINISTRATION BOARD|DISTRICT SERVICES BOARD|\\bDSSAB\\b",
+     "why": "Cost-shared social services and child care allocations",
+     "dollars": 41164026
+    },
+    {
+     "re": "PUBLIC LIBRARY",
+     "why": "Per-household library operating grant",
+     "dollars": 12967322
+    },
+    {
+     "re": "CHILDREN'?S AID SOCIETY|FAMILY (AND|&) CHILDREN'?S SERVICES|CHILD(REN)? (AND|&) FAMILY SERVICES (OF|FOR)\\b|JEWISH FAMILY AND CHILD|NATIVE CHILD AND FAMILY|HAMILTON CHILD AND FAMILY SUPPORTS|SIMCOE MUSKOKA CHILD|VALORIS|DNAAGDAWENMAG|KINA GBEZHGOMI|OGWADENI|KUNUWANIMANO|DILICO|TIKINAGAN|PAYUKOTAYNO|WEECHI-IT-TE-WIN|NOGDAWINDAMIN|ANISHINAABE ABINOOJII|HIGHLAND SHORES|BRUCE GREY CHILD|HURON-PERTH CHILDREN|CHATHAM-KENT CHILDREN'S SERVICES|SARNIA-LAMBTON CHILDREN",
+     "why": "Child welfare funding model",
+     "dollars": 1335966986
+    },
+    {
+     "re": "^Ministry of Long-Term Care \\|",
+     "why": "Per-bed level-of-care funding to long-term care homes",
+     "dollars": 2319892026
+    },
+    {
+     "re": "^Ministry of Health \\| (?!.*COMMUNITY HEALTH)(?!.*FAMILY HEALTH)(?!.*CANADIAN MENTAL HEALTH).*(\\bHOSPITAL\\b|HEALTH SCIENCES|HEALTH CARE\\b|HEALTH ALLIANCE|HEALTH CENTRE|HEALTH SYSTEM|HEALTH NETWORK|\\bGENERAL$|CARE GROUP|CONTINUING CARE)",
+     "why": "Hospital global budgets under HBAM formula",
+     "dollars": 1439531757
+    },
+    {
+     "re": "\\b(FIRST NATIONS?|INDIAN BAND|BAND COUNCIL|CREE NATION|MOHAWKS? OF|CHIPPEWAS OF|MISSISSAUGAS OF|OJIBWAYS? OF|ALGONQUINS OF|ONEIDA NATION|SIX NATIONS|WAHTA MOHAWKS|SAUGEEN OJIBWAY)\\b",
+     "why": "Gaming and resource revenue sharing with First Nations",
+     "dollars": 551115282
+    }
+   ],
+   "share_check": {
+    "formula_dollars_since_2024": 7960193318,
+    "total_dollars_since_2024": 16104560640,
+    "formula_share_pct": 49.4
+   }
+  }
+ }
+}

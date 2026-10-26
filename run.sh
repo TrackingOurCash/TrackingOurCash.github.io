@@ -41,6 +41,7 @@ python3 scripts/fetch_shapes.py
 python3 scripts/prep_ridings.py
 python3 scripts/population.py && python3 scripts/prep_ridings.py
 python3 scripts/build_spending.py > data/summary.json
+python3 scripts/contracts.py || echo "contracts layer skipped"
 (cd scripts && python3 budget.py)
 python3 scripts/merge_news.py
 python3 scripts/wiki_links.py || true

@@ -107,6 +107,21 @@ def to_float(v):
         return 0.0
 
 
+def formula_matcher(level):
+    """-> f(label) that says whether a payment is "formula" money (allocated by a published rule)
+    per data/formula_programs.json. The label is what that file's level says it matches:
+    "Department | Program" for federal, the 'Ministry: Program' label for Alberta and
+    Saskatchewan, "Department | Recipient" for the provinces whose statements carry no program."""
+    path = ROOT / "data" / "formula_programs.json"
+    if not path.exists():
+        return lambda label: False
+    lv = json.load(open(path))["levels"].get(level)
+    if not lv:
+        return lambda label: False
+    pats = [re.compile(e["re"], re.I) for e in lv["formula"]]
+    return lambda label: any(p.search(label) for p in pats)
+
+
 def recipient_table(per, name_of, cap=5000, floor=100000):
     """Every recipient's after-window total across ridings: [name, total, awards, flag, {riding: dollars}],
     largest first, for the page's recipient search and top-50 list."""
@@ -299,6 +314,7 @@ def main():
     years = span / 365.25
 
     per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "grants": [], "series": Counter()} for num in ridings}
+    is_formula = formula_matcher("federal")
     quarters = sorted({(int(r["start"][:4]), (int(r["start"][5:7]) - 1) // 3) for r in agreements.values()})
     quarters = [q for q in quarters if q <= (date.today().year, (date.today().month - 1) // 3)]  # a few agreements carry start dates in the future
     qlabel = lambda q: f"{q[0]}Q{q[1] + 1}"
@@ -344,9 +360,13 @@ def main():
         p = per[num]
         p[window]["total"] += rec["value"]
         p[window]["n"] += 1
+        formula = bool(is_formula(f'{rec["dept"]} | {rec["program"]}'))
         if not flagged:
             p[window]["adj"] += rec["value"]
             p[window]["adj_n"] += 1
+            if formula:
+                p[window]["formula"] += rec["value"]
+        rec["formula"] = formula
         if window == "before" and not flagged:
             dept_before[rec["dept"]][num] += rec["value"]
         if window == "after":
@@ -365,6 +385,7 @@ def main():
             "after_total": round(a["total"]), "after_n": a["n"],
             "after_adj": round(a["adj"]), "after_adj_n": a["adj_n"],
             "before_total": round(b["total"]), "before_adj": round(b["adj"]),
+            "after_formula": round(a["formula"]), "before_formula": round(b["formula"]),
             "pc_after": round(a["adj"] / pop / years, 2),
             "pc_after_all": round(a["total"] / pop / years, 2),
             "pc_before": round(b["adj"] / pop / years, 2),
@@ -373,7 +394,7 @@ def main():
             "top_depts": [[d, round(v)] for d, v in p["depts"].most_common(4)],
             "top_grants": [
                 {"v": round(v), "who": g["recipient"][:80], "dept": g["dept"][:60], "prog": g["program"][:80],
-                 "date": g["start"], "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"]}
+                 "date": g["start"], "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"], "formula": g.get("formula", False)}
                 for v, g, fl, how in sorted(p["grants"], key=lambda t: -t[0])[:10]
             ],
         })

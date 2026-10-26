@@ -38,7 +38,7 @@ RAW = ROOT / "data" / "raw"
 OUT = ROOT / "data" / "ab"
 sys.path.insert(0, str(ROOT / "scripts"))
 from geo import RidingIndex, load_centroids
-from build_spending import recipient_table  # noqa: E402
+from build_spending import recipient_table, formula_matcher  # noqa: E402
 
 ELECTION = date(2023, 5, 29)
 CLOSE_MARGIN = 10.0
@@ -199,6 +199,7 @@ def main():
     years = span / 365.25
 
     per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": [], "series": Counter()} for num in divisions}
+    is_formula = formula_matcher("alberta")
     quarters = sorted({(r["date"].year, (r["date"].month - 1) // 3) for r in rows if r["date"]})
     quarters = [q for q in quarters if q <= (date.today().year, (date.today().month - 1) // 3)]  # a few agreements carry start dates in the future
     qlabel = lambda q: f"{q[0]}Q{q[1] + 1}"
@@ -249,13 +250,16 @@ def main():
         p = per[num]
         p[window]["total"] += v
         p[window]["n"] += 1
+        label = f'{r["Ministry"].title()}: {program.title()}'
+        r["formula"] = bool(is_formula(label))
         if not flag:
             p[window]["adj"] += v
             p[window]["adj_n"] += 1
+            if r["formula"]:
+                p[window]["formula"] += v
         else:
             flagged_total[(window, r["Recipient"])] += v
         if window == "after":
-            label = f'{r["Ministry"].title()}: {program.title()}'
             p["progs"][label] += v
             if not flag:
                 prog_totals[label][num] += v
@@ -268,24 +272,25 @@ def main():
         a, b = p["after"], p["before"]
         rec = dict(dv)
         # Group the largest recipients rather than listing every payment.
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": ""})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
         for v, r, fl, how in p["grants"]:
             g = by_recipient[r["Recipient"]]
             g["v"] += v
             g["n"] += 1
+            g["formula"] = g["formula"] or bool(r.get("formula"))
             g["progs"][f'{r["Program"].title()} ({r["Ministry"].title()})'] += v
             g["flag"], g["how"], g["last"] = fl, how, max(g["last"], r["date"].isoformat())
         top = sorted(by_recipient.items(), key=lambda kv: -kv[1]["v"])[:10]
         rec.update({
             "after_total": round(a["total"]), "after_n": a["n"], "after_adj": round(a["adj"]), "after_adj_n": a["adj_n"],
-            "before_total": round(b["total"]), "before_adj": round(b["adj"]),
+            "before_total": round(b["total"]), "before_adj": round(b["adj"]), "after_formula": round(a["formula"]), "before_formula": round(b["formula"]),
             "pc_after": round(a["adj"] / pop / years, 2), "pc_after_all": round(a["total"] / pop / years, 2),
             "pc_before": round(b["adj"] / pop / years, 2),
             "close": dv["margin_pts"] < CLOSE_MARGIN,
             "gov_won": dv["party_2023"] == "UCP",
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"].get(qlabel(q), 0)) for q in quarters]

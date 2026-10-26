@@ -35,7 +35,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
 sys.path.insert(0, str(ROOT / "scripts"))
-from build_spending import ELECTION, KEEP_FROM, CLOSE_MARGIN, norm, first, flag_reason, clean_postal, to_float, amend_no, recipient_table  # noqa: E402
+from build_spending import ELECTION, KEEP_FROM, CLOSE_MARGIN, norm, first, flag_reason, clean_postal, to_float, amend_no, recipient_table, formula_matcher  # noqa: E402
 from geo import RidingIndex, load_centroids  # noqa: E402
 
 PROFILES = {
@@ -136,6 +136,7 @@ def main():
     # City governments spanning several districts can't be pinned to one.
     multi = {(norm(c), P["prov"]) for c in P["multi_city"]}
     per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "grants": [], "series": Counter()} for num in divisions}
+    is_formula = formula_matcher("federal")
     quarters = sorted({(int(r["start"][:4]), (int(r["start"][5:7]) - 1) // 3) for r in agreements.values()})
     quarters = [q for q in quarters if q <= (date.today().year, (date.today().month - 1) // 3)]  # a few agreements carry start dates in the future
     qlabel = lambda q: f"{q[0]}Q{q[1] + 1}"
@@ -163,9 +164,12 @@ def main():
         p = per[num]
         p[window]["total"] += rec["value"]
         p[window]["n"] += 1
+        rec["formula"] = bool(is_formula(f'{rec["dept"]} | {rec["program"]}'))
         if not flag:
             p[window]["adj"] += rec["value"]
             p[window]["adj_n"] += 1
+            if rec["formula"]:
+                p[window]["formula"] += rec["value"]
         else:
             flagged_total[(window, rec["recipient"])] += rec["value"]
         if window == "after":
@@ -182,12 +186,12 @@ def main():
         rec = dict(dv)
         rec.update({
             "after_total": round(a["total"]), "after_n": a["n"], "after_adj": round(a["adj"]), "after_adj_n": a["adj_n"],
-            "before_total": round(b["total"]), "before_adj": round(b["adj"]),
+            "before_total": round(b["total"]), "before_adj": round(b["adj"]), "after_formula": round(a["formula"]), "before_formula": round(b["formula"]),
             "pc_after": round(a["adj"] / pop / years, 2), "pc_after_all": round(a["total"] / pop / years, 2), "pc_before": round(b["adj"] / pop / years, 2),
             "close": dv["margin_pts"] < CLOSE_MARGIN, "gov_won": dv[f"party_{YEAR}"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["depts"].most_common(4)],
             "top_grants": [{"v": round(v), "who": g["recipient"][:80], "dept": g["dept"][:60], "prog": g["program"][:80], "date": g["start"],
-                            "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"]}
+                            "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"], "formula": g.get("formula", False)}
                            for v, g, fl, how in sorted(p["grants"], key=lambda t: -t[0])[:10]],
         })
         rec["series"] = [round(p["series"].get(qlabel(q), 0)) for q in quarters]

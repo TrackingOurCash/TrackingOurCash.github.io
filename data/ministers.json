@@ -1,0 +1,1167 @@
+{
+ "as_of": "2026-10-26",
+ "levels": {
+  "federal": {
+   "head": "Mark Carney",
+   "source": "https://www.pm.gc.ca/en/cabinet (cabinet) and https://www.pm.gc.ca/en/secretaries-state (secretaries of state), checked against https://en.wikipedia.org/wiki/30th_Canadian_Ministry",
+   "ministers": {
+    "35067": {
+     "name": "Mark Carney",
+     "title": "Prime Minister of Canada",
+     "rank": "head"
+    },
+    "13002": {
+     "name": "Dominic LeBlanc",
+     "title": "President of the King’s Privy Council for Canada and Minister responsible for Canada-U.S. Trade, Intergovernmental Affairs, Internal Trade and One Canadian Economy",
+     "rank": "cabinet"
+    },
+    "24003": {
+     "name": "Mélanie Joly",
+     "title": "Minister of Industry and Minister responsible for Canada Economic Development for Quebec Regions",
+     "rank": "cabinet"
+    },
+    "24070": {
+     "name": "François-Philippe Champagne",
+     "title": "Minister of Finance and National Revenue",
+     "rank": "cabinet"
+    },
+    "35075": {
+     "name": "Anita Anand",
+     "title": "Minister of Foreign Affairs",
+     "rank": "cabinet"
+    },
+    "35108": {
+     "name": "Patty Hajdu",
+     "title": "Minister of Jobs and Families and Minister responsible for the Federal Economic Development Agency for Northern Ontario",
+     "rank": "cabinet"
+    },
+    "24077": {
+     "name": "Marc Miller",
+     "title": "Minister of Canadian Identity and Culture and Minister responsible for Official Languages",
+     "rank": "cabinet"
+    },
+    "12003": {
+     "name": "Sean Fraser",
+     "title": "Minister of Justice and Attorney General of Canada and Minister responsible for the Atlantic Canada Opportunities Agency",
+     "rank": "cabinet"
+    },
+    "35094": {
+     "name": "Gary Anandasangaree",
+     "title": "Minister of Public Safety",
+     "rank": "cabinet"
+    },
+    "35066": {
+     "name": "Rechie Valdez",
+     "title": "Minister of Women and Gender Equality and Secretary of State (Small Business and Tourism)",
+     "rank": "cabinet"
+    },
+    "24025": {
+     "name": "Steven MacKinnon",
+     "title": "Minister of Transport and Leader of the Government in the House of Commons",
+     "rank": "cabinet"
+    },
+    "35080": {
+     "name": "David McGuinty",
+     "title": "Minister of National Defence",
+     "rank": "cabinet"
+    },
+    "10006": {
+     "name": "Joanne Thompson",
+     "title": "Minister of Fisheries",
+     "rank": "cabinet"
+    },
+    "35010": {
+     "name": "Shafqat Ali",
+     "title": "President of the Treasury Board",
+     "rank": "cabinet"
+    },
+    "61001": {
+     "name": "Rebecca Alty",
+     "title": "Minister of Crown-Indigenous Relations",
+     "rank": "cabinet"
+    },
+    "46002": {
+     "name": "Rebecca Chartrand",
+     "title": "Minister of Northern and Arctic Affairs and Minister responsible for the Canadian Northern Economic Development Agency",
+     "rank": "cabinet"
+    },
+    "35110": {
+     "name": "Julie Dabrusin",
+     "title": "Minister of the Environment, Climate Change and Nature",
+     "rank": "cabinet"
+    },
+    "12007": {
+     "name": "Lena Metlege Diab",
+     "title": "Minister of Immigration, Refugees and Citizenship",
+     "rank": "cabinet"
+    },
+    "24001": {
+     "name": "Mandy Gull-Masty",
+     "title": "Minister of Indigenous Services",
+     "rank": "cabinet"
+    },
+    "35057": {
+     "name": "Tim Hodgson",
+     "title": "Minister of Energy and Natural Resources",
+     "rank": "cabinet"
+    },
+    "24043": {
+     "name": "Joël Lightbound",
+     "title": "Minister of Government Transformation, Public Works and Procurement and Québec Lieutenant",
+     "rank": "cabinet"
+    },
+    "11004": {
+     "name": "Heath MacDonald",
+     "title": "Minister of Agriculture and Agri-Food",
+     "rank": "cabinet"
+    },
+    "59011": {
+     "name": "Jill McKnight",
+     "title": "Minister of Veterans Affairs and Associate Minister of National Defence",
+     "rank": "cabinet"
+    },
+    "24054": {
+     "name": "Marjorie Michel",
+     "title": "Minister of Health",
+     "rank": "cabinet"
+    },
+    "48015": {
+     "name": "Eleanor Olszewski",
+     "title": "Minister of Emergency Management and Community Resilience and Minister responsible for Prairies Economic Development Canada",
+     "rank": "cabinet"
+    },
+    "59037": {
+     "name": "Gregor Robertson",
+     "title": "Minister of Housing and Infrastructure and Minister responsible for Pacific Economic Development Canada",
+     "rank": "cabinet"
+    },
+    "35011": {
+     "name": "Maninder Sidhu",
+     "title": "Minister of International Trade",
+     "rank": "cabinet"
+    },
+    "35109": {
+     "name": "Evan Solomon",
+     "title": "Minister of Artificial Intelligence and Digital Innovation and Minister responsible for the Federal Economic Development Agency for Southern Ontario",
+     "rank": "cabinet"
+    },
+    "35012": {
+     "name": "Ruby Sahota",
+     "title": "Secretary of State (Combatting Crime)",
+     "rank": "state"
+    },
+    "47003": {
+     "name": "Buckley Belanger",
+     "title": "Secretary of State (Rural Development)",
+     "rank": "state"
+    },
+    "59016": {
+     "name": "Stephen Fuhr",
+     "title": "Secretary of State (Defence Procurement)",
+     "rank": "state"
+    },
+    "24052": {
+     "name": "Anna Gainey",
+     "title": "Secretary of State (Children and Youth)",
+     "rank": "state"
+    },
+    "13008": {
+     "name": "Wayne Long",
+     "title": "Secretary of State (Canada Revenue Agency and Financial Institutions)",
+     "rank": "state"
+    },
+    "59012": {
+     "name": "Stephanie McLean",
+     "title": "Secretary of State (Seniors)",
+     "rank": "state"
+    },
+    "24017": {
+     "name": "Nathalie Provost",
+     "title": "Secretary of State (Nature)",
+     "rank": "state"
+    },
+    "59033": {
+     "name": "Randeep Sarai",
+     "title": "Secretary of State (International Development)",
+     "rank": "state"
+    },
+    "35018": {
+     "name": "Adam van Koeverden",
+     "title": "Secretary of State (Sport)",
+     "rank": "state"
+    },
+    "35031": {
+     "name": "John Zerucelli",
+     "title": "Secretary of State (Labour)",
+     "rank": "state"
+    }
+   },
+   "unseated": [],
+   "note": "Carney ministry as listed on pm.gc.ca on 2026-10-26 (28 cabinet members; last shuffle 1 Dec 2025). Secretaries of State are not cabinet members but are part of the ministry; included with rank \"state\". Rechie Valdez is both a cabinet minister and Secretary of State (rank cabinet). Parliamentary secretaries and whips excluded. No senators sit in this ministry."
+  },
+  "alberta": {
+   "head": "Danielle Smith",
+   "source": "https://www.alberta.ca/premier-cabinet.aspx (Alberta Cabinet page, listing the 21 May 2026 shuffle)",
+   "ministers": {
+    "52": {
+     "name": "Danielle Smith",
+     "title": "Premier of Alberta and Minister of Intergovernmental and International Relations",
+     "rank": "head"
+    },
+    "26": {
+     "name": "Mike Ellis",
+     "title": "Deputy Premier and Minister of Public Safety and Emergency Services",
+     "rank": "cabinet"
+    },
+    "80": {
+     "name": "Jason Nixon",
+     "title": "President of Treasury Board and Minister of Finance",
+     "rank": "cabinet"
+    },
+    "65": {
+     "name": "R.J. Sigurdson",
+     "title": "Minister of Affordability and Utilities",
+     "rank": "cabinet"
+    },
+    "5": {
+     "name": "Mickey Amery, KC",
+     "title": "Minister of Justice",
+     "rank": "cabinet"
+    },
+    "58": {
+     "name": "Andrew Boitchenko",
+     "title": "Minister of Tourism and Sport",
+     "rank": "cabinet"
+    },
+    "66": {
+     "name": "Devin Dreeshen",
+     "title": "Minister of Transportation and Economic Corridors",
+     "rank": "cabinet"
+    },
+    "22": {
+     "name": "Tanya Fir",
+     "title": "Minister of Arts, Culture and Status of Women",
+     "rank": "cabinet"
+    },
+    "84": {
+     "name": "Nate Glubish",
+     "title": "Minister of Technology and Innovation",
+     "rank": "cabinet"
+    },
+    "85": {
+     "name": "Grant Hunter",
+     "title": "Minister of Environment and Protected Areas",
+     "rank": "cabinet"
+    },
+    "60": {
+     "name": "Brian Jean, KC",
+     "title": "Minister of Energy and Minerals",
+     "rank": "cabinet"
+    },
+    "78": {
+     "name": "Adriana LaGrange",
+     "title": "Minister of Hospital and Surgical Health Services",
+     "rank": "cabinet"
+    },
+    "57": {
+     "name": "Justin Wright",
+     "title": "Minister of Primary and Preventative Health Services",
+     "rank": "cabinet"
+    },
+    "55": {
+     "name": "Todd Loewen",
+     "title": "Minister of Forestry and Parks",
+     "rank": "cabinet"
+    },
+    "87": {
+     "name": "Martin Long",
+     "title": "Minister of Infrastructure",
+     "rank": "cabinet"
+    },
+    "11": {
+     "name": "Myles McDougall",
+     "title": "Minister of Advanced Education",
+     "rank": "cabinet"
+    },
+    "75": {
+     "name": "Dale Nally",
+     "title": "Minister of Service Alberta and Red Tape Reduction",
+     "rank": "cabinet"
+    },
+    "3": {
+     "name": "Demetrios Nicolaides",
+     "title": "Minister of Education and Childcare",
+     "rank": "cabinet"
+    },
+    "71": {
+     "name": "Nathan Neudorf",
+     "title": "Minister of Assisted Living and Social Services",
+     "rank": "cabinet"
+    },
+    "21": {
+     "name": "Rajan Sawhney",
+     "title": "Minister of Indigenous Relations",
+     "rank": "cabinet"
+    },
+    "54": {
+     "name": "Joseph Schow",
+     "title": "Minister of Jobs, Economy, Trade and Immigration",
+     "rank": "cabinet"
+    },
+    "76": {
+     "name": "Tara Sawyer",
+     "title": "Minister of Agriculture and Irrigation",
+     "rank": "cabinet"
+    },
+    "82": {
+     "name": "Searle Turton",
+     "title": "Minister of Children and Family Services",
+     "rank": "cabinet"
+    },
+    "77": {
+     "name": "Dan Williams",
+     "title": "Minister of Municipal Affairs",
+     "rank": "cabinet"
+    },
+    "74": {
+     "name": "Rick Wilson",
+     "title": "Minister of Mental Health and Addiction",
+     "rank": "cabinet"
+    },
+    "19": {
+     "name": "Muhammad Yaseen",
+     "title": "Associate Minister of Multiculturalism",
+     "rank": "associate"
+    }
+   },
+   "unseated": [],
+   "note": "Smith cabinet as listed on alberta.ca on 2026-10-26 (last shuffle 21 May 2026). Includes one Associate Minister (rank \"associate\"). Parliamentary secretaries excluded."
+  },
+  "bc": {
+   "head": "David Eby",
+   "source": "https://en.wikipedia.org/wiki/Eby_ministry (table current to the 14 Aug 2026 shuffle); official page https://www2.gov.bc.ca/gov/content/governments/organizational-structure/cabinet/cabinet-ministers was unreachable on 2026-10-26",
+   "ministers": {
+    "VNP": {
+     "name": "David Eby",
+     "title": "Premier of British Columbia",
+     "rank": "head"
+    },
+    "VHA": {
+     "name": "Niki Sharma",
+     "title": "Deputy Premier; Attorney General",
+     "rank": "cabinet"
+    },
+    "SAS": {
+     "name": "Lana Popham",
+     "title": "Minister of Agriculture and Food",
+     "rank": "cabinet"
+    },
+    "CQB": {
+     "name": "Jodie Wickens",
+     "title": "Minister of Children and Family Development; Minister of State for Child Care and Children and Youth with Support Needs",
+     "rank": "cabinet"
+    },
+    "OBG": {
+     "name": "Diana Gibson",
+     "title": "Minister of Citizens' Services",
+     "rank": "cabinet"
+    },
+    "MAP": {
+     "name": "Lisa Beare",
+     "title": "Minister of Education and Child Care",
+     "rank": "cabinet"
+    },
+    "RCS": {
+     "name": "Kelly Greene",
+     "title": "Minister of Emergency Management and Climate Readiness",
+     "rank": "cabinet"
+    },
+    "VNR": {
+     "name": "Adrian Dix",
+     "title": "Minister of Energy and Climate Solutions; Minister responsible for Francophone Affairs",
+     "rank": "cabinet"
+    },
+    "NOH": {
+     "name": "Tamara Davidson",
+     "title": "Minister of Environment and Parks",
+     "rank": "cabinet"
+    },
+    "MPR": {
+     "name": "Josie Osborne",
+     "title": "Minister of Finance",
+     "rank": "cabinet"
+    },
+    "LFH": {
+     "name": "Ravi Parmar",
+     "title": "Minister of Forests",
+     "rank": "cabinet"
+    },
+    "DLN": {
+     "name": "Ravi Kahlon",
+     "title": "Minister of Health",
+     "rank": "cabinet"
+    },
+    "VLM": {
+     "name": "Christine Boyle",
+     "title": "Minister of Housing and Municipal Affairs",
+     "rank": "cabinet"
+    },
+    "VNW": {
+     "name": "Spencer Chandra Herbert",
+     "title": "Minister of Indigenous Relations and Reconciliation",
+     "rank": "cabinet"
+    },
+    "NVL": {
+     "name": "Bowinn Ma",
+     "title": "Minister of Infrastructure",
+     "rank": "cabinet"
+    },
+    "VNS": {
+     "name": "Brenda Bailey",
+     "title": "Minister of Jobs, Economic Development and Innovation",
+     "rank": "cabinet"
+    },
+    "NMC": {
+     "name": "Jennifer Whiteside",
+     "title": "Minister of Labour",
+     "rank": "cabinet"
+    },
+    "SRF": {
+     "name": "Jagrup Brar",
+     "title": "Minister of Mining and Critical Minerals",
+     "rank": "cabinet"
+    },
+    "SRN": {
+     "name": "Jessie Sunner",
+     "title": "Minister of Post-Secondary Education and Future Skills",
+     "rank": "cabinet"
+    },
+    "VTS": {
+     "name": "Nina Krieger",
+     "title": "Minister of Public Safety and Solicitor General",
+     "rank": "cabinet"
+    },
+    "NAI": {
+     "name": "Sheila Malcolmson",
+     "title": "Minister of Social Development and Poverty Reduction",
+     "rank": "cabinet"
+    },
+    "BNC": {
+     "name": "Anne Kang",
+     "title": "Minister of Tourism, Arts, Culture and Sport",
+     "rank": "cabinet"
+    },
+    "POC": {
+     "name": "Mike Farnworth",
+     "title": "Minister of Transportation and Transit; Government House Leader",
+     "rank": "cabinet"
+    },
+    "POR": {
+     "name": "Randene Neill",
+     "title": "Minister of Water, Land and Resource Stewardship",
+     "rank": "cabinet"
+    },
+    "KOC": {
+     "name": "Brittny Anderson",
+     "title": "Minister of State for Local Government and Rural Communities",
+     "rank": "state"
+    },
+    "POM": {
+     "name": "Rick Glumac",
+     "title": "Minister of State for Artificial Intelligence and New Technologies",
+     "rank": "state"
+    },
+    "VNY": {
+     "name": "Terry Yung",
+     "title": "Minister of State for Community Safety and Integrated Services",
+     "rank": "state"
+    }
+   },
+   "unseated": [],
+   "note": "The Conservatives under Lorne Doerkson won the 24 Oct 2026 election but no new cabinet had been sworn in as of 2026-10-26, so this is the outgoing Eby (NDP) cabinet as reshuffled 14 Aug 2026, which remains in office until a new one is sworn in. The riding file holds the 2024-election members, so all map. Ministers of State have rank \"state\"."
+  },
+  "saskatchewan": {
+   "head": "Scott Moe",
+   "source": "https://www.saskatchewan.ca/government/government-structure/cabinet",
+   "ministers": {
+    "39": {
+     "name": "Scott Moe",
+     "title": "Premier of Saskatchewan, President of the Executive Council, Minister of Intergovernmental Affairs",
+     "rank": "head"
+    },
+    "38": {
+     "name": "Jim Reiter",
+     "title": "Deputy Premier and Minister of Finance",
+     "rank": "cabinet"
+    },
+    "60": {
+     "name": "David Marit",
+     "title": "Minister of Agriculture, Minister responsible for Saskatchewan Crop Insurance Corporation, Minister responsible for Saskatchewan Water Security Agency",
+     "rank": "cabinet"
+    },
+    "18": {
+     "name": "Jeremy Harrison",
+     "title": "Minister of Crown Investments Corporation and all of its commercial Crown Corporations, Minister responsible for the Public Service Commission, and Minister responsible for Lotteries and Gaming Saskatchewan Corporation",
+     "rank": "cabinet"
+    },
+    "10": {
+     "name": "Lori Carr",
+     "title": "Minister of Mental Health and Addictions, Seniors and Rural and Remote Health",
+     "rank": "cabinet"
+    },
+    "55": {
+     "name": "Everett Hindley",
+     "title": "Minister of Education",
+     "rank": "cabinet"
+    },
+    "56": {
+     "name": "Jeremy Cockrill",
+     "title": "Minister of Health",
+     "rank": "cabinet"
+    },
+    "21": {
+     "name": "Tim McLeod",
+     "title": "Minister of Justice and Attorney General, and Minister responsible for the Firearms Secretariat",
+     "rank": "cabinet"
+    },
+    "57": {
+     "name": "Terry Jenson",
+     "title": "Minister of Social Services",
+     "rank": "cabinet"
+    },
+    "54": {
+     "name": "Ken Cheveldayoff",
+     "title": "Minister of Advanced Education, Minister of Labour Relations and Workplace Safety, and Minister responsible for the Saskatchewan Workers' Compensation Board",
+     "rank": "cabinet"
+    },
+    "20": {
+     "name": "Warren Kaeding",
+     "title": "Minister of Trade and Export Development, Minister responsible for Innovation and Minister responsible for Saskatchewan Liquor Gaming Authority",
+     "rank": "cabinet"
+    },
+    "25": {
+     "name": "Alana Ross",
+     "title": "Minister of Parks, Culture and Sport, Minister responsible for the Status of Women, Minister responsible for Tourism Saskatchewan and Minister responsible for Francophone Affairs",
+     "rank": "cabinet"
+    },
+    "40": {
+     "name": "Eric Schmalz",
+     "title": "Minister of Government Relations, Minister of Immigration and Career Training, Minister responsible for First Nations, Métis and Northern Affairs, Minister responsible for the Provincial Capital Commission",
+     "rank": "cabinet"
+    },
+    "12": {
+     "name": "Chris Beaudry",
+     "title": "Minister of Energy and Resources",
+     "rank": "cabinet"
+    },
+    "13": {
+     "name": "Kim Gartner",
+     "title": "Minister of Highways",
+     "rank": "cabinet"
+    },
+    "2": {
+     "name": "Darlene Rowden",
+     "title": "Minister of Environment",
+     "rank": "cabinet"
+    },
+    "58": {
+     "name": "Michael Weger",
+     "title": "Minister of Community Safety, Minister responsible for the Saskatchewan Public Safety Agency",
+     "rank": "cabinet"
+    },
+    "4": {
+     "name": "Sean Wilson",
+     "title": "Minister of SaskBuilds and Procurement, Minister responsible for the Global Transportation Hub Authority",
+     "rank": "cabinet"
+    }
+   },
+   "unseated": [],
+   "note": "Moe cabinet as listed on saskatchewan.ca on 2026-10-26 (18 members). The Wikipedia \"Executive Council of Saskatchewan\" table was stale (still showed the Nov 2024 cabinet)."
+  },
+  "manitoba": {
+   "head": "Wab Kinew",
+   "source": "https://www.gov.mb.ca/minister/index.html",
+   "ministers": {
+    "14": {
+     "name": "Wab Kinew",
+     "title": "Premier and Minister of Intergovernmental Affairs and International Relations and Minister responsible for Indigenous Reconciliation",
+     "rank": "head"
+    },
+    "55": {
+     "name": "Uzoma Asagwara",
+     "title": "Deputy Premier, Minister of Health, Seniors and Long-Term Care",
+     "rank": "cabinet"
+    },
+    "8": {
+     "name": "Ron Kostyshyn",
+     "title": "Minister of Agriculture",
+     "rank": "cabinet"
+    },
+    "7": {
+     "name": "Matt Wiebe",
+     "title": "Minister of Justice and Attorney General, Keeper of the Great Seal of the Province of Manitoba, Minister responsible for the Manitoba Public Insurance Corporation",
+     "rank": "cabinet"
+    },
+    "44": {
+     "name": "Nahanni Fontaine",
+     "title": "Minister of Families, Minister responsible for Accessibility, Minister responsible for Gender Equity",
+     "rank": "cabinet"
+    },
+    "28": {
+     "name": "Bernadette Smith",
+     "title": "Minister of Housing, Addictions and Homelessness and Minister responsible for Mental Health",
+     "rank": "cabinet"
+    },
+    "17": {
+     "name": "Ian Bushie",
+     "title": "Minister of Natural Resources and Indigenous Futures",
+     "rank": "cabinet"
+    },
+    "27": {
+     "name": "Malaya Marcelino",
+     "title": "Minister of Labour and Immigration and Minister responsible for The Workers Compensation Board",
+     "rank": "cabinet"
+    },
+    "45": {
+     "name": "Jamie Moses",
+     "title": "Minister of Business, Mining, Trade and Job Creation",
+     "rank": "cabinet"
+    },
+    "57": {
+     "name": "Lisa Naylor",
+     "title": "Minister of Transportation and Infrastructure",
+     "rank": "cabinet"
+    },
+    "43": {
+     "name": "Adrien Sala",
+     "title": "Minister of Finance, Minister responsible for Manitoba Hydro, Minister responsible for the Manitoba Public Service",
+     "rank": "cabinet"
+    },
+    "39": {
+     "name": "Renée Cable",
+     "title": "Minister of Advanced Education and Training",
+     "rank": "cabinet"
+    },
+    "36": {
+     "name": "Tracy Schmidt",
+     "title": "Minister of Education and Early Childhood Learning",
+     "rank": "cabinet"
+    },
+    "4": {
+     "name": "Glen Simard",
+     "title": "Minister of Municipal and Northern Relations, Minister responsible for Francophone Affairs, Minister responsible for the Manitoba Liquor and Lotteries Corporation",
+     "rank": "cabinet"
+    },
+    "48": {
+     "name": "Mintu Sandhu",
+     "title": "Minister of Public Service Delivery",
+     "rank": "cabinet"
+    },
+    "2": {
+     "name": "Nellie Kennedy",
+     "title": "Minister of Sport, Culture, Heritage and Tourism",
+     "rank": "cabinet"
+    },
+    "34": {
+     "name": "Mike Moroz",
+     "title": "Minister of Innovation and New Technology",
+     "rank": "cabinet"
+    },
+    "33": {
+     "name": "Mike Moyes",
+     "title": "Minister of Environment and Climate Change, Minister responsible for Efficiency Manitoba",
+     "rank": "cabinet"
+    }
+   },
+   "unseated": [],
+   "note": "Kinew cabinet as listed on gov.mb.ca on 2026-10-26 (18 members). Wikipedia's \"Kinew ministry\" table additionally lists Carla Compton (Minister Responsible for Accessibility, from 28 Sep 2026) and David Pankratz (Minister responsible for First Responder Initiatives) without citations; neither appears on the official page or in news.gov.mb.ca releases, so they are omitted here pending confirmation."
+  },
+  "nb": {
+   "head": "Susan Holt",
+   "source": "https://www.legnb.ca/en/members/executive-council",
+   "ministers": {
+    "fredericton-south-silverwood": {
+     "name": "Susan Holt",
+     "title": "Premier; President of the Executive Council; Minister responsible for Official Languages",
+     "rank": "head"
+    },
+    "champdore-irishtown": {
+     "name": "Lyne Chantal Boudreau",
+     "title": "Minister of Seniors; Minister responsible for Women and Gender Equity",
+     "rank": "cabinet"
+    },
+    "grand-falls-vallee-des-rivieres-saint-quentin": {
+     "name": "Chuck Chiasson",
+     "title": "Minister of Transportation and Infrastructure",
+     "rank": "cabinet"
+    },
+    "tracadie": {
+     "name": "Keith Chiasson",
+     "title": "Minister of Indigenous Affairs",
+     "rank": "cabinet"
+    },
+    "edmundston-vallee-des-rivieres": {
+     "name": "Jean-Claude D'Amours",
+     "title": "Minister of Post-Secondary Education, Training and Labour; Minister of Intergovernmental Affairs; Minister responsible for Immigration; Minister responsible for Military Affairs; Minister responsible for the Research and Productivity Council",
+     "rank": "cabinet"
+    },
+    "saint-john-portland-simonds": {
+     "name": "John Dornan",
+     "title": "Minister of Health",
+     "rank": "cabinet"
+    },
+    "kent-north": {
+     "name": "Pat Finnigan",
+     "title": "Minister of Agriculture, Aquaculture and Fisheries",
+     "rank": "cabinet"
+    },
+    "shediac-bay-dieppe": {
+     "name": "Robert Gauvin",
+     "title": "Minister of Public Safety; Minister responsible for La Francophonie",
+     "rank": "cabinet"
+    },
+    "hampton-fundy-st-martins": {
+     "name": "John Herron",
+     "title": "Minister of Natural Resources",
+     "rank": "cabinet"
+    },
+    "saint-john-harbour": {
+     "name": "David Hickey",
+     "title": "Minister responsible for the New Brunswick Housing Corporation",
+     "rank": "cabinet"
+    },
+    "moncton-south": {
+     "name": "Claire Johnson",
+     "title": "Minister of Education and Early Childhood Development",
+     "rank": "cabinet"
+    },
+    "quispamsis": {
+     "name": "Aaron Kennedy",
+     "title": "Minister of Local Government; Minister responsible for Service New Brunswick",
+     "rank": "cabinet"
+    },
+    "bathurst": {
+     "name": "René Legacy",
+     "title": "Deputy Premier; Minister of Finance and Treasury Board; Minister of Energy; Minister responsible for the Right to Information and Protection of Privacy Act",
+     "rank": "cabinet"
+    },
+    "restigouche-west": {
+     "name": "Gilles LePage",
+     "title": "Minister of Environment and Climate Change; Minister responsible for the Regional Development Corporation",
+     "rank": "cabinet"
+    },
+    "moncton-centre": {
+     "name": "Robert McKee",
+     "title": "Minister of Justice; Attorney General; Minister responsible for Addictions and Mental Health Services",
+     "rank": "cabinet"
+    },
+    "hanwell-new-maryland": {
+     "name": "Cindy Miles",
+     "title": "Minister of Social Development; Minister responsible for the Economic and Social Inclusion Corporation",
+     "rank": "cabinet"
+    },
+    "fredericton-north": {
+     "name": "Luke Randall",
+     "title": "Minister responsible for Opportunities NB; Minister responsible for Economic Development and Small Business; Minister responsible for NB Liquor and Cannabis NB; Minister responsible for the Regulatory Accountability and Reporting Act",
+     "rank": "cabinet"
+    },
+    "caraquet": {
+     "name": "Isabelle Thériault",
+     "title": "Minister of Tourism, Heritage and Culture",
+     "rank": "cabinet"
+    },
+    "rothesay": {
+     "name": "Alyson Townsend",
+     "title": "Minister responsible for Labour",
+     "rank": "cabinet"
+    }
+   },
+   "unseated": [],
+   "note": "Holt cabinet as listed by the Legislative Assembly of New Brunswick on 2026-10-26 (19 members)."
+  },
+  "pei": {
+   "head": "Rob Lantz",
+   "source": "https://en.wikipedia.org/wiki/Executive_Council_of_Prince_Edward_Island, cross-checked against the \"Hon.\" members on https://www.assembly.pe.ca/members (princeedwardisland.ca blocks automated fetches)",
+   "ministers": {
+    "13": {
+     "name": "Rob Lantz",
+     "title": "Premier; President of the Executive Council; Minister Responsible for Intergovernmental Affairs; Minister Responsible for Indigenous Relations",
+     "rank": "head"
+    },
+    "8": {
+     "name": "Bloyce Thompson",
+     "title": "Minister of Justice and Public Safety and Attorney General; Minister of Transportation and Infrastructure",
+     "rank": "cabinet"
+    },
+    "1": {
+     "name": "Robin Croucher",
+     "title": "Minister of Education and Early Years",
+     "rank": "cabinet"
+    },
+    "26": {
+     "name": "Ernie Hudson",
+     "title": "Minister of Fisheries, Rural Development and Tourism",
+     "rank": "cabinet"
+    },
+    "4": {
+     "name": "Darlene Compton",
+     "title": "Minister of Land and Environment",
+     "rank": "cabinet"
+    },
+    "3": {
+     "name": "Cory Deagle",
+     "title": "Minister of Health and Wellness",
+     "rank": "cabinet"
+    },
+    "6": {
+     "name": "Jill Burridge",
+     "title": "Minister of Finance, Affordability and Energy",
+     "rank": "cabinet"
+    },
+    "22": {
+     "name": "Barb Ramsay",
+     "title": "Minister of Social Development and Seniors",
+     "rank": "cabinet"
+    },
+    "10": {
+     "name": "Zack Bell",
+     "title": "Minister of Economic Development, Trade and Artificial Intelligence; Minister Responsible for Acadian and Francophone Affairs",
+     "rank": "cabinet"
+    },
+    "5": {
+     "name": "Jenn Redmond",
+     "title": "Minister of Workforce and Advanced Learning; Minister Responsible for the Status of Women",
+     "rank": "cabinet"
+    },
+    "15": {
+     "name": "Kent Dollar",
+     "title": "Minister of Housing and Communities",
+     "rank": "cabinet"
+    },
+    "23": {
+     "name": "Hilton MacLennan",
+     "title": "Minister of Agriculture",
+     "rank": "cabinet"
+    }
+   },
+   "unseated": [],
+   "note": "Lantz cabinet (12 members incl. premier; Deputy Premier vacant). Titles taken from Wikipedia because the official cabinet page could not be fetched."
+  },
+  "ontario": {
+   "head": "Doug Ford",
+   "source": "https://www.ontario.ca/page/meet-premiers-team (updated 10 Sep 2026)",
+   "ministers": {
+    "30": {
+     "name": "Doug Ford",
+     "title": "Premier; Minister of Intergovernmental Affairs",
+     "rank": "head"
+    },
+    "23": {
+     "name": "Sylvia Jones",
+     "title": "Deputy Premier; Minister of Health",
+     "rank": "cabinet"
+    },
+    "87": {
+     "name": "Peter Bethlenfalvy",
+     "title": "Minister of Finance",
+     "rank": "cabinet"
+    },
+    "56": {
+     "name": "Paul Calandra",
+     "title": "Minister of Education",
+     "rank": "cabinet"
+    },
+    "96": {
+     "name": "Raymond Sung Joon Cho",
+     "title": "Minister for Seniors and Accessibility",
+     "rank": "cabinet"
+    },
+    "74": {
+     "name": "Stephen Crawford",
+     "title": "Minister of Public and Business Service Delivery and Procurement",
+     "rank": "cabinet"
+    },
+    "5": {
+     "name": "Doug Downey",
+     "title": "Attorney General",
+     "rank": "cabinet"
+    },
+    "100": {
+     "name": "Jill Dunlop",
+     "title": "Minister of Emergency Preparedness and Response",
+     "rank": "cabinet"
+    },
+    "72": {
+     "name": "Victor Fedeli",
+     "title": "Minister of Economic Development, Job Creation and Trade",
+     "rank": "cabinet"
+    },
+    "26": {
+     "name": "Rob Flack",
+     "title": "Minister of Municipal Affairs and Housing",
+     "rank": "cabinet"
+    },
+    "59": {
+     "name": "Zee Hamid",
+     "title": "Minister of Tourism, Culture and Gaming",
+     "rank": "cabinet"
+    },
+    "48": {
+     "name": "Mike Harris",
+     "title": "Minister of Natural Resources",
+     "rank": "cabinet"
+    },
+    "4": {
+     "name": "Andrea Khanjin",
+     "title": "Minister of Red Tape Reduction",
+     "rank": "cabinet"
+    },
+    "120": {
+     "name": "Michael S. Kerzner",
+     "title": "Solicitor General",
+     "rank": "cabinet"
+    },
+    "60": {
+     "name": "Natalia Kusendova-Bashta",
+     "title": "Minister of Long-Term Care; Minister of Francophone Affairs",
+     "rank": "cabinet"
+    },
+    "45": {
+     "name": "Stephen Lecce",
+     "title": "Minister of Energy and Mines",
+     "rank": "cabinet"
+    },
+    "18": {
+     "name": "Trevor Jones",
+     "title": "Minister of Labour, Immigration, Training and Skills Development",
+     "rank": "cabinet"
+    },
+    "24": {
+     "name": "Todd J. McCarthy",
+     "title": "Minister of the Environment, Conservation and Parks",
+     "rank": "cabinet"
+    },
+    "10": {
+     "name": "Graham McGregor",
+     "title": "Minister of Citizenship and Multiculturalism",
+     "rank": "cabinet"
+    },
+    "70": {
+     "name": "Sam Oosterhoff",
+     "title": "Minister of Agriculture, Food and Agribusiness",
+     "rank": "cabinet"
+    },
+    "3": {
+     "name": "Michael Parsa",
+     "title": "Minister of Children, Community and Social Services",
+     "rank": "cabinet"
+    },
+    "73": {
+     "name": "David Piccini",
+     "title": "Minister of Infrastructure",
+     "rank": "cabinet"
+    },
+    "108": {
+     "name": "George Pirie",
+     "title": "Minister of Northern Economic Development and Growth",
+     "rank": "cabinet"
+    },
+    "102": {
+     "name": "Nolan Quinn",
+     "title": "Minister of Colleges, Universities, Research Excellence and Security",
+     "rank": "cabinet"
+    },
+    "44": {
+     "name": "Greg Rickford",
+     "title": "Minister of Indigenous Affairs and First Nations Economic Reconciliation; Minister Responsible for Ring of Fire Economic and Community Partnerships",
+     "rank": "cabinet"
+    },
+    "11": {
+     "name": "Prabmeet Singh Sarkaria",
+     "title": "Minister of Transportation",
+     "rank": "cabinet"
+    },
+    "99": {
+     "name": "Brian Saunderson",
+     "title": "Minister of Sport",
+     "rank": "cabinet"
+    },
+    "28": {
+     "name": "Kinga Surma",
+     "title": "President of the Treasury Board",
+     "rank": "cabinet"
+    },
+    "42": {
+     "name": "Lisa M. Thompson",
+     "title": "Minister of Rural Affairs",
+     "rank": "cabinet"
+    },
+    "25": {
+     "name": "Michelle Cooper",
+     "title": "Associate Minister of Mental Health and Addictions",
+     "rank": "associate"
+    },
+    "105": {
+     "name": "Kevin Holland",
+     "title": "Associate Minister of Forestry and Forest Products",
+     "rank": "associate"
+    },
+    "85": {
+     "name": "Matthew Rae",
+     "title": "Associate Minister of Energy-Intensive Industries",
+     "rank": "associate"
+    },
+    "84": {
+     "name": "Graydon Smith",
+     "title": "Associate Minister of Municipal Affairs and Housing",
+     "rank": "associate"
+    },
+    "65": {
+     "name": "Nina Tangri",
+     "title": "Associate Minister of Small Business",
+     "rank": "associate"
+    },
+    "97": {
+     "name": "Vijay Thanigasalam",
+     "title": "Associate Minister of Artificial Intelligence Adoption",
+     "rank": "associate"
+    },
+    "113": {
+     "name": "Michael A. Tibollo",
+     "title": "Associate Attorney General",
+     "rank": "associate"
+    },
+    "8": {
+     "name": "Charmaine A. Williams",
+     "title": "Associate Minister of Women’s Social and Economic Opportunity",
+     "rank": "associate"
+    }
+   },
+   "unseated": [],
+   "note": "Ford cabinet as listed on ontario.ca (page updated 10 Sep 2026): 29 cabinet ministers (incl. premier) plus 8 Associate Ministers (rank \"associate\"). Parliamentary assistants excluded."
+  },
+  "quebec": {
+   "head": "Paul St-Pierre Plamondon",
+   "source": "https://www.assnat.qc.ca/en/deputes/fonctions-parlementaires-ministerielles/conseil-ministres.html (official, mixed FR/EN titles) with English titles from https://en.wikipedia.org/wiki/St-Pierre_Plamondon_ministry",
+   "ministers": {
+    "337": {
+     "name": "Paul St-Pierre Plamondon",
+     "title": "Premier; Minister Responsible for the Fight Against Homelessness",
+     "rank": "head"
+    },
+    "609": {
+     "name": "Catherine Gentilcore",
+     "title": "Deputy Premier; Government House Leader; Minister of Immigration and Integration; Minister Responsible for Attaining Quebec Independence",
+     "rank": "cabinet"
+    },
+    "219": {
+     "name": "Nicolas Marceau",
+     "title": "Minister of Finance and Revenue; Minister Responsible for Infrastructure",
+     "rank": "cabinet"
+    },
+    "197": {
+     "name": "Alain Therrien",
+     "title": "President of the Treasury Board; Minister Responsible for Government Administration; Minister Responsible for Community Action; Deputy Government House Leader",
+     "rank": "cabinet"
+    },
+    "681": {
+     "name": "Sébastien D'Astous",
+     "title": "Delegate Minister for Government Efficiency and the Regulatory Streamlining of the State; Minister Responsible for the Abitibi-Témiscamingue and Nord-du-Québec Regions",
+     "rank": "state"
+    },
+    "637": {
+     "name": "Anne Nguyen",
+     "title": "Delegate Minister for Artificial Intelligence and Digital Affairs; Minister Responsible for the Laurentides Region",
+     "rank": "state"
+    },
+    "617": {
+     "name": "Nicolas Girard",
+     "title": "Minister of Transport and Sustainable Mobility; Minister of Municipal Affairs; Minister Responsible for the Capitale-Nationale Region",
+     "rank": "cabinet"
+    },
+    "341": {
+     "name": "Stéphane Paquet",
+     "title": "Minister of Economic Development, Innovation and Energy; Minister Responsible for the Metropolis and the Montreal Region",
+     "rank": "cabinet"
+    },
+    "601": {
+     "name": "Dieudonné Ella Oyono",
+     "title": "Minister of International Relations, La Francophonie and Foreign Trade; Minister Responsible for the Laval Region",
+     "rank": "cabinet"
+    },
+    "811": {
+     "name": "Joël Arseneau",
+     "title": "Minister of National Education",
+     "rank": "cabinet"
+    },
+    "627": {
+     "name": "Elsie Lefebvre",
+     "title": "Minister of Higher Education; Minister Responsible for Housing; Minister Responsible for the Status of Women; Minister Responsible for the Lanaudière Region",
+     "rank": "cabinet"
+    },
+    "631": {
+     "name": "Mathieu Lebrun",
+     "title": "Minister of Labour, Employment and Social Solidarity",
+     "rank": "cabinet"
+    },
+    "809": {
+     "name": "Méganne Perry Mélançon",
+     "title": "Minister of Families and Youth; Minister Responsible for Sports and Leisure; Minister Responsible for the Gaspésie–Îles-de-la-Madeleine Region",
+     "rank": "cabinet"
+    },
+    "821": {
+     "name": "Marie-Karlynn Laflamme",
+     "title": "Minister of Health, Prevention and Seniors; Minister Responsible for the Saguenay–Lac-Saint-Jean Region",
+     "rank": "cabinet"
+    },
+    "161": {
+     "name": "Camille Pellerin-Forget",
+     "title": "Minister Responsible for Democratic Institutions; Delegate Minister for Mental Health and Social Services; Minister Responsible for the Outaouais Region",
+     "rank": "cabinet"
+    },
+    "577": {
+     "name": "Marie-Claude Sarrazin",
+     "title": "Minister of Justice and Attorney General; Minister Responsible for Relations with English-speaking Quebecers; Minister Responsible for the Fight Against Racism; Minister Responsible for the Fight Against Discrimination Against LGBTQ+ People; Minister Responsible for Access to Information and the Protection of Personal Information; Minister Responsible for Canadian Intergovernmental Affairs; Minister Responsible for Secularism",
+     "rank": "cabinet"
+    },
+    "807": {
+     "name": "Pascal Bérubé",
+     "title": "Minister of Culture, Heritage, Communications and the French Language; Minister Responsible for the Bas-Saint-Laurent Region",
+     "rank": "cabinet"
+    },
+    "239": {
+     "name": "Simon-Pierre Savard-Tremblay",
+     "title": "Minister Responsible for Relations with First Nations and Inuit",
+     "rank": "cabinet"
+    },
+    "691": {
+     "name": "Jean Pellerin",
+     "title": "Minister of the Environment, the Fight Against Climate Change, Wildlife and Parks; Minister Responsible for the Mauricie Region",
+     "rank": "cabinet"
+    },
+    "231": {
+     "name": "Guy Jr Lapointe",
+     "title": "Minister of Interior Security; Minister Responsible for the Montérégie Region",
+     "rank": "cabinet"
+    },
+    "139": {
+     "name": "Natalie Bisaillon",
+     "title": "Minister of Natural Resources and Forests; Minister Responsible for the Centre-du-Québec and Chaudière-Appalaches Regions",
+     "rank": "cabinet"
+    },
+    "813": {
+     "name": "Meggie Richard",
+     "title": "Minister Responsible for Regions and Territory Occupation; Minister Responsible for the Côte-Nord Region",
+     "rank": "cabinet"
+    },
+    "137": {
+     "name": "Bernard Sévigny",
+     "title": "Minister of Agriculture, Fisheries and Food; Minister Responsible for the Estrie Region",
+     "rank": "cabinet"
+    }
+   },
+   "unseated": [],
+   "note": "St-Pierre Plamondon (PQ) cabinet sworn in 21 Oct 2026 (23 members). Delegate ministers (ministres délégués) have rank \"state\"; Camille Pellerin-Forget holds both a full \"Minister Responsible\" post and a delegate post and is ranked cabinet. The assnat page lists Stéphane Paquet as \"Minister of Municipal Affairs\" (apparently a translation glitch, since Nicolas Girard also holds that post); Wikipedia's Economic Development, Innovation and Energy is used. Whip and caucus chair excluded."
+  }
+ }
+}

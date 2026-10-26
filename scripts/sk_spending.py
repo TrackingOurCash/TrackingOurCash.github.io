@@ -60,7 +60,7 @@ DL = SK / "dl"
 OUT = ROOT / "data" / "sk"
 sys.path.insert(0, str(ROOT / "scripts"))
 from geo import RidingIndex, load_centroids  # noqa: E402
-from build_spending import recipient_table  # noqa: E402
+from build_spending import formula_matcher, recipient_table  # noqa: E402
 from sk_pdf import pdf_pages  # noqa: E402
 
 ELECTION = date(2024, 10, 28)
@@ -496,6 +496,7 @@ def main():
     series_fys = sorted(years)  # every fiscal year parsed, windows or not
 
     per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": [], "series": Counter()} for num in divisions}
+    is_formula = formula_matcher("saskatchewan")
     method_counts = Counter()
     excluded = Counter()
     flagged_total = Counter()
@@ -524,6 +525,7 @@ def main():
                     unmatched[r["recipient"]] += v
             continue
         flag = flag_for(r["recipient"])
+        r["formula"] = bool(is_formula(f'{r["ministry"]}: {program}'))  # allocated by a published rule, per data/formula_programs.json
         p = per[num]
         if not flag:
             p["series"][r["fiscal_year"]] += v
@@ -535,6 +537,8 @@ def main():
         if not flag:
             p[window]["adj"] += v
             p[window]["adj_n"] += 1
+            if r["formula"]:
+                p[window]["formula"] += v
         else:
             flagged_total[(window, r["recipient"])] += v
         if window == "after":
@@ -550,24 +554,26 @@ def main():
         pop = dv["population"] or 1
         a, b = p["after"], p["before"]
         rec = dict(dv)
-        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": ""})
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": "", "formula": False})
         for v, r, fl, how, program in p["grants"]:
             g = by_recipient[r["recipient"]]
             g["v"] += v
             g["n"] += 1
             g["progs"][f'{program} ({r["ministry"]})'] += v
+            g["formula"] = g["formula"] or r["formula"]
             g["flag"], g["how"], g["last"] = fl, how, max(g["last"], r["fiscal_year"])
         top = sorted(by_recipient.items(), key=lambda kv: -kv[1]["v"])[:10]
         rec.update({
             "after_total": round(a["total"]), "after_n": a["n"], "after_adj": round(a["adj"]), "after_adj_n": a["adj_n"],
             "before_total": round(b["total"]), "before_adj": round(b["adj"]),
+            "after_formula": round(a["formula"]), "before_formula": round(b["formula"]),
             "pc_after": round(a["adj"] / pop / years_per_window, 2), "pc_after_all": round(a["total"] / pop / years_per_window, 2),
             "pc_before": round(b["adj"] / pop / years_per_window, 2),
             "close": dv["margin_pts"] < CLOSE_MARGIN,
             "gov_won": dv["party_2024"] == GOV_PARTY,
             "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
-                            "date": g["last"], "flag": g["flag"], "how": g["how"]} for who, g in top],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"]} for who, g in top],
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"][fy]) for fy in series_fys]

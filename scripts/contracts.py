@@ -14,15 +14,27 @@ Method, in order:
      file is newer.
   2. Amendments: rows sharing (owner_org, procurement_id), or reference_number
      when the department leaves procurement_id blank, are one contract. The
-     contract's date is the earliest contract_date (the original award); its
-     value is the latest row's contract_value (the current total, as the data
-     dictionary defines "Total Contract Value"). Standing offers and supply
-     arrangements (instrument_type SOSA) are frameworks, not spending, and are
-     dropped.
-  3. Riding: the vendor postal code's GeoNames centroid inside the 2023
-     boundaries; otherwise the vendor's address on its other contracts; otherwise
-     the centroid of the first three characters (FSA), marked approximate.
-     Contracts carry no city, so there is no city fallback.
+     contract's date is the original award (the earliest contract row's
+     contract_date; when only amendment rows survive the 2024 filter, the
+     earliest contract_period_start, so an amendment to a 2000 contract is not
+     counted as new money); its value is the latest row's contract_value (the
+     current total, as the data dictionary defines "Total Contract Value").
+     Standing offers and supply arrangements (instrument_type SOSA) are
+     frameworks, not spending, and are dropped.
+  2b. Large flag: contracts of $100M or more are nearly all multi-year defence,
+     shipbuilding and IT deals whose whole value is booked on the award date
+     (a $10.8B frigate contract runs to 2037). They are kept in the totals but
+     flagged, and the adjusted figures (after_adj, pc_after) leave them out,
+     as the grants layer leaves out national bodies.
+  3. Riding: the file publishes only the first three characters of the vendor's
+     postal code (the forward sortation area, FSA), never the full code, and no
+     city. Each FSA is scored by where its GeoNames postal codes fall inside the
+     2023 boundaries, and a contract's dollars are apportioned across those
+     ridings in that proportion (shares under 5% are dropped and the rest
+     renormalized). Only half of after-window dollars sit in FSAs that lie 80%+
+     in one riding, so a plurality rule would misplace too much. A vendor with
+     no FSA borrows the one its other contracts carry. Riding contract counts
+     are therefore fractional (rounded in the output).
   4. Vendors outside Canada (country_of_vendor not CA) are counted under
      meta.foreign and never placed in a riding.
   5. Windows, cutoff and quarter labels are taken from data/riding_spending.json
@@ -49,7 +61,10 @@ OUT = ROOT / "data"
 SOURCE = RAW / "contracts.csv"
 RECENT = RAW / "recent.csv"
 VENDOR_PC = RAW / "vendor_postal.json"
+FSA_SHARES = RAW / "fsa_shares.json"
+MIN_SHARE = 0.05
 KEEP_FROM = "2024-01-01"
+LARGE = 100_000_000  # flag threshold: multi-year megaprojects booked on one day
 
 csv.field_size_limit(sys.maxsize)
 
@@ -58,6 +73,14 @@ KEEP_COLS = ["reference_number", "procurement_id", "vendor_name", "vendor_postal
              "economic_object_code", "description_en", "commodity_type", "commodity_code", "agreement_type_code",
              "country_of_vendor", "solicitation_procedure", "contracting_entity", "instrument_type",
              "ministers_office", "reporting_period", "owner_org", "owner_org_title"]
+
+SUFFIX = re.compile(r"\b(inc|incorporated|ltd|limited|ltee|corp|corporation|co|company|llc|lp|llp|limited partnership|"
+                    r"gmbh|plc|sa|senc|s e n c|the)\b")
+
+
+def vendor_key(name):
+    return re.sub(r"\s+", " ", SUFFIX.sub(" ", norm(name))).strip() or norm(name)
+
 
 PROCEDURE = {"AC": "advance contract award notice", "OB": "competitive (open bidding)", "ST": "competitive (selective)",
              "TC": "competitive (traditional)", "TN": "non-competitive"}
@@ -75,8 +98,11 @@ def first(v):
 
 
 def clean_postal(pc):
+    """The full postal code when one is given, else the FSA (first three characters), else ""."""
     pc = re.sub(r"[^A-Za-z0-9]", "", pc or "").upper()
-    return pc if re.fullmatch(r"[A-Z]\d[A-Z]\d[A-Z]\d", pc) else ""
+    if re.fullmatch(r"[A-Z]\d[A-Z]\d[A-Z]\d", pc):
+        return pc
+    return pc[:3] if re.fullmatch(r"[A-Z]\d[A-Z].*", pc) else ""
 
 
 def to_float(v):
@@ -172,7 +198,8 @@ def main():
             if not pc:
                 stats["rows_without_postal"] += 1
             rec = {
-                "date": cdate, "value": value, "order": (row["reporting_period"] or "", cdate),
+                "date": cdate, "award": cdate if itype != "A" else "", "period": iso(row["contract_period_start"]) or cdate,
+                "value": value, "order": (row["reporting_period"] or "", cdate),
                 "dept": first(row["owner_org_title"]), "org": row["owner_org"], "ref": row["reference_number"].strip(), "pid": pid,
                 "vendor": (row["vendor_name"] or "").strip(), "pc": pc, "country": country,
                 "desc": (row["description_en"] or "").strip()[:100], "how": PROCEDURE.get((row["solicitation_procedure"] or "").strip(), ""),
@@ -184,7 +211,8 @@ def main():
                 contracts[key] = rec
                 continue
             stats["rows_merged"] += 1
-            earliest = min(prev["date"], cdate)
+            award = min(a for a in (prev["award"], rec["award"]) if a) if (prev["award"] or rec["award"]) else ""
+            period = min(prev["period"], rec["period"])
             # The latest row carries the current total; the original row carries the award date.
             if rec["order"] >= prev["order"]:
                 rec["pc"] = rec["pc"] or prev["pc"]
@@ -194,7 +222,15 @@ def main():
                 contracts[key] = rec
             else:
                 prev["n_rows"] += 1
-            contracts[key]["date"] = earliest
+            contracts[key]["award"], contracts[key]["period"] = award, period
+    for rec in contracts.values():
+        # Date = original award; for amendment-only groups the period start stands in for it.
+        if rec["award"]:
+            rec["date"] = rec["award"]
+        else:
+            rec["date"] = min(rec["period"], rec["date"])
+            stats["amendment_only_contracts"] += 1
+        rec["flag"] = "large" if rec["value"] >= LARGE else ""
     stats["duplicate_reference_numbers"] = sum(1 for n in seen_refs.values() if n > 1)
     stats["contracts"] = len(contracts)
 
@@ -206,31 +242,38 @@ def main():
                 rec["pc"], rec["pc_borrowed"] = pc, True
                 stats["postal_codes_borrowed"] += 1
 
-    centroids = load_centroids()
-    fsa_pts = defaultdict(list)
-    for pc, (lat, lon) in centroids.items():
-        fsa_pts[pc[:3]].append((lat, lon))
-    index = RidingIndex()
+    # FSA -> {riding: share of the FSA's postal codes}, from GeoNames centroids placed in the
+    # 2023 boundaries. Cached, since it is the slow step (~900k point-in-polygon lookups).
+    if FSA_SHARES.exists() and os.path.getmtime(FSA_SHARES) >= os.path.getmtime(ROOT / "scripts" / "geo.py"):
+        fsa_shares = json.load(open(FSA_SHARES))
+    else:
+        t1 = time.time()
+        centroids = load_centroids()
+        index = RidingIndex()
+        votes = defaultdict(Counter)
+        for pc, (lat, lon) in centroids.items():
+            num, _ = index.locate(lat, lon)
+            if num:
+                votes[pc[:3]][num] += 1
+        fsa_shares = {}
+        for fsa, c in votes.items():
+            total = sum(c.values())
+            keep = {n: v / total for n, v in c.items() if v / total >= MIN_SHARE}
+            scale = sum(keep.values())
+            fsa_shares[fsa] = {n: round(v / scale, 4) for n, v in keep.items()}
+        json.dump(fsa_shares, open(FSA_SHARES, "w"))
+        print(f"fsa shares built: {len(fsa_shares)} FSAs in {time.time() - t1:.0f}s", file=sys.stderr)
     needed = {rec["pc"] for rec in contracts.values() if rec["pc"]}
-    postal_to_riding, fsa_to_riding = {}, {}
-    for pc in needed:
-        if pc in centroids:
-            num, _ = index.locate(*centroids[pc])
-            if num:
-                postal_to_riding[pc] = num
-    for fsa in {pc[:3] for pc in needed if pc not in postal_to_riding}:
-        pts = fsa_pts.get(fsa)
-        if pts:
-            num, _ = index.locate(sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
-            if num:
-                fsa_to_riding[fsa] = num
-    stats["postal_codes_needed"] = len(needed)
-    stats["postal_codes_located"] = len(postal_to_riding)
+    stats["fsas_needed"] = len({pc[:3] for pc in needed})
+    stats["fsas_located"] = len({pc[:3] for pc in needed if pc[:3] in fsa_shares})
+    stats["fsas_split"] = sum(1 for pc in {pc[:3] for pc in needed} if len(fsa_shares.get(pc, {})) > 1)
 
     per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "top": [], "series": Counter()} for num in ridings}
     dept_totals = defaultdict(lambda: defaultdict(float))
     dept_after = Counter()
     vendor_after = Counter()
+    vendor_names = defaultdict(Counter)
+    large_after = []
     method_counts = Counter()
     unmapped = defaultdict(lambda: [0.0, 0, "", ""])
     windows = Counter()
@@ -254,12 +297,11 @@ def main():
                 method_counts[(window, "foreign")] += 1
                 method_counts[(window, "foreign $")] += rec["value"]
             continue
-        num, method = None, ""
-        if rec["pc"] in postal_to_riding:
-            num, method = postal_to_riding[rec["pc"]], "vendor's address on other contracts" if rec.get("pc_borrowed") else "postal code"
-        elif rec["pc"][:3] in fsa_to_riding:
-            num, method = fsa_to_riding[rec["pc"][:3]], "postal area (approx.)"
-        if not num:
+        shares = fsa_shares.get(rec["pc"][:3]) if rec["pc"] else None
+        method = ("vendor's address on other contracts" if rec.get("pc_borrowed") else "postal area") if shares else ""
+        if len(shares or ()) > 1:
+            method += " (split)"
+        if not shares:
             if window:
                 method_counts[(window, "unmapped")] += 1
                 method_counts[(window, "unmapped $")] += rec["value"]
@@ -270,36 +312,49 @@ def main():
                 u[2] = u[2] or rec["vendor"]
                 u[3] = u[3] or rec["dept"]
             continue
-        p = per[num]
-        p["series"][qlabel(d)] += rec["value"]
-        if not window:
-            continue
-        method_counts[(window, method)] += 1
-        p[window]["total"] += rec["value"]
-        p[window]["n"] += 1
-        if window == "after":
-            p["depts"][rec["dept"]] += rec["value"]
-            dept_totals[rec["dept"]][num] += rec["value"]
-            dept_after[rec["dept"]] += rec["value"]
-            vendor_after[rec["vendor"][:80]] += rec["value"]
-            p["top"].append((rec["value"], rec, method))
+        if window:
+            method_counts[(window, method)] += 1
+            if window == "after":
+                dept_after[rec["dept"]] += rec["value"]
+                vendor_after[vendor_key(rec["vendor"])] += rec["value"]
+                vendor_names[vendor_key(rec["vendor"])][rec["vendor"][:80]] += 1
+                if rec["flag"]:
+                    large_after.append(rec)
+        for num, share in shares.items():
+            v = rec["value"] * share
+            p = per[num]
+            if not rec["flag"]:
+                p["series"][qlabel(d)] += v
+            if not window:
+                continue
+            p[window]["total"] += v
+            p[window]["n"] += share
+            if not rec["flag"]:
+                p[window]["adj"] += v
+                p[window]["adj_n"] += share
+            if window == "after":
+                p["depts"][rec["dept"]] += v
+                if not rec["flag"]:
+                    dept_totals[rec["dept"]][num] += v
+                p["top"].append((v, rec, method if share == 1 else f"{method}, {share:.0%} of {rec['pc'][:3]} in riding"))
 
     out = {}
     for num, r in ridings.items():
         p = per[num]
         pop = r["population"] or 1
         a, b = p["after"], p["before"]
-        pc_after = round(a["total"] / pop / years, 2)
-        pc_before = round(b["total"] / pop / years, 2)
         out[num] = {
-            "after_total": round(a["total"]), "after_n": a["n"],
-            "before_total": round(b["total"]), "before_n": b["n"],
-            "pc_after": pc_after, "pc_before": pc_before,
-            "change_pct": (round(100 * (a["total"] - b["total"]) / b["total"], 1) if b["total"] > 0 else None),
+            "after_total": round(a["total"]), "after_n": round(a["n"]),
+            "after_adj": round(a["adj"]), "after_adj_n": round(a["adj_n"]),
+            "before_total": round(b["total"]), "before_n": round(b["n"]), "before_adj": round(b["adj"]),
+            "pc_after": round(a["adj"] / pop / years, 2), "pc_after_all": round(a["total"] / pop / years, 2),
+            "pc_before": round(b["adj"] / pop / years, 2),
+            "change_pct": (round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None),
             "top_depts": [[d, round(v)] for d, v in p["depts"].most_common(4)],
             "top_contracts": [
                 {"v": round(v), "who": c["vendor"][:80], "dept": c["dept"][:60], "desc": c["desc"], "date": c["date"],
-                 "city": "", "how": how + (", minister's office" if c["ministers"] else ""), "ref": c["ref"], "org": c["org"]}
+                 "city": "", "how": how + (", minister's office" if c["ministers"] else ""), "ref": c["ref"], "org": c["org"],
+                 "flag": c["flag"]}
                 for v, c, how in sorted(p["top"], key=lambda t: -t[0])[:10]
             ],
             "series": [round(p["series"].get(q, 0)) for q in labels],
@@ -319,8 +374,11 @@ def main():
         "unmapped_after": method_counts[("after", "unmapped")], "unmapped_after_$": round(method_counts[("after", "unmapped $")]),
         "stats": {**cache_stats, **{k: round(v) for k, v in stats.items()}},
         "series": {"kind": "quarter", "labels": labels, "complete": gmeta["series"]["complete"], "election_index": gmeta["series"]["election_index"]},
+        "large_threshold": LARGE,
+        "large_after": [{"v": round(c["value"]), "who": c["vendor"][:80], "dept": c["dept"][:60], "desc": c["desc"], "date": c["date"],
+                         "fsa": c["pc"][:3], "ref": c["ref"], "org": c["org"]} for c in sorted(large_after, key=lambda c: -c["value"])],
         "departments": [d for d, _ in dept_after.most_common(60)],
-        "top_vendors": [[v, round(x)] for v, x in vendor_after.most_common(50)],
+        "top_vendors": [[vendor_names[k].most_common(1)[0][0], round(x)] for k, x in vendor_after.most_common(50)],
     }
     with open(ROOT / "output" / "contracts_unmapped.csv", "w", newline="") as f:
         w = csv.writer(f)

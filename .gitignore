@@ -9,6 +9,8 @@ data/*/
 !data/news_links.json
 !data/equalization.json
 !data/pe_results.json
+!data/formula_programs.json
+!data/ministers.json
 output/
 .claude/
 __pycache__/

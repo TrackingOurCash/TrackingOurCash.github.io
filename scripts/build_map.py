@@ -24,7 +24,7 @@ ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXg
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
-          "group", "top_grants", "series"]
+          "group", "top_grants", "series", "after_formula", "before_formula"]
 
 
 def links(items):
@@ -156,6 +156,26 @@ def federal():
             "<b>News links:</b> for each riding's largest grant, every grant of $10 million or more, and the top three in close seats, a web search looked for one mainstream outlet (CBC, Global, CTV, Postmedia, Torstar, La Presse and the like) and one independent outlet (Juno, Rebel, Western Standard, The Tyee, National Observer, iPolitics and others) reporting that funding. Links are kept with the data and refreshed only for new grants. \"No coverage found\" means the search found nothing that clearly matched; smaller grants were not searched.",
         ],
     }
+    # Formula vs discretionary split (data/formula_programs.json), when the pipeline has computed it.
+    fp = json.load(open(DATA / "formula_programs.json")) if (DATA / "formula_programs.json").exists() else None
+    if fp and any("after_formula" in r for r in sp["ridings"].values()):
+        config["formula"] = {"by": fp["levels"]["federal"]["by"], "note": fp["note"], "examples": [e["why"] for e in fp["levels"]["federal"]["formula"][:6]], "as_of": fp["as_of"]}
+        fshare = sum(r.get("after_formula", 0) for r in sp["ridings"].values()) / max(1, sum(r["after_adj"] for r in sp["ridings"].values()))
+        config["notes"].append("<b>Formula vs discretionary:</b> " + fp["note"] + f" The classification (by program) is a curated list kept with the data; tick \"discretionary only\" above the map to drop the formula money. Only {fshare:.0%} of the adjusted dollars in the window are formula money, because the big formula streams (First Nations core funding and the like) start on 1 April each year, four weeks before election day, and so fall outside both windows.")
+    # Federal contracts (scripts/contracts.py): the same windows, placed by the vendor's postal area.
+    cpath = DATA / "contracts_by_riding.json"
+    if cpath.exists():
+        ct = json.load(open(cpath))
+        cm = ct["meta"]
+        config["contracts"] = {"source": cm["source"], "generated": cm["generated"], "large_threshold": cm["large_threshold"], "total_after": cm["total_after_$"], "placed_after": cm["placed_after_$"],
+                               "foreign_after": cm["foreign_after_$"], "unmapped_after": cm["unmapped_after_$"], "top_vendors": cm["top_vendors"], "large_after": cm["large_after"], "departments": cm["departments"]}
+        config["notes"].append(f"<b>Contracts:</b> the \"Contracts\" switch above the map swaps in federal procurement from the <a href=\"https://open.canada.ca/data/en/dataset/d8f85d91-7dec-4fd1-8055-483b77225d8b\" target=\"_blank\" rel=\"noopener\">proactive publication of contracts over $10,000</a>, "
+                               f"same windows as the grants: {fmt_money(cm['total_after_$'])} awarded since the election, {fmt_money(cm['placed_after_$'])} placed. The file gives only the vendor's postal area (the first three characters), so each contract is split across the ridings that area covers in proportion to its addresses, "
+                               f"and the money sits where the vendor bills from, not where the work happens: Ottawa-area ridings and the downtown Toronto and Montréal areas where IBM, Bell and the consultancies book national contracts read high. Contracts of {fmt_money(cm['large_threshold'])} or more (multi-year ships, aircraft, software) are flagged and left out of the adjusted figures; foreign vendors ({fmt_money(cm['foreign_after_$'])}) are not placed. Amendments count once, at the contract's latest total, dated by the original award.")
+        contracts_payload = {"ridings": ct["ridings"], "dept": ct["dept_by_riding"], "series": cm.get("series")}
+        config["filterOptions"] = sorted(set(config["filterOptions"]) | set(cm["departments"]))  # the department menu serves both layers
+    else:
+        contracts_payload = None
     budget = json.load(open(DATA / "budget_by_riding.json")) if (DATA / "budget_by_riding.json").exists() else None
     if budget:
         config["notes"].insert(1, "<b>Budget commitments:</b> the dots and the panel's \"Budget commitments\" list come from reading "
@@ -166,7 +186,7 @@ def federal():
     config["legislatureInGrid"] = True  # the federal inset grid has room for it
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"], "budget": budget,
                "legislature": legislature_for("Canada"),
-               "deptBefore": sp["dept_by_riding_before"], "recipients": sp.get("recipients", []), "geo": json.load(open(DATA / "ridings_geo.json")), "land": land_for(config["insets"]),
+               "deptBefore": sp["dept_by_riding_before"], "recipients": sp.get("recipients", []), "contracts": contracts_payload, "geo": json.load(open(DATA / "ridings_geo.json")), "land": land_for(config["insets"]),
                "geoFine": json.load(open(DATA / "ridings_geo_fine.json")) if (DATA / "ridings_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]
 
@@ -519,6 +539,12 @@ def provincial(key):
             f"<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local {rep}s. A pattern by seat type is a signal worth checking, not proof of intent.",
         ],
     }
+    fp = json.load(open(DATA / "formula_programs.json")) if (DATA / "formula_programs.json").exists() else None
+    flevel = {"pei": "federal", "quebec": "federal"}.get(key, key)
+    if fp and flevel in fp["levels"] and any("after_formula" in r for r in sp["ridings"].values()):
+        lv = fp["levels"][flevel]
+        config["formula"] = {"by": lv["by"], "note": fp["note"], "examples": [e["why"] for e in lv["formula"][:6]], "as_of": fp["as_of"]}
+        config["notes"].append("<b>Formula vs discretionary:</b> " + fp["note"] + (" Here the split is by program." if lv["by"] == "program" else " This government's statements name no programs, so the split is by class of recipient: municipalities, First Nations, school and child-care operators, care homes and the like count as formula money.") + " Tick \"discretionary only\" above the map to drop the formula money.")
     fine = DATA / P["dir"] / "divisions_geo_fine.json"
     config["legislatureInGrid"] = False  # provinces: below the city insets
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["prog_by_riding"], "deptBefore": {}, "recipients": sp.get("recipients", []),
