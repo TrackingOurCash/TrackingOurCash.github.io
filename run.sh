@@ -45,4 +45,6 @@ python3 scripts/merge_news.py
 python3 scripts/wiki_links.py || true
 # Alberta layer (skipped if the Alberta downloads are missing)
 if [[ -f data/raw/ab/grants-2025-26.csv ]]; then python3 scripts/ab_prep.py && python3 scripts/ab_spending.py > data/ab/summary.json; fi
+# British Columbia layer
+if python3 scripts/bc_prep.py && python3 scripts/bc_spending.py > data/bc/summary.json; then :; else echo "BC layer skipped"; fi
 python3 scripts/build_map.py

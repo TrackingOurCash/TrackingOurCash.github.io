@@ -12,9 +12,10 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
-NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}]
+NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
-ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9"}
+ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
+                 "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -116,67 +117,119 @@ def federal():
     return payload, sp["ridings"]
 
 
-def alberta():
-    sp = json.load(open(DATA / "ab" / "division_spending.json"))
+PROVINCES = {
+    "alberta": {
+        "dir": "ab", "year": "2023", "region": "Alberta", "title": "Where Alberta's grants went after the 2023 election",
+        "electionLabel": "the 29 May 2023 election", "count": 87, "gov": "UCP",
+        "parties": {"UCP": {"name": "United Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
+                    "AP": {"name": "Alberta Party", "light": "#5a9bd5", "dark": "#7fb3e6"}, "GPA": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"},
+                    "PTP": {"name": "Progressive", "light": "#6a4c93", "dark": "#9b7fc4"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["UCP", "NDP", "PTP"], "opp": "NDP",
+        "groupNote": '"UCP" means the governing United Conservatives won the seat in 2023.',
+        "filterAll": "All programs", "topProgsTitle": "Top programs", "beforeLabel": "Same length of time before the election",
+        "includeLabel": "Include province-wide bodies (health, post-secondary, school divisions) & big-city governments",
+        "projection": {"parallels": [50, 58], "rotate": [114.5, 0]},
+        "insets": [["Calgary", [-114.35, 50.85, -113.85, 51.22]], ["Edmonton", [-113.75, 53.38, -113.25, 53.7]], ["Red Deer", [-113.9, 52.2, -113.7, 52.35]],
+                   ["Lethbridge", [-112.95, 49.62, -112.75, 49.75]], ["Fort McMurray", [-111.5, 56.65, -111.3, 56.78]], ["Grande Prairie", [-118.9, 55.12, -118.7, 55.22]]],
+        "source": "Alberta Treasury Board and Finance grant payments disclosure (open.alberta.ca/dataset/grant-disclosure), which lists every payment by recipient, program and date.",
+        "windowNote": "\"Before\" is the same length of time ending on election day",
+        "placing": "Alberta publishes recipient names but no addresses. Each recipient was matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality, or to a place name inside its own name, then located in a division.",
+        "individualNote": "programs that pay individuals (physician fees, AISH, benefits, awards)",
+        "leftOut": "province-wide bodies booked at a head office (Alberta Health Services, universities and colleges, school divisions, agencies) and the governments of cities that span several divisions (Calgary, Edmonton and others)",
+        "boundaryNote": "the 87 divisions used in 2023. Alberta's next election will use a new map that is not final yet.",
+        "sources": [("Alberta grant payments disclosure (Treasury Board and Finance)", "https://open.alberta.ca/dataset/grant-disclosure"),
+                    ("Elections Alberta 2023 Statement of Vote", "https://www.elections.ab.ca/uploads/2023-Provincial-General-Election-Statement-of-Vote.xlsx"),
+                    ("Legislative Assembly of Alberta member list", "https://www.assembly.ab.ca/members/members-of-the-legislative-assembly"),
+                    ("2021 census profiles by electoral division", "https://open.alberta.ca/dataset/330635ba-632a-4ad1-a9f6-b8176216cf07"),
+                    ("Division boundaries, 2019 map (Represent, Open North)", "https://represent.opennorth.ca/boundary-sets/alberta-electoral-districts-2017/"),
+                    ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (division articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Alberta_provincial_electoral_districts")],
+    },
+    "bc": {
+        "dir": "bc", "year": "2024", "region": "British Columbia", "title": "Where BC's transfers went after the 2024 election",
+        "electionLabel": "the 19 October 2024 election", "count": 93, "gov": "NDP",
+        "parties": {"NDP": {"name": "BC NDP", "light": "#f37021", "dark": "#f68a45"}, "BCC": {"name": "Conservative", "light": "#1b4c9e", "dark": "#4f80d8"},
+                    "GPBC": {"name": "BC Green", "light": "#3d9b35", "dark": "#5cb954"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
+        "legendParties": ["NDP", "BCC", "GPBC"], "opp": "BCC",
+        "groupNote": '"NDP" means the governing BC NDP won the seat in 2024. BC voted again on 24 October 2026; those results are final on 18 November 2026 and the MLAs shown are the 2024 winners until then.',
+        "filterAll": "All ministries", "topProgsTitle": "Top ministries", "beforeLabel": "Fiscal year before the election (to March 2024)",
+        "includeLabel": "Include province-wide bodies (health authorities, Crown corporations, universities, school districts) & big-city governments",
+        "projection": {"parallels": [49, 55], "rotate": [124, 0]},
+        "insets": [["Vancouver", [-123.35, 49.0, -122.45, 49.42]], ["Victoria", [-123.75, 48.35, -123.25, 48.7]], ["Kelowna", [-119.65, 49.75, -119.3, 50.0]],
+                   ["Nanaimo", [-124.1, 49.1, -123.85, 49.3]], ["Kamloops", [-120.5, 50.6, -120.2, 50.75]], ["Prince George", [-122.9, 53.85, -122.65, 54.0]]],
+        "source": "BC Public Accounts, Consolidated Revenue Fund detailed schedule of government transfers (payees of $25,000 or more, by ministry and fiscal year; no dates or programs are published).",
+        "windowNote": "\"After\" is the fiscal year to March 2026, the first full year after the election; \"before\" is the year to March 2024",
+        "placing": "BC publishes payee names but no addresses, and only payees of $25,000 or more. Each recipient was matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality or band, or to a place name inside its own name, then located in a district.",
+        "individualNote": "programs that pay individuals (medical claims, PharmaCare, income assistance, child care, seniors' supplements)",
+        "leftOut": "province-wide bodies booked at a head office (health authorities, BC Housing, BC Hydro, universities, school districts, regional districts) and the governments of cities that span several districts (Vancouver, Surrey, Burnaby and others)",
+        "boundaryNote": "the 93 districts of the 2023 redistribution, used in 2024 and again on 24 October 2026.",
+        "sources": [("BC Public Accounts: government transfers by payee (BC Data Catalogue)", "https://catalogue.data.gov.bc.ca/dataset/crf-detailed-schedules-of-payments-government-transfers"),
+                    ("Elections BC provincial voting results by voting place", "https://catalogue.data.gov.bc.ca/dataset/44914a35-de9a-4830-ac48-870001ef8935"),
+                    ("Electoral district boundaries, 2023 redistribution (BC Data Catalogue)", "https://catalogue.data.gov.bc.ca/dataset/provincial-electoral-districts-electoral-boundaries-redistribution-2023"),
+                    ("BC Stats 2021 census profiles by electoral district", "https://catalogue.data.gov.bc.ca/dataset/da0326f2-2191-4345-84d3-d14cd6ee76eb"),
+                    ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
+                    ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
+                    ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
+                    ("Wikipedia (district articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_British_Columbia_provincial_electoral_districts")],
+    },
+}
+
+
+def provincial(key):
+    P = PROVINCES[key]
+    y = P["year"]
+    sp = json.load(open(DATA / P["dir"] / "division_spending.json"))
     m = sp["meta"]
     ex = m["excluded_after"]
-    wk = wiki("alberta")
+    wk = wiki(key)
     ridings = {}
     for n, r in sp["ridings"].items():
         rec = {k: r[k] for k in COMMON}
         rec["wiki"] = (wk.get(n) or {}).get("url")
-        rec.update({"num": n, "name": r["name"], "region": "Alberta", "party_won": r["party_2023"], "runnerup_party": r["runnerup_party_2023"],
-                    "winner": r["winner_2023"], "runnerup": r["runnerup_2023"], "shares": r["shares_2023"], "rep": r["mla"],
+        rec.update({"num": n, "name": r["name"], "region": P["region"], "party_won": r[f"party_{y}"], "runnerup_party": r[f"runnerup_party_{y}"],
+                    "winner": r[f"winner_{y}"], "runnerup": r[f"runnerup_{y}"], "shares": r[f"shares_{y}"], "rep": r["mla"],
                     "rep_party": r["mla_party"], "top_progs": r["top_progs"]})
         ridings[n] = rec
     land = json.load(open(DATA / "land_geo.json"))
+    gov, opp = P["gov"], P["opp"]
     config = {
-        "title": "Where Alberta's grants went after the 2023 election",
-        "nav": [dict(x, current=x["href"] == "alberta.html") for x in NAV],
-        "level": "division", "levelPlural": "divisions", "levelTitle": "Division", "region": "province", "regionTitle": "Prov.",
-        "rep": "MLA", "electionYear": "2023",
-        "parties": {"UCP": {"name": "United Conservative", "light": "#1b4c9e", "dark": "#4f80d8"}, "NDP": {"name": "NDP", "light": "#f37021", "dark": "#f68a45"},
-                    "AP": {"name": "Alberta Party", "light": "#5a9bd5", "dark": "#7fb3e6"}, "GPA": {"name": "Green", "light": "#3d9b35", "dark": "#5cb954"},
-                    "PTP": {"name": "Progressive", "light": "#6a4c93", "dark": "#9b7fc4"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
-        "legendParties": ["UCP", "NDP", "PTP"],
+        "title": P["title"],
+        "nav": [dict(x, current=x["href"] == f"{key}.html") for x in NAV],
+        "level": "district" if key == "bc" else "division", "levelPlural": "districts" if key == "bc" else "divisions",
+        "levelTitle": "District" if key == "bc" else "Division", "region": "province", "regionTitle": "Prov.",
+        "rep": "MLA", "electionYear": y,
+        "parties": P["parties"], "legendParties": P["legendParties"],
         "flags": {"province-wide": "province-wide body", "other government": "other government"},
-        "filterAll": "All programs", "filterOptions": m["programs"],
-        "includeLabel": "Include province-wide bodies (health, post-secondary, school divisions) & big-city governments",
-        "groupTitle": "Does money follow close seats?", "groups": ["Close UCP", "Close NDP", "Safe UCP", "Safe NDP"],
-        "groupNote": f'"Close" means the 2023 winner led by under {m["close_margin"]} points; "UCP" means the governing United Conservatives won the seat in 2023.',
-        "groupParty": {"Close UCP": "UCP", "Safe UCP": "UCP", "Close NDP": "NDP", "Safe NDP": "NDP"},
+        "filterAll": P["filterAll"], "filterOptions": m["programs"],
+        "includeLabel": P["includeLabel"],
+        "groupTitle": "Does money follow close seats?", "groups": [f"Close {gov}", f"Close {opp}", f"Safe {gov}", f"Safe {opp}"],
+        "groupNote": f'"Close" means the {y} winner led by under {m["close_margin"]} points; ' + P["groupNote"],
+        "groupParty": {f"Close {gov}": gov, f"Safe {gov}": gov, f"Close {opp}": opp, f"Safe {opp}": opp},
         "regionOrder": None, "regionGroup": {}, "regionShort": {},
-        "beforeLabel": "Same length of time before the election", "topProgsTitle": "Top programs", "topGrantsTitle": "Largest recipients since the election",
+        "beforeLabel": P["beforeLabel"], "topProgsTitle": P["topProgsTitle"], "topGrantsTitle": "Largest recipients since the election",
         "recordUrl": None, "searchUrl": None, "searchLabel": "",
-        "linkNote": "Source: Alberta Treasury Board and Finance grant payments disclosure (open.alberta.ca/dataset/grant-disclosure), which lists every payment by recipient, program and date.",
-        "projection": {"parallels": [50, 58], "rotate": [114.5, 0]},
-        "insets": [["Calgary", [-114.35, 50.85, -113.85, 51.22]], ["Edmonton", [-113.75, 53.38, -113.25, 53.7]], ["Red Deer", [-113.9, 52.2, -113.7, 52.35]],
-                   ["Lethbridge", [-112.95, 49.62, -112.75, 49.75]], ["Fort McMurray", [-111.5, 56.65, -111.3, 56.78]], ["Grande Prairie", [-118.9, 55.12, -118.7, 55.22]]],
-        "subtitle": (f"Alberta government grant payments from the 29 May 2023 election to {m['cutoff']}, placed in the 87 electoral divisions and set against the 2023 result. "
-                     f"Each division wears its current MLA's party colour; the deeper the colour, the more grant money per resident. "
-                     f"\"Before\" is the same length of time ending on election day ({m['before_start']} to {m['before_end']})."),
+        "linkNote": "Source: " + P["source"],
+        "projection": P["projection"], "insets": P["insets"],
+        "subtitle": (f"{P['region']} government payments from {P['electionLabel']} to {m['cutoff']}, placed in the {P['count']} electoral "
+                     f"{'districts' if key == 'bc' else 'divisions'} and set against the {y} result. Each one wears its current MLA's party colour; "
+                     f"the deeper the colour, the more money per resident. {P['windowNote']} ({m['before_start']} to {m['before_end']})."),
         "notes": [
-            "<b>Sources:</b> " + links([
-                ("Alberta grant payments disclosure (Treasury Board and Finance)", "https://open.alberta.ca/dataset/grant-disclosure"),
-                ("Elections Alberta 2023 Statement of Vote", "https://www.elections.ab.ca/uploads/2023-Provincial-General-Election-Statement-of-Vote.xlsx"),
-                ("Legislative Assembly of Alberta member list", "https://www.assembly.ab.ca/members/members-of-the-legislative-assembly"),
-                ("2021 census profiles by electoral division", "https://open.alberta.ca/dataset/330635ba-632a-4ad1-a9f6-b8176216cf07"),
-                ("Division boundaries, 2019 map (Represent, Open North)", "https://represent.opennorth.ca/boundary-sets/alberta-electoral-districts-2017/"),
-                ("CRA list of charities", "https://open.canada.ca/data/en/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8"),
-                ("GeoNames postal codes", "https://download.geonames.org/export/zip/"),
-                ("Natural Earth coastlines, lakes and rivers", "https://www.naturalearthdata.com/"),
-                ("Wikipedia (division articles, linked from each panel)", "https://en.wikipedia.org/wiki/List_of_Alberta_provincial_electoral_districts"),
-            ]) + f" Data as of {m.get('generated', m['cutoff'])}.",
-            f"<b>Placing payments:</b> Alberta publishes recipient names but no addresses. Each recipient was matched by name to a postal code in the federal grants file or the CRA charity list, to a municipality, or to a place name inside its own name, then located in a division. Of {fmt_money(m['total_after'])} paid since the election, {fmt_money(m['placed_after'])} was placed; {fmt_money(ex.get('individual programs', 0))} went through programs that pay individuals (physician fees, AISH, benefits, awards), {fmt_money(ex.get('individuals', 0))} to recipients who look like individuals, {fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
-            "<b>Left out by default:</b> province-wide bodies booked at a head office (Alberta Health Services, universities and colleges, school divisions, agencies) and the governments of cities that span several divisions (Calgary, Edmonton and others). Tick the box to put them back.",
-            "<b>Boundaries:</b> the 87 divisions used in 2023. Alberta's next election will use a new map that is not final yet.",
+            "<b>Sources:</b> " + links(P["sources"]) + f" Data as of {m.get('generated', m['cutoff'])}.",
+            f"<b>Placing payments:</b> {P['placing']} Of {fmt_money(m['total_after'])} paid in the \"after\" window, {fmt_money(m['placed_after'])} was placed; "
+            f"{fmt_money(ex.get('individual programs', 0))} went through {P['individualNote']}, {fmt_money(ex.get('individuals', 0))} to recipients who look like individuals, "
+            f"{fmt_money(ex.get('province-wide bodies', 0))} to province-wide bodies with no match, and {fmt_money(ex.get('unmatched', 0))} could not be matched.",
+            f"<b>Left out by default:</b> {P['leftOut']}. Tick the box to put them back.",
+            f"<b>Boundaries:</b> {P['boundaryNote']}",
             "<b>Party is correlation, not credit:</b> ministers and departments approve grants, not local MLAs. A pattern by seat type is a signal worth checking, not proof of intent.",
         ],
     }
+    fine = DATA / P["dir"] / "divisions_geo_fine.json"
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["prog_by_riding"], "deptBefore": {},
-               "geo": json.load(open(DATA / "ab" / "divisions_geo.json")), "land": land,
-               "geoFine": json.load(open(DATA / "ab" / "divisions_geo_fine.json")) if (DATA / "ab" / "divisions_geo_fine.json").exists() else {"features": []}}
-    return payload, sp["ridings"]
+               "geo": json.load(open(DATA / P["dir"] / "divisions_geo.json")), "land": land,
+               "geoFine": json.load(open(fine)) if fine.exists() else {"features": []}}
+    return payload, sp["ridings"], y
 
 
 def render(payload, nav_urls=None):
@@ -216,13 +269,16 @@ def main():
     write_csv(raw, ["num", "current_name", "province", "population", "mp", "mp_party", "party_2025", "runnerup_party_2025", "margin_votes",
                     "margin_pts", "close", "group", "after_adj", "after_total", "after_n", "before_adj", "before_total", "pc_after",
                     "pc_after_all", "pc_before", "change_pct", "score"], OUTDIR / "riding_spending.csv")
-    if (DATA / "ab" / "division_spending.json").exists():
-        payload, raw = alberta()
-        fragment = write_page(payload, "alberta")
-        (OUTDIR / "artifact_alberta.html").write_text(fragment)
-        write_csv(raw, ["num", "name", "population", "mla", "mla_party", "party_2023", "runnerup_party_2023", "margin_votes", "margin_pts",
+    for key in PROVINCES:
+        P = PROVINCES[key]
+        if not (DATA / P["dir"] / "division_spending.json").exists():
+            continue
+        payload, raw, y = provincial(key)
+        fragment = write_page(payload, key)
+        (OUTDIR / f"artifact_{key}.html").write_text(fragment)
+        write_csv(raw, ["num", "name", "population", "mla", "mla_party", f"party_{y}", f"runnerup_party_{y}", "margin_votes", "margin_pts",
                         "close", "group", "after_adj", "after_total", "after_n", "before_adj", "before_total", "pc_after", "pc_after_all",
-                        "pc_before", "change_pct", "score"], OUTDIR / "alberta_spending.csv")
+                        "pc_before", "change_pct", "score"], OUTDIR / f"{key}_spending.csv")
 
 
 if __name__ == "__main__":
