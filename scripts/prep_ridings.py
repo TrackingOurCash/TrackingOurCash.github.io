@@ -304,8 +304,11 @@ def load_land():
         c = json.load(open(path))
         if not in_inset(c["shape"]) or span(c["shape"]) > 3:
             continue  # the riding touched an inset box but this municipality is far outside it, or is a vast rural one
+        polys = clean_polygons(polys_of(c["shape"]), 0.0015, 0.003)
+        if not polys:
+            continue  # a speck (an urban reserve) that simplified away
         out["features"].append({"type": "Feature", "properties": {"kind": "muni", "name": c["name"]},
-                                "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys_of(c["shape"]), 0.0015, 0.003)}})
+                                "geometry": {"type": "MultiPolygon", "coordinates": polys}})
     return out
 
 

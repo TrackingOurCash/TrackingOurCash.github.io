@@ -94,11 +94,13 @@ ul.budget li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12p
 .kpi.debt .big { font-size: 32px; }
 .sub-h { font-size: 13px; margin: 6px 0 4px; }
 #compare, #history { margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 8px; }
-#compare summary, #history summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
-#compare summary::-webkit-details-marker, #history summary::-webkit-details-marker { display: none; }
-#compare .pm, #history .pm { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--axis); border-radius: 4px; align-items: center; justify-content: center; font-size: 14px; color: var(--ink-2); }
-#compare .pm::before, #history .pm::before { content: "+"; }
-#compare[open] .pm::before, #history[open] .pm::before { content: "−"; }
+#compare summary, #history summary, #seats summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; align-items: center; gap: 8px; }
+#compare summary::-webkit-details-marker, #history summary::-webkit-details-marker, #seats summary::-webkit-details-marker { display: none; }
+#compare .pm, #history .pm, #seats .pm { display: inline-flex; width: 18px; height: 18px; border: 1px solid var(--axis); border-radius: 4px; align-items: center; justify-content: center; font-size: 14px; color: var(--ink-2); flex: none; }
+#compare .pm::before, #history .pm::before, #seats .pm::before { content: "+"; }
+#compare[open] .pm::before, #history[open] .pm::before, #seats[open] .pm::before { content: "−"; }
+#seats .seatsrow { margin-top: 10px; }
+.kpi.deficit .note, .kpi.surplus .note { font-size: 13px; color: var(--ink-2); }
 #history #historyChart { margin-top: 10px; }
 #compare .fiscbars { margin-top: 10px; }
 .hist { grid-template-columns: 64px 1fr 1fr 110px; }
@@ -209,11 +211,13 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
   </div>
 
   <div class="card" id="seatsCard" hidden>
-    <h2 id="seatsTitle"></h2>
-    <div class="seatsrow">
-      <div id="hemicycle"></div>
-      <div id="leaders"></div>
-    </div>
+    <details id="seats">
+      <summary><span class="pm" aria-hidden="true"></span> <h2 id="seatsTitle" style="display:inline;margin:0"></h2></summary>
+      <div class="seatsrow">
+        <div id="hemicycle"></div>
+        <div id="leaders"></div>
+      </div>
+    </details>
   </div>
 
   <div class="card" id="budgetCard" hidden>
