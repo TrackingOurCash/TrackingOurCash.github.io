@@ -622,19 +622,21 @@ function renderLegislature() {
     const col = (sr, v) => sr.color || (v >= 0 ? "var(--surplus)" : "var(--deficit)");
     const ticks = yS.ticks(5);
     const bars = ys.map(y => SERIES.map((sr, i) => { const v = y[sr.key]; if (v == null) return ""; const bx = x(y.year) + i * bw;
-      return `<rect x="${bx}" y="${yS(Math.max(0, v))}" width="${bw - 2}" height="${Math.abs(yS(v) - yS(0))}" fill="${col(sr, v)}" opacity="${y.status === "forecast" ? 0.55 : 0.9}"><title>${y.year} ${sr.label}: ${fmtBn(v)}</title></rect>
-        <text x="${bx + (bw - 2) / 2}" y="${v >= 0 ? yS(v) - 3 : yS(v) + 11}" text-anchor="middle" font-size="9.5" fill="var(--ink-2)">${v >= 0 ? "" : "−"}${Math.abs(v) >= 100 ? Math.round(Math.abs(v)) : Math.abs(v).toFixed(1)}</text>`; }).join("")).join("");
+      return `<rect x="${bx}" y="${yS(Math.max(0, v))}" width="${bw - 2}" height="${Math.abs(yS(v) - yS(0))}" fill="${col(sr, v)}" opacity="${y.status === "forecast" ? 0.55 : 0.9}"><title>${y.year} ${sr.label}: ${fmtBn(v)}</title></rect>`; }).join("")).join("");
+    // Value labels drawn last, with a surface-coloured halo so lines never run through the digits.
+    const labels = ys.map(y => SERIES.map((sr, i) => { const v = y[sr.key]; if (v == null) return ""; const bx = x(y.year) + i * bw;
+      return `<text x="${bx + (bw - 2) / 2}" y="${v >= 0 ? yS(v) - 5 : yS(v) + 12}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink)" stroke="var(--surface)" stroke-width="3" paint-order="stroke" stroke-linejoin="round">${v >= 0 ? "" : "−"}${Math.abs(v) >= 100 ? Math.round(Math.abs(v)) : Math.abs(v).toFixed(1)}</text>`; }).join("")).join("");
     const lines = SERIES.map((sr, i) => {
       const pts = ys.filter(y => y[sr.key] != null).map(y => [x(y.year) + i * bw + (bw - 2) / 2, yS(y[sr.key]), y[sr.key]]);
-      if (!sr.color) return pts.slice(1).map((p, k) => `<line x1="${pts[k][0]}" y1="${pts[k][1]}" x2="${p[0]}" y2="${p[1]}" stroke="${p[2] >= 0 ? "var(--surplus)" : "var(--deficit)"}" stroke-width="2"/>`).join("")
+      if (!sr.color) return pts.slice(1).map((p, k) => `<line x1="${pts[k][0]}" y1="${pts[k][1]}" x2="${p[0]}" y2="${p[1]}" stroke="${p[2] >= 0 ? "var(--surplus)" : "var(--deficit)"}" stroke-width="1.2" stroke-dasharray="4 3"/>`).join("")
         + pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${p[2] >= 0 ? "var(--surplus)" : "var(--deficit)"}"/>`).join("");
-      return `<polyline points="${pts.map(p => p.slice(0, 2).join(",")).join(" ")}" fill="none" stroke="${sr.color}" stroke-width="2"/>` + pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${sr.color}"/>`).join("");
+      return `<polyline points="${pts.map(p => p.slice(0, 2).join(",")).join(" ")}" fill="none" stroke="${sr.color}" stroke-width="1.2" stroke-dasharray="4 3"/>` + pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${sr.color}"/>`).join("");
     }).join("");
     document.getElementById("historyTitle").textContent = "Revenue, spending and the balance, year by year ($ billions)";
     document.getElementById("historyChart").innerHTML = `<svg viewBox="0 0 ${W2} ${H2}" role="img" aria-label="Revenue, spending and balance by year" style="width:100%;height:auto;display:block">
       ${ticks.map(t => `<line x1="${m.l}" x2="${W2 - m.r}" y1="${yS(t)}" y2="${yS(t)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${yS(t)}" dy="0.35em" text-anchor="end" font-size="10" fill="var(--muted)">${t}</text>`).join("")}
       <line x1="${m.l}" x2="${W2 - m.r}" y1="${yS(0)}" y2="${yS(0)}" stroke="var(--ink)" stroke-width="1.2"/>
-      ${bars}${lines}
+      ${bars}${lines}${labels}
       ${ys.map(y => `<text x="${x(y.year) + x.bandwidth() / 2}" y="${H2 - m.b + 16}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${y.year}${y.status === "forecast" ? "*" : ""}</text>
         ${y.net_debt_billions != null ? `<text x="${x(y.year) + x.bandwidth() / 2}" y="${H2 - m.b + 31}" text-anchor="middle" font-size="10" fill="var(--deficit)">debt ${fmtBn(y.net_debt_billions)}</text>` : ""}`).join("")}
       <g transform="translate(${m.l},${H2 - 8})" font-size="11" fill="var(--ink-2)">
