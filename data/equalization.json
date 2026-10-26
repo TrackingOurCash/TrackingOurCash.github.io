@@ -1,0 +1,59 @@
+{
+ "year": "2026-27",
+ "source": "https://www.canada.ca/en/department-finance/programs/federal-transfers/major-federal-transfers.html",
+ "total_millions": 27160,
+ "provinces": {
+  "Newfoundland and Labrador": 182,
+  "Prince Edward Island": 723,
+  "Nova Scotia": 3538,
+  "New Brunswick": 3360,
+  "Quebec": 13907,
+  "Ontario": 406,
+  "Manitoba": 5044,
+  "Saskatchewan": 0,
+  "Alberta": 0,
+  "British Columbia": 0
+ },
+ "cht_millions": {
+  "Newfoundland and Labrador": 755,
+  "Prince Edward Island": 254,
+  "Nova Scotia": 1507,
+  "New Brunswick": 1203,
+  "Quebec": 12457,
+  "Ontario": 22359,
+  "Manitoba": 2086,
+  "Saskatchewan": 1757,
+  "Alberta": 7036,
+  "British Columbia": 7817,
+  "national_total": 57419
+ },
+ "cst_millions": {
+  "Newfoundland and Labrador": 236,
+  "Prince Edward Island": 79,
+  "Nova Scotia": 471,
+  "New Brunswick": 376,
+  "Quebec": 3892,
+  "Ontario": 6985,
+  "Manitoba": 652,
+  "Saskatchewan": 549,
+  "Alberta": 2198,
+  "British Columbia": 2442,
+  "national_total": 17939
+ },
+ "previous": {
+  "year": "2025-26",
+  "total_millions": 26170,
+  "provinces": {
+   "Newfoundland and Labrador": 113,
+   "Prince Edward Island": 666,
+   "Nova Scotia": 3465,
+   "New Brunswick": 3123,
+   "Quebec": 13567,
+   "Ontario": 546,
+   "Manitoba": 4689,
+   "Saskatchewan": 0,
+   "Alberta": 0,
+   "British Columbia": 0
+  }
+ }
+}

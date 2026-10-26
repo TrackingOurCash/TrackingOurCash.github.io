@@ -413,9 +413,19 @@ def legislature_for(name):
     hist_path = DATA / "fiscal_history.json"
     hist = json.load(open(hist_path))["jurisdictions"] if hist_path.exists() else {}
     compare = [{"name": j["name"], "budget": j["budget"], "population": j["population"]} for j in d["jurisdictions"] if j.get("budget") and j.get("population")]
+    eq_path = DATA / "equalization.json"
+    eq = json.load(open(eq_path)) if eq_path.exists() else None
     for j in d["jurisdictions"]:
         if j["name"] == name:
-            return dict(j, as_of=d["as_of"], population_date=d["population_date"], compare=compare, history=hist.get(name))
+            equal = None
+            if eq:
+                if name == "Canada":
+                    equal = {"year": eq["year"], "total": eq["total_millions"], "prev_year": eq["previous"]["year"], "prev_total": eq["previous"]["total_millions"],
+                             "recipients": {k: v for k, v in eq["provinces"].items() if v}, "source": eq["source"]}
+                elif name in eq["provinces"]:
+                    equal = {"year": eq["year"], "amount": eq["provinces"][name], "prev_year": eq["previous"]["year"], "prev_amount": eq["previous"]["provinces"].get(name),
+                             "cht": (eq.get("cht_millions") or {}).get(name), "cst": (eq.get("cst_millions") or {}).get(name), "source": eq["source"]}
+            return dict(j, as_of=d["as_of"], population_date=d["population_date"], compare=compare, history=hist.get(name), equalization=equal)
     return None
 
 

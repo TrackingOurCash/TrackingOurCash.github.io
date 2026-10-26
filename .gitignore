@@ -7,5 +7,6 @@ data/*/
 !data/wikipedia_links.json
 !data/poliwave_links.json
 !data/news_links.json
+!data/equalization.json
 output/
 .claude/
