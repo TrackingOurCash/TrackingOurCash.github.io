@@ -1,0 +1,683 @@
+{
+ "documents": [
+  {
+   "name": "Budget 2025 (Canada Strong)",
+   "date": "2025-11-04",
+   "url": "https://budget.canada.ca/2025/report-rapport/toc-tdm-en.html"
+  },
+  {
+   "name": "Spring Economic Update 2026 (Canada Strong for All)",
+   "date": "2026-04-28",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/toc-tdm-en.html"
+  }
+ ],
+ "next": "Budget 2026 is to be tabled on 5 November 2026; this list will be refreshed after it.",
+ "items": [
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 55.2,
+   "years": "4 years from 2026-27",
+   "kind": "program with named priority project",
+   "text": "$55.2 million over four years to Transport Canada for safety-related infrastructure at local and regional airports through the Airports Capital Assistance Program, including a priority project to extend the runway at the Transport Canada-owned Îles-de-la-Madeleine Airport (program-wide amount; the runway's share is not stated).",
+   "places": [
+    "Cap-aux-Meules, QC"
+   ],
+   "department": "Transport Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a17"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 25,
+   "years": "2027-28",
+   "kind": "named project",
+   "text": "Supporting Medical School Infrastructure: funding for Toronto Metropolitan University's School of Medicine campus in Brampton ($25 million in 2027-28).",
+   "places": [
+    "Brampton, ON"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 9,
+   "years": "3 years from 2026-27",
+   "kind": "named project",
+   "text": "$9 million over three years to Environment and Climate Change Canada to support the Biosphère in Montréal.",
+   "places": [
+    "Montréal, QC"
+   ],
+   "department": "Environment and Climate Change Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap3-en.html#a23"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 100,
+   "years": "2025-26 to 2026-27",
+   "kind": "named project",
+   "text": "$100 million for federal activities (Canadian Heritage, RCMP, CBSA, IRCC, CATSA, CFIA) supporting the hosting of the FIFA Men's World Cup 2026 in Toronto and Vancouver.",
+   "places": [
+    "Toronto, ON",
+    "Vancouver, BC"
+   ],
+   "department": "Canadian Heritage and others",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap3-en.html"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 18,
+   "years": "5 years from 2025-26",
+   "kind": "named project",
+   "text": "Support for Cape Breton Operations in managing legacy liabilities (Public Services and Procurement Canada), $18 million over five years (Annex 1, Table A1.18).",
+   "places": [
+    "Sydney, NS"
+   ],
+   "department": "Public Services and Procurement Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/anx1-en.html#a32"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 5000,
+   "years": "7 years from 2025-26",
+   "kind": "national fund with named examples",
+   "text": "$5 billion Trade Diversification Corridors Fund (Transport Canada). Named examples: the Port of Saguenay's second wharf, container designation at Québec City and Hamilton, rail lines in Alberta, West Coast port and rail. No per-project amounts.",
+   "places": [
+    "Saguenay, QC",
+    "Québec, QC",
+    "Hamilton, ON"
+   ],
+   "department": "Transport Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap2-en.html#a9"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 2000,
+   "years": "announced 23 Oct 2025",
+   "kind": "restated prior announcement",
+   "text": "Darlington New Nuclear Project in Bowmanville: $2 billion investment from the Canada Growth Fund, plus $1 billion from Ontario.",
+   "places": [
+    "Bowmanville, ON"
+   ],
+   "department": "Canada Growth Fund",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap2-en.html#a21"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 400,
+   "years": "loan, prior announcement",
+   "kind": "restated prior announcement",
+   "text": "Large Enterprise Tariff Loan to Algoma Steel (Sault Ste. Marie): access to $400 million in liquidity, with Ontario adding $100 million.",
+   "places": [
+    "Sault Ste. Marie, ON"
+   ],
+   "department": "Canada Enterprise Emergency Funding Corporation",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap2-en.html#a6"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Canada Homes: a request for qualifications for 540 new homes at Arbo Downsview in Toronto.",
+   "places": [
+    "North York, ON"
+   ],
+   "department": "Build Canada Homes",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap3-en.html#a2"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 30,
+   "years": "2023 investment, restated",
+   "kind": "restated prior announcement",
+   "text": "The new preclearance facility at Billy Bishop Toronto City Airport, for which the government invested $30 million in 2023.",
+   "places": [
+    "Toronto, ON"
+   ],
+   "department": "Transport Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap4-en.html#a15"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "descriptive, no amount",
+   "text": "The new B Jetty at CFB Esquimalt created close to 1,300 jobs; the River-class Destroyer project is expected to create or maintain over 5,000 jobs over 15 years, many in Halifax.",
+   "places": [
+    "Esquimalt, BC",
+    "Halifax, NS"
+   ],
+   "department": "National Defence",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap4-en.html#a4"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "Direct Delivery stream, $6 billion over 10 years from 2026-27",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Filipino Community and Cultural Centre in Metro Vancouver.",
+   "places": [
+    "Vancouver, BC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: White Rock Pier in White Rock.",
+   "places": [
+    "White Rock, BC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Newton Athletic Park artificial turf, practice field, tennis court and walking path in Surrey.",
+   "places": [
+    "Surrey, BC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Royal Athletic Park in Victoria.",
+   "places": [
+    "Victoria, BC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Rapid Fire Theatre in Edmonton.",
+   "places": [
+    "Edmonton, AB"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Bissell Centre in Edmonton.",
+   "places": [
+    "Edmonton, AB"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Lac La Ronge Indian Band, Kitsaki Hall in La Ronge.",
+   "places": [
+    "La Ronge, SK"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: RCMP Heritage Centre in Regina.",
+   "places": [
+    "Regina, SK"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Riverview Community Centre in Winnipeg.",
+   "places": [
+    "Winnipeg, MB"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Dakota Community Centre in Winnipeg.",
+   "places": [
+    "Winnipeg, MB"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Victims of Flight PS752 Memorial in Unity Park, Richmond Hill.",
+   "places": [
+    "Richmond Hill, ON"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Hamilton Downtown Family YMCA.",
+   "places": [
+    "Hamilton, ON"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Bob MacQuarrie Recreation Complex in Orléans.",
+   "places": [
+    "Orleans, ON"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Exploramer Shark Pavilion in Sainte-Anne-des-Monts.",
+   "places": [
+    "Sainte-Anne-des-Monts, QC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: L'Espace Hubert-Reeves in Charlevoix.",
+   "places": [
+    "Baie-Saint-Paul, QC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Chantier Naval Forillon in Gaspé.",
+   "places": [
+    "Gaspé, QC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Centre sportif de Montréal-Nord.",
+   "places": [
+    "Montréal-Nord, QC"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": 0.75,
+   "years": "July 2026 joint investment",
+   "kind": "named project",
+   "text": "Build Communities Strong Fund named project: Place Marcel-François-Richard (Place du Drapeau acadien) in Beaurivage; a $750,000 joint investment was announced in July 2026.",
+   "places": [
+    "Saint-Louis-de-Kent, NB"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: SeaRoots Alliance Wellness Centre in Souris.",
+   "places": [
+    "Souris, PE"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: breakwater installation in Petty Harbour-Maddox Cove.",
+   "places": [
+    "Petty Harbour, NL"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "named project, amount not stated",
+   "text": "Build Communities Strong Fund named project: Baddeck Recreation Facility in Baddeck.",
+   "places": [
+    "Baddeck, NS"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a18"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "Major Projects Office referral, no federal amount",
+   "text": "Major Projects Office referral: LNG Canada Phase 2 in Kitimat.",
+   "places": [
+    "Kitimat, BC"
+   ],
+   "department": "Major Projects Office",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a3"
+  },
+  {
+   "budget": "Budget 2025",
+   "amount_millions": null,
+   "years": "",
+   "kind": "Major Projects Office referral, no federal amount",
+   "text": "Major Projects Office referral: Contrecœur container terminal, expanding the Port of Montréal's capacity by about 60 per cent.",
+   "places": [
+    "Contrecoeur, QC"
+   ],
+   "department": "Major Projects Office",
+   "url": "https://budget.canada.ca/2025/report-rapport/chap1-en.html#a3"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 957.8,
+   "years": "5 years from 2026-27",
+   "kind": "national program; first projects announced in this riding",
+   "text": "$957.8 million over five years for the Small Craft Harbours Program (national). The first Nova Scotia projects were announced on 22 May 2026 at Camp Cove (Lower Argyle) and Meteghan, with no local dollar figure stated.",
+   "places": [
+    "Lower Argyle, NS",
+    "Meteghan, NS"
+   ],
+   "department": "Fisheries and Oceans Canada",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap2-en.html#a35"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 64,
+   "years": "Build Communities Strong Fund",
+   "kind": "named project",
+   "text": "Embleton Community Centre and Park in Brampton, supported with a $64 million investment from the Build Communities Strong Fund.",
+   "places": [
+    "Brampton, ON"
+   ],
+   "department": "Housing, Infrastructure and Communities Canada",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap2-en.html#a34"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 43,
+   "years": "5 years from 2026-27",
+   "kind": "named project",
+   "text": "Supporting the Harbourfront Centre in Toronto: operating support and time-limited capital repairs, $43 million over five years.",
+   "places": [
+    "Toronto, ON"
+   ],
+   "department": "Canadian Heritage",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a48"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 23,
+   "years": "5 years from 2026-27 (about $12 million net of existing resources)",
+   "kind": "named project",
+   "text": "CBSA service at the Port of Québec, $23 million over five years.",
+   "places": [
+    "Québec, QC"
+   ],
+   "department": "Canada Border Services Agency",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a48"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": null,
+   "years": "from the $1 billion Arctic Infrastructure Fund",
+   "kind": "named project, amount not stated",
+   "text": "Arctic Infrastructure Fund support to modernize the Rankin Inlet and Inuvik airports for larger aircraft (announced 12 March 2026).",
+   "places": [
+    "Rankin Inlet, NU",
+    "Inuvik, NT"
+   ],
+   "department": "Transport Canada",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a33"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": null,
+   "years": "",
+   "kind": "commitment, no amount",
+   "text": "Commitment to work with the Last Post Fund on the National Field of Honour in Pointe-Claire.",
+   "places": [
+    "Pointe-Claire, QC"
+   ],
+   "department": "Veterans Affairs Canada",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a41"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 611,
+   "years": "announced October 2025",
+   "kind": "restated prior announcement",
+   "text": "Nouveau Monde Graphite, Matawinie Mine in Saint-Michel-des-Saints: about $462 million debt and $149 million equity financing.",
+   "places": [
+    "Saint-Michel-des-Saints, QC"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 25,
+   "years": "announced October 2025",
+   "kind": "restated prior announcement",
+   "text": "Rio Tinto Fer et Titane scandium oxide in Sorel-Tracy: $25 million equity-like royalty financing.",
+   "places": [
+    "Sorel-Tracy, QC"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 14.1,
+   "years": "",
+   "kind": "restated prior announcement",
+   "text": "Focus Graphite in Baie-Comeau: $14.1 million.",
+   "places": [
+    "Baie-Comeau, QC"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 2.3,
+   "years": "",
+   "kind": "restated prior announcement",
+   "text": "Frontier Lithium processing facility in Thunder Bay: $2.3 million.",
+   "places": [
+    "Thunder Bay, ON"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 84,
+   "years": "",
+   "kind": "restated prior announcement",
+   "text": "BC Hydro transmission upgrades for critical minerals projects, Kamloops and northwest BC: $84 million.",
+   "places": [
+    "Kamloops, BC"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 36.5,
+   "years": "",
+   "kind": "restated prior announcement",
+   "text": "E3 Lithium Clearwater project, lithium refining demonstration in Olds: $36.5 million.",
+   "places": [
+    "Olds, AB"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 43.5,
+   "years": "",
+   "kind": "restated prior announcement",
+   "text": "Cyclic Materials rare-earth recycling in Kingston: about $34.4 million equity plus $9.1 million.",
+   "places": [
+    "Kingston, ON"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 18.1,
+   "years": "",
+   "kind": "restated prior announcement",
+   "text": "SaskPower grid connection for critical minerals mining, Athabasca Basin and Regina: $18.1 million.",
+   "places": [
+    "Regina, SK"
+   ],
+   "department": "Federal investment vehicles",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a16"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 63,
+   "years": "2025-26",
+   "kind": "named project",
+   "text": "Emergency shelter funding for the City of Toronto, $63 million (Annex 1, Table A1.15).",
+   "places": [
+    "Toronto, ON"
+   ],
+   "department": "Immigration, Refugees and Citizenship Canada",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/anx1-en.html#a27"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 14,
+   "years": "2025-26",
+   "kind": "named project",
+   "text": "Support for Kap Paper in Kapuskasing, $14 million through FedNor (Annex 1, Table A1.15).",
+   "places": [
+    "Kapuskasing, ON"
+   ],
+   "department": "FedNor",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/anx1-en.html#a27"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": 15,
+   "years": "5 years from 2026-27",
+   "kind": "named program",
+   "text": "Nation's Capital Extraordinary Policing Costs Program, $3 million a year to Ottawa (Annex 1, Table A1.15).",
+   "places": [
+    "Ottawa, ON"
+   ],
+   "department": "Public Safety Canada",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/anx1-en.html#a27"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": null,
+   "years": "",
+   "kind": "Major Projects Office referral, no federal amount",
+   "text": "Major Projects Office referral: Canada Nickel Crawford project near Timmins.",
+   "places": [
+    "Timmins, ON"
+   ],
+   "department": "Major Projects Office",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a13"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": null,
+   "years": "",
+   "kind": "Major Projects Office referral, no federal amount",
+   "text": "Major Projects Office referral: Iqaluit Nukkiksautiit hydro project.",
+   "places": [
+    "Iqaluit, NU"
+   ],
+   "department": "Major Projects Office",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a13"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": null,
+   "years": "",
+   "kind": "Major Projects Office referral, no federal amount",
+   "text": "Major Projects Office referral: Sisson Mine at Sisson Brook.",
+   "places": [
+    "Stanley, NB"
+   ],
+   "department": "Major Projects Office",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a13"
+  },
+  {
+   "budget": "Spring Economic Update 2026",
+   "amount_millions": null,
+   "years": "",
+   "kind": "Major Projects Office referral, no federal amount",
+   "text": "Major Projects Office referral: Mackenzie Valley Highway, Wrigley to Inuvik.",
+   "places": [
+    "Inuvik, NT"
+   ],
+   "department": "Major Projects Office",
+   "url": "https://budget.canada.ca/update-miseajour/2026/report-rapport/chap1-en.html#a13"
+  }
+ ]
+}

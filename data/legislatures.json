@@ -1,0 +1,827 @@
+{
+ "as_of": "2026-10-26",
+ "population_date": "2026-07-01",
+ "jurisdictions": [
+  {
+   "name": "Canada",
+   "legislature": "House of Commons",
+   "seats_total": 343,
+   "standings": [
+    {
+     "party": "Liberal",
+     "seats": 173
+    },
+    {
+     "party": "Conservative",
+     "seats": 137
+    },
+    {
+     "party": "Bloc QuÃ©bÃ©cois",
+     "seats": 21
+    },
+    {
+     "party": "NDP",
+     "seats": 5
+    },
+    {
+     "party": "Green",
+     "seats": 1
+    }
+   ],
+   "vacant": 6,
+   "head_of_government": {
+    "name": "Mark Carney",
+    "party": "Liberal",
+    "riding": "Nepean"
+   },
+   "opposition_leader": {
+    "name": "Pierre Poilievre",
+    "party": "Conservative",
+    "riding": "Battle RiverâCrowfoot"
+   },
+   "other_leaders": [
+    {
+     "name": "Yves-FranÃ§ois Blanchet",
+     "party": "Bloc QuÃ©bÃ©cois",
+     "riding": "BeloeilâChambly"
+    },
+    {
+     "name": "Avi Lewis",
+     "party": "NDP",
+     "riding": null,
+     "note": "Leader since 29 Mar 2026; no seat"
+    },
+    {
+     "name": "Elizabeth May",
+     "party": "Green",
+     "riding": "SaanichâGulf Islands"
+    }
+   ],
+   "last_election": "2025-04-28",
+   "next_election": "2029-10-15",
+   "next_election_note": "Fixed date (third Monday in October). Liberals hold a bare majority after 2026 by-elections; no early election expected.",
+   "budget": {
+    "date": "2026-04-28",
+    "title": "Spring Economic Update 2026 (Budget 2026 to be tabled 5 Nov 2026)",
+    "deficit_billions": 65.3,
+    "deficit_note": "2026-27 projected deficit; 2025-26 $66.9B. 1.9% of GDP.",
+    "net_debt_billions": 1399.3,
+    "debt_measure": "Federal debt (accumulated deficit), end 2026-27; 2025-26 $1,333.9B. Federal net debt (liabilities minus financial assets) $1,556.0B. General-government net debt incl. CPP/QPP (IMF, all levels): 13.3% of GDP, no $ figure published.",
+    "debt_to_gdp_pct": 41.5,
+    "general_government_net_debt_to_gdp_pct": 13.3,
+    "year": "2026-27"
+   },
+   "population": 41798407,
+   "sources": {
+    "standings": "https://www.ourcommons.ca/members/en/party-standings",
+    "leaders": "https://en.wikipedia.org/wiki/45th_Canadian_Parliament",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://budget.canada.ca/update-miseajour/2026/report-rapport/anx1-en.html",
+    "budget_overview": "https://budget.canada.ca/update-miseajour/2026/report-rapport/overview-apercu-en.html",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "British Columbia",
+   "legislature": "Legislative Assembly of British Columbia",
+   "seats_total": 93,
+   "standings": [
+    {
+     "party": "Conservative",
+     "seats": 63
+    },
+    {
+     "party": "NDP",
+     "seats": 28
+    },
+    {
+     "party": "Green",
+     "seats": 2
+    }
+   ],
+   "vacant": 0,
+   "standings_note": "PRELIMINARY â Elections BC initial count, 99.96% of boxes reporting as of 25 Oct 2026 17:04 PT (Wikipedia: Con 61 won + 3 leading, NDP 26 + 1 leading). Final count 6â10 Nov; final results 18 Nov 2026.",
+   "head_of_government": {
+    "name": "Lorne Doerkson (premier-designate; David Eby remains premier until sworn in)",
+    "party": "Conservative",
+    "riding": "Cariboo-Chilcotin"
+   },
+   "opposition_leader": {
+    "name": null,
+    "party": "NDP",
+    "riding": null,
+    "note": "David Eby (Vancouver-Point Grey) resigned as NDP leader on election night; interim leader not yet named."
+   },
+   "other_leaders": [
+    {
+     "name": "Emily Lowan",
+     "party": "Green",
+     "riding": "Saanich North and the Islands"
+    }
+   ],
+   "last_election": "2026-10-24",
+   "next_election": "2030-10-19",
+   "next_election_note": "Snap election 24 Oct 2026 (previous 19 Oct 2024). Fixed date: third Saturday of October every four years.",
+   "budget": {
+    "date": "2026-02-17",
+    "title": "Budget 2026 (updated by First Quarterly Report, 14 Sep 2026)",
+    "deficit_billions": 13.3,
+    "deficit_note": "Q1 report (14 Sep 2026) revised 2026-27 deficit to $13.8B.",
+    "net_debt_billions": 141.1,
+    "debt_measure": "Taxpayer-supported debt end 2026-27 (Q1 forecast; budget $142.9B). Total provincial debt $180.9B.",
+    "debt_to_gdp_pct": 30.1,
+    "year": "2026-27"
+   },
+   "population": 5710598,
+   "sources": {
+    "standings": "https://results.elections.bc.ca/",
+    "leaders": "https://en.wikipedia.org/wiki/2026_British_Columbia_general_election",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://news.gov.bc.ca/releases/2026FIN0031-001066",
+    "budget_doc": "https://www2.gov.bc.ca/assets/gov/british-columbians-our-governments/government-finances/quarterly-reports/2026-27_first_quarterly_report.pdf",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Alberta",
+   "legislature": "Legislative Assembly of Alberta",
+   "seats_total": 87,
+   "standings": [
+    {
+     "party": "United Conservative",
+     "seats": 47
+    },
+    {
+     "party": "NDP",
+     "seats": 39
+    },
+    {
+     "party": "Progressive Tory",
+     "seats": 1
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Danielle Smith",
+    "party": "United Conservative",
+    "riding": "Brooks-Medicine Hat"
+   },
+   "opposition_leader": {
+    "name": "Naheed Nenshi",
+    "party": "NDP",
+    "riding": "Edmonton-Strathcona"
+   },
+   "other_leaders": [
+    {
+     "name": "Peter Guthrie",
+     "party": "Progressive Tory Party of Alberta",
+     "riding": "Airdrie-Cochrane"
+    }
+   ],
+   "last_election": "2023-05-29",
+   "next_election": "2027-10-18",
+   "next_election_note": "Fixed date: third Monday in October (2024 amendment).",
+   "budget": {
+    "date": "2026-02-26",
+    "title": "Budget 2026 (updated by 2026-27 First Quarter Fiscal Update, 27 Aug 2026)",
+    "deficit_billions": 9.4,
+    "deficit_note": "Q1 update (27 Aug 2026) now forecasts a $2.0B SURPLUS for 2026-27.",
+    "net_debt_billions": 40.3,
+    "debt_measure": "Net financial debt at 31 Mar 2027 (Q1; budget $51.4B). Taxpayer-supported debt $94.8B (budget $108.9B).",
+    "debt_to_gdp_pct": 7.7,
+    "year": "2026-27"
+   },
+   "population": 5101050,
+   "sources": {
+    "standings": "https://www.assembly.ab.ca/members/members-of-the-legislative-assembly",
+    "leaders": "https://en.wikipedia.org/wiki/31st_Alberta_Legislature",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://open.alberta.ca/dataset/9c81a5a7-cdf1-49ad-a923-d1ecb42944e4/resource/eaeb7a75-0c9f-4964-be53-0f1cc889ffab/download/tbf-2026-27-first-quarter-fiscal-update-economic-statement.pdf",
+    "budget_release": "https://www.alberta.ca/announcements.cfm?xID=97685A955CBCA-DECF-643E-6E279A638090A54C",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Saskatchewan",
+   "legislature": "Legislative Assembly of Saskatchewan",
+   "seats_total": 61,
+   "standings": [
+    {
+     "party": "Saskatchewan Party",
+     "seats": 34
+    },
+    {
+     "party": "NDP",
+     "seats": 26
+    },
+    {
+     "party": "Independent",
+     "seats": 1
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Scott Moe",
+    "party": "Saskatchewan Party",
+    "riding": "Rosthern-Shellbrook"
+   },
+   "opposition_leader": {
+    "name": "Carla Beck",
+    "party": "NDP",
+    "riding": "Regina Lakeview"
+   },
+   "other_leaders": [],
+   "last_election": "2024-10-28",
+   "next_election": "2028-10-30",
+   "next_election_note": "Fixed date: last Monday of October.",
+   "budget": {
+    "date": "2026-03-18",
+    "title": "2026-27 Budget: Protecting Saskatchewan (updated by First Quarter Report, 27 Aug 2026)",
+    "deficit_billions": 0.8,
+    "deficit_note": "Budget $819.4M; Q1 $825.2M.",
+    "net_debt_billions": 18.9,
+    "debt_measure": "Net debt at 31 Mar 2027 (Q1 investor fact sheet; budget $19.7B).",
+    "debt_to_gdp_pct": 14.9,
+    "year": "2026-27"
+   },
+   "population": 1278402,
+   "sources": {
+    "standings": "https://www.legassembly.sk.ca/mlas/",
+    "leaders": "https://en.wikipedia.org/wiki/30th_Saskatchewan_Legislature",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://www.saskatchewan.ca/government/news-and-media/2026/august/27/government-of-saskatchewan-releases-2026-27-first-quarter-report",
+    "budget_doc": "https://publications.saskatchewan.ca/api/v1/products/129712/formats/156618/download",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Manitoba",
+   "legislature": "Legislative Assembly of Manitoba",
+   "seats_total": 57,
+   "standings": [
+    {
+     "party": "NDP",
+     "seats": 34
+    },
+    {
+     "party": "Progressive Conservative",
+     "seats": 19
+    },
+    {
+     "party": "Liberal",
+     "seats": 1
+    },
+    {
+     "party": "Independent",
+     "seats": 3
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Wab Kinew",
+    "party": "NDP",
+    "riding": "Fort Rouge"
+   },
+   "opposition_leader": {
+    "name": "Konrad Narth (interim PC leader)",
+    "party": "Progressive Conservative",
+    "riding": "La VÃ©rendrye"
+   },
+   "other_leaders": [
+    {
+     "name": "Willard Reaves",
+     "party": "Liberal",
+     "riding": null,
+     "note": "No seat; sole Liberal MLA is Cindy Lamoureux (Tyndall Park)"
+    }
+   ],
+   "last_election": "2023-10-03",
+   "next_election": "2027-10-05",
+   "next_election_note": "Fixed date: first Tuesday of October.",
+   "budget": {
+    "date": "2026-03-24",
+    "title": "Budget 2026 (updated by 2026/27 First Quarter Report, Sept 2026)",
+    "deficit_billions": 0.5,
+    "deficit_note": "Budget $498M; Q1 $496M.",
+    "net_debt_billions": 38.1,
+    "debt_measure": "Summary net debt at 31 Mar 2027 (Q1; budget $39.7B).",
+    "debt_to_gdp_pct": 36.4,
+    "year": "2026/27"
+   },
+   "population": 1517379,
+   "sources": {
+    "standings": "https://www.gov.mb.ca/legislature/members/mla_list_alphabetical.html",
+    "leaders": "https://www.ctvnews.ca/winnipeg/article/konrad-narth-becomes-interim-pc-leader-says-newfound-hope-in-caucus/",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://www.gov.mb.ca/asset_library/en/proactive/20262027/first-quarter-report-september2026.pdf",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Ontario",
+   "legislature": "Legislative Assembly of Ontario",
+   "seats_total": 124,
+   "standings": [
+    {
+     "party": "Progressive Conservative",
+     "seats": 79
+    },
+    {
+     "party": "NDP",
+     "seats": 27
+    },
+    {
+     "party": "Liberal",
+     "seats": 14
+    },
+    {
+     "party": "Green",
+     "seats": 2
+    },
+    {
+     "party": "Independent",
+     "seats": 2
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Doug Ford",
+    "party": "Progressive Conservative",
+    "riding": "Etobicoke North"
+   },
+   "opposition_leader": {
+    "name": "Marit Stiles",
+    "party": "NDP",
+    "riding": "Davenport"
+   },
+   "other_leaders": [
+    {
+     "name": "John Fraser (interim)",
+     "party": "Liberal",
+     "riding": "Ottawa South",
+     "note": "Permanent leader to be announced 21 Nov 2026"
+    },
+    {
+     "name": "Mike Schreiner",
+     "party": "Green",
+     "riding": "Guelph"
+    }
+   ],
+   "last_election": "2025-02-27",
+   "next_election": null,
+   "next_election_note": "No fixed date: law repealed 27 Nov 2025. Legislature expires 7 Mar 2030; election by ~Apr 2030 at premier's discretion (Ford: 'three, four or five years').",
+   "budget": {
+    "date": "2026-03-26",
+    "title": "2026 Ontario Budget (updated by 2026-27 First Quarter Finances, 14 Aug 2026)",
+    "deficit_billions": 13.8,
+    "deficit_note": "Unchanged in Q1 Finances. Accumulated deficit $273.2B (21.2% of GDP).",
+    "net_debt_billions": 485.1,
+    "debt_measure": "Net debt at 31 Mar 2027.",
+    "debt_to_gdp_pct": 37.7,
+    "year": "2026-27"
+   },
+   "population": 16262121,
+   "sources": {
+    "standings": "https://www.ola.org/en/members/current",
+    "leaders": "https://en.wikipedia.org/wiki/44th_Parliament_of_Ontario",
+    "elections": "https://en.wikipedia.org/wiki/45th_Ontario_general_election",
+    "budget": "https://www.ontario.ca/page/2026-27-first-quarter-finances",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Quebec",
+   "legislature": "National Assembly of Quebec",
+   "seats_total": 127,
+   "standings": [
+    {
+     "party": "Parti QuÃ©bÃ©cois",
+     "seats": 60
+    },
+    {
+     "party": "Liberal",
+     "seats": 39
+    },
+    {
+     "party": "Conservative",
+     "seats": 19
+    },
+    {
+     "party": "QuÃ©bec solidaire",
+     "seats": 9
+    },
+    {
+     "party": "Coalition Avenir QuÃ©bec",
+     "seats": 0
+    }
+   ],
+   "vacant": 0,
+   "standings_note": "Seats raised from 125 to 127 by June 2026 law. Champlain (PCQ by 191 votes) under judicial recount; Vachon flipped to PQ by 3 votes on recount (Liberals appealing). PQ minority (64 needed).",
+   "head_of_government": {
+    "name": "Paul St-Pierre Plamondon",
+    "party": "Parti QuÃ©bÃ©cois",
+    "riding": "Camille-Laurin"
+   },
+   "opposition_leader": {
+    "name": "Charles Milliard",
+    "party": "Liberal",
+    "riding": "Orford"
+   },
+   "other_leaders": [
+    {
+     "name": "Ãric Duhaime",
+     "party": "Conservative",
+     "riding": "Bellechasse"
+    },
+    {
+     "name": "Ruba Ghazal (co-spokesperson, parliamentary leader)",
+     "party": "QuÃ©bec solidaire",
+     "riding": "Mercier"
+    },
+    {
+     "name": "Christine FrÃ©chette",
+     "party": "Coalition Avenir QuÃ©bec",
+     "riding": null,
+     "note": "Lost Trois-RiviÃ¨res; CAQ has no seats"
+    }
+   ],
+   "last_election": "2026-10-05",
+   "next_election": "2030-10-07",
+   "next_election_note": "Fixed date: first Monday of October. Minority government; early election possible.",
+   "budget": {
+    "date": "2026-03-18",
+    "title": "Budget 2026-2027 (updated by Q1 2026-2027 report, 25 Sep 2026 / pre-election report Aug 2026)",
+    "deficit_billions": 8.6,
+    "deficit_note": "Budgetary deficit under Balanced Budget Act (after $2.5B Generations Fund deposits); accounting deficit $6.3B. Q1 report: $7.7B BBA / $5.2B accounting (incl. $2.0B contingency).",
+    "net_debt_billions": 253.5,
+    "debt_measure": "Net debt at 31 Mar 2027 (Q1; budget $259.5B / 38.9%).",
+    "debt_to_gdp_pct": 37.9,
+    "year": "2026-2027"
+   },
+   "population": 9067114,
+   "sources": {
+    "standings": "https://www.assnat.qc.ca/en/deputes/index.html",
+    "leaders": "https://en.wikipedia.org/wiki/2026_Quebec_general_election",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/finances/publications-adm/rapport/TRIMEN_SIFIN_1T_26-27.pdf",
+    "budget_release": "https://www.quebec.ca/en/news/actualites/detail/budget-2026-2027-press-release-no-1-of-3-a-responsible-budget-with-targeted-measures-for-quebecers-69186",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "New Brunswick",
+   "legislature": "Legislative Assembly of New Brunswick",
+   "seats_total": 49,
+   "standings": [
+    {
+     "party": "Liberal",
+     "seats": 31
+    },
+    {
+     "party": "Progressive Conservative",
+     "seats": 16
+    },
+    {
+     "party": "Green",
+     "seats": 2
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Susan Holt",
+    "party": "Liberal",
+    "riding": "Fredericton South-Silverwood"
+   },
+   "opposition_leader": {
+    "name": "Margaret Johnson (PC parliamentary leader since 20 Oct 2026)",
+    "party": "Progressive Conservative",
+    "riding": "Carleton-Victoria"
+   },
+   "other_leaders": [
+    {
+     "name": "Daniel Allain",
+     "party": "Progressive Conservative (party leader, elected 17 Oct 2026)",
+     "riding": null
+    },
+    {
+     "name": "David Coon",
+     "party": "Green",
+     "riding": "Fredericton-Lincoln"
+    }
+   ],
+   "last_election": "2024-10-21",
+   "next_election": "2028-10-16",
+   "next_election_note": "Fixed date: third Monday of October.",
+   "budget": {
+    "date": "2026-03-17",
+    "title": "Budget 2026-27 (updated by first-quarter results, 27 Aug 2026)",
+    "deficit_billions": 1.4,
+    "deficit_note": "Budget $1.39B; Q1 $1.66B.",
+    "net_debt_billions": 16.2,
+    "debt_measure": "Net debt at 31 Mar 2027 per Q1 (officials via CP/CTV); budget speech $15.9B / 30.8%.",
+    "debt_to_gdp_pct": 31.3,
+    "year": "2026-27"
+   },
+   "population": 883522,
+   "sources": {
+    "standings": "https://www.legnb.ca/en/members/current",
+    "leaders": "https://en.wikipedia.org/wiki/Leader_of_the_Opposition_(New_Brunswick)",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://www.gnb.ca/en/news/n-b.2026.08.first-quarter-financial-results-for-2026-27.html",
+    "budget_doc": "https://www.gnb.ca/content/dam/GNB3/gov/budget/docs/budget-speech-2026-27.pdf",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Nova Scotia",
+   "legislature": "Nova Scotia House of Assembly",
+   "seats_total": 56,
+   "standings": [
+    {
+     "party": "Progressive Conservative",
+     "seats": 43
+    },
+    {
+     "party": "NDP",
+     "seats": 9
+    },
+    {
+     "party": "Liberal",
+     "seats": 3
+    },
+    {
+     "party": "Independent",
+     "seats": 1
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Tim Houston",
+    "party": "Progressive Conservative",
+    "riding": "Pictou East"
+   },
+   "opposition_leader": {
+    "name": "Claudia Chender",
+    "party": "NDP",
+    "riding": "Dartmouth South"
+   },
+   "other_leaders": [
+    {
+     "name": "Iain Rankin (interim)",
+     "party": "Liberal",
+     "riding": "Timberlea-Prospect",
+     "note": "Leadership vote late Nov 2026"
+    }
+   ],
+   "last_election": "2024-11-26",
+   "next_election": null,
+   "next_election_note": "No fixed date: law repealed 26 Mar 2025. Legislature expires 7 Dec 2029.",
+   "budget": {
+    "date": "2026-02-23",
+    "title": "Budget 2026-27",
+    "deficit_billions": 1.2,
+    "deficit_note": "$1,240.9M after $50M contingency. No later forecast update found.",
+    "net_debt_billions": 27.9,
+    "debt_measure": "Net debt at 31 Mar 2027 ($27,945M before / $27,995M after contingency). Ratio includes 3.2 pts from long-term-care accounting change.",
+    "debt_to_gdp_pct": 39.4,
+    "year": "2026-27"
+   },
+   "population": 1103419,
+   "sources": {
+    "standings": "https://en.wikipedia.org/wiki/65th_General_Assembly_of_Nova_Scotia",
+    "leaders": "https://en.wikipedia.org/wiki/2026_Nova_Scotia_Liberal_Party_leadership_election",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://novascotia.ca/finance/statistics/news.asp?id=21783",
+    "budget_doc": "https://www.novascotia.ca/sites/default/files/documents/6-4173/ftb-bfi-046-en-budget-2026-2027.pdf",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Prince Edward Island",
+   "legislature": "Legislative Assembly of Prince Edward Island",
+   "seats_total": 27,
+   "standings": [
+    {
+     "party": "Progressive Conservative",
+     "seats": 18
+    },
+    {
+     "party": "Liberal",
+     "seats": 4
+    },
+    {
+     "party": "Green",
+     "seats": 4
+    },
+    {
+     "party": "Independent",
+     "seats": 1
+    }
+   ],
+   "vacant": 0,
+   "standings_note": "From Wikipedia tally; assembly.pe.ca blocked automated access.",
+   "head_of_government": {
+    "name": "Rob Lantz",
+    "party": "Progressive Conservative",
+    "riding": "Charlottetown-Brighton"
+   },
+   "opposition_leader": {
+    "name": "Hal Perry",
+    "party": "Liberal",
+    "riding": "Tignish-Palmer Road"
+   },
+   "other_leaders": [
+    {
+     "name": "Dan Kutcher",
+     "party": "Liberal (party leader, acclaimed Oct 2026)",
+     "riding": null
+    },
+    {
+     "name": "Matt MacFarlane",
+     "party": "Green",
+     "riding": "Borden-Kinkora"
+    }
+   ],
+   "last_election": "2023-04-03",
+   "next_election": "2027-10-04",
+   "next_election_note": "Fixed date: first Monday of October.",
+   "budget": {
+    "date": "2026-04-14",
+    "title": "Budget 2026-27",
+    "deficit_billions": 0.4,
+    "deficit_note": "$410M, record. 2025-26 revised to ~$450M.",
+    "net_debt_billions": 4.5,
+    "debt_measure": "Net debt FY2026-27 per Scotiabank/TD reading of budget documents (official PDF not retrievable); ratio 38.1% is from the official release.",
+    "debt_to_gdp_pct": 38.1,
+    "year": "2026-27"
+   },
+   "population": 182989,
+   "sources": {
+    "standings": "https://en.wikipedia.org/wiki/67th_General_Assembly_of_Prince_Edward_Island",
+    "leaders": "https://en.wikipedia.org/wiki/Hal_Perry_(politician)",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://www.princeedwardisland.ca/en/news/budget-2026-investing-in-islanders-for-a-more-affordable-future",
+    "budget_secondary": "https://www.scotiabank.com/ca/en/about/economics/economics-publications/post.other-publications.fiscal-policy.fiscal-pulse.provincial-budget-analyses-and-updates.prince-edward-island-.prince-edward-island-2026-27-budget--april-14--2026-.html",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Newfoundland and Labrador",
+   "legislature": "House of Assembly of Newfoundland and Labrador",
+   "seats_total": 40,
+   "standings": [
+    {
+     "party": "Progressive Conservative",
+     "seats": 20
+    },
+    {
+     "party": "Liberal",
+     "seats": 15
+    },
+    {
+     "party": "NDP",
+     "seats": 2
+    },
+    {
+     "party": "Independent",
+     "seats": 3
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Tony Wakeham",
+    "party": "Progressive Conservative",
+    "riding": "Stephenville-Port au Port"
+   },
+   "opposition_leader": {
+    "name": "John Hogan",
+    "party": "Liberal",
+    "riding": "Windsor Lake"
+   },
+   "other_leaders": [
+    {
+     "name": "Jim Dinn",
+     "party": "NDP",
+     "riding": "St. John's Centre"
+    }
+   ],
+   "last_election": "2025-10-14",
+   "next_election": "2029-10-09",
+   "next_election_note": "Fixed date: second Tuesday of October.",
+   "budget": {
+    "date": "2026-04-29",
+    "title": "Budget 2026: Opportunity for All of Us",
+    "deficit_billions": 0.7,
+    "deficit_note": "$688.5M; no later update found.",
+    "net_debt_billions": 20.8,
+    "debt_measure": "Net debt at end of 2026-27.",
+    "debt_to_gdp_pct": 43.5,
+    "year": "2026-27"
+   },
+   "population": 552462,
+   "sources": {
+    "standings": "https://www.assembly.nl.ca/Members/Members.aspx",
+    "leaders": "https://en.wikipedia.org/wiki/51st_General_Assembly_of_Newfoundland_and_Labrador",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": "https://www.gov.nl.ca/budget/2026/wp-content/uploads/sites/10/Budget-2026-Highlights.pdf",
+    "budget_release": "https://gov.nl.ca/releases/2026/fin/0429n01",
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Yukon",
+   "legislature": "Yukon Legislative Assembly",
+   "seats_total": 21,
+   "standings": [
+    {
+     "party": "Yukon Party",
+     "seats": 14
+    },
+    {
+     "party": "NDP",
+     "seats": 6
+    },
+    {
+     "party": "Liberal",
+     "seats": 1
+    }
+   ],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "Currie Dixon",
+    "party": "Yukon Party",
+    "riding": "Copperbelt North"
+   },
+   "opposition_leader": {
+    "name": "Kate White",
+    "party": "NDP",
+    "riding": "Takhini"
+   },
+   "other_leaders": [],
+   "last_election": "2025-11-03",
+   "next_election": "2029-11-05",
+   "next_election_note": "Fixed date: first Monday of November.",
+   "budget": null,
+   "population": 50356,
+   "sources": {
+    "standings": "https://en.wikipedia.org/wiki/Yukon_Legislative_Assembly",
+    "leaders": "https://en.wikipedia.org/wiki/Yukon_Legislative_Assembly",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": null,
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Northwest Territories",
+   "legislature": "Legislative Assembly of the Northwest Territories (consensus, non-partisan)",
+   "seats_total": 19,
+   "standings": [],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "R.J. Simpson",
+    "party": null,
+    "riding": "Hay River North"
+   },
+   "opposition_leader": null,
+   "other_leaders": [],
+   "last_election": "2023-11-14",
+   "next_election": "2027-10-05",
+   "next_election_note": "Fixed date: first Tuesday of October (assembly page says on or before 4 Oct 2027).",
+   "budget": null,
+   "population": 45904,
+   "sources": {
+    "standings": "https://en.wikipedia.org/wiki/Legislative_Assembly_of_the_Northwest_Territories",
+    "leaders": "https://en.wikipedia.org/wiki/Legislative_Assembly_of_the_Northwest_Territories",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": null,
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  },
+  {
+   "name": "Nunavut",
+   "legislature": "Legislative Assembly of Nunavut (consensus, non-partisan)",
+   "seats_total": 22,
+   "standings": [],
+   "vacant": 0,
+   "head_of_government": {
+    "name": "John Main",
+    "party": null,
+    "riding": "Arviat North-Whale Cove"
+   },
+   "opposition_leader": null,
+   "other_leaders": [],
+   "last_election": "2025-10-27",
+   "next_election": "2029-10-29",
+   "next_election_note": "Fixed date: last Monday of October.",
+   "budget": null,
+   "population": 43091,
+   "sources": {
+    "standings": "https://en.wikipedia.org/wiki/Legislative_Assembly_of_Nunavut",
+    "leaders": "https://en.wikipedia.org/wiki/Legislative_Assembly_of_Nunavut",
+    "elections": "https://en.wikipedia.org/wiki/Fixed_election_dates_in_Canada",
+    "budget": null,
+    "population": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1710000901"
+   }
+  }
+ ]
+}

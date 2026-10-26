@@ -1,4 +1,11 @@
 data/raw/
 data/*.json
+data/*/
+!data/budget_items.json
+!data/legislatures.json
+!data/fiscal_history.json
+!data/wikipedia_links.json
+!data/poliwave_links.json
+!data/news_links.json
 output/
 .claude/
