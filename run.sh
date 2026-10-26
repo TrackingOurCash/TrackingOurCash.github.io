@@ -20,6 +20,22 @@ mkdir -p data/raw/ne
 for f in ne_10m_admin_0_countries ne_10m_lakes ne_10m_rivers_lake_centerlines; do
   [[ -f data/raw/ne/$f.geojson ]] || curl -sSL -o data/raw/ne/$f.geojson "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/$f.geojson"
 done
+
+# Alberta inputs
+mkdir -p data/raw/ab data/raw/cra
+AB=https://open.alberta.ca/dataset/faef5592-9ea0-4b60-92db-79a8a9673fe5/resource
+curl -sSL -o data/raw/ab/grants-2025-26.csv "$AB/1e95ba75-b4b1-44df-9426-988d60b6cff7/download/tbf-grants-disclosure-2025-26.csv"
+curl -sSL -o data/raw/ab/grants-2024-25.csv "$AB/f4197a5a-b3c3-4045-b2ce-7f77d700935f/download/tbf-grants-disclosure-2024-25.csv"
+curl -sSL -o data/raw/ab/grants-2023-24.csv "$AB/0c7e93c1-1c28-460d-92eb-f6934e9ba4a8/download/tbf-grants-disclosure-2023-24.csv"
+curl -sSL -o data/raw/ab/grants-2022-23.csv "$AB/a9a92ce7-c005-418d-a411-b663254c601a/download/tbf-grants-disclosure-2022-23.csv"
+curl -sSL -o data/raw/ab/grants-2021-22.csv "$AB/bda2903e-8106-47be-824e-2b22636c8a05/download/tbf-grants-disclosure-2021-22.csv"
+curl -sSL -o data/raw/ab/grants-2020-21.csv "$AB/ef6f0f85-7f5e-449e-8a54-3d45e37f3dc4/download/tbf-grants-disclosure-2020-21.csv"
+curl -sSL -o data/raw/ab/sov-2023.xlsx https://www.elections.ab.ca/uploads/2023-Provincial-General-Election-Statement-of-Vote.xlsx
+curl -sSL -o data/raw/ab/mlas.csv https://www.assembly.ab.ca/txt/mla_home/contacts.csv
+curl -sSL -o data/raw/ab/ped-census-2021.csv https://open.alberta.ca/dataset/330635ba-632a-4ad1-a9f6-b8176216cf07/resource/81f483c1-b6c8-4ba3-9ab1-b26c03188c01/download/ped-profile-census-2021-report-data.csv
+curl -sSL -o data/raw/ab/ab2017_simple.json "https://represent.opennorth.ca/boundaries/alberta-electoral-districts-2017/simple_shape?limit=100"
+curl -sSL -o data/raw/ab/ab2017_list.json "https://represent.opennorth.ca/boundaries/alberta-electoral-districts-2017/?limit=100"
+curl -sSL -o data/raw/cra/ident_2024.csv "https://open.canada.ca/data/dataset/80c00cdb-1358-415c-bb8b-0de7f12675b8/resource/694fdc72-eae4-4ee0-83eb-832ab7b230e3/download/ident_2024_updated.csv"
 python3 scripts/fetch_csd.py
 python3 scripts/fetch_shapes.py
 python3 scripts/prep_ridings.py
