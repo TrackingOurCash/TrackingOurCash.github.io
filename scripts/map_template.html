@@ -603,20 +603,48 @@ function renderLegislature() {
     <div class="kpi ${surplusNow ? "surplus" : "deficit"}"><div class="lab">${surplusNow ? "Budgeted deficit, now a surplus" : "Deficit this year"}</div><div class="big">${fmtBn(b.deficit_billions)}</div><div class="per">${fmtPer(per(b.deficit_billions, pop))} per person</div>${b.deficit_note ? `<div class="note">${b.deficit_note}</div>` : ""}</div>
     <div class="kpi debt"><div class="lab">${J.name === "Canada" ? "Federal debt (accumulated deficit)" : "Net debt"}, what's owed in total</div><div class="big">${fmtBn(b.net_debt_billions)}</div><div class="per"><b>${fmtPer(per(b.net_debt_billions, pop))}</b> per person</div><div class="note">${b.debt_measure || ""}</div></div>
     <div class="kpi"><div class="lab">Debt to GDP</div><div class="big">${b.debt_to_gdp_pct == null ? "–" : b.debt_to_gdp_pct + "%"}</div>${b.general_government_net_debt_to_gdp_pct != null ? `<div class="per">${b.general_government_net_debt_to_gdp_pct}% for all governments together, counting CPP and QPP assets (IMF measure)</div>` : `<div class="per">&nbsp;</div>`}</div>`;
-  // History: revenue, spending, balance and the debt it leaves behind, year by year.
+  // History: grouped bars per year (revenue black, spending maroon, balance green/red) with trend lines,
+  // years along the bottom, net debt noted under each year.
   const Hs = J.history;
   if (Hs && Hs.years && Hs.years.length) {
     const ys = Hs.years;
-    const mx = d3.max(ys, y => Math.abs(y.balance_billions || 0)) || 1;
-    const mxd = d3.max(ys, y => y.net_debt_billions || 0) || 1;
-    document.getElementById("historyTitle").textContent = "Revenue, spending and the balance, last five years, and the debt that follows";
-    document.getElementById("historyChart").innerHTML = `<div class="hist">
-      <span class="h muted small">Year</span><span class="h muted small">deficit ← 0 → surplus</span><span class="h muted small">${J.name === "Canada" ? "Net debt" : "Net debt"} at year end</span><span class="h muted small" style="text-align:right">Revenue · spending</span>
-      ${ys.map(y => { const v = y.balance_billions || 0, w = 50 * Math.abs(v) / mx, d = y.net_debt_billions; return `<span>${y.year}${y.status === "forecast" ? "*" : ""}</span>
-        <div class="axis" title="${v < 0 ? "deficit" : "surplus"} ${fmtBn(Math.abs(v))}"><b style="left:50%"></b><i class="${v < 0 ? "neg" : "pos"}" style="${v < 0 ? `right:50%;width:${w}%` : `left:50%;width:${w}%`}"></i><span style="position:absolute;${v < 0 ? "left:4px" : "right:4px"};top:0;line-height:16px;font-size:11px;font-weight:600;color:var(${v < 0 ? "--deficit" : "--surplus"})">${v < 0 ? "−" : "+"}${fmtBn(Math.abs(v))}</span></div>
-        <div class="debtbar" title="net debt ${fmtBn(d)}">${d != null ? `<i style="width:${100 * d / mxd}%"></i><b>${fmtBn(d)}</b>` : ""}</div>
-        <span class="v${y.status === "forecast" ? " fc" : ""}">${y.revenue_billions != null ? `${fmtBn(y.revenue_billions)}<br><span class="amt">${fmtBn(y.expense_billions)} spent</span>` : ""}</span>`; }).join("")}
-    </div><p class="fn">${Hs.basis || ""} * forecast. Sources: ${[...new Set(ys.map(y => y.source).filter(Boolean))].map((u, i) => `<a href="${u}" target="_blank" rel="noopener">${i + 1}</a>`).join(", ")}.</p>`;
+    const W2 = 820, H2 = 320, m = {t: 24, r: 16, b: 58, l: 56};
+    const x = d3.scaleBand().domain(ys.map(y => y.year)).range([m.l, W2 - m.r]).paddingInner(0.3).paddingOuter(0.15);
+    const bw = x.bandwidth() / 3;
+    const top = d3.max(ys, y => Math.max(y.revenue_billions || 0, y.expense_billions || 0, y.balance_billions || 0));
+    const bottom = d3.min(ys, y => Math.min(0, y.balance_billions || 0));
+    const yS = d3.scaleLinear().domain([bottom * 1.15, top * 1.08]).nice().range([H2 - m.b, m.t]);
+    const SERIES = [
+      {key: "revenue_billions", label: "Revenue", color: "var(--ink)"},
+      {key: "expense_billions", label: "Spending", color: "#7a1f2b"},
+      {key: "balance_billions", label: "Surplus (green) or deficit (red)", color: null},
+    ];
+    const col = (sr, v) => sr.color || (v >= 0 ? "var(--surplus)" : "var(--deficit)");
+    const ticks = yS.ticks(5);
+    const bars = ys.map(y => SERIES.map((sr, i) => { const v = y[sr.key]; if (v == null) return ""; const bx = x(y.year) + i * bw;
+      return `<rect x="${bx}" y="${yS(Math.max(0, v))}" width="${bw - 2}" height="${Math.abs(yS(v) - yS(0))}" fill="${col(sr, v)}" opacity="${y.status === "forecast" ? 0.55 : 0.9}"><title>${y.year} ${sr.label}: ${fmtBn(v)}</title></rect>
+        <text x="${bx + (bw - 2) / 2}" y="${v >= 0 ? yS(v) - 3 : yS(v) + 11}" text-anchor="middle" font-size="9.5" fill="var(--ink-2)">${v >= 0 ? "" : "−"}${Math.abs(v) >= 100 ? Math.round(Math.abs(v)) : Math.abs(v).toFixed(1)}</text>`; }).join("")).join("");
+    const lines = SERIES.map((sr, i) => {
+      const pts = ys.filter(y => y[sr.key] != null).map(y => [x(y.year) + i * bw + (bw - 2) / 2, yS(y[sr.key]), y[sr.key]]);
+      if (!sr.color) return pts.slice(1).map((p, k) => `<line x1="${pts[k][0]}" y1="${pts[k][1]}" x2="${p[0]}" y2="${p[1]}" stroke="${p[2] >= 0 ? "var(--surplus)" : "var(--deficit)"}" stroke-width="2"/>`).join("")
+        + pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${p[2] >= 0 ? "var(--surplus)" : "var(--deficit)"}"/>`).join("");
+      return `<polyline points="${pts.map(p => p.slice(0, 2).join(",")).join(" ")}" fill="none" stroke="${sr.color}" stroke-width="2"/>` + pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${sr.color}"/>`).join("");
+    }).join("");
+    document.getElementById("historyTitle").textContent = "Revenue, spending and the balance, year by year ($ billions)";
+    document.getElementById("historyChart").innerHTML = `<svg viewBox="0 0 ${W2} ${H2}" role="img" aria-label="Revenue, spending and balance by year" style="width:100%;height:auto;display:block">
+      ${ticks.map(t => `<line x1="${m.l}" x2="${W2 - m.r}" y1="${yS(t)}" y2="${yS(t)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${yS(t)}" dy="0.35em" text-anchor="end" font-size="10" fill="var(--muted)">${t}</text>`).join("")}
+      <line x1="${m.l}" x2="${W2 - m.r}" y1="${yS(0)}" y2="${yS(0)}" stroke="var(--ink)" stroke-width="1.2"/>
+      ${bars}${lines}
+      ${ys.map(y => `<text x="${x(y.year) + x.bandwidth() / 2}" y="${H2 - m.b + 16}" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${y.year}${y.status === "forecast" ? "*" : ""}</text>
+        ${y.net_debt_billions != null ? `<text x="${x(y.year) + x.bandwidth() / 2}" y="${H2 - m.b + 31}" text-anchor="middle" font-size="10" fill="var(--deficit)">debt ${fmtBn(y.net_debt_billions)}</text>` : ""}`).join("")}
+      <g transform="translate(${m.l},${H2 - 8})" font-size="11" fill="var(--ink-2)">
+        <rect width="10" height="10" y="-9" fill="var(--ink)"/><text x="14">Revenue</text>
+        <rect width="10" height="10" y="-9" x="80" fill="#7a1f2b"/><text x="94">Spending</text>
+        <rect width="10" height="10" y="-9" x="166" fill="var(--surplus)"/><text x="180">Surplus</text>
+        <rect width="10" height="10" y="-9" x="238" fill="var(--deficit)"/><text x="252">Deficit</text>
+        <text x="310">· "debt" under each year is the net debt at year end · * forecast, bars faded</text>
+      </g></svg>
+    <p class="fn">${Hs.basis || ""} Sources: ${[...new Set(ys.map(y => y.source).filter(Boolean))].map((u, i) => `<a href="${u}" target="_blank" rel="noopener">${i + 1}</a>`).join(", ")}.</p>`;
   }
   // Comparison across governments: Canada first, then provinces high to low; the page's own government highlighted.
   const cmp = J.compare || [];
