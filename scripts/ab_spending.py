@@ -1,0 +1,313 @@
+"""Alberta: aggregate provincial grant payments by electoral division.
+
+Reads data/raw/ab/grants-*.csv (Treasury Board and Finance grant payments disclosure)
+and data/ab/divisions.json (from ab_prep.py). Writes data/ab/division_spending.json.
+
+Alberta publishes recipient name, program, amount and date, but no address. Each
+payment is placed by matching the recipient's name, in this order:
+  1. the same name in the federal grants file (which carries postal codes);
+  2. the CRA list of registered charities (name -> postal code);
+  3. a municipality name ("Town of X", "X County") -> that place's centroid;
+  4. a place name inside the recipient's name ("Red Deer Public Library");
+  5. an explicit list of province-wide bodies (health, post-secondary, agencies)
+     and school divisions, placed at their head office but flagged.
+Postal codes and place centroids come from GeoNames and are located in a division
+by point-in-polygon on the 2019 boundaries.
+
+Programs that pay individuals (physician fee-for-service, AISH, income support,
+seniors' benefits, awards) are excluded: the recipients are people, not places.
+Province-wide bodies (health, post-secondary, school divisions, agencies) and the
+governments of cities that span several divisions are flagged, like national HQs in
+the federal map, so the adjusted totals show grants to local recipients.
+
+Windows: "after" runs from the day after the 29 May 2023 election to the latest
+payment date; "before" is the same number of days ending on election day.
+"""
+import csv
+import json
+import re
+import statistics
+import sys
+import unicodedata
+from collections import Counter, defaultdict
+from datetime import date, timedelta
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+RAW = ROOT / "data" / "raw"
+OUT = ROOT / "data" / "ab"
+sys.path.insert(0, str(ROOT / "scripts"))
+from geo import RidingIndex, load_centroids  # noqa: E402
+
+ELECTION = date(2023, 5, 29)
+CLOSE_MARGIN = 10.0
+
+INDIVIDUAL_PROGRAMS = re.compile(
+    r"FFS|FEE.FOR.SERVICE|PHYSICIAN|AISH|INCOME SUPPORT|SENIORS? (DRUG )?BENEFIT|SENIORS BENEFIT|ALBERTA SENIORS|"
+    r"AWARDS?( AND MEDALS)?|SCHOLARSHIP|BURSAR|STUDENT (AID|GRANT|LOAN)|CHILD CARE SUBSIDY|AFFORDABILITY|"
+    r"DISASTER RECOVERY|EVACU|FOSTER|KINSHIP|ADOPTION|CAREGIVER|PDD INDIVIDUAL|FSCD|SPECIAL NEEDS ASSIST|"
+    r"EMPLOYMENT AND TRAINING|SKILLS DEVELOPMENT|RELIEF|BLUE CROSS|DRUG|DENTAL|OPTICAL|HEALTH BENEFIT|"
+    r"MEDICAL (ASSOC|BENEFIT)|ALLIED HEALTH|FARM FUEL|AGRISTABILITY|AGRIINSURANCE|AGRIINVEST|CROP INSURANCE",
+    re.I)
+PROVINCEWIDE = re.compile(
+    r"ALBERTA HEALTH SERVICES|ACUTE CARE ALBERTA|RECOVERY ALBERTA|PRIMARY CARE ALBERTA|ASSISTED LIVING ALBERTA|"
+    r"ALBERTA BLUE CROSS|AGRICULTURE FINANCIAL SERVICES|ALBERTA INNOVATES|TRAVEL ALBERTA|CANADIAN BLOOD SERVICES|"
+    r"LEGAL AID SOCIETY|ALBERTA MEDICAL ASSOCIATION|CLIMATE CHANGE AND EMISSIONS|ALBERTA LAW ENFORCEMENT|"
+    r"COVENANT HEALTH|ALBERTA GAMING|ALBERTA PENSIONS|ALBERTA TEACHERS|ALBERTA SCHOOL|ALBERTA MUNICIPALITIES|"
+    r"RURAL MUNICIPALITIES OF ALBERTA|ALBERTA ENERGY REGULATOR|CARBON|HEARTLAND PETROCHEMICAL|"
+    r"UNIVERSITY OF (ALBERTA|CALGARY|LETHBRIDGE)|MACEWAN UNIVERSITY|MOUNT ROYAL UNIVERSITY|ATHABASCA UNIVERSITY|"
+    r"INSTITUTE OF TECHNOLOGY|POLYTECHNIC|COLLEGE$|SCHOOL DIVISION|SCHOOL DISTRICT|REGIONAL DIVISION|"
+    r"CATHOLIC SEPARATE|FRANCOPHONE EDUCATION|CONSEIL SCOLAIRE|CHARTER (SCHOOL|ACADEMY)|PUBLIC SCHOOLS?$|"
+    r"ALBERTA$|ALBERTA (ASSOCIATION|COUNCIL|FOUNDATION|SOCIETY|FEDERATION)",
+    re.I)
+MUNI = re.compile(r"^(CITY|TOWN|VILLAGE|SUMMER VILLAGE|MUNICIPAL DISTRICT|MD|COUNTY|MUNICIPALITY|REGIONAL MUNICIPALITY|"
+                  r"SPECIALIZED MUNICIPALITY|IMPROVEMENT DISTRICT) (OF )?(.+?)( NO \d+| \d+)?( FINANCE.*| LIBRARY.*| TREASURY.*)?$")
+MUNI2 = re.compile(r"^(.+?) (COUNTY|MUNICIPAL DISTRICT)( NO \d+| \d+)?$")
+
+
+def upper(s):
+    return unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().upper()
+
+
+def norm(s):
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().upper()
+    s = re.sub(r"[^A-Z0-9 ]", " ", s)
+    s = re.sub(r"\b(THE|OF|INC|LTD|LIMITED|CORP|CORPORATION|SOCIETY|ASSOCIATION|ASSN|FOUNDATION)\b", " ", s)
+    # "Rocky View School Division No 41", "#75", "Secretary Treasurer" suffixes all name the same body.
+    s = re.sub(r"\b(NO|NUMBER)\s*\d+\b|#\s*\d+|\bSECRETARY TREASURER\b|\bFINANCE BRANCH.*|\bTREASURY SECTION\b|\bREGIONAL DIVISION\b", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def parse_date(s):
+    """Older files use M/D/YYYY, newer ones ISO."""
+    s = (s or "").strip()[:10]
+    if not s:
+        return None
+    if "/" in s:
+        m, d, y = s.split("/")
+        return date(int(y), int(m), int(d))
+    return date.fromisoformat(s)
+
+
+def read_rows():
+    rows = []
+    for path in sorted(RAW.glob("ab/grants-*.csv")):
+        raw = open(path, "rb").read()
+        try:
+            txt = raw.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            txt = raw.decode("cp1252")
+        for r in csv.DictReader(txt.splitlines()):
+            r["date"] = parse_date(r["PaymentDate"])
+            rows.append(r)
+    return rows
+
+
+def main():
+    divisions = json.load(open(OUT / "divisions.json"))
+    geo = json.load(open(OUT / "divisions_geo.json"))
+    index = RidingIndex([(f["id"], f["geometry"]) for f in geo["features"]])
+    centroids = load_centroids()
+
+    # Name -> postal code sources.
+    name_pc = {k[3:]: v for k, v in json.load(open(ROOT / "data" / "name_postal.json")).items() if k.startswith("AB|")}
+    with open(RAW / "cra" / "ident_2024.csv", encoding="utf-8-sig", newline="") as f:
+        for r in csv.DictReader(f):
+            if r["Province"] == "AB":
+                for nm in (r["Legal Name"], r["Account Name"]):
+                    name_pc.setdefault(norm(nm), r["Postal Code"].replace(" ", "").upper())
+    places = defaultdict(list)
+    with open(RAW / "geonames" / "CA_full.txt", encoding="utf-8", newline="") as f:
+        for r in csv.reader(f, delimiter="\t"):
+            if r[4] == "AB":
+                try:
+                    places[norm(r[2])].append((float(r[9]), float(r[10])))
+                except ValueError:
+                    pass
+    place_names = sorted((p for p in places if len(p) >= 5), key=len, reverse=True)
+
+    loc_cache = {}
+
+    def locate_pc(pc):
+        if pc in centroids:
+            return index.locate(*centroids[pc])[0]
+        return None
+
+    def locate_place(key):
+        pts = places.get(key)
+        if not pts:
+            return None
+        return index.locate(sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))[0]
+
+    def place(name):
+        """-> (division number or None, method)."""
+        n = norm(name)
+        if n in loc_cache:
+            return loc_cache[n]
+        res = (None, "unmatched")
+        if not n or "WITHHELD" in n or "PRIVACY" in n:
+            res = (None, "withheld")
+        elif n in name_pc and locate_pc(name_pc[n]):
+            res = (locate_pc(name_pc[n]), "postal code from federal or charity records")
+        else:
+            m = MUNI.match(n) or MUNI2.match(n)
+            if m:
+                key = m.group(3) if m.re is MUNI else m.group(1)
+                d = locate_place(key)
+                if d:
+                    res = (d, "municipality")
+            if res[0] is None and not re.search(r"\bALBERTA\b|\bCANADA\b", n):
+                for p in place_names:
+                    if f" {p} " in f" {n} ":
+                        d = locate_place(p)
+                        if d:
+                            res = (d, "place name in recipient (approx.)")
+                            break
+            if res[0] is None and len(n.split()) <= 3 and not re.search(
+                    r"\b(INC|LTD|SCHOOL|DIVISION|SOCIETY|CLUB|CHURCH|CENTRE|SERVICES|NATION|BAND|COUNCIL|GROUP|CO|FARMS|RANCH|CORP)\b", n):
+                res = (None, "individual")
+        loc_cache[n] = res
+        return res
+
+    def divisions_of_place(key, limit=60):
+        pts = places.get(key) or []
+        step = max(1, len(pts) // limit)
+        return {index.locate(*p)[0] for p in pts[::step]} - {None}
+
+    multi_division = {}
+
+    def flag_for(name, how):
+        """Why a placed payment is left out of the adjusted totals, or ""."""
+        u = upper(name)
+        if PROVINCEWIDE.search(u):
+            return "province-wide"
+        n = norm(name)
+        m = MUNI.match(n) or MUNI2.match(n)
+        if m:
+            key = m.group(3) if m.re is MUNI else m.group(1)
+            if key not in multi_division:
+                multi_division[key] = len(divisions_of_place(key)) > 1
+            if multi_division[key]:
+                return "other government"  # a city spread over several divisions
+        return ""
+
+    rows = read_rows()
+    cutoff = max(r["date"] for r in rows if r["date"])
+    span = (cutoff - ELECTION).days
+    before_start = ELECTION - timedelta(days=span)
+    years = span / 365.25
+
+    per = {num: {"after": Counter(), "before": Counter(), "progs": Counter(), "grants": []} for num in divisions}
+    method_counts = Counter()
+    excluded = Counter()
+    flagged_total = Counter()
+    unmatched = Counter()
+    prog_totals = defaultdict(lambda: defaultdict(float))
+    for r in rows:
+        v = float(r["Amount"] or 0)
+        if v <= 0 or not r["date"]:
+            continue
+        d = r["date"]
+        if before_start <= d <= ELECTION:
+            window = "before"
+        elif ELECTION < d <= cutoff:
+            window = "after"
+        else:
+            continue
+        program = r["Program"]
+        if INDIVIDUAL_PROGRAMS.search(program):
+            excluded[(window, "individual programs")] += v
+            continue
+        num, how = place(r["Recipient"])
+        if how == "withheld":
+            excluded[(window, "withheld")] += v
+            continue
+        if how == "individual":
+            excluded[(window, "individuals")] += v
+            continue
+        if num is None:
+            # Province-wide bodies with no match still don't belong to any one division.
+            kind = "province-wide bodies" if PROVINCEWIDE.search(upper(r["Recipient"])) else "unmatched"
+            excluded[(window, kind)] += v
+            if window == "after" and kind == "unmatched":
+                unmatched[r["Recipient"]] += v
+            continue
+        flag = flag_for(r["Recipient"], how)
+        method_counts[(window, how)] += 1
+        p = per[num]
+        p[window]["total"] += v
+        p[window]["n"] += 1
+        if not flag:
+            p[window]["adj"] += v
+            p[window]["adj_n"] += 1
+        else:
+            flagged_total[(window, r["Recipient"])] += v
+        if window == "after":
+            label = f'{r["Ministry"].title()}: {program.title()}'
+            p["progs"][label] += v
+            if not flag:
+                prog_totals[label][num] += v
+            p["grants"].append((v, r, flag, how))
+
+    out = {}
+    for num, dv in divisions.items():
+        p = per[num]
+        pop = dv["population"] or 1
+        a, b = p["after"], p["before"]
+        rec = dict(dv)
+        # Group the largest recipients rather than listing every payment.
+        by_recipient = defaultdict(lambda: {"v": 0.0, "n": 0, "progs": Counter(), "flag": "", "how": "", "last": ""})
+        for v, r, fl, how in p["grants"]:
+            g = by_recipient[r["Recipient"]]
+            g["v"] += v
+            g["n"] += 1
+            g["progs"][f'{r["Program"].title()} ({r["Ministry"].title()})'] += v
+            g["flag"], g["how"], g["last"] = fl, how, max(g["last"], r["date"].isoformat())
+        top = sorted(by_recipient.items(), key=lambda kv: -kv[1]["v"])[:10]
+        rec.update({
+            "after_total": round(a["total"]), "after_n": a["n"], "after_adj": round(a["adj"]), "after_adj_n": a["adj_n"],
+            "before_total": round(b["total"]), "before_adj": round(b["adj"]),
+            "pc_after": round(a["adj"] / pop / years, 2), "pc_after_all": round(a["total"] / pop / years, 2),
+            "pc_before": round(b["adj"] / pop / years, 2),
+            "close": dv["margin_pts"] < CLOSE_MARGIN,
+            "gov_won": dv["party_2023"] == "UCP",
+            "top_progs": [[k, round(v)] for k, v in p["progs"].most_common(4)],
+            "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
+                            "date": g["last"], "flag": g["flag"], "how": g["how"]} for who, g in top],
+        })
+        rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
+        out[num] = rec
+    med = statistics.median(x["pc_after"] for x in out.values())
+    for x in out.values():
+        x["score"] = round(x["pc_after"] / med, 2) if med else None
+        x["group"] = ("Close" if x["close"] else "Safe") + (" UCP" if x["gov_won"] else " NDP")
+    groups = {}
+    for g in ["Close UCP", "Close NDP", "Safe UCP", "Safe NDP"]:
+        xs = [x for x in out.values() if x["group"] == g]
+        chg = [x["change_pct"] for x in xs if x["change_pct"] is not None]
+        groups[g] = {"ridings": len(xs), "median_pc_after": round(statistics.median(x["pc_after"] for x in xs), 2) if xs else None,
+                     "median_pc_before": round(statistics.median(x["pc_before"] for x in xs), 2) if xs else None,
+                     "median_change_pct": round(statistics.median(chg), 1) if chg else None,
+                     "total_adj_after": round(sum(x["after_adj"] for x in xs))}
+    total_after = sum(v for (w, _), v in excluded.items() if w == "after") + sum(x["after_total"] for x in out.values())
+    meta = {
+        "generated": date.today().isoformat(), "election": ELECTION.isoformat(), "cutoff": cutoff.isoformat(),
+        "before_start": before_start.isoformat(), "before_end": ELECTION.isoformat(), "years_per_window": round(years, 3),
+        "close_margin": CLOSE_MARGIN, "median_pc_after": med,
+        "methods": {f"{w}|{m}": v for (w, m), v in method_counts.items()},
+        "excluded_after": {m: round(v) for (w, m), v in excluded.items() if w == "after"},
+        "placed_after": round(sum(x["after_total"] for x in out.values())),
+        "total_after": round(total_after),
+        "top_flagged": [[k, round(v)] for (w, k), v in sorted(flagged_total.items(), key=lambda kv: -kv[1]) if w == "after"][:20],
+        "top_unmatched": [[k, round(v)] for k, v in unmatched.most_common(40)],
+        "programs": sorted(prog_totals, key=lambda d: -sum(prog_totals[d].values()))[:60],
+    }
+    json.dump({"meta": meta, "groups": groups, "ridings": out,
+               "prog_by_riding": {k: {n: round(v) for n, v in m.items()} for k, m in prog_totals.items() if k in meta["programs"]}},
+              open(OUT / "division_spending.json", "w"), ensure_ascii=False)
+    print(json.dumps({k: v for k, v in meta.items() if k not in ("programs",)}, indent=1, ensure_ascii=False))
+    print(json.dumps(groups, indent=1))
+
+
+if __name__ == "__main__":
+    main()

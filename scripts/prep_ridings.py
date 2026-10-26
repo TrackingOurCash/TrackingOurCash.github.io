@@ -13,6 +13,8 @@ import re
 import unicodedata
 from pathlib import Path
 
+from fetch_csd import INSETS
+
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "data"
@@ -239,12 +241,48 @@ def load_land():
             polys = [p for p in polys_of(f["geometry"]) if max(pt[1] for pt in p[0]) > 40 and min(pt[0] for pt in p[0]) < -45 and max(pt[0] for pt in p[0]) > -170]
             out["features"].append({"type": "Feature", "properties": {"kind": "other"},
                                     "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys, 0.01, 0.05)}})
+    def in_inset(geom):
+        coords = geom["coordinates"]
+        if geom["type"] == "MultiPolygon":
+            pts = [pt for poly in coords for pt in poly[0]]
+        elif geom["type"] == "Polygon":
+            pts = coords[0]
+        elif geom["type"] == "MultiLineString":
+            pts = [pt for line in coords for pt in line]
+        else:
+            pts = coords
+        if not pts:
+            return False
+        x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)
+        y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+        return any(x1 > w and x0 < e and y1 > so and y0 < n for w, so, e, n in INSETS)
+
     for f in lakes:
         p = f["properties"]
         polys = polys_of(f["geometry"])
         if p.get("scalerank", 9) <= 2 and max(pt[1] for pt in polys[0][0]) > 41 and min(pt[0] for pt in polys[0][0]) < -52:
             out["features"].append({"type": "Feature", "properties": {"kind": "lake", "name": p.get("name")},
                                     "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys, 0.004, 0.02)}})
+        elif in_inset(f["geometry"]):
+            # Smaller lakes only matter inside the city insets.
+            out["features"].append({"type": "Feature", "properties": {"kind": "lake_small", "name": p.get("name")},
+                                    "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys, 0.001, 0.002)}})
+    rivers = json.load(open(RAW / "ne" / "ne_10m_rivers_lake_centerlines.geojson"))["features"]
+    for f in rivers:
+        g = f["geometry"]
+        if g["type"] not in ("LineString", "MultiLineString") or not in_inset(g):
+            continue
+        lines = g["coordinates"] if g["type"] == "MultiLineString" else [g["coordinates"]]
+        lines = [[[round(x, 4), round(y, 4)] for x, y in simplify(line, 0.001)] for line in lines if len(line) > 1]
+        out["features"].append({"type": "Feature", "properties": {"kind": "river", "name": f["properties"].get("name")},
+                                "geometry": {"type": "MultiLineString", "coordinates": lines}})
+    # Municipal outlines (census subdivisions) fetched by fetch_csd.py, when present.
+    for path in sorted((RAW / "csd").glob("*.json")) if (RAW / "csd").exists() else []:
+        if path.name == "index.json":
+            continue
+        c = json.load(open(path))
+        out["features"].append({"type": "Feature", "properties": {"kind": "muni", "name": c["name"]},
+                                "geometry": {"type": "MultiPolygon", "coordinates": clean_polygons(polys_of(c["shape"]), 0.0015, 0.003)}})
     return out
 
 

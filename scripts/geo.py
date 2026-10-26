@@ -21,16 +21,18 @@ def load_centroids():
 
 
 class RidingIndex:
-    def __init__(self):
-        ids = {o["name"]: o["external_id"] for o in json.load(open(RAW / "fed2023_list.json"))["objects"]}
+    def __init__(self, shapes=None):
+        """shapes: iterable of (id, GeoJSON geometry). Defaults to the federal ridings."""
+        if shapes is None:
+            ids = {o["name"]: o["external_id"] for o in json.load(open(RAW / "fed2023_list.json"))["objects"]}
+            shapes = [(ids[o["name"]], o["simple_shape"]) for o in json.load(open(RAW / "fed2023_simple.json"))["objects"]]
         self.polys = []  # (num, bbox, rings)
-        for o in json.load(open(RAW / "fed2023_simple.json"))["objects"]:
-            g = o["simple_shape"]
+        for num, g in shapes:
             polys = g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
             for poly in polys:
                 xs = [p[0] for p in poly[0]]
                 ys = [p[1] for p in poly[0]]
-                self.polys.append((ids[o["name"]], (min(xs), min(ys), max(xs), max(ys)), poly))
+                self.polys.append((num, (min(xs), min(ys), max(xs), max(ys)), poly))
 
     @staticmethod
     def _in_ring(x, y, ring):

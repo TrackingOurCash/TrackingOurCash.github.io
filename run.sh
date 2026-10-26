@@ -17,9 +17,10 @@ if [[ ! -f data/raw/geonames/CA_full.txt ]]; then
   unzip -o -q data/raw/geonames/CA_full.csv.zip -d data/raw/geonames
 fi
 mkdir -p data/raw/ne
-for f in ne_10m_admin_0_countries ne_10m_lakes; do
+for f in ne_10m_admin_0_countries ne_10m_lakes ne_10m_rivers_lake_centerlines; do
   [[ -f data/raw/ne/$f.geojson ]] || curl -sSL -o data/raw/ne/$f.geojson "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/$f.geojson"
 done
+python3 scripts/fetch_csd.py
 python3 scripts/prep_ridings.py
 python3 scripts/build_spending.py > data/summary.json
 python3 scripts/build_map.py

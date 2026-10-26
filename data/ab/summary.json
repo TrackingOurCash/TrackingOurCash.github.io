@@ -1,0 +1,300 @@
+{
+ "generated": "2026-10-25",
+ "election": "2023-05-29",
+ "cutoff": "2026-03-31",
+ "before_start": "2020-07-26",
+ "before_end": "2023-05-29",
+ "years_per_window": 2.839,
+ "close_margin": 10.0,
+ "median_pc_after": 396.48,
+ "methods": {
+  "before|postal code from federal or charity records": 130033,
+  "before|place name in recipient (approx.)": 26885,
+  "before|municipality": 1745,
+  "after|postal code from federal or charity records": 106576,
+  "after|place name in recipient (approx.)": 23197,
+  "after|municipality": 1195
+ },
+ "excluded_after": {
+  "individual programs": 8880979304,
+  "unmatched": 1339835343,
+  "individuals": 8288882311,
+  "province-wide bodies": 4497356697
+ },
+ "placed_after": 78425253288,
+ "total_after": 101432306942,
+ "top_flagged": [
+  [
+   "ALBERTA HEALTH SERVICES",
+   42734708599
+  ],
+  [
+   "THE CALGARY SCHOOL DIVISION",
+   3000238661
+  ],
+  [
+   "THE EDMONTON SCHOOL DIVISION",
+   2555688615
+  ],
+  [
+   "CITY OF EDMONTON FINANCE BRANCH TREASURY SECTION",
+   2440546332
+  ],
+  [
+   "CITY OF CALGARY",
+   1842655372
+  ],
+  [
+   "UNIVERSITY OF ALBERTA FINANCIAL SERVICES",
+   1652079885
+  ],
+  [
+   "UNIVERSITY OF CALGARY",
+   1531523642
+  ],
+  [
+   "THE CALGARY ROMAN CATHOLIC SEPARATE SCHOOL DIVISION",
+   1205191113
+  ],
+  [
+   "THE EDMONTON CATHOLIC SEPARATE SCHOOL DIVISION",
+   935192535
+  ],
+  [
+   "CANADIAN BLOOD SERVICES",
+   787237096
+  ],
+  [
+   "ALBERTA INNOVATES",
+   584570075
+  ],
+  [
+   "ROCKY VIEW SCHOOL DIVISION NO 41",
+   572797418
+  ],
+  [
+   "SOUTHERN ALBERTA INSTITUTE OF TECHNOLOGY",
+   567841116
+  ],
+  [
+   "NORTHERN ALBERTA INSTITUTE OF TECHNOLOGY",
+   533897529
+  ],
+  [
+   "GRANT MACEWAN UNIVERSITY",
+   355342512
+  ],
+  [
+   "MOUNT ROYAL UNIVERSITY",
+   331172032
+  ],
+  [
+   "THE BLACK GOLD SCHOOL DIVISION",
+   305082042
+  ],
+  [
+   "PARKLAND SCHOOL DIVISION NO 70",
+   293682777
+  ],
+  [
+   "THE LEGAL AID SOCIETY OF ALBERTA",
+   288672000
+  ],
+  [
+   "UNIVERSITY OF LETHBRIDGE",
+   285492813
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "SHERWOOD CARE (REDEVELOPMENT PROJECT) SHERWOOD CARE",
+   65925000
+  ],
+  [
+   "ROSC SOLUTIONS GROUP INC.",
+   54228083
+  ],
+  [
+   "BRYAN J WARD PROFESSIONAL CORPORATION",
+   38225000
+  ],
+  [
+   "MCMILLAN LLP IN TRUST",
+   34750000
+  ],
+  [
+   "I'M FOR KIDS TEAM LTD.",
+   24700885
+  ],
+  [
+   "MUNICIPAL DISTRICT OF GREENVIEW #16",
+   22935990
+  ],
+  [
+   "ELVES SPECIAL NEEDS SOCIETY ELVES CHILD DEVELOPMENT CENTRE",
+   21608783
+  ],
+  [
+   "THE ALBERTA RURAL PHYSICIAN ACTION PLAN",
+   21154201
+  ],
+  [
+   "METIS URBAN HOUSING CORPORATION OF ALBERTA, INC.",
+   20922435
+  ],
+  [
+   "RURAL HEALTH PROFESSIONS ACTION PLAN TRADE NAME OF THE ALBERTA RURAL",
+   19100000
+  ],
+  [
+   "AESO ALBERTA ELECTRIC SYSTEM OPERATOR",
+   18771817
+  ],
+  [
+   "HOLY SPIRIT ROMAN CATHOLIC",
+   17110649
+  ],
+  [
+   "CANADIAN CENTRE OF RECOVERY EXCELLENCE",
+   16518456
+  ],
+  [
+   "NATURAL RESOURCES CONSERVATION BOARD",
+   16163000
+  ],
+  [
+   "THE NORTHERN GATEWAY SCHOOL DIVISIO",
+   15673627
+  ],
+  [
+   "THE ST. THOMAS AQUINAS ROMAN CATHOL",
+   15431227
+  ],
+  [
+   "FEDERATION OF ALBERTA GAS CO-OPS LIMITED",
+   15390000
+  ],
+  [
+   "ATG ARROW TECHNOLOGY GROUP LIMITED PARTNERSHIP",
+   14996098
+  ],
+  [
+   "THE GRANDE YELLOWHEAD SCHOOL DIVISI",
+   14921175
+  ],
+  [
+   "RED DEER RECOVERY COMMUNITY BY EHN CANADA INC.",
+   14868609
+  ],
+  [
+   "THE CANADIAN MENTAL HEALTH ASSOCIATION ALBERTA DIVISION AND CENTRE FOR SUICIDE",
+   13477740
+  ],
+  [
+   "MARLBOROUGH DAY NURSERY ECS LIMITED",
+   13380937
+  ],
+  [
+   "MUNICIPAL DISTRICT OF WILLOW CREEK NO 26",
+   12219627
+  ],
+  [
+   "THE LIVINGSTONE RANGE SCHOOL DIVISI",
+   11867579
+  ],
+  [
+   "STONEY NATION FNDF",
+   11540459
+  ],
+  [
+   "SEDEN CENTRE FOR CHILD DEVELOPMENT AND WELLNESS",
+   11318054
+  ],
+  [
+   "BEVERLY HEIGHTS SENIORS COMMUNITY PARTNERSHIP",
+   11200000
+  ],
+  [
+   "ALBERTA INDIGENOUS OPPORTUNITIES CORPORATION (AIOC)",
+   11150000
+  ],
+  [
+   "KIDS DEVELOPMENTAL SERVICES LTD.",
+   9780260
+  ],
+  [
+   "THE RENERT SCHOOL FOUNDATION",
+   9706045
+  ],
+  [
+   "DAVAR FAMILY DAY HOME PROJECT",
+   9643631
+  ],
+  [
+   "THE LAKELAND ROMAN CATHOLIC SEPARAT",
+   8845079
+  ],
+  [
+   "RECEIVER GENERAL FOR CANADA R C M P",
+   8839183
+  ],
+  [
+   "MUNICIPAL DISTRICT OF LESSER SLAVE RIVER #124",
+   8835879
+  ],
+  [
+   "FAMILY AND COMMUNITY SUPPORT SERVICES ASSOCIATION OF ALBERTA (FCSSAA)",
+   8626450
+  ],
+  [
+   "SHIRLEY MCCLELLAN REGIONAL WATER SERVICES COMMISSION",
+   8565425
+  ],
+  [
+   "INDEPENDENT SCHOOL AUTHORITY LTD.",
+   7720935
+  ],
+  [
+   "TSUUT'INA NATION",
+   7691314
+  ],
+  [
+   "THE EAST CENTRAL ALBERTA CATHOLIC",
+   6824280
+  ],
+  [
+   "WEST INTER LAKE DISTRICT REGIONAL WATER SERVICES COMMISSION",
+   6789977
+  ]
+ ]
+}
+{
+ "Close UCP": {
+  "ridings": 9,
+  "median_pc_after": 154.53,
+  "median_pc_before": 100.6,
+  "median_change_pct": 8.6,
+  "total_adj_after": 272139489
+ },
+ "Close NDP": {
+  "ridings": 9,
+  "median_pc_after": 562.18,
+  "median_pc_before": 399.94,
+  "median_change_pct": 11.0,
+  "total_adj_after": 845962431
+ },
+ "Safe UCP": {
+  "ridings": 40,
+  "median_pc_after": 555.61,
+  "median_pc_before": 451.95,
+  "median_change_pct": 19.0,
+  "total_adj_after": 3041022595
+ },
+ "Safe NDP": {
+  "ridings": 29,
+  "median_pc_after": 237.84,
+  "median_pc_before": 198.54,
+  "median_change_pct": 13.1,
+  "total_adj_after": 2548647914
+ }
+}
