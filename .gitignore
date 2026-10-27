@@ -2,6 +2,7 @@ data/raw/*
 !data/raw/contracts/
 data/raw/contracts/*
 !data/raw/contracts/fsa_shares.json
+!data/raw/csd/
 data/*.json
 data/*/
 !data/raw/
