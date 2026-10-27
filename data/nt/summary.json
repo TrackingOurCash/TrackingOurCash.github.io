@@ -1,0 +1,155 @@
+{
+ "generated": "2026-10-27",
+ "election": "2025-04-28",
+ "federal_election": "2025-04-28",
+ "provincial_election": "2023-11-14",
+ "cutoff": "2026-03-31",
+ "before_start": "2024-04-28",
+ "before_end": "2025-03-31",
+ "years_per_window": 0.925,
+ "population_basis": "2021 census population of the district's communities (Statistics Canada), Yellowknife, Hay River and Inuvik shared between their districts by registered electors at the 2023 election, scaled to Statistics Canada's latest NWT estimate by the ratio of that estimate to the census total",
+ "close_margin": 10.0,
+ "median_pc_after": 206.53,
+ "methods": {
+  "before|postal code": 281,
+  "after|postal code": 199,
+  "before|city (approx.)": 4,
+  "before|recipient's address on other awards": 20,
+  "after|recipient's address on other awards": 15,
+  "after|postal area (approx.)": 3,
+  "before|unmapped": 5,
+  "after|city (approx.)": 2,
+  "after|unmapped": 2,
+  "before|postal area (approx.)": 1
+ },
+ "excluded_after": {
+  "unmatched": 415372,
+  "flagged": 300474699
+ },
+ "placed_after": 649849039,
+ "total_after": 650264411,
+ "top_flagged": [
+  [
+   "Government of the Northwest Territories",
+   229287242
+  ],
+  [
+   "City of Yellowknife",
+   58111470
+  ],
+  [
+   "The Government of the Northwest Territories (GNWT)",
+   5977125
+  ],
+  [
+   "PROSPER NWT",
+   2316000
+  ],
+  [
+   "NORTHWEST TERRITORIES",
+   1600000
+  ],
+  [
+   "Government of the Northwest Territories Department of Health and Social Services",
+   1100481
+  ],
+  [
+   "Government of Northwest Territories",
+   764350
+  ],
+  [
+   "Northwest Territories Housing Corporation",
+   309138
+  ],
+  [
+   "FÉDÉRATION FRANCO-TÉNOISE (LA)",
+   294875
+  ],
+  [
+   "GNWT - MUNICIPAL AND COMMUNITY AFFAIRS",
+   200000
+  ],
+  [
+   "The Enough Initiative Canada",
+   199948
+  ],
+  [
+   "GNWT EDUCATION CULTURE AND EMPLOYMENT",
+   130000
+  ],
+  [
+   "GOVERNMENT OF N.W.T.",
+   119500
+  ],
+  [
+   "COMMUNITY GOVERNMENT OF BEHCHOKO",
+   41900
+  ],
+  [
+   "Community Government of Behchoko",
+   15970
+  ],
+  [
+   "COMMUNITY GOVERNMENT OF WHATÌ",
+   6700
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "The Arctic Eider Society",
+   384600
+  ],
+  [
+   "IGLOOLIK H.T.A.",
+   30772
+  ]
+ ],
+ "series": {
+  "kind": "quarter",
+  "labels": [
+   "2024Q1",
+   "2024Q2",
+   "2024Q3",
+   "2024Q4",
+   "2025Q1",
+   "2025Q2",
+   "2025Q3",
+   "2025Q4",
+   "2026Q1",
+   "2026Q2",
+   "2026Q3"
+  ],
+  "complete": 9,
+  "election_index": 5
+ }
+}
+{
+ "Close cabinet": {
+  "ridings": 2,
+  "median_pc_after": 561.58,
+  "median_pc_before": 2266.24,
+  "median_change_pct": -61.6,
+  "total_adj_after": 2597056
+ },
+ "Close regular members": {
+  "ridings": 4,
+  "median_pc_after": 85.58,
+  "median_pc_before": 629.85,
+  "median_change_pct": -88.8,
+  "total_adj_after": 2353162
+ },
+ "Safe cabinet": {
+  "ridings": 5,
+  "median_pc_after": 24.44,
+  "median_pc_before": 332.23,
+  "median_change_pct": -88.2,
+  "total_adj_after": 6169403
+ },
+ "Safe regular members": {
+  "ridings": 8,
+  "median_pc_after": 1821.58,
+  "median_pc_before": 6409.3,
+  "median_change_pct": -88.0,
+  "total_adj_after": 338254719
+ }
+}

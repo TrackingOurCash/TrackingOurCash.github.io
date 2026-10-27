@@ -1,0 +1,179 @@
+{
+ "generated": "2026-10-27",
+ "election": "2025-04-28",
+ "federal_election": "2025-04-28",
+ "provincial_election": "2025-10-14",
+ "cutoff": "2026-03-31",
+ "before_start": "2024-04-28",
+ "before_end": "2025-03-31",
+ "years_per_window": 0.925,
+ "population_basis": "registered electors at the 14 October 2025 election (Elections NL's s. 164 election report, electors on the revised list), scaled to Statistics Canada's latest NL estimate by the ratio of that estimate to the elector total; the 2015 boundary commission's counts are 2011-census based and no census population exists for these districts",
+ "close_margin": 10.0,
+ "median_pc_after": 132.455,
+ "methods": {
+  "before|postal code": 1300,
+  "after|postal code": 1296,
+  "before|recipient's address on other awards": 47,
+  "before|postal area (approx.)": 7,
+  "after|postal area (approx.)": 7,
+  "before|city (approx.)": 53,
+  "after|recipient's address on other awards": 26,
+  "before|unmapped": 9,
+  "after|city (approx.)": 9,
+  "after|unmapped": 5
+ },
+ "excluded_after": {
+  "unmatched": 206969,
+  "flagged": 90923638
+ },
+ "placed_after": 276196641,
+ "total_after": 276403610,
+ "top_flagged": [
+  [
+   "City of St. John's",
+   69769116
+  ],
+  [
+   "Stewardship Association of Municipalities",
+   4986440
+  ],
+  [
+   "Newfoundland and Labrador",
+   4980452
+  ],
+  [
+   "Search and Rescue Volunteer Association of Canada (SARVAC)",
+   3000000
+  ],
+  [
+   "SARVAC",
+   1519090
+  ],
+  [
+   "Newfoundland and Labrador Association of Community Business Development Corporat",
+   1241037
+  ],
+  [
+   "Geological Survey of Newfoundland and Labrador",
+   1000000
+  ],
+  [
+   "Government of Newfoundland & Labrador",
+   641317
+  ],
+  [
+   "Hospitality Newfoundland and Labrador",
+   600000
+  ],
+  [
+   "Government of Newfoundland and Labrador - Department of Health and Community Services",
+   465280
+  ],
+  [
+   "City of Corner Brook",
+   438738
+  ],
+  [
+   "HARBOUR AUTHORITY ASSOCIATION OF NE",
+   323662
+  ],
+  [
+   "CANADIAN PARKS AND WILDERNESS SOCIETY - Newfoundland and Labrador Chapter (CPAWS)",
+   304244
+  ],
+  [
+   "Newfoundland - Labrador Federation of Co-Operatives",
+   200256
+  ],
+  [
+   "Public Legal Information Association of NL",
+   194450
+  ],
+  [
+   "Department of Industry, Energy and Technology",
+   192500
+  ],
+  [
+   "Skills Canada-Newfoundland and Labrador Incorporated",
+   187783
+  ],
+  [
+   "Canada's Ocean Supercluster",
+   175000
+  ],
+  [
+   "Canadian Journal of Career Development",
+   150000
+  ],
+  [
+   "MusicNL",
+   146646
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "CONSEIL DES ABÉNAKIS D’ODANAK",
+   151892
+  ],
+  [
+   "Georges Brook-Milton Veterans Commemoration Association",
+   25000
+  ],
+  [
+   "Community of Gillams - Gillams Historical Society",
+   24480
+  ],
+  [
+   "Branch 45 Royal Canadian Legion",
+   5597
+  ]
+ ],
+ "series": {
+  "kind": "quarter",
+  "labels": [
+   "2024Q1",
+   "2024Q2",
+   "2024Q3",
+   "2024Q4",
+   "2025Q1",
+   "2025Q2",
+   "2025Q3",
+   "2025Q4",
+   "2026Q1",
+   "2026Q2",
+   "2026Q3"
+  ],
+  "complete": 9,
+  "election_index": 5
+ }
+}
+{
+ "Close PC": {
+  "ridings": 8,
+  "median_pc_after": 97.73,
+  "median_pc_before": 121.11,
+  "median_change_pct": -23.8,
+  "total_adj_after": 12750014
+ },
+ "Close opposition": {
+  "ridings": 3,
+  "median_pc_after": 145.15,
+  "median_pc_before": 307.45,
+  "median_change_pct": -46.5,
+  "total_adj_after": 25515952
+ },
+ "Safe PC": {
+  "ridings": 13,
+  "median_pc_after": 119.76,
+  "median_pc_before": 299.21,
+  "median_change_pct": -57.5,
+  "total_adj_after": 56614555
+ },
+ "Safe opposition": {
+  "ridings": 16,
+  "median_pc_after": 265.12,
+  "median_pc_before": 238.0,
+  "median_change_pct": -21.1,
+  "total_adj_after": 90392482
+ }
+}

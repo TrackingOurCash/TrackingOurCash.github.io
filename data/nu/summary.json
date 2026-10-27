@@ -1,0 +1,123 @@
+{
+ "generated": "2026-10-27",
+ "election": "2025-04-28",
+ "federal_election": "2025-04-28",
+ "provincial_election": "2025-10-27",
+ "cutoff": "2026-03-31",
+ "before_start": "2024-04-28",
+ "before_end": "2025-03-31",
+ "years_per_window": 0.925,
+ "population_basis": "2021 census population of the constituency's communities (Statistics Canada), Iqaluit, Arviat, Rankin Inlet and Igloolik shared between their constituencies by electors on the list at the 2025 election, scaled to Statistics Canada's latest Nunavut estimate by the ratio of that estimate to the census total",
+ "close_margin": 10.0,
+ "median_pc_after": 210.275,
+ "methods": {
+  "before|postal area (approx.)": 24,
+  "after|postal code": 109,
+  "before|city (approx.)": 3,
+  "before|recipient's address on other awards": 13,
+  "before|postal code": 140,
+  "after|postal area (approx.)": 34,
+  "after|city (approx.)": 2,
+  "after|recipient's address on other awards": 6,
+  "before|unmapped": 4,
+  "after|unmapped": 3
+ },
+ "excluded_after": {
+  "unmatched": 295114,
+  "flagged": 248443384
+ },
+ "placed_after": 560943759,
+ "total_after": 561238873,
+ "top_flagged": [
+  [
+   "GOVERNMENT OF NUNAVUT - DEPARTMENT OF HEALTH",
+   241423392
+  ],
+  [
+   "Government of Nunavut",
+   4260000
+  ],
+  [
+   "GOVERNMENT OF NUNAVUT - COMMUNITY SERVICES",
+   1675000
+  ],
+  [
+   "Government of Nunavut- Department of Health & Social Services",
+   934992
+  ],
+  [
+   "NUNAVUT HOUSING CORPORATION",
+   50000
+  ],
+  [
+   "DEPARTMENT OF EXECUTIVE AND INTERGOVERNMENTAL AFFAIRS",
+   50000
+  ],
+  [
+   "City of Iqaluit",
+   50000
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "Collège nordique francophone",
+   219094
+  ],
+  [
+   "NIHTAT GWICH'IN COUNCIL",
+   63000
+  ],
+  [
+   "Fisheries Joint Management Committee",
+   13020
+  ]
+ ],
+ "series": {
+  "kind": "quarter",
+  "labels": [
+   "2024Q1",
+   "2024Q2",
+   "2024Q3",
+   "2024Q4",
+   "2025Q1",
+   "2025Q2",
+   "2025Q3",
+   "2025Q4",
+   "2026Q1",
+   "2026Q2",
+   "2026Q3"
+  ],
+  "complete": 9,
+  "election_index": 5
+ }
+}
+{
+ "Close cabinet": {
+  "ridings": 3,
+  "median_pc_after": 360.08,
+  "median_pc_before": 3223.68,
+  "median_change_pct": -65.9,
+  "total_adj_after": 4973046
+ },
+ "Close regular members": {
+  "ridings": 5,
+  "median_pc_after": 195.05,
+  "median_pc_before": 758.91,
+  "median_change_pct": -87.8,
+  "total_adj_after": 5270611
+ },
+ "Safe cabinet": {
+  "ridings": 6,
+  "median_pc_after": 158.32,
+  "median_pc_before": 610.52,
+  "median_change_pct": -59.1,
+  "total_adj_after": 54656672
+ },
+ "Safe regular members": {
+  "ridings": 8,
+  "median_pc_after": 227.74,
+  "median_pc_before": 930.76,
+  "median_change_pct": -60.9,
+  "total_adj_after": 247600046
+ }
+}

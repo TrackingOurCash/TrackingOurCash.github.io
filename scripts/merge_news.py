@@ -29,7 +29,8 @@ def main():
             if searched(v):
                 out[k] = {"mainstream": v.get("mainstream"), "independent": v.get("independent"), "query": v.get("query")}
     json.dump(out, open(links_path, "w"), ensure_ascii=False, indent=0)
-    queue = json.load(open(ROOT / "data" / "news_queue.json"))
+    qpath = ROOT / "data" / "news_queue.json"
+    queue = json.load(open(qpath)) if qpath.exists() else []
     remaining = [q for q in queue if q["key"] not in out]
     json.dump(remaining, open(NEWS / "remaining.json", "w"), ensure_ascii=False, indent=0)
     ms = sum(1 for v in out.values() if v.get("mainstream"))

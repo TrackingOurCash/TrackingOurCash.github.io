@@ -1,0 +1,492 @@
+{
+ "generated": "2026-10-26",
+ "election": "2025-02-27",
+ "cutoff": "2026-03-31",
+ "before_start": "2023-04-01",
+ "before_end": "2024-03-31",
+ "years_per_window": 1.0,
+ "after_fiscal_year": "FY2025-26",
+ "windows": "after = FY2025-26 (1 April 2025 to 31 March 2026), the first full fiscal year after the 27 February 2025 election; before = FY2023-24 (1 April 2023 to 31 March 2024), the last full fiscal year before it; FY2024-25 straddles the election and is read for the coverage table only; annual data, no payment dates",
+ "straddles_election": false,
+ "population_basis": "2021 census: Statistics Canada's count for the identical 2013-order federal electoral district for 111 ridings; 2021 census subdivisions summed by centroid for the 13 northern ridings, which are not federal districts; 2021 census count for the identical 2013-order federal electoral district (Statistics Canada table 98-10-0010-01), scaled to Statistics Canada's latest Ontario estimate by the province's growth since 2021",
+ "close_margin": 10.0,
+ "median_pc_after": 769.62,
+ "search_url": "https://duckduckgo.com/?q={q}+Ontario+grant",
+ "series": {
+  "kind": "fiscal year",
+  "labels": [
+   "2023-24",
+   "2024-25",
+   "2025-26"
+  ],
+  "complete": 3,
+  "election_index": 0
+ },
+ "methods": {
+  "before|postal code from federal or charity records": 7382,
+  "before|place name in recipient (approx.)": 829,
+  "before|municipality": 47,
+  "after|place name in recipient (approx.)": 801,
+  "after|postal code from federal or charity records": 7593,
+  "after|municipality": 70
+ },
+ "excluded_after": {
+  "accounts under threshold": 7605805141,
+  "suppliers": 14139156575,
+  "province-wide bodies": 18224330207,
+  "out-of-province": 139841749,
+  "unmatched": 837585374,
+  "individuals": 32628675898,
+  "other governments": 183834907
+ },
+ "buckets_after": {
+  "province-wide": 110534597710,
+  "individuals": 32628675898,
+  "supplier": 18119462113,
+  "other government": 16157576356,
+  "counted": 16104560640,
+  "accounts under threshold": 7605805141,
+  "unmatched": 837585374,
+  "out-of-province": 139841749
+ },
+ "other_payment_types_after": {
+  "Statutory Payments": 4807317773,
+  "Travel Expenses": 76471134,
+  "Employee Benefits": 2788434026,
+  "Salaries And Wages": 70538567,
+  "Other Salaries And Wages": 4363,
+  "Travel Expense": 23175,
+  "Treasury Program": 16294306554,
+  "Election Expense Subsidies Payments": 21417576,
+  "Recoveries": 2267546,
+  "Other Transactions": 3898704
+ },
+ "coverage": {
+  "FY2023-24": {
+   "rows": 14735,
+   "total": 188668025218,
+   "by_category": {
+    "Transfer Payments": {
+     "total": 160471291112,
+     "rows": 8677
+    },
+    "Treasury Program": {
+     "total": 14957208103,
+     "rows": 7
+    },
+    "Other Payments": {
+     "total": 9007965116,
+     "rows": 4463
+    },
+    "Employee Benefits": {
+     "total": 2121338904,
+     "rows": 60
+    },
+    "Statutory Payments": {
+     "total": 1980223444,
+     "rows": 337
+    },
+    "Travel Expenses": {
+     "total": 61920479,
+     "rows": 968
+    },
+    "Salaries And Wages": {
+     "total": 52285336,
+     "rows": 104
+    },
+    "Compensation": {
+     "total": 14848541,
+     "rows": 39
+    },
+    "Note: Total Expenditures Above Of $105,717 Restated By Committee": {
+     "total": 537052,
+     "rows": 6
+    },
+    "Travel Expenses (Non Members)": {
+     "total": 285874,
+     "rows": 1
+    },
+    "Travel Expenses (Members Of Provincial Parliament)": {
+     "total": 121257,
+     "rows": 73
+    }
+   }
+  },
+  "FY2024-25": {
+   "rows": 15571,
+   "total": 206636003862,
+   "by_category": {
+    "Transfer Payments": {
+     "total": 175953344311,
+     "rows": 8592
+    },
+    "Treasury Program": {
+     "total": 15738648077,
+     "rows": 7
+    },
+    "Other Payments": {
+     "total": 10212211758,
+     "rows": 5087
+    },
+    "Employee Benefits": {
+     "total": 2310552875,
+     "rows": 39
+    },
+    "Statutory Payments": {
+     "total": 2257548084,
+     "rows": 425
+    },
+    "Travel Expenses": {
+     "total": 70023696,
+     "rows": 1295
+    },
+    "Salaries And Wages": {
+     "total": 63082730,
+     "rows": 79
+    },
+    "Advances Under Education Act": {
+     "total": 25634025,
+     "rows": 40
+    },
+    "Salaries And Wages: Temporary Help Services": {
+     "total": 4957980,
+     "rows": 6
+    },
+    "Other Salaries And Wages": {
+     "total": 326,
+     "rows": 1
+    }
+   }
+  },
+  "FY2025-26": {
+   "rows": 16142,
+   "total": 226192784399,
+   "by_category": {
+    "Transfer Payments": {
+     "total": 189370660716,
+     "rows": 8810
+    },
+    "Treasury Program": {
+     "total": 16294306554,
+     "rows": 10
+    },
+    "Other Payments": {
+     "total": 12373994276,
+     "rows": 5330
+    },
+    "Statutory Payments": {
+     "total": 5190767762,
+     "rows": 363
+    },
+    "Employee Benefits": {
+     "total": 2788434026,
+     "rows": 41
+    },
+    "Travel Expenses": {
+     "total": 76471134,
+     "rows": 1489
+    },
+    "Salaries And Wages": {
+     "total": 70538567,
+     "rows": 80
+    },
+    "Election Expense Subsidies Payments": {
+     "total": 21417576,
+     "rows": 14
+    },
+    "Other Transactions": {
+     "total": 3898704,
+     "rows": 1
+    },
+    "Recoveries": {
+     "total": 2267546,
+     "rows": 1
+    },
+    "Travel Expense": {
+     "total": 23175,
+     "rows": 2
+    },
+    "Other Salaries And Wages": {
+     "total": 4363,
+     "rows": 1
+    }
+   }
+  }
+ },
+ "placed_after": 128368875130,
+ "total_after": 202128104981,
+ "top_flagged": [
+  [
+   "Metrolinx",
+   13815059997
+  ],
+  [
+   "Independent Electricity System Operator",
+   7047169155
+  ],
+  [
+   "City Of Toronto",
+   4431690901
+  ],
+  [
+   "Toronto District School Board",
+   2095815834
+  ],
+  [
+   "University Health Network",
+   2017917348
+  ],
+  [
+   "Hamilton Health Sciences Corp",
+   1788777373
+  ],
+  [
+   "Trillium Health Partners",
+   1587264752
+  ],
+  [
+   "Peel District School Board",
+   1570097132
+  ],
+  [
+   "London Health Sciences Centre",
+   1490778257
+  ],
+  [
+   "Ottawa Hospital",
+   1350386683
+  ],
+  [
+   "Unity Health Toronto (O/A Providence St Josephs & St Michaels Healthcare)",
+   1266331444
+  ],
+  [
+   "Regional Municipality Of Peel",
+   1265811965
+  ],
+  [
+   "Niagara Health System",
+   1175392366
+  ],
+  [
+   "City Of Ottawa",
+   1159187410
+  ],
+  [
+   "York Region District School Board",
+   1138288278
+  ],
+  [
+   "Thames Valley District School Board",
+   1130862651
+  ],
+  [
+   "Toronto Catholic District School Board",
+   1114284477
+  ],
+  [
+   "University Of Toronto",
+   1039865811
+  ],
+  [
+   "Regional Municipality Of York",
+   1031993765
+  ],
+  [
+   "William Osler Health System",
+   1024769956
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "Westhills Care Centre Inc.",
+   17496737
+  ],
+  [
+   "The Henley House",
+   15124232
+  ],
+  [
+   "St Demetrius (Ukr Catholic) Development Corporation",
+   14338421
+  ],
+  [
+   "Eastern Ontario Regional Laboratory Association (Eorla)",
+   13453170
+  ],
+  [
+   "Central Canadian District Christian & Missionary Alliance - Cama Woodlands",
+   13442095
+  ],
+  [
+   "Niagara Childrens Centre",
+   13406795
+  ],
+  [
+   "Mennonite Brethern Senior Citizens Home",
+   13394537
+  ],
+  [
+   "Autism At Communicare Therapy Inc O/A Act Learning Centre",
+   13392148
+  ],
+  [
+   "John Howard Society",
+   12550273
+  ],
+  [
+   "Sante Montfort",
+   12354824
+  ],
+  [
+   "Wyndham Manor",
+   12335412
+  ],
+  [
+   "Regina Gardens",
+   12287948
+  ],
+  [
+   "Broadview Nursing Centre Ltd",
+   12262055
+  ],
+  [
+   "Heidehof Home For The Aged",
+   11858221
+  ],
+  [
+   "Wiikwemikong Unceded Indian Reserve (Wuir)",
+   11713363
+  ],
+  [
+   "Delcare Cawthra Gardens",
+   11564734
+  ],
+  [
+   "488491 Ontario Inc - Avalon Care Centre",
+   11548537
+  ],
+  [
+   "Trent Valley Lodge Ltd",
+   11159502
+  ],
+  [
+   "Carveth Nursing Home Ltd",
+   10163104
+  ],
+  [
+   "Occupational Health Clinics For Ontario Workers Inc",
+   9916697
+  ],
+  [
+   "Manikheir Canada Inc.",
+   9300000
+  ],
+  [
+   "Wesway Inc",
+   9241424
+  ],
+  [
+   "Parkview Meadows Retirement Village",
+   9079040
+  ],
+  [
+   "Lakeland Long Term Care Services Corporation",
+   8972111
+  ],
+  [
+   "Children'S Community Network",
+   8701379
+  ],
+  [
+   "Labdara Lithuanian Nursing Home",
+   8430242
+  ],
+  [
+   "Madison Village Inc.",
+   8044384
+  ],
+  [
+   "Cmha Huron Perth Addiction And Mental Health Service",
+   7949923
+  ],
+  [
+   "Elm Grove Living Centre Inc",
+   7680319
+  ],
+  [
+   "Centre De Sante Communautaire Pinecrest-Queensway",
+   7629382
+  ],
+  [
+   "Resources For Exceptional Children And Youth -Durham Region",
+   7243519
+  ],
+  [
+   "Tyndall Seniors Village Inc",
+   7187697
+  ],
+  [
+   "Enaahtig Healing Lodge & Learning Centre",
+   7127428
+  ],
+  [
+   "Canadian Mental Health Association - Halton Branch",
+   6870575
+  ],
+  [
+   "Niwaas Long-Term Care",
+   6730000
+  ],
+  [
+   "Carlingview Manor Operating Inc (O/A Carlingview Manor)",
+   6706869
+  ],
+  [
+   "Csc Du Temiskaming",
+   6690926
+  ],
+  [
+   "Community Living - Stormont County",
+   6661465
+  ],
+  [
+   "The Ontario Mission Of The Deaf Incorporated",
+   6369936
+  ],
+  [
+   "North East Association For Community Living",
+   6345034
+  ]
+ ]
+}
+{
+ "Close PC": {
+  "ridings": 25,
+  "median_pc_after": 321.14,
+  "median_pc_before": 316.24,
+  "median_change_pct": 6.4,
+  "total_adj_after": 2061968468
+ },
+ "Close opposition": {
+  "ridings": 15,
+  "median_pc_after": 1047.84,
+  "median_pc_before": 921.3,
+  "median_change_pct": 8.0,
+  "total_adj_after": 2261932651
+ },
+ "Safe PC": {
+  "ridings": 55,
+  "median_pc_after": 770.5,
+  "median_pc_before": 672.49,
+  "median_change_pct": 10.7,
+  "total_adj_after": 7173443147
+ },
+ "Safe opposition": {
+  "ridings": 29,
+  "median_pc_after": 815.73,
+  "median_pc_before": 771.85,
+  "median_change_pct": 9.1,
+  "total_adj_after": 4607216374
+ }
+}

@@ -40,31 +40,36 @@ python3 scripts/fetch_csd.py
 python3 scripts/fetch_shapes.py
 python3 scripts/prep_ridings.py
 python3 scripts/population.py && python3 scripts/prep_ridings.py
-python3 scripts/build_spending.py > data/summary.json
+python3 scripts/build_spending.py > data/summary.json.tmp && mv data/summary.json.tmp data/summary.json
+mkdir -p data/raw/contracts
+[[ -s data/raw/contracts/contracts.csv ]] || curl -sSL --retry 3 -o data/raw/contracts/contracts.csv "https://open.canada.ca/data/dataset/d8f85d91-7dec-4fd1-8055-483b77225d8b/resource/fac950c0-00d5-4ec1-a4d3-9cbebf98a305/download/contracts.csv" || echo "contracts download failed"
 python3 scripts/contracts.py || echo "contracts layer skipped"
 (cd scripts && python3 budget.py)
 python3 scripts/merge_news.py
 python3 scripts/wiki_links.py || true
 # Alberta layer (skipped if the Alberta downloads are missing)
-if [[ -f data/raw/ab/grants-2025-26.csv ]]; then python3 scripts/ab_prep.py && python3 scripts/ab_spending.py > data/ab/summary.json; fi
+if python3 scripts/ab_prep.py && python3 scripts/ab_spending.py > data/ab/summary.json.tmp; then mv data/ab/summary.json.tmp data/ab/summary.json; else rm -f data/ab/summary.json.tmp; echo "AB layer skipped; using committed data"; fi
 # British Columbia layer
-if python3 scripts/bc_prep.py && python3 scripts/bc_spending.py > data/bc/summary.json; then :; else echo "BC layer skipped"; fi
+if python3 scripts/bc_prep.py && python3 scripts/bc_spending.py > data/bc/summary.json.tmp; then mv data/bc/summary.json.tmp data/bc/summary.json; else rm -f data/bc/summary.json.tmp; echo "BC layer skipped (inputs missing); using committed data"; fi
 # Saskatchewan layer
-if python3 scripts/sk_prep.py && python3 scripts/sk_spending.py > data/sk/summary.json; then :; else echo "SK layer skipped"; fi
+if python3 scripts/sk_prep.py && python3 scripts/sk_spending.py > data/sk/summary.json.tmp; then mv data/sk/summary.json.tmp data/sk/summary.json; else rm -f data/sk/summary.json.tmp; echo "SK layer skipped (inputs missing); using committed data"; fi
 # Manitoba layer
-if python3 scripts/mb_prep.py && python3 scripts/mb_spending.py > data/mb/summary.json; then :; else echo "MB layer skipped"; fi
+if python3 scripts/mb_prep.py && python3 scripts/mb_spending.py > data/mb/summary.json.tmp; then mv data/mb/summary.json.tmp data/mb/summary.json; else rm -f data/mb/summary.json.tmp; echo "MB layer skipped (inputs missing); using committed data"; fi
 # New Brunswick layer
-if python3 scripts/nb_prep.py && python3 scripts/nb_spending.py > data/nb/summary.json; then :; else echo "NB layer skipped"; fi
+if python3 scripts/nb_prep.py && python3 scripts/nb_spending.py > data/nb/summary.json.tmp; then mv data/nb/summary.json.tmp data/nb/summary.json; else rm -f data/nb/summary.json.tmp; echo "NB layer skipped (inputs missing); using committed data"; fi
 # Prince Edward Island layer (federal grants on the provincial districts; PEI publishes no payee list)
-if python3 scripts/pe_prep.py && python3 scripts/fed_prov_spending.py pe > data/pe/summary.json; then :; else echo "PEI layer skipped"; fi
+python3 scripts/pe_prep.py || echo "pe prep skipped (inputs missing); using committed divisions"
+python3 scripts/fed_prov_spending.py pe > data/pe/summary.json.tmp && mv data/pe/summary.json.tmp data/pe/summary.json || echo "pe layer skipped"
 # Ontario layer
-if python3 scripts/on_prep.py && python3 scripts/on_spending.py > data/on/summary.json; then :; else echo "ON layer skipped"; fi
+if python3 scripts/on_prep.py && python3 scripts/on_spending.py > data/on/summary.json.tmp; then mv data/on/summary.json.tmp data/on/summary.json; else rm -f data/on/summary.json.tmp; echo "ON layer skipped (inputs missing); using committed data"; fi
 # Nova Scotia layer (archived Public Accounts supplements; the live site refuses connections)
-if python3 scripts/ns_prep.py && python3 scripts/ns_spending.py > data/ns/summary.json; then :; else echo "NS layer skipped"; fi
+if python3 scripts/ns_prep.py && python3 scripts/ns_spending.py > data/ns/summary.json.tmp; then mv data/ns/summary.json.tmp data/ns/summary.json; else rm -f data/ns/summary.json.tmp; echo "NS layer skipped (inputs missing); using committed data"; fi
 # Quebec layer (federal grants on the 2026 ridings; Quebec publishes no payee list either)
-if python3 scripts/qc_prep.py && python3 scripts/fed_prov_spending.py qc > data/qc/summary.json; then :; else echo "QC layer skipped"; fi
+python3 scripts/qc_prep.py || echo "qc prep skipped (inputs missing); using committed divisions"
+python3 scripts/fed_prov_spending.py qc > data/qc/summary.json.tmp && mv data/qc/summary.json.tmp data/qc/summary.json || echo "qc layer skipped"
 # Newfoundland and Labrador layer (federal grants on the provincial districts; NL publishes no payee list)
-if python3 scripts/nl_prep.py && python3 scripts/fed_prov_spending.py nl > data/nl/summary.json; then :; else echo "NL layer skipped"; fi
+python3 scripts/nl_prep.py || echo "nl prep skipped (inputs missing); using committed divisions"
+python3 scripts/fed_prov_spending.py nl > data/nl/summary.json.tmp && mv data/nl/summary.json.tmp data/nl/summary.json || echo "nl layer skipped"
 # Territories (federal grants on the territorial districts)
-for t in yt nt nu; do if python3 scripts/${t}_prep.py && python3 scripts/fed_prov_spending.py $t > data/$t/summary.json; then :; else echo "$t layer skipped"; fi; done
+for t in yt nt nu; do python3 scripts/${t}_prep.py || echo "$t prep skipped (inputs missing); using committed divisions"; python3 scripts/fed_prov_spending.py $t > data/$t/summary.json.tmp && mv data/$t/summary.json.tmp data/$t/summary.json || echo "$t layer skipped"; done
 python3 scripts/build_map.py

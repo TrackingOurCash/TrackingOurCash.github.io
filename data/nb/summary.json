@@ -1,0 +1,332 @@
+{
+ "generated": "2026-10-26",
+ "election": "2024-10-21",
+ "cutoff": "2025-03-31",
+ "before_start": "2023-04-01",
+ "before_end": "2024-03-31",
+ "years_per_window": 1.0,
+ "after_fiscal_year": "FY2024-25",
+ "windows": "after = FY2025 (1 April 2024 to 31 March 2025, which straddles the 21 October 2024 election: FY2026 is not published until December 2026); before = FY2024 (1 April 2023 to 31 March 2024), the last full fiscal year before the election; annual data, no payment dates",
+ "straddles_election": true,
+ "population_basis": "estimated electors per district from the Electoral Boundaries and Representation Commission's final report (Appendix B, 2022 register), amended for districts 15 and 16; New Brunswick publishes no census population by provincial district",
+ "close_margin": 10.0,
+ "median_pc_after": 1168.97,
+ "search_url": "https://duckduckgo.com/?q={q}+New+Brunswick+grant",
+ "series": {
+  "kind": "fiscal year",
+  "labels": [
+   "2020-21",
+   "2021-22",
+   "2022-23",
+   "2023-24",
+   "2024-25"
+  ],
+  "complete": 5,
+  "election_index": 3
+ },
+ "methods": {
+  "before|postal code from federal or charity records": 1502,
+  "before|place name in recipient (approx.)": 325,
+  "before|municipality": 25,
+  "after|postal code from federal or charity records": 1531,
+  "after|place name in recipient (approx.)": 341,
+  "after|municipality": 30
+ },
+ "excluded_after": {
+  "suppliers": 1342579040,
+  "unmatched": 635318653,
+  "individuals": 59833699,
+  "province-wide bodies": 1139085848,
+  "out-of-province": 580857416
+ },
+ "buckets_after": {
+  "province-wide": 4611999141,
+  "supplier": 1703147849,
+  "counted": 875085215,
+  "unmatched": 635318653,
+  "out-of-province": 580857416,
+  "other government": 74438114,
+  "individuals": 59833699
+ },
+ "other_payment_types_after": {
+  "Loan Disbursements": 86988455,
+  "Purchase Cards": 6523467,
+  "Other Payments": 410560190
+ },
+ "placed_after": 4783005431,
+ "total_after": 8540680087,
+ "top_flagged": [
+  [
+   "Horizon Health Network",
+   1741025920
+  ],
+  [
+   "Réseau de santé Vitalité",
+   1125557418
+  ],
+  [
+   "University of New Brunswick",
+   152923939
+  ],
+  [
+   "NB Power Corporation",
+   134283033
+  ],
+  [
+   "Université de Moncton",
+   106347116
+  ],
+  [
+   "Shannex RLC Ltd",
+   100312263
+  ],
+  [
+   "Mount Allison University",
+   27195846
+  ],
+  [
+   "St-Isidore Asphalte Ltée",
+   26311929
+  ],
+  [
+   "New Brunswick Medical Society",
+   24256492
+  ],
+  [
+   "Service New Brunswick",
+   21240478
+  ],
+  [
+   "City of Saint John",
+   19113681
+  ],
+  [
+   "St Thomas University",
+   16017776
+  ],
+  [
+   "New Brunswick Legal Aid Services Commission",
+   15764766
+  ],
+  [
+   "Genibuild Construction Ltd",
+   14490034
+  ],
+  [
+   "Johnson Incorporated - Fredericton",
+   13689360
+  ],
+  [
+   "eVisitNB Inc.",
+   13641840
+  ],
+  [
+   "City of Moncton",
+   12736741
+  ],
+  [
+   "Forest Protection Limited",
+   11234532
+  ],
+  [
+   "Edmundston",
+   10572985
+  ],
+  [
+   "Avondale Construction Ltd",
+   10366855
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "Kindred Home Care (Region 2)",
+   18097897
+  ],
+  [
+   "Soins À Domicile Mallais Home Care Inc",
+   16446788
+  ],
+  [
+   "Résidences Jodin inc",
+   15232044
+  ],
+  [
+   "Bayshore Home Health",
+   14908788
+  ],
+  [
+   "Capital Family Services Inc",
+   13490249
+  ],
+  [
+   "Kindred Home Care (Region 3)",
+   13404889
+  ],
+  [
+   "Avenue NB Cooperative Ltd.",
+   13272332
+  ],
+  [
+   "Millcove Nursing Home Inc",
+   8456178
+  ],
+  [
+   "Dow Quality Health Care Inc",
+   7706359
+  ],
+  [
+   "Soins de Qualité Atlantik Quality Care Inc",
+   7460675
+  ],
+  [
+   "Kindred Home Care (Region 1)",
+   7192974
+  ],
+  [
+   "Barrie Special Care Home Ltd",
+   6238006
+  ],
+  [
+   "Haven Stream Residence, Fundy Royal Manor I & II (671661 NB Inc)",
+   5922968
+  ],
+  [
+   "Brunswick Learning Centres Inc",
+   5188579
+  ],
+  [
+   "Agence Résidentielle Restigouche Residential Agency",
+   4705414
+  ],
+  [
+   "Supreme Human Services",
+   4682341
+  ],
+  [
+   "NewLife Options Inc",
+   4564401
+  ],
+  [
+   "Résidences Lucien Saindon inc",
+   4465388
+  ],
+  [
+   "Le Havre Communautaire Inc",
+   4396404
+  ],
+  [
+   "More Services Inc",
+   4004108
+  ],
+  [
+   "Portage",
+   3942000
+  ],
+  [
+   "Crosswinds House",
+   3492877
+  ],
+  [
+   "Salvation Army Lakeview Manor",
+   3488746
+  ],
+  [
+   "Co-Aide Home Care & Support Services Ltd",
+   3462333
+  ],
+  [
+   "New Brunswick All Terrain Vehicle Federation Inc",
+   3347001
+  ],
+  [
+   "Restigouche Home Care Services",
+   3275174
+  ],
+  [
+   "Pascale Poirier Homecare (057033 NB Inc)",
+   3210302
+  ],
+  [
+   "Access Home Care Inc",
+   3180689
+  ],
+  [
+   "Family Ties Family Support Inc.",
+   3147434
+  ],
+  [
+   "WG Bishop Nursing Home",
+   3065333
+  ],
+  [
+   "Elite Support Services",
+   2713907
+  ],
+  [
+   "Manoir Belle-Vue inc",
+   2662465
+  ],
+  [
+   "Moving Forward for Better Inc",
+   2600900
+  ],
+  [
+   "Beyond Behavioural Intervention",
+   2600391
+  ],
+  [
+   "NB Research & Productivity Council (RPC)",
+   2536132
+  ],
+  [
+   "Fundy Nursing Home-Fundy Health Centre",
+   2509837
+  ],
+  [
+   "508482 NB Inc (O/A Kent Senior Homecare)",
+   2504502
+  ],
+  [
+   "Bunzl Canada Inc",
+   2475487
+  ],
+  [
+   "Amy's Quality Care (Home Care)",
+   2439573
+  ],
+  [
+   "Diocese of Saint John (Roman Catholic Bishop of Saint John)",
+   2434268
+  ]
+ ]
+}
+{
+ "Close LIB": {
+  "ridings": 7,
+  "median_pc_after": 625.64,
+  "median_pc_before": 536.07,
+  "median_change_pct": -5.0,
+  "total_adj_after": 67060785
+ },
+ "Close PC": {
+  "ridings": 3,
+  "median_pc_after": 556.26,
+  "median_pc_before": 533.64,
+  "median_change_pct": 4.2,
+  "total_adj_after": 29674531
+ },
+ "Safe LIB": {
+  "ridings": 24,
+  "median_pc_after": 1631.1,
+  "median_pc_before": 1636.49,
+  "median_change_pct": 5.4,
+  "total_adj_after": 536869249
+ },
+ "Safe PC": {
+  "ridings": 15,
+  "median_pc_after": 1079.61,
+  "median_pc_before": 935.79,
+  "median_change_pct": 4.6,
+  "total_adj_after": 241480650
+ }
+}

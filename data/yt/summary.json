@@ -1,0 +1,126 @@
+{
+ "generated": "2026-10-27",
+ "election": "2025-04-28",
+ "federal_election": "2025-04-28",
+ "provincial_election": "2025-11-03",
+ "cutoff": "2026-03-31",
+ "before_start": "2024-04-28",
+ "before_end": "2025-03-31",
+ "years_per_window": 0.925,
+ "population_basis": "registered electors at the 3 November 2025 election (Elections Yukon official results), scaled to Statistics Canada's latest Yukon estimate by the ratio of that estimate to the elector total; no census count exists for these districts and the Whitehorse area is cut into 15 of them",
+ "close_margin": 10.0,
+ "median_pc_after": 287.81,
+ "methods": {
+  "before|postal code": 224,
+  "after|postal code": 164,
+  "before|city (approx.)": 6,
+  "before|recipient's address on other awards": 23,
+  "before|unmapped": 3,
+  "after|recipient's address on other awards": 3
+ },
+ "excluded_after": {
+  "unmatched": 0,
+  "flagged": 8056974
+ },
+ "placed_after": 161973567,
+ "total_after": 161973567,
+ "top_flagged": [
+  [
+   "Yukon",
+   3976928
+  ],
+  [
+   "GOVERNMENT OF YUKON",
+   1372500
+  ],
+  [
+   "Government of Yukon",
+   834060
+  ],
+  [
+   "YUKON UNIVERSITY",
+   541000
+  ],
+  [
+   "City of Whitehorse",
+   500000
+  ],
+  [
+   "WILDERNESS TOURISM ASSOCIATION OF THE YUKON",
+   440000
+  ],
+  [
+   "SPORT YUKON",
+   165000
+  ],
+  [
+   "ASSOCIATION OF YUKON COMMUNITIES",
+   100000
+  ],
+  [
+   "ROYAL CANADIAN LEGION, BRANCH 254",
+   55000
+  ],
+  [
+   "TOURISM INDUSTRY ASSOCIATION OF THE YUKON",
+   48760
+  ],
+  [
+   "YUKON DEPARTMENT OF JUSTICE",
+   12066
+  ],
+  [
+   "GOVERNMENT OF YUKON - YUKON BERINGIA INTERPRETIVE CENTRE",
+   11660
+  ]
+ ],
+ "top_unmatched": [],
+ "series": {
+  "kind": "quarter",
+  "labels": [
+   "2024Q1",
+   "2024Q2",
+   "2024Q3",
+   "2024Q4",
+   "2025Q1",
+   "2025Q2",
+   "2025Q3",
+   "2025Q4",
+   "2026Q1",
+   "2026Q2",
+   "2026Q3"
+  ],
+  "complete": 9,
+  "election_index": 5
+ }
+}
+{
+ "Close YP": {
+  "ridings": 2,
+  "median_pc_after": 491.4,
+  "median_pc_before": 910.29,
+  "median_change_pct": -46.0,
+  "total_adj_after": 1427268
+ },
+ "Close opposition": {
+  "ridings": 5,
+  "median_pc_after": 448.49,
+  "median_pc_before": 9365.98,
+  "median_change_pct": -84.4,
+  "total_adj_after": 24347054
+ },
+ "Safe YP": {
+  "ridings": 12,
+  "median_pc_after": 30.95,
+  "median_pc_before": 32.01,
+  "median_change_pct": 72.9,
+  "total_adj_after": 9586904
+ },
+ "Safe opposition": {
+  "ridings": 2,
+  "median_pc_after": 23904.78,
+  "median_pc_before": 3942.74,
+  "median_change_pct": 446.1,
+  "total_adj_after": 118555367
+ }
+}

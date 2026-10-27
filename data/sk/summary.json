@@ -1,0 +1,369 @@
+windows: No 2025-26 Volume 2 was published yet, so after = fiscal 2024-25, which straddles the 28 October 2024 election (April to October before it, November to March after); before = fiscal 2023-24
+
+2023-24: 2892 transfer rows, $13,214,359,997 parsed; 5 lines skipped (garbled amounts)
+  ministry                                          rows         parsed $       schedule $  cover
+  Health                                             369    5,908,537,342    7,181,132,000    82%
+  Education                                          929    3,018,608,289    3,026,739,000   100%
+  Social Services                                    232    1,227,949,673    1,254,453,000    98%
+  Government Relations                               864      758,946,478      779,722,000    97%
+  Advanced Education                                  58      743,087,050      743,477,000   100%
+  Agriculture                                         89      600,866,921      605,961,000    99%
+  Corrections, Policing and Public Safety             29      399,343,642      399,990,000   100%
+  Immigration and Career Training                    143      117,519,636      129,833,000    91%
+  Water Security Agency                                1       85,796,000       85,796,000   100%
+  SaskBuilds Corporation                               1       56,750,000       56,750,000   100%
+  Parks, Culture and Sport                            17       53,903,959       54,245,000    99%
+  Saskatchewan Research Council                        1       45,408,000       45,408,000   100%
+  Environment                                          4       43,168,774       43,416,000    99%
+  Justice and Attorney General                        15       35,185,497       35,321,000   100%
+  Innovation Saskatchewan                              1       28,227,000       28,227,000   100%
+  Integrated Justice Services                         68       25,573,247       26,249,000    97%
+  Highways                                            21       23,087,870       24,033,000    96%
+  Tourism Saskatchewan                                 1       20,223,000       20,223,000   100%
+  Trade and Export Development                        12        6,839,649        7,116,000    96%
+  Finance                                              2        6,117,000        6,969,000    88%
+  SaskBuilds and Procurement                           3        5,970,970        6,039,000    99%
+  Energy and Resources                                32        3,250,000        3,269,000    99%
+  ministries with transfers in the schedule but no parsed rows: Firearms Secretariat ($49,000), Legislative Assembly ($2,588,000)
+  schedule total transfers $14,567,005,000; parsed covers 91% (recipients under $50,000 and payments to individuals are not itemised)
+
+2024-25: 3148 transfer rows, $14,612,220,727 parsed; 4 lines skipped (garbled amounts)
+  ministry                                          rows         parsed $       schedule $  cover
+  Health                                             384    6,694,625,119    7,916,384,000    85%
+  Education                                         1130    3,311,514,437    3,320,078,000   100%
+  Social Services                                    231    1,326,179,400    1,360,755,000    97%
+  Advanced Education                                  53      798,238,826      798,685,000   100%
+  Government Relations                               884      726,964,250      746,028,000    97%
+  Agriculture                                        119      601,227,498      610,860,000    98%
+  Corrections, Policing and Public Safety             54      475,288,697      475,712,000   100%
+  Environment                                          5      181,838,178      181,998,000   100%
+  Immigration and Career Training                    130      117,005,785      128,983,000    91%
+  Water Security Agency                                1       88,900,000       88,900,000   100%
+  Saskatchewan Research Council                        1       63,623,000       63,623,000   100%
+  Justice and Attorney General                        73       61,806,226       62,549,000    99%
+  Parks, Culture and Sport                            16       58,953,703       59,457,000    99%
+  Innovation Saskatchewan                              1       31,832,000       31,832,000   100%
+  Highways                                            23       30,926,659       31,599,000    98%
+  Tourism Saskatchewan                                 1       19,603,000       19,603,000   100%
+  Trade and Export Development                        12        8,397,802        8,815,000    95%
+  SaskBuilds and Procurement                           3        8,097,791        8,183,000    99%
+  Finance                                              1        5,000,000       13,306,000    38%
+  Energy and Resources                                24        1,848,356        1,947,000    95%
+  Legislative Assembly                                 1          300,000        3,077,000    10%
+  Firearms Secretariat                                 1           50,000           50,000   100%
+  schedule total transfers $15,932,424,000; parsed covers 92% (recipients under $50,000 and payments to individuals are not itemised)
+{
+ "generated": "2026-10-26",
+ "election": "2024-10-28",
+ "after_year": "2024-25",
+ "before_year": "2023-24",
+ "after_start": "2024-04-01",
+ "cutoff": "2025-03-31",
+ "before_start": "2023-04-01",
+ "before_end": "2024-03-31",
+ "years_per_window": 1.0,
+ "window_note": "No 2025-26 Volume 2 was published yet, so after = fiscal 2024-25, which straddles the 28 October 2024 election (April to October before it, November to March after); before = fiscal 2023-24",
+ "population_basis": "registered voters, 2024 general election (Elections Saskatchewan poll-by-poll file)",
+ "close_margin": 10.0,
+ "median_pc_after": 895.55,
+ "search_url": "https://duckduckgo.com/?q={q}+Saskatchewan+grant",
+ "series": {
+  "kind": "fiscal year",
+  "labels": [
+   "2023-24",
+   "2024-25"
+  ],
+  "complete": 2,
+  "election_index": 0
+ },
+ "methods": {
+  "before|place name in recipient (approx.)": 135,
+  "before|postal code from federal or charity records": 766,
+  "before|municipality": 596,
+  "after|place name in recipient (approx.)": 134,
+  "after|postal code from federal or charity records": 776,
+  "after|municipality": 632
+ },
+ "excluded_after": {
+  "unmatched": 339687519,
+  "province-wide bodies": 3605495799,
+  "individual programs": 1757001927,
+  "individuals": 48156866
+ },
+ "placed_after": 8861878616,
+ "total_after": 14612220727,
+ "top_flagged": [
+  [
+   "SASKATCHEWAN HEALTH AUTHORITY",
+   5537902039
+  ],
+  [
+   "UNIVERSITY OF SASKATCHEWAN",
+   371680557
+  ],
+  [
+   "BOARD OF EDUCATION OF THE REGINA SCHOOL DIV. NO. 4",
+   312532928
+  ],
+  [
+   "SASKATCHEWAN CANCER AGENCY",
+   267177000
+  ],
+  [
+   "SASKATCHEWAN POLYTECHNIC",
+   215615121
+  ],
+  [
+   "BOARD OF EDUCATION OF THE REGINA ROMAN CATHOLIC SEPARATE SCHOOL DIVISION NO. 81 OF SASKATCHEWAN",
+   145132782
+  ],
+  [
+   "SASKPOWER CORPORATION",
+   140000000
+  ],
+  [
+   "UNIVERSITY OF REGINA",
+   135962759
+  ],
+  [
+   "SASKATOON, CITY OF",
+   93001983
+  ],
+  [
+   "Water Security Agency",
+   88900000
+  ],
+  [
+   "REGINA, CITY OF",
+   80559549
+  ],
+  [
+   "Saskatchewan Research Council",
+   63623000
+  ],
+  [
+   "CANADIAN BLOOD SERVICES",
+   58829317
+  ],
+  [
+   "SASKATCHEWAN ASSOCIATION OF REHABILITATION CENTRES",
+   38540963
+  ],
+  [
+   "SASKATCHEWAN INDIAN INSTITUTE OF TECHNOLOGIES",
+   21337133
+  ],
+  [
+   "LLOYDMINSTER, CITY OF",
+   20862978
+  ],
+  [
+   "Tourism Saskatchewan",
+   19603000
+  ],
+  [
+   "SASKATCHEWAN ASSOCIATION OF RURAL MUNICIPALITIES",
+   19601813
+  ],
+  [
+   "CREATIVE SASKATCHEWAN",
+   17613000
+  ],
+  [
+   "MOOSE JAW, CITY OF",
+   17417769
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "BUFFALO POUND WATER TREATMENT CORPORATION",
+   35073937
+  ],
+  [
+   "KARIS DISABILITY SERVICES",
+   15888917
+  ],
+  [
+   "THOMAS' CIRCLE OF CARE INC",
+   13808393
+  ],
+  [
+   "FARM & RANCH WATER INFRASTRUCTURE PROGRAM",
+   12766998
+  ],
+  [
+   "NORTHERN LIGHTS COMMUNITY DEVELOPMENT CORPORATION",
+   9658329
+  ],
+  [
+   "CHIP & DALE HOMES INC",
+   9524086
+  ],
+  [
+   "CBI LIMITED",
+   8293023
+  ],
+  [
+   "FOXVALLEY COUNSELING SERVICES INC",
+   8172611
+  ],
+  [
+   "EHN PRAIRIES INC",
+   6197490
+  ],
+  [
+   "BATC COMMUNITY DEVELOPMENT CORPORATION",
+   4553922
+  ],
+  [
+   "MOSQUITO, GRIZZYLY BEAR'S HEAD, LEAN MAN FIRST NATION",
+   4400000
+  ],
+  [
+   "NEIGHBOURHOOD HOME CARE SERVICES",
+   4238027
+  ],
+  [
+   "AHTAHKAKOOP CREE DEVELOPMENTS",
+   3696600
+  ],
+  [
+   "BUILDING BRAINS EARLY LEARNING CENTRE INC",
+   3497274
+  ],
+  [
+   "M.D. AMBULANCE CARE LTD",
+   3415454
+  ],
+  [
+   "TURNING LEAF COMMUNITY SUPPORT SERVICES INCORPORATED",
+   3309503
+  ],
+  [
+   "PAINTED HAND COMMUNITY DEVELOPMENT CORPORATION",
+   3199232
+  ],
+  [
+   "BOARD OF GOVERNORS OF THE SOUTHERN ALBERTA INSTITUTE OF TECHNOLOGY",
+   2787162
+  ],
+  [
+   "UNIVERSITY OF ALBERTA",
+   2768490
+  ],
+  [
+   "SUNSHINE HOUSING INC",
+   2471031
+  ],
+  [
+   "QBOW CHILD & FAMILY SERVICES INC",
+   2248536
+  ],
+  [
+   "KAMOR INTEGRATED HEALTH SERVICES INC",
+   2209500
+  ],
+  [
+   "PARK PLAY COMMUNITY PROGRAMS INC",
+   2190927
+  ],
+  [
+   "SPADINA EARLY LEARNING & CHILDCARE CO -OPERATIVE LTD",
+   2120413
+  ],
+  [
+   "JAMES HILL ROAD VILLA GP INC",
+   2112968
+  ],
+  [
+   "BLOOMS & BUDS INTER-GENERATIONAL CHILD CARE CENTER INC",
+   1943851
+  ],
+  [
+   "SOUTH SASKATCHEWAN RIVER IRRIGATION DISTRICT NO. 1",
+   1905024
+  ],
+  [
+   "NEW LEAF DAYCARE LTD",
+   1872050
+  ],
+  [
+   "HAVEN FAMILY CONNECTIONS INC",
+   1804259
+  ],
+  [
+   "CANADIAN SURGERY SOLUTIONS",
+   1774350
+  ],
+  [
+   "NATURAL CONNECTIONS EARLY LEARNING INC",
+   1684610
+  ],
+  [
+   "MNP LTD",
+   1596986
+  ],
+  [
+   "CHOICE. PASSION. LIFE. SUPPORT SERVICES INC",
+   1558767
+  ],
+  [
+   "SASKATCHEWAN PARKS & RECREATION ASSOCIATION INC",
+   1522500
+  ],
+  [
+   "SHELTERING WINGS FOUNDATION INCORPORATED",
+   1513674
+  ],
+  [
+   "FLEX ED SCHOOLS",
+   1506959
+  ],
+  [
+   "ROYAL CANADIAN LEGION SASKATCHEWAN COMMAND",
+   1500000
+  ],
+  [
+   "PRAIRIE GROWN EARLY LEARNING CENTRE INCORPORATED",
+   1411992
+  ],
+  [
+   "ASPIRE EARLY LEARNING CENTRE INC",
+   1337300
+  ],
+  [
+   "CREATIVE CUBS DAY -CENTER CORP",
+   1337300
+  ]
+ ]
+}
+{
+ "Close SP": {
+  "ridings": 3,
+  "median_pc_after": 1510.87,
+  "median_pc_before": 1464.7,
+  "median_change_pct": 16.5,
+  "total_adj_after": 48462791
+ },
+ "Close NDP": {
+  "ridings": 8,
+  "median_pc_after": 546.76,
+  "median_pc_before": 348.63,
+  "median_change_pct": 14.2,
+  "total_adj_after": 72022489
+ },
+ "Safe SP": {
+  "ridings": 31,
+  "median_pc_after": 1018.98,
+  "median_pc_before": 859.28,
+  "median_change_pct": 12.3,
+  "total_adj_after": 429690862
+ },
+ "Safe NDP": {
+  "ridings": 19,
+  "median_pc_after": 814.33,
+  "median_pc_before": 724.58,
+  "median_change_pct": 6.1,
+  "total_adj_after": 355933103
+ }
+}

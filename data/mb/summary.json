@@ -1,0 +1,540 @@
+windows: after = fiscal 2025-26 (the latest statement, entirely after the 3 October 2023 election); before = fiscal 2022-23 (the last full year before it); the statements carry no dates, so the windows are whole fiscal years and 2023-24, which straddles the election, is left out
+
+2022-23: 4682 payee rows, $124,417,480,137; 1 lines skipped (name without amount at heading in SOA: The Public Guardian and Trustee: 1)
+  department                                            rows MB town outside           parsed $
+  Public Debt                                            126      58      31    110,271,178,973
+  Health                                                 501     150      86      6,436,103,039
+  Education and Early Childhood Learning                 699     292      20      1,978,514,186
+  Families                                               671     280      23      1,503,980,476
+  Advanced Education and Training                         74      29       4        766,366,069
+  Transportation and Infrastructure                      364     210      65        598,615,121
+  M Unicipal Relations                                   317     201      13        593,226,820
+  Consumer Protection and Government Services            479     185     133        484,370,255
+  Justice                                                212      97      28        343,101,396
+  Mental Health and Community Wellness                    71       7      16        289,917,928
+  Agriculture                                             54      24      16        204,174,793
+  Economic Development, Investment and Trade             207      72       8        190,478,779
+  Tax Credits                                             43      35       0        132,354,620
+  Finance                                                 39       3      14        119,465,957
+  Environment and Climate                                150      64      24        102,771,419
+  Sport, Culture and Heritage                             58      24       5         68,974,097
+  SOA: Vehicle and Equipment Management Agency           112      35      35         62,780,114
+  Natural Resources and Northern Development             154      69      45         62,333,467
+  Employee Pensions and Other Costs                        6       0       0         53,899,317
+  Other Appropriations                                    66      64       0         46,320,233
+  SOA: Materials Distribution Agency                      69       2      32         41,335,510
+  Indigenous Reconciliation and Northern Relations        63      40       3         23,085,217
+  Seniors and Long Term Care                              12       4       1         19,915,403
+  Legislative Assembly                                    89      24      11         13,202,234
+  SOA: Manitoba Education, Research and Learning Infor    18       1      12          7,122,349
+  Public Service Commission                               17       2       3          1,593,440
+  Executive Council                                        1       0       0          1,250,000
+  SOA: Manitoba Financial Services Agency                  5       0       3            450,900
+  Labour and Immigration                                   3       1       0            349,262
+  SOA: Entrepreneurship Manitoba                           2       0       2            248,763
+
+2023-24: 4948 payee rows, $125,900,164,023; 0 lines skipped (none)
+  department                                            rows MB town outside           parsed $
+  Public Debt                                            100      36      32    110,538,266,904
+  Health, Seniors and Long Term Care                     564     167      99      7,056,438,340
+  Education and Early Childhood Learning                 708     302      21      2,145,810,881
+  Families                                               729     320      28      1,694,284,426
+  Advanced Education and Training                         64      28       4        895,717,878
+  Transportation and Infrastructure                      344     191      73        646,577,585
+  Consumer Protection and Government Services            476     194     128        519,029,952
+  Housing, Addictions and Homelessness                    66      12       6        454,201,093
+  Justice                                                217     103      24        370,920,863
+  Municipal and Northern Relations                       352     229      15        362,489,458
+  Finance                                                 43       4      17        218,091,942
+  Economic Development, Investment, Trade and Natural    444     174      78        198,657,320
+  Agriculture                                             52      26      13        178,503,858
+  Sport, Culture, Heritage and Tourism                   179      68       4        139,524,574
+  Tax Credits                                             38      30       0        102,800,646
+  SOA: Vehicle and Equipment Management Agency           103      36      32         96,096,293
+  Emergency Expenditures                                  89      87       1         84,796,208
+  Environment and Climate Change                         130      55      23         67,324,513
+  Employee Pensions and Other Costs                        7       0       1         58,534,709
+  SOA: Materials Distribution Agency                      64       3      28         30,517,928
+  Legislative Assembly                                   101      21      18         17,269,941
+  SOA: Manitoba Education, Research and Learning Infor    16       0      11          7,491,609
+  Labour and Immigration                                  27       5       4          7,020,345
+  Indigenous Economic Development                          8       4       0          5,016,781
+  Public Service Commission                               18       2       7          2,733,773
+  Executive Council                                        1       0       0          1,250,000
+  SOA: Manitoba Financial Services Agency                  4       0       2            402,326
+  SOA: Entrepreneurship Manitoba                           2       0       2            286,158
+  SOA: The Public Guardian and Trustee                     2       0       1            107,719
+
+2024-25: 4905 payee rows, $145,661,137,495; 0 lines skipped (none)
+  department                                            rows MB town outside           parsed $
+  Public Debt                                            113      43      35    128,086,493,109
+  Health, Seniors and Long Term Care                     548     170      82      8,080,400,827
+  Education and Early Childhood Learning                 723     298      21      2,212,101,472
+  Families                                               692     308      18      2,069,361,478
+  Advanced Education and Training                         70      34       6        928,171,933
+  Municipal and Northern Relations                       340     215      16        675,725,233
+  Housing, Addictions and Homelessness                    71      17       4        674,915,585
+  Transportation and Infrastructure                      358     200      68        604,108,786
+  Tax Credits                                             43      35       0        576,108,056
+  Justice                                                239      97      34        394,882,534
+  Public Service Delivery                                418     138     120        365,380,637
+  Agriculture                                             69      38      19        186,334,105
+  Business Mining Trade and Job Creation                 342     122      51        153,663,848
+  Finance                                                 62      12      17        121,002,006
+  Environment and Climate Change                         182      96      27        112,997,951
+  Sport, Culture, Heritage and Tourism                   103      43       9         99,404,127
+  SOA: Vehicle and Equipment Management Agency           107      38      31         86,923,956
+  Employee Pensions and Other Costs                        6       0       0         61,265,077
+  Emergency Expenditures                                  73      73       0         49,020,435
+  Innovation and New Technology                           53       1      42         38,896,801
+  SOA: Materials Distribution Agency                      58       2      26         30,306,785
+  Natural Resources and Indigenous Futures                65      18      28         21,169,198
+  Legislative Assembly                                    91      22      11         10,684,234
+  SOA: Manitoba Education, Research and Learning Infor    22       0      15          9,430,378
+  Labour and Immigration                                  29       5       2          7,957,215
+  Public Service Commission                               19       2       8          2,480,299
+  Executive Council                                        1       0       0          1,250,000
+  SOA: Manitoba Financial Services Agency                  5       0       2            363,427
+  SOA: Entrepreneurship Manitoba                           2       0       2            257,875
+  SOA: The Public Guardian and Trustee                     1       0       0             80,128
+
+2025-26: 4765 payee rows, $139,840,479,784; 0 lines skipped (none)
+  department                                            rows MB town outside           parsed $
+  Public Debt                                            118      49      37    121,897,519,190
+  Health, Seniors and Long Term Care                     551     162      84      8,274,328,584
+  Education and Early Childhood Learning                 833     328      20      2,353,498,514
+  Families                                               432     155      20      1,622,884,478
+  Advanced Education and Training                         61      28       5        937,722,007
+  Housing, Addictions and Homlessness                     74      18       4        678,969,603
+  Transportation and Infrastructure                      402     218      86        646,420,230
+  Municipal and Northern Relations                       372     236      15        633,132,783
+  Tax Credits                                             77      69       0        495,831,436
+  Justice                                                214      83      29        409,827,146
+  Finance                                                 61      12      19        344,647,462
+  Public Service Delivery                                390     121      82        291,379,210
+  Innovation and New Technology                          121       1     101        273,451,694
+  Natural Resources and Indigenous Futures               218      91      66        268,596,483
+  Agriculture                                             63      34      16        194,258,303
+  Business Mining Trade and Job Creation                 208      66      21        112,004,921
+  Environment and Climate Change                         208     110      31         94,429,335
+  Sport, Culture, Heritage and Tourism                    88      43       5         91,978,482
+  Employee Pensions and Other Costs                        6       0       0         64,648,393
+  Emergency Expenditures                                  46      41       2         59,494,747
+  SOA: Materials Distribution Agency                      59       3      30         34,072,401
+  Indigenous Economic Development                          1       0       1         25,961,256
+  SOA: Manitoba Education, Research and Learning Infor    23       0      15         11,130,736
+  Labour and Immigration                                  32       5       3         10,435,925
+  Legislative Assembly                                    84      22      11         10,396,732
+  Public Service Commission                               16       1       7          1,500,920
+  Executive Council                                        1       0       0          1,250,000
+  SOA: Entrepreneurship Manitoba                           3       0       2            360,274
+  SOA: Manitoba Financial Services Agency                  2       0       2            254,890
+  SOA: The Public Guardian and Trustee                     1       0       0             93,649
+{
+ "generated": "2026-10-26",
+ "election": "2023-10-03",
+ "after_year": "2025-26",
+ "before_year": "2022-23",
+ "after_start": "2025-04-01",
+ "cutoff": "2026-03-31",
+ "before_start": "2022-04-01",
+ "before_end": "2023-03-31",
+ "years_per_window": 1.0,
+ "window_note": "after = fiscal 2025-26 (the latest statement, entirely after the 3 October 2023 election); before = fiscal 2022-23 (the last full year before it); the statements carry no dates, so the windows are whole fiscal years and 2023-24, which straddles the election, is left out",
+ "population_basis": "2016 census (boundary commission), scaled to Statistics Canada's latest Manitoba estimate by the ratio of that estimate to the commission total",
+ "close_margin": 10.0,
+ "median_pc_after": 826.38,
+ "search_url": "https://duckduckgo.com/?q={q}+Manitoba+grant",
+ "series": {
+  "kind": "fiscal year",
+  "labels": [
+   "2022-23",
+   "2023-24",
+   "2024-25",
+   "2025-26"
+  ],
+  "complete": 4,
+  "election_index": 0
+ },
+ "methods": {
+  "before|place name in payee (approx.)": 80,
+  "before|postal code from federal or charity records": 908,
+  "before|town printed with payee": 924,
+  "after|postal code from federal or charity records": 983,
+  "after|town printed with payee": 843,
+  "after|place name in payee (approx.)": 65
+ },
+ "excluded_after": {
+  "individuals": 351978188,
+  "suppliers": 1911525608,
+  "pensions and tax credits": 721273844,
+  "outside Manitoba": 416344680,
+  "unmatched": 179419195,
+  "province-wide bodies": 3228349826,
+  "refunds and trust funds": 93700116,
+  "individual programs": 315303589
+ },
+ "placed_after": 10725065548,
+ "total_after": 17942960594,
+ "top_flagged": [
+  [
+   "WINNIPEG REGIONAL HEALTH AUTHORITY",
+   3000842535
+  ],
+  [
+   "PRAIRIE MOUNTAIN HEALTH",
+   820135864
+  ],
+  [
+   "SOUTHERN HEALTH-SANTE SUD",
+   541037793
+  ],
+  [
+   "UNIVERSITY OF MANITOBA",
+   536831650
+  ],
+  [
+   "CITY OF WINNIPEG",
+   366287947
+  ],
+  [
+   "INTERLAKE-EASTERN REGIONAL HEALTH AUTHORITY",
+   357104905
+  ],
+  [
+   "NORTHERN REGIONAL HEALTH AUTHORITY",
+   342311866
+  ],
+  [
+   "CANCERCARE MANITOBA",
+   299874768
+  ],
+  [
+   "WINNIPEG SCHOOL DIVISION",
+   263956260
+  ],
+  [
+   "SOUTHERN FIRST NATIONS NETWORK OF CARE",
+   184977175
+  ],
+  [
+   "RED RIVER COLLEGE POLYTECHNIC",
+   149469207
+  ],
+  [
+   "RIVER EAST TRANSCONA SCHOOL DIVISION",
+   141848032
+  ],
+  [
+   "LOUIS RIEL SCHOOL DIVISION",
+   127951131
+  ],
+  [
+   "MANITOBA AGRICULTURAL SERVICES CORP",
+   114699482
+  ],
+  [
+   "SEVEN OAKS SCHOOL DIVISION",
+   109340731
+  ],
+  [
+   "PEMBINA TRAILS SCHOOL DIVISION",
+   98192285
+  ],
+  [
+   "FIRST NATIONS OF NORTHERN MANITOBA CHILD AND FAMILY SERVICES AUTHORITY",
+   96485740
+  ],
+  [
+   "UNIVERSITY OF WINNIPEG",
+   88895711
+  ],
+  [
+   "DIVISION SCOLAIRE FRANCO-MANITOBAINE",
+   83850555
+  ],
+  [
+   "BRANDON SCHOOL DIVISION",
+   80228003
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "M B S RESIDENCE",
+   10622974
+  ],
+  [
+   "S P I K E INC",
+   9803746
+  ],
+  [
+   "RAINBOW DAY NURSERY INC (PHASE 1)",
+   6346526
+  ],
+  [
+   "KIDS IN DAYCARE ARE SUPER INC",
+   4487078
+  ],
+  [
+   "HANDI -HELPER TRANSIT",
+   3716232
+  ],
+  [
+   "IQRA ISLAMIC SCHOOL",
+   3649826
+  ],
+  [
+   "IMAGINE ABILITY INC",
+   3485286
+  ],
+  [
+   "FPS THERAPY AND SUPPORT SERVICES",
+   3340517
+  ],
+  [
+   "DOWNS CHILDREN'S CENTRE INC",
+   3318698
+  ],
+  [
+   "ST MAURICE DAY CARE INC",
+   2768380
+  ],
+  [
+   "FIRST PEOPLES ECONOMIC GROWTH FUND INC",
+   2700000
+  ],
+  [
+   "NORSHEL INC (SCURFIELD)",
+   2470547
+  ],
+  [
+   "NEECHEEWAM INC",
+   2454025
+  ],
+  [
+   "NORTH PORTAGE DEVELOPMENT CORP",
+   2400000
+  ],
+  [
+   "ANSEEUW WILLIAM AND ANSEEUW JAMES AND ANSEEUW MARK AND ANSEEUW DANIEL",
+   2372383
+  ],
+  [
+   "CANADIAN MANUFACTURERS & EXPORTERS",
+   2352410
+  ],
+  [
+   "REHABILITATION CENTRE FOR CHILDREN SSC",
+   2300741
+  ],
+  [
+   "CAMPUS DAY CARE CENTRE INC",
+   2287401
+  ],
+  [
+   "SPLASH MINO PIMATISIWIN CHILDREN'S CENTRE",
+   2084932
+  ],
+  [
+   "TAKING CHARGE INC",
+   2068739
+  ],
+  [
+   "NORTHERN MEAT SERVICE",
+   2057563
+  ],
+  [
+   "HORIZONS CHILDRENS CENTRE INC",
+   1984856
+  ],
+  [
+   "ST IGNATIUS SCHOOL INC",
+   1943749
+  ],
+  [
+   "PRECISION JOINT SEALING INC",
+   1911446
+  ],
+  [
+   "FPS HEALTH & FORENSIC PSYCHOLOGICAL SERVICES",
+   1884189
+  ],
+  [
+   "RADY JCC CHILD CARE CENTRE",
+   1843787
+  ],
+  [
+   "KLINIC COMMUNITY HEALTH CENTRE",
+   1797628
+  ],
+  [
+   "MANIDOO GI MINNI GONAAN INC",
+   1733573
+  ],
+  [
+   "MFRC CHILD CARE CENTRE",
+   1723028
+  ],
+  [
+   "NORWEST CO -OP COMMUNITY HEALTH CARE",
+   1719895
+  ],
+  [
+   "LE P'TIT BONHEUR INC (PRESCHOOL)",
+   1614511
+  ],
+  [
+   "JOB WORKS EMPLOYMENT EDUCATION PROGRAMS INC",
+   1601100
+  ],
+  [
+   "ENFANTS PRECIEUX INC",
+   1596092
+  ],
+  [
+   "URBAN TACTICAL",
+   1531995
+  ],
+  [
+   "MANITOBA- SASKATCHEWAN CONFERENCE OF THE SEVENTH -DAY ADVENTIST",
+   1525680
+  ],
+  [
+   "LITTLE BO-PEEP EARLY LEARNING CENTRE INC",
+   1494823
+  ],
+  [
+   "ADORABLE CHILD CARE",
+   1461443
+  ],
+  [
+   "SPLASH EARLY LEARNING CENTRE",
+   1461268
+  ],
+  [
+   "QUALITY LIFE SERVICES INC",
+   1384065
+  ],
+  [
+   "TOUPIES INC",
+   1335907
+  ]
+ ],
+ "top_suppliers": [
+  [
+   "DE HAVILLAND AIRCRAFT OF CANADA LTD",
+   78058347
+  ],
+  [
+   "BIOSCRIPT PHARMACY LTD",
+   75727197
+  ],
+  [
+   "INNOMAR PHARMACY",
+   62382978
+  ],
+  [
+   "SHOPPER'S DRUG MART INC",
+   61745827
+  ],
+  [
+   "IBM CANADA LTD",
+   47202119
+  ],
+  [
+   "MAPLE LEAF CONSTRUCTION LTD",
+   35386915
+  ],
+  [
+   "M D STEELE CONSTRUCTION LTD",
+   33432538
+  ],
+  [
+   "PCL CONSTRUCTORS CANADA INC",
+   33180435
+  ],
+  [
+   "BAYVIEW CONSTRUCTION LTD",
+   30091216
+  ],
+  [
+   "STRILKIWSKI CONTRACTING LTD",
+   29519659
+  ],
+  [
+   "SAP CANADA INC",
+   28549051
+  ],
+  [
+   "BENNETT JONES LLP AND SISKINDS LLP",
+   25961256
+  ],
+  [
+   "NDS CANADA INC",
+   23935812
+  ],
+  [
+   "BABCOCK CANADA INC",
+   23770262
+  ],
+  [
+   "PEREGRINE EQUITIES LTD",
+   21988303
+  ],
+  [
+   "NELSON RIVER CONSTRUCTION INC",
+   21630513
+  ],
+  [
+   "RADIO A DIV OF BELL MOBILITY INC",
+   21246675
+  ],
+  [
+   "DXC TECHNOLOGY CANADA CO",
+   19853112
+  ],
+  [
+   "PAYWORKS INC",
+   19495699
+  ],
+  [
+   "BAYSHORE PHARMACY",
+   18139004
+  ]
+ ],
+ "not_counted_after": {
+  "Public Debt (payments to banks and bondholders, left out of total_after)": 121897519190
+ }
+}
+{
+ "Close NDP": {
+  "ridings": 9,
+  "median_pc_after": 536.13,
+  "median_pc_before": 379.32,
+  "median_change_pct": 34.0,
+  "total_adj_after": 139752956
+ },
+ "Close PC": {
+  "ridings": 6,
+  "median_pc_after": 766.38,
+  "median_pc_before": 786.43,
+  "median_change_pct": 8.8,
+  "total_adj_after": 124903468
+ },
+ "Safe NDP": {
+  "ridings": 25,
+  "median_pc_after": 918.53,
+  "median_pc_before": 724.29,
+  "median_change_pct": 31.4,
+  "total_adj_after": 984216102
+ },
+ "Safe PC": {
+  "ridings": 17,
+  "median_pc_after": 983.16,
+  "median_pc_before": 999.03,
+  "median_change_pct": 12.6,
+  "total_adj_after": 467293639
+ }
+}
+
+after window 2025-26: $17,942,960,594 parsed, $10,725,065,548 placed (60%), adjusted $1,716,166,165

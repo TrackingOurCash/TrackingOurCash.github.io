@@ -1,0 +1,418 @@
+{
+ "generated": "2026-10-26",
+ "election": "2024-11-26",
+ "cutoff": "2025-03-31",
+ "before_start": "2023-04-01",
+ "before_end": "2024-03-31",
+ "years_per_window": 1.0,
+ "after_fiscal_year": "FY2024-25",
+ "windows": "after = FY2024-25 (1 April 2024 to 31 March 2025, which straddles the 26 November 2024 election: eight months before the vote, four after; the FY2025-26 volume was not yet published); before = FY2023-24 (1 April 2023 to 31 March 2024), the last full fiscal year before the election; annual data, no payment dates",
+ "straddles_election": true,
+ "sections": "Grants and Contributions (counted when placeable and not flagged) and Other (goods and services, always flagged supplier); Salaries, Travel and External Secondments dropped",
+ "population_basis": "electors on the final list at the 26 November 2024 election (Elections Nova Scotia poll-by-poll results), scaled to Statistics Canada's latest Nova Scotia estimate by the ratio of that estimate to the elector total; Inverness's electors are apportioned between Inverness and Chéticamp-Margarees-Pleasant Bay by the elector counts in the 2026 boundary file; Nova Scotia publishes no census population by provincial district",
+ "close_margin": 10.0,
+ "median_pc_after": 1470.295,
+ "search_url": "https://duckduckgo.com/?q={q}+Nova+Scotia+grant",
+ "series": {
+  "kind": "fiscal year",
+  "labels": [
+   "2022-23",
+   "2023-24",
+   "2024-25"
+  ],
+  "complete": 3,
+  "election_index": 1
+ },
+ "methods": {
+  "before|postal code from federal or charity records": 3293,
+  "before|place name in recipient (approx.)": 334,
+  "before|address from facility directory": 181,
+  "before|municipality": 13,
+  "after|postal code from federal or charity records": 3270,
+  "after|place name in recipient (approx.)": 355,
+  "after|address from facility directory": 179,
+  "after|municipality": 9
+ },
+ "excluded_after": {
+  "program aggregates (no payee)": 5128977578,
+  "suppliers": 2499660167,
+  "intra-government": 771500559,
+  "province-wide bodies": 2501597441,
+  "out-of-province": 311598431,
+  "unmatched": 242871127,
+  "individuals": 26025073
+ },
+ "buckets_after": {
+  "province-wide": 9444662917,
+  "program aggregates": 5128977578,
+  "supplier": 2818915376,
+  "counted": 1777639830,
+  "intra-government": 771500559,
+  "out-of-province": 311598431,
+  "other government": 251019857,
+  "unmatched": 242871127,
+  "individuals": 26025073
+ },
+ "dropped_sections_after": {
+  "Salaries": 1165403026,
+  "Travel": 24757941,
+  "External Secondments": 3923759,
+  "Members' Indemnities": 5533007,
+  "Members' Statutory Salaries": 170810,
+  "Members' Severances": 251640,
+  "Clerk of the Legislature": 475665,
+  "Chairs": 79339,
+  "Members' Constituency Expenses": 2588558,
+  "Members' Living Expenses": 270028,
+  "Ministers' Living Expenses": 220529
+ },
+ "placed_after": 9290980372,
+ "total_after": 20773210749,
+ "pdf_check": {
+  "FY2022-23": {
+   "rows": 25271,
+   "section_totals_checked": 62,
+   "section_totals_matched": 61,
+   "mismatched": [
+    [
+     "Labour, Skills and Immigration",
+     "Grants and Contributions",
+     174643965.14,
+     174658965.14,
+     221
+    ]
+   ],
+   "used_sections_parsed": 13498901926,
+   "used_sections_printed": 13141052839,
+   "all_sections_parsed": 14549564204,
+   "department_totals_printed": 14646169882,
+   "department_totals_n": 47
+  },
+  "FY2023-24": {
+   "rows": 26841,
+   "section_totals_checked": 61,
+   "section_totals_matched": 59,
+   "mismatched": [
+    [
+     "Labour, Skills and Immigration",
+     "Grants and Contributions",
+     186589618.96,
+     186624618.96,
+     243
+    ],
+    [
+     "Public Works",
+     "Other",
+     496858253.8,
+     496864296.7,
+     376
+    ]
+   ],
+   "used_sections_parsed": 14569177594,
+   "used_sections_printed": 14330688864,
+   "all_sections_parsed": 15693198982,
+   "department_totals_printed": 15954587183,
+   "department_totals_n": 47
+  },
+  "FY2024-25": {
+   "rows": 27192,
+   "section_totals_checked": 68,
+   "section_totals_matched": 66,
+   "mismatched": [
+    [
+     "Labour, Skills and Immigration",
+     "Grants and Contributions",
+     186613335.81,
+     186657335.81,
+     196
+    ],
+    [
+     "Public Works",
+     "Other",
+     544714122.25,
+     546276276.1,
+     384
+    ]
+   ],
+   "used_sections_parsed": 16071015366,
+   "used_sections_printed": 15424275329,
+   "all_sections_parsed": 17274689667,
+   "department_totals_printed": 17191186614,
+   "department_totals_n": 50
+  }
+ },
+ "top_flagged": [
+  [
+   "Nova Scotia Health Authority",
+   3701904871
+  ],
+  [
+   "Halifax Regional Centre for Education",
+   562510722
+  ],
+  [
+   "IWK Health Centre",
+   392527005
+  ],
+  [
+   "Nova Scotia Community College",
+   281437520
+  ],
+  [
+   "Dalhousie University",
+   259434072
+  ],
+  [
+   "Chignecto-Central Regional Centre for Education",
+   243313472
+  ],
+  [
+   "Cape Breton-Victoria Regional Centre for Education",
+   174465919
+  ],
+  [
+   "Victorian Order of Nurses for Canada",
+   159924468
+  ],
+  [
+   "Annapolis Valley Regional Centre for Education",
+   154514431
+  ],
+  [
+   "Conseil scolaire acadien provincial",
+   122504409
+  ],
+  [
+   "Strait Regional Centre for Education",
+   100595710
+  ],
+  [
+   "Halifax Regional Municipality",
+   98385264
+  ],
+  [
+   "Tri-County Regional Centre for Education",
+   97982632
+  ],
+  [
+   "South Shore Regional Centre for Education",
+   92285381
+  ],
+  [
+   "Cape Breton Regional Municipality",
+   73067368
+  ],
+  [
+   "Invest Nova Scotia",
+   48533942
+  ],
+  [
+   "Northwoodcare Inc",
+   48092008
+  ],
+  [
+   "Saint Mary's University",
+   44947708
+  ],
+  [
+   "St Francis Xavier University",
+   44794193
+  ],
+  [
+   "Acadia University",
+   42769034
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "Colonial Community Services Ltd",
+   9085674
+  ],
+  [
+   "Annapolis County Adult Residential Centre",
+   8713370
+  ],
+  [
+   "Parkland at the Lakes Retirement Campus",
+   8492657
+  ],
+  [
+   "Change Up Support Services",
+   8112668
+  ],
+  [
+   "Community Living Centres Inc",
+   7885599
+  ],
+  [
+   "Purdy's Wharf Children's Centre YMCA",
+   6866672
+  ],
+  [
+   "JAZ Community Support Ltd",
+   6852512
+  ],
+  [
+   "Cape Breton County Homemakers Agency",
+   5536648
+  ],
+  [
+   "La Garderie le Petit Voilier",
+   3695566
+  ],
+  [
+   "Colchester Community Respite Services Ltd",
+   3411899
+  ],
+  [
+   "Townsview Estates",
+   3405530
+  ],
+  [
+   "The Third Place Transition House",
+   3386587
+  ],
+  [
+   "Southwest Nova Transition House Assoc",
+   3245441
+  ],
+  [
+   "Cumberland YMCA Child Care",
+   3156201
+  ],
+  [
+   "Haliburton Place",
+   3148103
+  ],
+  [
+   "Digby/Clare Home Support Agency/Agence de soutien a domicile",
+   3071253
+  ],
+  [
+   "Liberty Lodge Inc",
+   3067773
+  ],
+  [
+   "Willowbrae Childcare Academy Learning Tree Childcare Centre Inc",
+   3032527
+  ],
+  [
+   "Supportive Living Society",
+   2923876
+  ],
+  [
+   "Out of the Cold Community Assoc",
+   2906000
+  ],
+  [
+   "Sunshine Personal Home Care Inc",
+   2811105
+  ],
+  [
+   "My Cape Breton Home for Seniors Inc",
+   2603343
+  ],
+  [
+   "PJD Rehab Housing Inc",
+   2595237
+  ],
+  [
+   "Care & Fun Childcare Ltd",
+   2530513
+  ],
+  [
+   "Canadian Mental Health Assoc",
+   2480403
+  ],
+  [
+   "L'Atelier de Clare-Canadian Association for Community Living-Clare Branch",
+   2372933
+  ],
+  [
+   "Digby Small Options Housing",
+   2359863
+  ],
+  [
+   "It Takes A Village Daycare Society",
+   2343802
+  ],
+  [
+   "Alternative Programs for Youth and Families Inc",
+   2258249
+  ],
+  [
+   "Eastern College Inc",
+   2223366
+  ],
+  [
+   "Pine Tree Park Estates Ltd",
+   2222837
+  ],
+  [
+   "Maison au cucher du soleil Ltee",
+   1969074
+  ],
+  [
+   "New Dawn Housing Assoc",
+   1826774
+  ],
+  [
+   "Daydreams Childcare Center Inc",
+   1661488
+  ],
+  [
+   "Colchester Community Small Options",
+   1569137
+  ],
+  [
+   "Mcl Masonview Homes",
+   1569064
+  ],
+  [
+   "Leeds Street Child Care Centre",
+   1549386
+  ],
+  [
+   "Adventurers Child Care Centre",
+   1522165
+  ],
+  [
+   "Awards (Education Program for Black Students)",
+   1348000
+  ],
+  [
+   "Highland Visions Society",
+   1305941
+  ]
+ ]
+}
+{
+ "Close PC": {
+  "ridings": 8,
+  "median_pc_after": 1227.51,
+  "median_pc_before": 1095.03,
+  "median_change_pct": 11.2,
+  "total_adj_after": 194117889
+ },
+ "Close opposition": {
+  "ridings": 5,
+  "median_pc_after": 1737.19,
+  "median_pc_before": 1327.27,
+  "median_change_pct": 8.1,
+  "total_adj_after": 301433843
+ },
+ "Safe PC": {
+  "ridings": 36,
+  "median_pc_after": 1423.27,
+  "median_pc_before": 1247.74,
+  "median_change_pct": 8.8,
+  "total_adj_after": 1028752032
+ },
+ "Safe opposition": {
+  "ridings": 7,
+  "median_pc_after": 1969.6,
+  "median_pc_before": 1764.93,
+  "median_change_pct": -2.6,
+  "total_adj_after": 253336067
+ }
+}

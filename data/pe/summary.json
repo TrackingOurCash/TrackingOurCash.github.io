@@ -1,0 +1,167 @@
+{
+ "generated": "2026-10-27",
+ "election": "2025-04-28",
+ "federal_election": "2025-04-28",
+ "provincial_election": "2023-04-03",
+ "cutoff": "2026-03-31",
+ "before_start": "2024-04-28",
+ "before_end": "2025-03-31",
+ "years_per_window": 0.925,
+ "population_basis": "registered electors at the 2023 election (the 2017 commission's count where none is recorded), scaled to Statistics Canada's latest PEI estimate by the ratio of that estimate to the elector total",
+ "close_margin": 10.0,
+ "median_pc_after": 294.57,
+ "methods": {
+  "before|postal code": 477,
+  "after|postal code": 453,
+  "before|postal area (approx.)": 1,
+  "before|city (approx.)": 15,
+  "before|recipient's address on other awards": 24,
+  "after|recipient's address on other awards": 7,
+  "after|city (approx.)": 7,
+  "after|postal area (approx.)": 1,
+  "before|unmapped": 2,
+  "after|unmapped": 1
+ },
+ "excluded_after": {
+  "unmatched": 100000,
+  "flagged": 28752500
+ },
+ "placed_after": 105467823,
+ "total_after": 105567823,
+ "top_flagged": [
+  [
+   "DEPARTMENT OF ENVIRONMENT, ENERGY AND CLIMATE ACTION",
+   11530000
+  ],
+  [
+   "FATHERS OF CONFEDERATION BUILDINGS TRUST",
+   5500000
+  ],
+  [
+   "Department of Health and Wellness",
+   4779058
+  ],
+  [
+   "Construction Association of PEI",
+   1275708
+  ],
+  [
+   "Prince Edward Island Department of Transportation, Infrastructure and Energy",
+   1248000
+  ],
+  [
+   "Province of Prince Edward Island",
+   803930
+  ],
+  [
+   "Town of Stratford",
+   587000
+  ],
+  [
+   "Prince Edward Island Federation of Agriculture",
+   499400
+  ],
+  [
+   "GOVERNMENT OF PRINCE EDWARD ISLAND",
+   400000
+  ],
+  [
+   "Holland College",
+   378824
+  ],
+  [
+   "Government of Prince Edward Island",
+   320000
+  ],
+  [
+   "FÉDÉRATION DES PARENTS DE L'ÎLE-DU-PRINCE-ÉDOUARD INC. (LA)",
+   270000
+  ],
+  [
+   "INDIGENOUS TOURISM ASSOCIATION OF PRINCE EDWARD ISLAND",
+   255000
+  ],
+  [
+   "Canadian Journal for the Scholarship of Teaching and Learning",
+   146000
+  ],
+  [
+   "Innovation PEI",
+   143298
+  ],
+  [
+   "City of Summerside",
+   142200
+  ],
+  [
+   "Department of Fisheries, Tourism, Sport and Culture",
+   130000
+  ],
+  [
+   "Indigenous PEI",
+   120000
+  ],
+  [
+   "FÉDÉRATION CULTURELLE DE L'ÎLE-DU-PRINCE-ÉDOUARD INC. (LA)",
+   100000
+  ],
+  [
+   "CONFEDERATION CENTRE OF THE ARTS FOUNDATION INC.",
+   30480
+  ]
+ ],
+ "top_unmatched": [
+  [
+   "DASHCHARGER TECHNOLOGIES LTD.",
+   100000
+  ]
+ ],
+ "series": {
+  "kind": "quarter",
+  "labels": [
+   "2024Q1",
+   "2024Q2",
+   "2024Q3",
+   "2024Q4",
+   "2025Q1",
+   "2025Q2",
+   "2025Q3",
+   "2025Q4",
+   "2026Q1",
+   "2026Q2",
+   "2026Q3"
+  ],
+  "complete": 9,
+  "election_index": 5
+ }
+}
+{
+ "Close PC": {
+  "ridings": 1,
+  "median_pc_after": 27.25,
+  "median_pc_before": 596.2,
+  "median_change_pct": -95.4,
+  "total_adj_after": 168611
+ },
+ "Close opposition": {
+  "ridings": 4,
+  "median_pc_after": 620.06,
+  "median_pc_before": 1651.44,
+  "median_change_pct": -26.9,
+  "total_adj_after": 31285137
+ },
+ "Safe PC": {
+  "ridings": 21,
+  "median_pc_after": 227.36,
+  "median_pc_before": 246.39,
+  "median_change_pct": 11.6,
+  "total_adj_after": 42439345
+ },
+ "Safe opposition": {
+  "ridings": 1,
+  "median_pc_after": 527.04,
+  "median_pc_before": 226.33,
+  "median_change_pct": 132.9,
+  "total_adj_after": 2822230
+ }
+}
