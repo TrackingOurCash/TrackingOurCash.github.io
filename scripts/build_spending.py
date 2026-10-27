@@ -433,6 +433,10 @@ def main():
         "series": {"kind": "quarter", "labels": [qlabel(q) for q in quarters], "complete": sum(1 for q in quarters if date(q[0], q[1] * 3 + 1, 1) <= cutoff),
                    "election_index": sum(1 for q in quarters if date(q[0], q[1] * 3 + 1, 1) <= ELECTION) - 1},
         "top_flagged_recipients": [[k, round(v)] for k, v in natl_examples.most_common(25)],
+        # Money with no usable location (no postal code, no address on other awards, no single-riding city), by recipient.
+        "top_unmapped": [[k[0], round(v), k[1], k[2]] for k, v in sorted(
+            sum((Counter({(r["recipient"][:80], r["dept"][:50], r["city"]): r["value"]}) for r in unmapped), Counter()).items(), key=lambda kv: -kv[1])[:25]],
+        "excluded_after": {"no location found": round(method_counts[("after", "unmapped $")])},
         "departments": sorted(dept_totals, key=lambda d: -sum(dept_totals[d].values())),
     }
     with open(ROOT / "output" / "unmapped_after_election.csv", "w", newline="") as f:
