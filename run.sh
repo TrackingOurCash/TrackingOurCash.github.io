@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Refresh everything: download the latest data, rebuild the riding table, aggregate grants, write the map.
 set -e
+# Timestamp every command so a slow step shows up in the build log.
+PS4='+ [$(date -u +%H:%M:%S)] '
+set -x
 cd "$(dirname "$0")"
 mkdir -p data/raw/geonames output
 GRANTS=https://open.canada.ca/data/dataset/432527ab-7aac-45b5-81d6-7597107a7013/resource/1d15a62f-5656-49ad-8c88-f40ce689d831/download/grants.csv
