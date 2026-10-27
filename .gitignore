@@ -12,6 +12,7 @@ data/*/
 !data/pe_results.json
 !data/formula_programs.json
 !data/ministers.json
+!data/name_postal.json
 !data/news_queue.json
 !data/contracts_by_riding.json
 !data/budget_by_riding.json
