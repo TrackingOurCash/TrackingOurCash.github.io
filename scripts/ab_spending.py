@@ -312,6 +312,12 @@ def main():
             "top_grants": [{"v": round(g["v"]), "who": who[:80], "n": g["n"], "prog": "; ".join(k for k, _ in g["progs"].most_common(2))[:120],
                             "date": g["last"], "flag": g["flag"], "how": g["how"], "formula": g["formula"],
                             **({"src": g["src"]} if g["src"] else {})} for who, g in top],
+            # The ten most recent payments (by payment date) and the newest date, for the "latest" view.
+            "latest_grants": [{"v": round(v), "who": r["Recipient"][:80], "n": 1, "prog": f'{r["Program"].title()} ({r["Ministry"].title()})'[:120],
+                               "date": r["date"].isoformat(), "flag": fl, "how": how, "formula": bool(r.get("formula")),
+                               **({"src": source_url(r)} if source_url(r) else {})}
+                              for v, r, fl, how in sorted(p["grants"], key=lambda t: (t[1]["date"], t[0]), reverse=True)[:10]],
+            "latest_date": max((r["date"].isoformat() for _, r, _, _ in p["grants"]), default=None),
         })
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None
         rec["series"] = [round(p["series"].get(qlabel(q), 0)) for q in quarters]

@@ -27,7 +27,7 @@ ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXg
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
-          "group", "top_grants", "series", "after_formula", "before_formula"]
+          "group", "top_grants", "series", "after_formula", "before_formula", "latest_grants", "latest_date"]
 
 
 def links(items):
@@ -686,6 +686,9 @@ def provincial(key):
         rec = {k: r.get(k) for k in COMMON}
         rec["wiki"] = (wk.get(n) or {}).get("url")
         rec["minister"] = mins.get(n)
+        if not rec.get("latest_grants"):
+            rec["latest_grants"] = r["top_grants"]
+            rec["latest_date"] = m.get("after_fiscal_year") or m.get("after_year") or (r["top_grants"][0]["date"] if r["top_grants"] else None)
         if news:  # federal awards carry open.canada.ca keys, so the federal page's news links apply
             rec["top_grants"] = [dict(g, news=news[f'{g["org"]}|{g["ref"]}']) if f'{g.get("org")}|{g.get("ref")}' in news else g for g in r["top_grants"]]
         elif pnews:  # provincial coverage is keyed by recipient name

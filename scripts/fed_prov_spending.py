@@ -204,6 +204,10 @@ def main():
             "top_grants": [{"v": round(v), "who": g["recipient"][:80], "dept": g["dept"][:60], "prog": g["program"][:80], "date": g["start"],
                             "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"], "formula": g.get("formula", False)}
                            for v, g, fl, how in sorted(p["grants"], key=lambda t: -t[0])[:10]],
+            "latest_grants": [{"v": round(v), "who": g["recipient"][:80], "dept": g["dept"][:60], "prog": g["program"][:80], "date": g["start"],
+                               "city": g["city"], "flag": fl, "how": how, "org": g["org"], "ref": g["ref"], "formula": g.get("formula", False)}
+                              for v, g, fl, how in sorted(p["grants"], key=lambda t: (t[1]["start"], t[0]), reverse=True)[:10]],
+            "latest_date": max((g["start"] for _, g, _, _ in p["grants"]), default=None),
         })
         rec["series"] = [round(p["series"].get(qlabel(q), 0)) for q in quarters]
         rec["change_pct"] = round(100 * (a["adj"] - b["adj"]) / b["adj"], 1) if b["adj"] > 0 else None

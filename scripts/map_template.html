@@ -123,6 +123,7 @@ table.mini td.n { text-align: right; white-space: nowrap; }
 .recips .chip { display: inline-block; font-size: 11px; padding: 1px 6px; margin: 1px 2px 0 0; border: 1px solid var(--axis); border-radius: 999px; background: none; color: var(--ink-2); cursor: pointer; }
 .recips .chip:hover { border-color: var(--ink); color: var(--ink); }
 @media (max-width: 760px) { .recips { columns: 1; } }
+.seg.small button { font-size: 11px; padding: 2px 8px; }
 .linkbtn { font: 500 11px/1 system-ui, sans-serif; padding: 3px 7px; border: 1px solid var(--axis); border-radius: 999px; background: none; color: var(--ink-2); cursor: pointer; vertical-align: middle; }
 .linkbtn:hover { border-color: var(--ink); color: var(--ink); }
 .spark { display: block; width: 100%; height: auto; margin: 6px 0 2px; }
@@ -299,7 +300,8 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
   </div>
 
   <div class="card" style="margin-top:16px" id="trendCard" hidden>
-    <h2 id="trendTitle">How the money moved over time</h2>
+    <div class="controls" style="justify-content:space-between"><h2 id="trendTitle" style="margin:0">How the money moved over time</h2>
+      <div class="seg small" role="group" aria-label="Per person or total" id="trendMode"><button type="button" data-t="pc" aria-pressed="true">$ per person per year</button><button type="button" data-t="total" aria-pressed="false">Total $ per party</button></div></div>
     <p class="small muted" id="trendNote"></p>
     <div id="trendChart"></div>
   </div>
@@ -358,7 +360,7 @@ const fmt$ = v => v == null ? "–" : "$" + (Math.abs(v) >= 1e9 ? (v/1e9).toFixe
 const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleString() : v.toFixed(2));
 const fmtPct = v => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(0) + "%";
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const state = {metric: "pc", dept: "", natl: false, disc: false, money: "grants", closeOnly: false, budget: true, budgetScope: "all", sel: null, sort: "pc", dir: -1, q: "", recipQ: ""};
+const state = {metric: "pc", dept: "", natl: false, disc: false, money: "grants", grants: "largest", trend: "pc", closeOnly: false, budget: true, budgetScope: "all", sel: null, sort: "pc", dir: -1, q: "", recipQ: ""};
 const CT = D.contracts || null;  // federal contracts layer, same windows, keyed like R
 const BUDGET = D.budget || null;
 // Budget documents are listed oldest first; "latest" is the most recent one.
@@ -623,8 +625,10 @@ function select(n, quiet) {
     ${r.after_formula != null && C.formula && !state.dept ? `<div class="small muted">Of the adjusted ${fmt$(r.after_adj)} since the election, <b>${fmt$(r.after_formula)}</b> is formula money and <b>${fmt$(r.after_adj - r.after_formula)}</b> discretionary${r.before_adj ? ` (before: ${fmt$(r.before_formula || 0)} formula of ${fmt$(r.before_adj)})` : ""}.</div>` : ""}
     ${sparkline(r)}
     ${CT && state.money !== "grants" && CT.ridings[n] ? contractsList(n) : ""}
-    <h2 style="margin-top:14px">${C.topGrantsTitle}</h2>
-    <ul class="grants">${r.top_grants.map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.src ? `<a href="${t.src}" target="_blank" rel="noopener" title="Open the source record">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}${t.formula ? ' <span class="tag" title="allocated by a published formula">formula</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span>${newsLine(t)}</li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
+    <h2 style="margin-top:14px">${state.grants === "latest" ? C.topGrantsTitle.replace(/^Largest/, "Latest") : C.topGrantsTitle}
+      <span class="seg small" role="group" aria-label="Largest or latest" style="margin-left:8px;vertical-align:middle"><button type="button" data-g="largest" aria-pressed="${state.grants !== "latest"}" onclick="setGrants('largest')">Largest</button><button type="button" data-g="latest" aria-pressed="${state.grants === "latest"}" onclick="setGrants('latest')">Latest</button></span></h2>
+    ${r.latest_date ? `<div class="small muted">Newest award on record here: ${r.latest_date}${SER && SER.kind === "fiscal year" ? " (statements carry no dates, so \"latest\" is the latest fiscal year)" : ""}</div>` : ""}
+    <ul class="grants">${(state.grants === "latest" ? (r.latest_grants || r.top_grants) : r.top_grants).map(t => `<li><b>${fmt$(t.v)}</b> ${t.org && recordUrl(t) ? `<a href="${recordUrl(t)}" target="_blank" rel="noopener">${t.who}</a>` : t.src ? `<a href="${t.src}" target="_blank" rel="noopener" title="Open the source record">${t.who}</a>` : t.who}${t.n > 1 ? ` <span class="muted">(${t.n} payments)</span>` : ""}${t.flag ? ` <span class="tag">${FLAG[t.flag]}</span>` : ""}${t.how.includes("approx") ? ' <span class="tag">location approx.</span>' : ""}${t.formula ? ' <span class="tag" title="allocated by a published formula">formula</span>' : ""}<br><span class="muted">${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date}${t.city ? " · " + t.city : ""}${searchUrl(t.who) ? ` · <a href="${searchUrl(t.who)}" target="_blank" rel="noopener">${C.searchLabel}</a>` : ""}</span>${newsLine(t)}</li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>
     <p class="small muted">${C.linkNote}</p>
     ${BUDGET ? budgetSection(n) : ""}`;
   // Keep the reader at the map: the panel sits beside it on wide screens; on narrow ones bring the panel up.
@@ -925,6 +929,7 @@ function renderRecipients() {
   document.getElementById("recipsMore").innerHTML = shown.slice(10).map(item).join("");
 }
 document.getElementById("recipQ").oninput = e => { state.recipQ = e.target.value; renderRecipients(); };
+document.querySelectorAll("#trendMode button").forEach(b => b.onclick = () => { document.querySelectorAll("#trendMode button").forEach(x => x.setAttribute("aria-pressed", x === b)); state.trend = b.dataset.t; renderTrend(); });
 
 // ---- what never reached the map: placed and counted, placed but flagged, no location, and the other exclusions ----
 function renderUnplaced() {
@@ -961,10 +966,11 @@ function renderUnplaced() {
 // ---- trend over time: per-period adjusted dollars, annualized per person ----
 const SER = M.series || null;  // {kind, labels, complete, election_index}
 const PERIOD_YEARS = SER && SER.kind === "quarter" ? 0.25 : 1;
-const perPeriodPc = (r, i) => {
+const perPeriodRaw = (r, i) => {
   const g = r.series ? r.series[i] : 0, c = CT && state.money !== "grants" && CT.ridings[r.num] && CT.ridings[r.num].series ? CT.ridings[r.num].series[i] || 0 : 0;
-  return (state.money === "contracts" ? c : state.money === "both" ? g + c : g) / r.population / PERIOD_YEARS;
+  return state.money === "contracts" ? c : state.money === "both" ? g + c : g;
 };
+const perPeriodPc = (r, i) => perPeriodRaw(r, i) / r.population / PERIOD_YEARS;
 function sparkline(r) {
   if (!SER || !r.series) return "";
   const n = SER.labels.length, W = 300, H = 46, bw = W / n;
@@ -982,10 +988,14 @@ function renderTrend() {
   card.hidden = false;
   const parties = C.legendParties.filter(p => Object.values(R).some(r => (r.rep_party || r.party_won) === p));
   const n = SER.labels.length;
-  const med = p => SER.labels.map((_, i) => d3.median(Object.values(R).filter(r => (r.rep_party || r.party_won) === p && r.series), r => perPeriodPc(r, i)) || 0);
+  const total = state.trend === "total";
+  // Per person: the median riding held by the party, dollars per person per year. Total: every dollar placed in the party's ridings in the period.
+  const agg = (rs, i) => total ? d3.sum(rs, r => perPeriodRaw(r, i)) : (d3.median(rs, r => perPeriodPc(r, i)) || 0);
+  const med = p => SER.labels.map((_, i) => agg(Object.values(R).filter(r => (r.rep_party || r.party_won) === p && r.series), i));
   const lines = parties.map(p => ({p, v: med(p)}));
-  const all = SER.labels.map((_, i) => d3.median(Object.values(R).filter(r => r.series), r => perPeriodPc(r, i)) || 0);
-  const W = 860, H = 240, m = {l: 54, r: 16, t: 14, b: 30};
+  const all = SER.labels.map((_, i) => total ? d3.sum(Object.values(R).filter(r => r.series), r => perPeriodRaw(r, i)) : (d3.median(Object.values(R).filter(r => r.series), r => perPeriodPc(r, i)) || 0));
+  const fmtY = total ? fmt$ : fmtPc;
+  const W = 860, H = 240, m = {l: total ? 64 : 54, r: 16, t: 14, b: 30};
   const x = d3.scalePoint().domain(d3.range(n)).range([m.l, W - m.r]);
   const ymax = d3.max(lines.flatMap(l => l.v).concat(all)) || 1;
   const y = d3.scaleLinear().domain([0, ymax]).nice().range([H - m.b, m.t]);
@@ -996,15 +1006,15 @@ function renderTrend() {
   const el = SER.election_index >= 0 && SER.election_index < n - 1 ? `<line x1="${(x(SER.election_index) + x(SER.election_index + 1)) / 2}" x2="${(x(SER.election_index) + x(SER.election_index + 1)) / 2}" y1="${m.t}" y2="${H - m.b}" stroke="var(--sel)" stroke-dasharray="4 3"/><text x="${(x(SER.election_index) + x(SER.election_index + 1)) / 2 + 4}" y="${m.t + 10}" font-size="11" fill="var(--ink-2)">election</text>` : "";
   document.getElementById("trendChart").innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Median spending per person by ${SER.kind} and party" style="width:100%;height:auto;display:block">
     ${partial}
-    ${y.ticks(5).map(t => `<line x1="${m.l}" x2="${W - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="var(--ink-2)">${fmtPc(t)}</text>`).join("")}
+    ${y.ticks(5).map(t => `<line x1="${m.l}" x2="${W - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${y(t) + 4}" text-anchor="end" font-size="11" fill="var(--ink-2)">${fmtY(t)}</text>`).join("")}
     ${SER.labels.map((lb, i) => i % every === 0 && i <= n - 1 - every / 2 || i === n - 1 ? `<text x="${x(i)}" y="${H - m.b + 16}" text-anchor="middle" font-size="11" fill="var(--ink-2)">${lb}</text>` : "").join("")}
     <path d="${line(all)}" fill="none" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="2 3"/>
     ${lines.map(l => `<path d="${line(l.v)}" fill="none" stroke="${lc(l.p)}" stroke-width="2.2"><title>${PARTY[l.p]}</title></path>`).join("")}
     ${lines.map(l => `<circle cx="${x(n - 1)}" cy="${y(l.v[n - 1])}" r="3" fill="${lc(l.p)}"/>`).join("")}
     ${el}
   </svg>
-  <div class="swl small" style="margin-top:6px">${lines.map(l => `<span><span class="sw" style="background:${lc(l.p)}"></span>${PARTY[l.p]} ${C.levelPlural}</span>`).join("")}<span><svg width="22" height="8" aria-hidden="true" style="vertical-align:middle"><line x1="1" y1="4" x2="21" y2="4" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3"/></svg> all ${C.levelPlural}</span></div>`;
-  document.getElementById("trendNote").innerHTML = `Median ${C.level} held by each party today, dollars per person per year in each ${SER.kind} (adjusted totals: flagged bodies left out, no department filter), so a spike in one ${SER.kind} stands out against the before/after averages. ${SER.complete < n ? `The shaded ${SER.kind}${n - SER.complete > 1 ? "s are" : " is"} still being reported, which is the lag the main map waits out.` : ""} ${SER.kind === "quarter" ? "Big one-time agreements land in the quarter they are signed, so a tall spike is usually one award." : "Statements carry no dates, so the series is by fiscal year."}`;
+  <div class="swl small" style="margin-top:6px">${lines.map(l => `<span><span class="sw" style="background:${lc(l.p)}"></span>${PARTY[l.p]} ${C.levelPlural}</span>`).join("")}<span><svg width="22" height="8" aria-hidden="true" style="vertical-align:middle"><line x1="1" y1="4" x2="21" y2="4" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3"/></svg> all ${C.levelPlural}${total ? " (sum)" : " (median)"}</span></div>`;
+  document.getElementById("trendNote").innerHTML = (total ? `Every dollar placed in the ${C.levelPlural} each party holds today, per ${SER.kind} (adjusted totals: flagged bodies left out, no department filter); a party with more seats naturally has a taller line, so switch to per person to compare fairly.` : `Median ${C.level} held by each party today, dollars per person per year in each ${SER.kind} (adjusted totals: flagged bodies left out, no department filter), so a spike in one ${SER.kind} stands out against the before/after averages.`) + `  ${SER.complete < n ? `The shaded ${SER.kind}${n - SER.complete > 1 ? "s are" : " is"} still being reported, which is the lag the main map waits out.` : ""} ${SER.kind === "quarter" ? "Big one-time agreements land in the quarter they are signed, so a tall spike is usually one award." : "Statements carry no dates, so the series is by fiscal year."}`;
 }
 
 // Federal contracts in the riding panel (vendor's postal area, split across the ridings it covers).
@@ -1030,6 +1040,7 @@ const COLS = [
   ["margin", "Margin (votes)", r => r.margin_votes, true], ["mpts", "Margin (pts)", r => r.margin_pts, true],
   ["after", "$ since election", (r, v) => v.after, true], ["pc", "$/person/yr", (r, v) => v.pc, true],
   ["pcb", "Before", (r, v) => v.pcb, true], ["chg", "Change", (r, v) => v.chg, true],
+  ["latest", "Latest award", r => r.latest_date || ""],
 ];
 function renderTable() {
   const thead = document.querySelector("#tbl thead"), tbody = document.querySelector("#tbl tbody");
@@ -1041,7 +1052,7 @@ function renderTable() {
   ns.sort((a, b) => { const x = col[2](R[a], V[a]), y = col[2](R[b], V[b]); if (x == null) return 1; if (y == null) return -1; return (x < y ? -1 : x > y ? 1 : 0) * state.dir; });
   tbody.innerHTML = ns.map(n => { const r = R[n], v = V[n]; return `<tr data-n="${n}"><td><span class="sw" style="background:var(${PVAR[r.rep_party]})"></span>${r.name}${r.close ? ' <span class="tag">close</span>' : ""}${r.minister ? ' <span class="tag">cabinet</span>' : ""}</td><td>${r.region.slice(0, 16)}</td>
       <td>${r.rep} · ${r.rep_party || "–"}</td><td>${r.party_won}</td><td class="n">${r.margin_votes.toLocaleString()}</td><td class="n">${r.margin_pts}</td>
-      <td class="n">${fmt$(v.after)}</td><td class="n">${fmtPc(v.pc)}</td><td class="n">${fmtPc(v.pcb)}</td><td class="n">${fmtPct(v.chg)}</td></tr>`; }).join("");
+      <td class="n">${fmt$(v.after)}</td><td class="n">${fmtPc(v.pc)}</td><td class="n">${fmtPc(v.pcb)}</td><td class="n">${fmtPct(v.chg)}</td><td class="n" title="Date of the newest award recorded in this ${C.level}">${r.latest_date || "–"}</td></tr>`; }).join("");
   tbody.querySelectorAll("tr").forEach(tr => {
     tr.classList.toggle("sel", tr.dataset.n === state.sel);
     // Clicking a row selects the riding and zooms the main map so the riding fills half the view.
@@ -1066,6 +1077,7 @@ if (BUDGET) {
   scopeSel.onchange = () => { state.budgetScope = scopeSel.value; renderLegend(); renderDots(); if (state.sel) select(state.sel, true); };
 }
 document.getElementById("q").oninput = e => { state.q = e.target.value; renderTable(); };
+function setGrants(mode) { state.grants = mode; if (state.sel) select(state.sel, true); }
 // Permalinks: #r=<riding key> opens a riding; the panel's "link" button copies that address.
 function copyLink(n, btn) {
   const url = location.href.split("#")[0] + "#r=" + encodeURIComponent(n);
@@ -1082,10 +1094,10 @@ document.getElementById("csvBtn").onclick = async () => {
   const q = state.q.toLowerCase();
   const ns = Object.keys(R).filter(n => (!state.closeOnly || R[n].close) && (!q || (R[n].name + " " + R[n].rep + " " + R[n].region).toLowerCase().includes(q)));
   const head = ["key", C.levelTitle, C.regionTitle, "population", C.rep, "party", `winner_${C.electionYear}`, "runner_up", "margin_votes", "margin_pts", "close", "cabinet", "group",
-                "dollars_since_election", "dollars_before", "per_person_per_year", "per_person_before", "change_pct", "awards_since_election"];
+                "dollars_since_election", "dollars_before", "per_person_per_year", "per_person_before", "change_pct", "awards_since_election", "latest_award"];
   const esc = v => v == null ? "" : /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
   const rows = ns.map(n => { const r = R[n], v = V[n]; return [n, r.name, r.region, r.population, r.rep, r.rep_party, r.party_won, r.runnerup_party, r.margin_votes, r.margin_pts, r.close ? "yes" : "no",
-    r.minister ? r.minister.title : "", r.group, Math.round(v.after), Math.round(v.before), v.pc.toFixed(2), v.pcb.toFixed(2), v.chg == null ? "" : v.chg.toFixed(1), state.dept ? "" : (state.natl ? r.after_n : r.after_adj_n)].map(esc).join(","); });
+    r.minister ? r.minister.title : "", r.group, Math.round(v.after), Math.round(v.before), v.pc.toFixed(2), v.pcb.toFixed(2), v.chg == null ? "" : v.chg.toFixed(1), state.dept ? "" : (state.natl ? r.after_n : r.after_adj_n), r.latest_date || ""].map(esc).join(","); });
   const note = `# ${C.title}; ${state.dept || C.filterAll}; ${state.natl ? "flagged bodies included" : "adjusted totals"}; windows ${M.before_start || ""} to ${M.before_end || ""} and ${M.election} to ${M.cutoff}; generated ${M.generated || ""}`;
   const csv = "\ufeff" + note + "\n" + head.join(",") + "\n" + rows.join("\n");
   const filename = (C.title || "ridings").toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".csv";
