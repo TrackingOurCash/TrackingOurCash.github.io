@@ -12,9 +12,9 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
-NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "alberta.html", "label": "Alberta"}, {"href": "bc.html", "label": "British Columbia"},
-       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "nb.html", "label": "New Brunswick"},
-       {"href": "pei.html", "label": "PEI"}, {"href": "ontario.html", "label": "Ontario"}, {"href": "quebec.html", "label": "Quebec"}, {"href": "ns.html", "label": "Nova Scotia"}, {"href": "nl.html", "label": "Newfoundland"},
+NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "bc.html", "label": "British Columbia"}, {"href": "alberta.html", "label": "Alberta"},
+       {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "ontario.html", "label": "Ontario"},
+       {"href": "quebec.html", "label": "Quebec"}, {"href": "nb.html", "label": "New Brunswick"}, {"href": "pei.html", "label": "PEI"}, {"href": "ns.html", "label": "Nova Scotia"}, {"href": "nl.html", "label": "Newfoundland"},
        {"href": "yukon.html", "label": "Yukon"}, {"href": "nwt.html", "label": "NWT"}, {"href": "nunavut.html", "label": "Nunavut"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
