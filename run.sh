@@ -51,29 +51,29 @@ python3 scripts/contracts.py || echo "contracts layer skipped"
 (cd scripts && python3 budget.py)
 python3 scripts/merge_news.py
 python3 scripts/wiki_links.py || true
-# Alberta layer (skipped if the Alberta downloads are missing)
-if python3 scripts/ab_prep.py && python3 scripts/ab_spending.py > data/ab/summary.json.tmp; then mv data/ab/summary.json.tmp data/ab/summary.json; else rm -f data/ab/summary.json.tmp; echo "AB layer skipped; using committed data"; fi
-# British Columbia layer
-if python3 scripts/bc_prep.py && python3 scripts/bc_spending.py > data/bc/summary.json.tmp; then mv data/bc/summary.json.tmp data/bc/summary.json; else rm -f data/bc/summary.json.tmp; echo "BC layer skipped (inputs missing); using committed data"; fi
-# Saskatchewan layer
-if python3 scripts/sk_prep.py && python3 scripts/sk_spending.py > data/sk/summary.json.tmp; then mv data/sk/summary.json.tmp data/sk/summary.json; else rm -f data/sk/summary.json.tmp; echo "SK layer skipped (inputs missing); using committed data"; fi
-# Manitoba layer
-if python3 scripts/mb_prep.py && python3 scripts/mb_spending.py > data/mb/summary.json.tmp; then mv data/mb/summary.json.tmp data/mb/summary.json; else rm -f data/mb/summary.json.tmp; echo "MB layer skipped (inputs missing); using committed data"; fi
-# New Brunswick layer
-if python3 scripts/nb_prep.py && python3 scripts/nb_spending.py > data/nb/summary.json.tmp; then mv data/nb/summary.json.tmp data/nb/summary.json; else rm -f data/nb/summary.json.tmp; echo "NB layer skipped (inputs missing); using committed data"; fi
-# Prince Edward Island layer (federal grants on the provincial districts; PEI publishes no payee list)
-python3 scripts/pe_prep.py || echo "pe prep skipped (inputs missing); using committed divisions"
-python3 scripts/fed_prov_spending.py pe > data/pe/summary.json.tmp && mv data/pe/summary.json.tmp data/pe/summary.json || echo "pe layer skipped"
-# Ontario layer
-if python3 scripts/on_prep.py && python3 scripts/on_spending.py > data/on/summary.json.tmp; then mv data/on/summary.json.tmp data/on/summary.json; else rm -f data/on/summary.json.tmp; echo "ON layer skipped (inputs missing); using committed data"; fi
-# Nova Scotia layer (archived Public Accounts supplements; the live site refuses connections)
-if python3 scripts/ns_prep.py && python3 scripts/ns_spending.py > data/ns/summary.json.tmp; then mv data/ns/summary.json.tmp data/ns/summary.json; else rm -f data/ns/summary.json.tmp; echo "NS layer skipped (inputs missing); using committed data"; fi
-# Quebec layer (federal grants on the 2026 ridings; Quebec publishes no payee list either)
-python3 scripts/qc_prep.py || echo "qc prep skipped (inputs missing); using committed divisions"
-python3 scripts/fed_prov_spending.py qc > data/qc/summary.json.tmp && mv data/qc/summary.json.tmp data/qc/summary.json || echo "qc layer skipped"
-# Newfoundland and Labrador layer (federal grants on the provincial districts; NL publishes no payee list)
-python3 scripts/nl_prep.py || echo "nl prep skipped (inputs missing); using committed divisions"
-python3 scripts/fed_prov_spending.py nl > data/nl/summary.json.tmp && mv data/nl/summary.json.tmp data/nl/summary.json || echo "nl layer skipped"
-# Territories (federal grants on the territorial districts)
-for t in yt nt nu; do python3 scripts/${t}_prep.py || echo "$t prep skipped (inputs missing); using committed divisions"; python3 scripts/fed_prov_spending.py $t > data/$t/summary.json.tmp && mv data/$t/summary.json.tmp data/$t/summary.json || echo "$t layer skipped"; done
+# Provincial layers. Each one rebuilds from its sources when they are reachable; otherwise the
+# committed copy under data/<dir>/ stands. The layer is snapshotted first and restored if the
+# rebuild fails or produces an empty map (check_layer.py), so a bad day at a source never publishes zeros.
+layer() {  # layer <label> <dir> <command...>
+  local label=$1 dir=$2; shift 2
+  rm -rf "data/$dir.bak"; cp -R "data/$dir" "data/$dir.bak"
+  if "$@" > "data/$dir/summary.json.tmp" && python3 scripts/check_layer.py "data/$dir"; then
+    mv "data/$dir/summary.json.tmp" "data/$dir/summary.json"; rm -rf "data/$dir.bak"; echo "$label layer refreshed"
+  else
+    rm -rf "data/$dir"; mv "data/$dir.bak" "data/$dir"; echo "$label layer: rebuild failed or empty; using committed data"
+  fi
+}
+prov() { python3 "scripts/$1_prep.py" >&2 && python3 "scripts/$1_spending.py"; }
+grid() { python3 "scripts/$1_prep.py" >&2 || echo "$1 prep skipped (inputs missing); using committed divisions" >&2; python3 scripts/fed_prov_spending.py "$1"; }
+layer AB ab prov ab
+layer BC bc prov bc
+layer SK sk prov sk
+layer MB mb prov mb
+layer NB nb prov nb
+layer ON on prov on
+layer NS ns prov ns        # archived Public Accounts supplements; the live site refuses connections
+layer PEI pe grid pe       # federal grants on the provincial districts (no provincial payee list)
+layer QC qc grid qc
+layer NL nl grid nl
+for t in yt nt nu; do layer "$t" "$t" grid "$t"; done
 python3 scripts/build_map.py
