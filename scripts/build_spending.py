@@ -167,7 +167,7 @@ def main():
     stats = Counter()
     latest_start = ""
 
-    with open(RAW / "grants.csv", encoding="utf-8-sig", newline="") as f:
+    with open(RAW / "grants_trim.csv" if (RAW / "grants_trim.csv").exists() else RAW / "grants.csv", encoding="utf-8-sig", newline="") as f:
         for row in csv.DictReader(f):
             stats["rows"] += 1
             if None in row or row.get("owner_org_title") is None:

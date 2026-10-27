@@ -10,6 +10,7 @@ GRANTS=https://open.canada.ca/data/dataset/432527ab-7aac-45b5-81d6-7597107a7013/
 EC=https://www.elections.ca/res/rep/off/ovrGE45/62/data_donnees
 REP=https://represent.opennorth.ca/boundaries/federal-electoral-districts-2023-representation-order
 curl -sSL --retry 4 -o data/raw/grants.csv "$GRANTS"
+python3 scripts/trim_grants.py   # one pass over the 2 GB file; the other scripts read the trimmed copy
 curl -sSL -o data/raw/ec2025_table11.csv "$EC/table_tableau11.csv"
 curl -sSL -o data/raw/ec2025_table12.csv "$EC/table_tableau12.csv"
 curl -sSL -o data/raw/mps.csv "https://www.ourcommons.ca/Members/en/search/csv"
