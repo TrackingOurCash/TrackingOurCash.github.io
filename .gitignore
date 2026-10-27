@@ -1,6 +1,10 @@
-data/raw/
+data/raw/*
+!data/raw/contracts/
+data/raw/contracts/*
+!data/raw/contracts/fsa_shares.json
 data/*.json
 data/*/
+!data/raw/
 !data/budget_items.json
 !data/legislatures.json
 !data/fiscal_history.json

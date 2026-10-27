@@ -244,7 +244,8 @@ def main():
 
     # FSA -> {riding: share of the FSA's postal codes}, from GeoNames centroids placed in the
     # 2023 boundaries. Cached, since it is the slow step (~900k point-in-polygon lookups).
-    if FSA_SHARES.exists() and os.path.getmtime(FSA_SHARES) >= os.path.getmtime(ROOT / "scripts" / "geo.py"):
+    # The cache is committed; delete it to force a rebuild after changing geo.py or the boundaries.
+    if FSA_SHARES.exists():
         fsa_shares = json.load(open(FSA_SHARES))
     else:
         t1 = time.time()
