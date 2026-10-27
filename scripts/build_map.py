@@ -22,7 +22,8 @@ ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXg
                  "legislatures.html": "https://claude.ai/artifact/45zE2pwEjXbZ3Wd2Zxib4p", "manitoba.html": "https://claude.ai/artifact/PmTjRxsid59XiGgJgPVmiv",
                  "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R", "pei.html": "https://claude.ai/artifact/X4239bKZYyxRcX8ozVVZHQ",
                  "ontario.html": "https://claude.ai/artifact/JXkiRVQspJBViHHJ2MDcYL", "quebec.html": "https://claude.ai/artifact/YCvZDpg18q9rNjVfrG1nGz",
-                 "ns.html": "https://claude.ai/artifact/KZKpkXpFKx5vSGPxYMrDPX", "nl.html": "https://claude.ai/artifact/9bRA1fMpskDcP2EzTcYjT1"}
+                 "ns.html": "https://claude.ai/artifact/KZKpkXpFKx5vSGPxYMrDPX", "nl.html": "https://claude.ai/artifact/9bRA1fMpskDcP2EzTcYjT1",
+                 "yukon.html": "https://claude.ai/artifact/TfZdzP8WmqHWxpADNAJQjS", "nwt.html": "https://claude.ai/artifact/EHbnP8UrR4CvzXmWrNDpc1", "nunavut.html": "https://claude.ai/artifact/8QyhH7xKkzNy3vzTws8c81"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
