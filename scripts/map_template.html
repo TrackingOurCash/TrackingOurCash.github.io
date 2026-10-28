@@ -411,6 +411,7 @@ const CT = D.contracts || null;  // federal contracts layer, same windows, keyed
 const MEGA = (CT && CT.large) || [];
 const megaMin = () => fmt$(C.contracts.large_threshold).replace(/\.0M$/, "M");
 const GOV = (C.ministers && C.ministers.govParty) || "LPC";
+document.getElementById("panel").innerHTML = `<p class="muted">Hover a ${C.level} for a summary. Click it for the ${C.rep}, the ${C.electionYear} result and its largest ${(C.findItem || "grant").toLowerCase()}s.</p>`;
 const PANEL_IDLE = document.getElementById("panel").innerHTML;
 const BUDGET = D.budget || null;
 // Budget documents are listed oldest first; "latest" is the most recent one.
@@ -1304,19 +1305,25 @@ const FIND = [];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 function fold(x) { return (x == null ? "" : String(x)).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase(); }
 function longDate(d) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ""); return m ? `${+m[3]} ${MONTHS[+m[2] - 1]} ${m[1]} ${MONTHS[+m[2] - 1].slice(0, 3)}` : ""; }
+// Group names follow the page: "Riding"/"Department" federally, "District"/"Ministry" and the like on provincial pages.
+const G_RIDING = C.levelTitle || "Riding";
+const G_DEPT = (C.filterAll || "All departments").replace(/^All\s+/i, "").replace(/ies$/, "y").replace(/s$/, "").replace(/^./, c => c.toUpperCase());
+const FIND_ITEM = C.findItem || "Grant";  // "Payment" where the province publishes payments rather than grant awards
+const isDay = d => /^\d{4}-\d{2}-\d{2}/.test(d || "");
 function buildFind() {
   const seen = new Set();
   const add = (g, label, sub, n, extra) => {
     const key = g + "|" + label + "|" + n; if (seen.has(key)) return; seen.add(key);
-    FIND.push(Object.assign({g, label, sub, n, hay: fold(label + " " + sub + " " + ((extra && extra.hay) || ""))}, extra || {}));
+    // extra.hay holds extra words (a long-form date); the searchable text is always label + sub + those words, folded.
+    FIND.push(Object.assign({g, label, sub, n}, extra || {}, {hay: fold(label + " " + sub + " " + ((extra && extra.hay) || ""))}));
   };
   for (const [n, r] of Object.entries(R)) {
-    add("Riding", r.name, `${r.region} · ${r.rep} (${r.rep_party || "–"})`, n);
+    add(G_RIDING, r.name, `${r.region} · ${r.rep} (${r.rep_party || "–"})`, n);
     add(C.rep, r.rep, `${PARTY[r.rep_party] || r.rep_party || ""} · ${r.name}${r.minister ? " · " + r.minister.title : ""}`, n);
     const grants = [...(r.top_grants || []).map(t => [t, "largest"]), ...(r.latest_grants || []).map(t => [t, "latest"])];
     for (const [t, mode] of grants) {
-      add("Grant", `${t.who} · ${fmt$(t.v)}`, `${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date} · ${r.name}`, n, {mode, hay: longDate(t.date)});
-      add("Date", `${t.date} · ${t.who} · ${fmt$(t.v)}`, `${t.prog} · ${r.name}`, n, {mode, hay: longDate(t.date)});
+      add(FIND_ITEM, `${t.who} · ${fmt$(t.v)}`, `${t.prog}${t.dept ? " · " + t.dept : ""} · ${t.date} · ${r.name}`, n, {mode, hay: longDate(t.date)});
+      if (isDay(t.date)) add("Date", `${t.date} · ${t.who} · ${fmt$(t.v)}`, `${t.prog} · ${r.name}`, n, {mode, hay: longDate(t.date)});
     }
     if (CT && CT.ridings[n]) for (const t of CT.ridings[n].top_contracts || []) {
       add("Contract", `${t.who} · ${fmt$(t.v)}`, `${t.desc || ""}${t.dept ? " · " + t.dept : ""} · ${t.date} · ${r.name}`, n, {money: true, hay: longDate(t.date)});
@@ -1329,13 +1336,14 @@ function buildFind() {
     add("Contract", `${c.who} · ${fmt$(c.v)}`, `megacontract, ${megaWhen(c)} · ${c.desc || ""} · ${c.dept} · ${c.date} · ${names.join(", ") || "not placed: " + c.why}`, first, {mega: true, hay: longDate(c.date) + " megacontract"});
     add("Date", `${c.date} · ${c.who} · ${fmt$(c.v)} (megacontract)`, `${c.desc || ""} · ${names.join(", ") || "not placed"}`, first, {mega: true, hay: longDate(c.date)});
   }
-  for (const d of C.filterOptions) add("Department", d, "filter the map and table to this department or program", null, {dept: d});
-  for (const [name, total, awards, , by] of (D.recipients || [])) {
+  for (const d of C.filterOptions) add(G_DEPT, d, `filter the map and table to this ${G_DEPT.toLowerCase()}`, null, {dept: d});
+  const unit = C.findItem ? FIND_ITEM.toLowerCase() : "award";
+  for (const [name, total, awards, flag, by] of (D.recipients || [])) {
     const top = Object.entries(by || {}).sort((a, b) => b[1] - a[1])[0];
-    if (top && R[top[0]]) add("Recipient", `${name} · ${fmt$(total)}`, `${awards} award${awards > 1 ? "s" : ""} since the election; most in ${R[top[0]].name}`, top[0]);
+    if (top && R[top[0]]) add("Recipient", `${name} · ${fmt$(total)}`, `${awards} ${unit}${awards > 1 ? "s" : ""} since the election; most in ${R[top[0]].name}${flag && FLAG[flag] ? " · " + FLAG[flag] : ""}`, top[0]);
   }
 }
-const FIND_ORDER = [C.rep, "Riding", "Department", "Recipient", "Grant", "Contract", "Date"];
+const FIND_ORDER = [C.rep, G_RIDING, G_DEPT, "Recipient", FIND_ITEM, "Contract", "Date"];
 const FIND_PER_GROUP = 6;
 let findActive = -1, findShown = [];
 function findMatches(q) {
@@ -1395,6 +1403,8 @@ if (C.search) {
   document.getElementById("findWrap").hidden = false;
   buildFind();
   const input = document.getElementById("find");
+  const kinds = [`an ${C.rep}`, C.level, G_DEPT.toLowerCase(), "recipient", CT ? "contract" : null, FIND.some(e => e.g === "Date") ? "date" : null].filter(Boolean);
+  input.placeholder = "Find " + kinds.slice(0, -1).join(", ") + " or " + kinds[kinds.length - 1];
   input.oninput = renderFind;
   input.onfocus = () => { if (input.value) renderFind(); };
   input.onblur = () => setTimeout(() => { document.getElementById("findList").hidden = true; }, 150);

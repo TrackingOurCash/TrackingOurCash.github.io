@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-26",
+ "generated": "2026-10-28",
  "election": "2025-02-27",
  "cutoff": "2026-03-31",
  "before_start": "2023-04-01",
@@ -32,21 +32,21 @@
  },
  "excluded_after": {
   "accounts under threshold": 7605805141,
-  "suppliers": 14139156575,
-  "province-wide bodies": 18224330207,
+  "suppliers": 14141477376,
   "out-of-province": 139841749,
-  "unmatched": 837585374,
+  "province-wide bodies": 18221884406,
+  "unmatched": 837710374,
   "individuals": 32628675898,
   "other governments": 183834907
  },
  "buckets_after": {
-  "province-wide": 110534597710,
+  "province-wide": 110531582969,
   "individuals": 32628675898,
-  "supplier": 18119462113,
+  "supplier": 18122192928,
   "other government": 16157576356,
-  "counted": 16104560640,
+  "counted": 16104719566,
   "accounts under threshold": 7605805141,
-  "unmatched": 837585374,
+  "unmatched": 837710374,
   "out-of-province": 139841749
  },
  "other_payment_types_after": {
@@ -473,7 +473,7 @@
   "median_pc_after": 1047.84,
   "median_pc_before": 921.3,
   "median_change_pct": 8.0,
-  "total_adj_after": 2261932651
+  "total_adj_after": 2262091577
  },
  "Safe PC": {
   "ridings": 55,

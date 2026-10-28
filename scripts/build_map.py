@@ -756,6 +756,8 @@ def provincial(key):
         config["notes"].append("<b>Formula vs discretionary:</b> " + fp["note"] + (" Here the split is by program." if lv["by"] == "program" else " This government's statements name no programs, so the split is by class of recipient: municipalities, First Nations, school and child-care operators, care homes and the like count as formula money.") + " Tick \"discretionary only\" above the map to drop the formula money.")
     fine = DATA / P["dir"] / "divisions_geo_fine.json"
     config["legislatureInGrid"] = False  # provinces: below the city insets
+    config["search"] = True  # the same type-ahead search as the federal page: MLAs, districts, ministries, recipients, payments, dates
+    config["findItem"] = "Grant" if P.get("recordUrl") or "grants" in P["title"] else "Payment"
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["prog_by_riding"], "deptBefore": {}, "recipients": sp.get("recipients", []),
                "legislature": legislature_for(P["region"]),
                "geo": json.load(open(DATA / P["dir"] / "divisions_geo.json")), "land": land,
