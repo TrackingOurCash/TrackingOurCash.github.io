@@ -861,18 +861,20 @@ def world():
     notes = [
         f"<b>Sources:</b> {src_link('grants', 'Proactive disclosure of grants and contributions')}; {src_link('contracts', 'Proactive publication of contracts over $10,000')}; "
         f"{src_link('iati', 'Global Affairs Canada IATI activity files')}; {src_link('gii', 'UNDP Gender Inequality Index')}. The three spending sources overlap (Global Affairs grants appear both in the disclosure and in IATI), so the page switches between them instead of adding them up.",
-        f"<b>Windows:</b> since the election means {m['election']} to {m['cutoff']}; the year before means {m['before_start']} to {m['before_end']}, the same windows as the riding maps. Contracts are dated by the original award, grants by the agreement start, IATI aid by its disbursement and expenditure transactions in the window.",
+        f"<b>Fiscal years</b> run 1 April to 31 March ({', '.join(m.get('fys', []))}). "
+        + "".join(f"FY {fy} is still being reported (records to {d}). " for fy, d in (m.get("fy_through") or {}).items())
+        + "Contracts are dated by the original award (an amendment does not move them), grants by the agreement start, IATI aid by the disbursements paid in the year.",
         "<b>Where the money is placed:</b> contracts by the vendor's country, grants and contributions by the recipient's address (a United Nations agency in New York or Geneva counts there, wherever the program runs), IATI aid by the project's recipient countries. Canada itself is shaded neutral.",
         "<b>Flags</b> are keyword matches on each record's title, description and program, in English and French. They say what a record mentions, not whether the money was well or badly spent. "
         + "; ".join(f"<b>{lbl}</b> <code>{kw[k]}</code>" for k, lbl in (("women", "W"), ("men", "M"), ("gender", "G"), ("lgbtq", "L")) if kw.get(k))
         + ". Global Affairs also tags every IATI project with the OECD gender-equality policy marker: <i>principal</i> means gender equality is the main objective, <i>significant</i> means it is one objective.",
-        "<b>Gender Inequality Index (UNDP):</b> 0 means women and men fare equally on reproductive health, empowerment and labour-market measures; higher means less equal. The flags card plots flagged dollars against it so readers can see where gender-focused money goes.",
+        "<b>Gender Inequality Index (UNDP):</b> 0 means women and men fare equally on reproductive health, empowerment and labour-market measures; higher means less equal. It shades the map, and the flags card plots flagged dollars against it so readers can see where gender-focused money goes. Grey countries have no score.",
     ] + [f"<b>Caveat:</b> {n}" for n in m.get("notes", [])]
     config = {
         "title": "Canada's money abroad",
-        "subtitle": (f"Federal grants, contributions and contracts paid to recipients and vendors outside Canada, and Global Affairs Canada's aid "
-                     f"as reported to IATI, since the {m['election']} federal election (to {m['cutoff']}) against the year before. Each continent has its own colour; "
-                     f"the deeper the colour, the more money. Grey: none recorded."),
+        "subtitle": ("Federal contracts, grants and contributions paid to vendors and recipients outside Canada, and Global Affairs Canada's aid "
+                     "as reported to IATI, by fiscal year. Countries are shaded by the UN Gender Inequality Index (deeper means less equal for women) "
+                     "and the bubbles show the dollars; switch to colour by spending for a continent-by-continent view."),
         "nav": [dict(x, current=x["href"] == "international.html") for x in NAV],
         "notes": notes,
     }

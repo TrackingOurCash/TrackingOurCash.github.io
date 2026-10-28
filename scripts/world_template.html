@@ -1,15 +1,19 @@
 <style>
-/* International page: the shared look from map_template.html, plus a world map coloured by continent. */
-:root { --c-AF: #d07a1f; --c-AS: #c8435a; --c-EU: #3a6bd0; --c-NA: #8257cc; --c-SA: #23946a; --c-OC: #1a92ad; --c-OT: #7d8a96; --home: #c3c2b7; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --c-AF: #f0a052; --c-AS: #ee7186; --c-EU: #77a0f2; --c-NA: #ad8bf0; --c-SA: #55c497; --c-OC: #4cc0d9; --c-OT: #9eabb6; --home: #4a4a46; } }
-:root[data-theme="dark"] { --c-AF: #f0a052; --c-AS: #ee7186; --c-EU: #77a0f2; --c-NA: #ad8bf0; --c-SA: #55c497; --c-OC: #4cc0d9; --c-OT: #9eabb6; --home: #4a4a46; }
+/* International page: the shared look from map_template.html, plus a world map. Countries are shaded by the UN Gender
+   Inequality Index (deeper = less equal) with spending as bubbles, or by continent with spending as the depth. */
+:root { --c-AF: #d07a1f; --c-AS: #c8435a; --c-EU: #3a6bd0; --c-NA: #8257cc; --c-SA: #23946a; --c-OC: #1a92ad; --c-OT: #7d8a96; --home: #c3c2b7; --gii: #8e2a6b; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --c-AF: #f0a052; --c-AS: #ee7186; --c-EU: #77a0f2; --c-NA: #ad8bf0; --c-SA: #55c497; --c-OC: #4cc0d9; --c-OT: #9eabb6; --home: #4a4a46; --gii: #e389c0; } }
+:root[data-theme="dark"] { --c-AF: #f0a052; --c-AS: #ee7186; --c-EU: #77a0f2; --c-NA: #ad8bf0; --c-SA: #55c497; --c-OC: #4cc0d9; --c-OT: #9eabb6; --home: #4a4a46; --gii: #e389c0; }
 .country { stroke: var(--surface); stroke-width: 0.5; vector-effect: non-scaling-stroke; cursor: pointer; }
 .country:hover { stroke: var(--sel); stroke-width: 1.4; }
 .country.sel { stroke: var(--sel); stroke-width: 2; }
 .country.home { cursor: default; }
 .sphere { fill: var(--water); }
+.bub { fill: var(--ink); fill-opacity: 0.5; stroke: var(--surface); stroke-width: 1; vector-effect: non-scaling-stroke; cursor: pointer; }
+.bub:hover, .bub.sel { fill-opacity: 0.8; stroke: var(--sel); }
 .wlegend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--ink-2); margin-top: 8px; align-items: center; }
 .wlegend .ramp { display: inline-block; width: 64px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 4px; }
+.wlegend .dot { display: inline-block; border-radius: 50%; background: var(--ink); opacity: 0.5; vertical-align: middle; margin-right: 3px; }
 .cbars .row { display: grid; grid-template-columns: 130px 1fr 92px; gap: 8px; align-items: center; font-size: 13px; margin: 4px 0; }
 .cbars .track { height: 12px; background: var(--grid); border-radius: 3px; overflow: hidden; }
 .cbars .fill { height: 100%; border-radius: 3px; }
@@ -18,14 +22,21 @@
 .fl { display: inline-block; min-width: 16px; text-align: center; font-size: 11px; font-weight: 600; border-radius: 4px; padding: 0 3px; }
 .fl.on { background: var(--ink); color: var(--surface); }
 .fl.off { color: var(--axis); }
-#scatter svg, #continentChart svg { width: 100%; height: auto; display: block; }
+#scatter svg { width: 100%; height: auto; display: block; }
 #scatter .lbl { font-size: 10px; fill: var(--ink-2); }
-.tabs { display: inline-flex; }
 .pager { display: flex; gap: 10px; align-items: center; margin-top: 8px; font-size: 12px; color: var(--ink-2); }
 td.t { white-space: normal; min-width: 240px; max-width: 420px; }
 td.who { white-space: normal; min-width: 160px; max-width: 260px; }
-.giibar { height: 8px; background: linear-gradient(90deg, var(--surplus), var(--deficit)); border-radius: 4px; position: relative; margin: 6px 0 2px; }
-.giibar i { position: absolute; top: -3px; width: 3px; height: 14px; background: var(--ink); border-radius: 1px; }
+.giibar { height: 8px; background: linear-gradient(90deg, var(--surface), var(--gii)); border: 1px solid var(--border); border-radius: 4px; position: relative; margin: 6px 0 2px; }
+.giibar i { position: absolute; top: -4px; width: 3px; height: 14px; background: var(--ink); border-radius: 1px; }
+.spark { display: block; width: 100%; height: auto; margin: 6px 0 2px; }
+.spark rect { fill: var(--before); }
+.spark rect.on { fill: var(--after); }
+.spark text { font-size: 9px; fill: var(--muted); }
+table.fytbl { border-collapse: collapse; font-size: 13px; margin: 4px 0 12px; }
+table.fytbl td, table.fytbl th { padding: 3px 10px 3px 0; border-bottom: 1px solid var(--grid); text-align: right; position: static; cursor: default; }
+table.fytbl td:first-child, table.fytbl th:first-child { text-align: left; }
+table.fytbl tr.on td { font-weight: 600; }
 </style>
 
 <div class="wrap">
@@ -39,13 +50,14 @@ td.who { white-space: normal; min-width: 160px; max-width: 260px; }
       <button data-s="grants" aria-pressed="false">Grants &amp; contributions</button>
       <button data-s="iati" aria-pressed="false">Global Affairs aid (IATI)</button>
     </div>
-    <div class="seg" role="group" aria-label="Which window" id="win">
-      <button data-w="after" aria-pressed="true">Since the election</button>
-      <button data-w="before" aria-pressed="false">Year before</button>
+    <div class="seg" role="group" aria-label="Fiscal year" id="fy"></div>
+    <div class="seg" role="group" aria-label="What colours the map" id="colorBy">
+      <button data-c="gii" aria-pressed="true">Colour = gender inequality</button>
+      <button data-c="spend" aria-pressed="false">Colour = spending</button>
     </div>
-    <div class="seg" role="group" aria-label="What sets the colour depth" id="metric">
-      <button data-m="total" aria-pressed="true">Depth = total $</button>
-      <button data-m="pc" aria-pressed="false">Depth = $ per resident</button>
+    <div class="seg" role="group" aria-label="Dollars or dollars per resident" id="metric">
+      <button data-m="total" aria-pressed="true">Total $</button>
+      <button data-m="pc" aria-pressed="false">$ per resident</button>
     </div>
     <select id="flag" aria-label="Keyword flag">
       <option value="">All spending</option>
@@ -64,17 +76,18 @@ td.who { white-space: normal; min-width: 160px; max-width: 260px; }
       <svg id="svg" viewBox="0 0 960 500" role="img" aria-label="World map of Canadian federal spending abroad"><g id="main"></g></svg>
       <div class="wlegend" id="legend"></div>
     </div>
-    <div class="card" id="panel"><p class="muted">Hover a country for a summary. Click it for its totals, its gender-equality score and the largest records.</p></div>
+    <div class="card" id="panel"><p class="muted">Hover a country for a summary. Click it for its totals by fiscal year, its gender-equality score and its largest and latest records.</p></div>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <h2 id="contTitle">By continent</h2>
+    <h2 id="contTitle">By fiscal year and continent</h2>
+    <table class="fytbl" id="fyTbl"></table>
     <p class="small muted" id="contNote"></p>
     <div class="cbars" id="contBars"></div>
   </div>
 
   <div class="card" style="margin-top:16px">
-    <h2>Gender and LGBTQ2+ flags</h2>
+    <h2 id="flagTitle">Gender and LGBTQ2+ flags</h2>
     <p class="small muted" id="flagNote"></p>
     <div class="tablewrap" style="max-height:none"><table class="flagtbl" id="flagTbl"></table></div>
     <h3 style="margin-top:14px" id="scatterTitle">Flagged money and women's equality, country by country</h3>
@@ -93,13 +106,13 @@ td.who { white-space: normal; min-width: 160px; max-width: 260px; }
   </div>
 
   <div class="card" style="margin-top:16px">
-    <h2>Money that is not on the map</h2>
+    <h2 id="unplacedTitle">Money that is not on the map</h2>
     <div id="unplaced" class="small"></div>
   </div>
 
   <div class="card" style="margin-top:16px">
     <div class="controls" style="justify-content:space-between">
-      <h2 style="margin:0" id="tableTitle">Every record since the election</h2>
+      <h2 style="margin:0" id="tableTitle">Every record</h2>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <div class="seg" role="group" aria-label="Which records" id="tab">
           <button data-t="contract" aria-pressed="true">Contracts</button>
@@ -121,20 +134,38 @@ td.who { white-space: normal; min-width: 160px; max-width: 260px; }
 
 <script>
 const D = /*__DATA__*/null;
-const C = D.config, M = D.meta, K = D.countries, REC = D.records || [], GEO = D.geo;
-const state = {src: "contracts", win: "after", metric: "total", flag: "", sel: null, tab: "contract", q: "", recipQ: "", sort: "v", dir: -1, limit: 200};
-const SRC = {grants: "Grants & contributions", contracts: "Contracts", iati: "Global Affairs aid (IATI)"};
+const C = D.config, M = D.meta, K = D.countries, GEO = D.geo;
+const S_OF = {c: "contract", g: "grant", i: "iati"};
+const SRC = {contracts: "Contracts", grants: "Grants & contributions", iati: "Global Affairs aid (IATI)"};
 const REC_OF = {grants: "grant", contracts: "contract", iati: "iati"};
 const SRC_OF = {grant: "grants", contract: "contracts", iati: "iati"};
 const FLAGS = {W: "Women or girls", M: "Men or boys", G: "Gender", L: "LGBTQ2+", P: "Gender marker: principal", S: "Gender marker: significant"};
 const CONT = {"Africa": "AF", "Asia": "AS", "Europe": "EU", "North America": "NA", "South America": "SA", "Oceania": "OC"};
 const contKey = c => CONT[c] || "OT";
 const HOME = "CAN";
+const FYS = M.fys || [];
+function fyOf(d) { const y = +d.slice(0, 4), m = +d.slice(5, 7), s = m >= 4 ? y : y - 1; return `${s}-${String((s + 1) % 100).padStart(2, "0")}`; }
+function recUrl(r) {
+  const org = (M.orgs[r.o] || [])[0] || "";
+  if (r.s === "contract") return `https://search.open.canada.ca/contracts/record/${encodeURIComponent(org)}%2C${encodeURIComponent(r.ref)}`;
+  if (r.s === "grant") return `https://search.open.canada.ca/grants/record/${encodeURIComponent(org)}%2C${encodeURIComponent(r.ref)}%2Ccurrent`;
+  return `https://w05.international.gc.ca/projectbrowser-banqueprojets/project-projet/details/${encodeURIComponent(r.ref)}`;
+}
+// Records arrive as compact arrays: [source, date, value, who, iso3, region, org index, title, ref, flags].
+const REC = (D.records || []).map(a => { const r = {s: S_OF[a[0]], d: a[1], v: a[2], who: a[3], c: a[4], r: a[5], o: a[6], t: a[7], ref: a[8], k: a[9] || ""}; r.fy = fyOf(r.d); r.dept = (M.orgs[r.o] || [])[1] || ""; return r; });
+const recByCountry = {};
+for (const r of REC) if (r.c) (recByCountry[r.c] || (recByCountry[r.c] = [])).push(r);
+// Start on the latest complete fiscal year; a year still being reported is one click away.
+const done = FYS.filter(f => !(M.fy_through || {})[f]);
+const state = {src: "contracts", fy: done.length ? done[done.length - 1] : FYS[FYS.length - 1], colorBy: "gii", metric: "total", flag: "", sel: null, grants: "largest", tab: "contract", q: "", recipQ: "", sort: "v", dir: -1, limit: 200};
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const fmt$ = v => v == null ? "–" : "$" + (Math.abs(v) >= 1e9 ? (v/1e9).toFixed(2) + "B" : Math.abs(v) >= 1e6 ? (v/1e6).toFixed(1) + "M" : Math.abs(v) >= 1e3 ? (v/1e3).toFixed(0) + "K" : Math.round(v));
 const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleString() : v >= 1 ? v.toFixed(2) : v.toFixed(3));
 const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, ch => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[ch]));
 const hasFlag = (r, f) => f === "any" ? /[WGLPS]/.test(r.k || "") : (r.k || "").includes(f);
+const fyLabel = f => `FY ${f}${(M.fy_through || {})[f] ? ` (to ${M.fy_through[f]})` : ""}`;
+const prevFy = f => { const i = FYS.indexOf(f); return i > 0 ? FYS[i - 1] : null; };
+const flagName = () => state.flag ? document.querySelector(`#flag option[value="${state.flag}"]`).textContent.toLowerCase() : "";
 
 document.getElementById("title").textContent = C.title;
 document.title = C.title;
@@ -142,16 +173,14 @@ document.getElementById("subtitle").innerHTML = C.subtitle;
 document.getElementById("nav").innerHTML = C.nav.map(n => `<a href="${n.href}"${n.current ? ' aria-current="page"' : ""}>${n.label}</a>`).join("");
 document.getElementById("sourcesLink").href = C.sourcesHref || "sources.html";
 document.getElementById("notes").innerHTML = `<h2>How to read this</h2><ul>${C.notes.map(n => `<li>${n}</li>`).join("")}</ul>`;
+document.getElementById("fy").innerHTML = FYS.map(f => `<button data-f="${f}" aria-pressed="${f === state.fy}" title="${esc(fyLabel(f))}">${f}${(M.fy_through || {})[f] ? "*" : ""}</button>`).join("");
 
 // ---- values ----
-// Flags exist only for the "since the election" records, so a flag filter reads the records; plain totals read the country table.
-const recByCountry = {};
-for (const r of REC) if (r.c) (recByCountry[r.c] || (recByCountry[r.c] = [])).push(r);
-function value(iso) {
+function value(iso, fy = state.fy) {
   const k = K[iso];
   if (!k) return 0;
-  if (state.flag) return (recByCountry[iso] || []).filter(r => r.s === REC_OF[state.src] && hasFlag(r, state.flag)).reduce((a, r) => a + r.v, 0);
-  return ((k[state.win] || {})[state.src]) || 0;
+  if (state.flag) return (recByCountry[iso] || []).filter(r => r.fy === fy && r.s === REC_OF[state.src] && hasFlag(r, state.flag)).reduce((a, r) => a + r.v, 0);
+  return (((k.fy || {})[fy] || {})[state.src]) || 0;
 }
 function metricOf(iso) { const v = value(iso), p = K[iso] && K[iso].pop; return state.metric === "pc" ? (p ? v / p : 0) : v; }
 let V = {};
@@ -162,13 +191,17 @@ function compute() {
   const ranked = ids.filter(i => V[i].m > 0).sort((a, b) => V[a].m - V[b].m);
   ranked.forEach((i, n) => V[i].t = ranked.length > 1 ? n / (ranked.length - 1) : 1);
 }
+const GII_MAX = Math.max(0.8, ...Object.values(K).map(k => k.gii || 0));
 function fillFor(f) {
-  const iso = f.properties.iso3;
+  const iso = f.properties.iso3, surface = css("--surface");
   if (iso === HOME) return css("--home");
+  if (state.colorBy === "gii") {
+    const g = K[iso] ? K[iso].gii : null;
+    return g == null ? css("--nodata") : d3.interpolateRgb(surface, css("--gii"))(0.1 + 0.9 * g / GII_MAX);
+  }
   const v = V[iso];
   if (!v || !(v.m > 0)) return css("--nodata");
-  const base = css(`--c-${contKey(f.properties.continent)}`);
-  return d3.interpolateRgb(css("--surface"), base)(0.16 + 0.84 * v.t);
+  return d3.interpolateRgb(surface, css(`--c-${contKey(f.properties.continent)}`))(0.16 + 0.84 * v.t);
 }
 
 // ---- map ----
@@ -180,10 +213,20 @@ g.append("path").attr("class", "sphere").attr("d", path({type: "Sphere"}));
 const paths = g.append("g").selectAll("path").data(feats).join("path")
   .attr("class", f => "country" + (f.properties.iso3 === HOME ? " home" : ""))
   .attr("d", path)
-  .on("mouseenter", (ev, f) => { if (!state.sel) hover(f); })
+  .on("mouseenter", (ev, f) => { if (!state.sel) hover(f.properties.iso3); })
   .on("click", (ev, f) => { if (f.properties.iso3 !== HOME) { select(f.properties.iso3); zoomToCountry(f.properties.iso3); } });
 paths.append("title").text(f => f.properties.name);
-const zoom = d3.zoom().scaleExtent([1, 24]).on("zoom", e => g.attr("transform", e.transform));
+// Bubbles sit on each country's largest landmass, so France's sits in France, not between it and its overseas regions.
+function anchor(f) {
+  const geom = f.geometry;
+  if (geom.type !== "MultiPolygon") return path.centroid(f);
+  const parts = geom.coordinates.map(c => ({type: "Polygon", coordinates: c}));
+  return path.centroid(parts.reduce((a, b) => d3.geoArea(b) > d3.geoArea(a) ? b : a));
+}
+const ANCHOR = Object.fromEntries(feats.map(f => [f.properties.iso3, anchor(f)]));
+const bubLayer = g.append("g");
+let zoomK = 1;
+const zoom = d3.zoom().scaleExtent([1, 24]).on("zoom", e => { g.attr("transform", e.transform); zoomK = e.transform.k; bubLayer.selectAll("circle").attr("r", function () { return +this.dataset.r / zoomK; }); });
 svg.call(zoom);
 function zoomToCountry(iso) {
   const f = feats.find(x => x.properties.iso3 === iso);
@@ -193,57 +236,95 @@ function zoomToCountry(iso) {
   const k = Math.min(16, 0.5 / Math.max((x1 - x0) / 960, (y1 - y0) / 500));
   svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity.translate(480, 250).scale(Math.max(1, k)).translate(-(x0 + x1) / 2, -(y0 + y1) / 2));
 }
+function renderBubbles() {
+  const rows = state.colorBy === "gii" ? Object.keys(V).filter(i => V[i].m > 0 && ANCHOR[i]).sort((a, b) => V[b].m - V[a].m) : [];
+  const max = d3.max(rows, i => V[i].m) || 1;
+  bubLayer.selectAll("circle").data(rows, d => d).join("circle")
+    .attr("class", i => "bub" + (i === state.sel ? " sel" : ""))
+    .attr("cx", i => ANCHOR[i][0]).attr("cy", i => ANCHOR[i][1])
+    .attr("data-r", i => 1.5 + 20 * Math.sqrt(V[i].m / max))
+    .attr("r", function () { return +this.dataset.r / zoomK; })
+    .on("mouseenter", (ev, i) => { if (!state.sel) hover(i); })
+    .on("click", (ev, i) => { select(i); zoomToCountry(i); })
+    .selectAll("title").data(i => [i]).join("title").text(i => `${K[i].name}: ${state.metric === "pc" ? fmtPc(V[i].m) + " per resident" : fmt$(V[i].v)}`);
+}
 function renderLegend() {
   const surface = css("--surface");
-  const ramp = c => `linear-gradient(90deg, ${d3.interpolateRgb(surface, css(`--c-${c}`))(0.16)}, ${css(`--c-${c}`)})`;
-  document.getElementById("legend").innerHTML = Object.entries(CONT).map(([name, c]) => `<span><span class="ramp" style="background:${ramp(c)}"></span>${name}</span>`).join("")
-    + `<span><span class="ramp" style="background:var(--nodata);width:18px"></span>none recorded</span><span><span class="ramp" style="background:var(--home);width:18px"></span>Canada</span>`
-    + `<span class="muted">Deeper colour = more ${state.metric === "pc" ? "dollars per resident" : "dollars"}, ranked across all countries.</span>`;
+  const what = `${SRC[state.src].toLowerCase()}, ${fyLabel(state.fy)}${state.flag ? ", " + flagName() : ""}`;
+  if (state.colorBy === "gii") {
+    document.getElementById("legend").innerHTML = `<span><span class="ramp" style="background:linear-gradient(90deg, ${d3.interpolateRgb(surface, css("--gii"))(0.1)}, ${css("--gii")})"></span>more equal → less equal for women (UN Gender Inequality Index)</span>
+      <span><span class="ramp" style="background:var(--nodata);width:18px"></span>no score</span>
+      <span><span class="dot" style="width:8px;height:8px"></span><span class="dot" style="width:16px;height:16px"></span>bubble: ${state.metric === "pc" ? "dollars per resident" : "dollars"}, ${esc(what)}</span>`;
+  } else {
+    const ramp = c => `linear-gradient(90deg, ${d3.interpolateRgb(surface, css(`--c-${c}`))(0.16)}, ${css(`--c-${c}`)})`;
+    document.getElementById("legend").innerHTML = Object.entries(CONT).map(([name, c]) => `<span><span class="ramp" style="background:${ramp(c)}"></span>${name}</span>`).join("")
+      + `<span><span class="ramp" style="background:var(--nodata);width:18px"></span>none recorded</span><span><span class="ramp" style="background:var(--home);width:18px"></span>Canada</span>`
+      + `<span class="muted">Deeper = more ${state.metric === "pc" ? "dollars per resident" : "dollars"} (${esc(what)}), ranked across all countries.</span>`;
+  }
 }
 
 // ---- panel ----
-function srcLine(k, w) { return Object.keys(SRC).map(s => `<dt>${SRC[s]}</dt><dd>${fmt$(((k[w] || {})[s]) || 0)}</dd>`).join(""); }
 function giiBlock(k) {
   if (k.gii == null) return `<div class="small muted">No UN Gender Inequality Index score for ${esc(k.name)}.</div>`;
-  const n = M.gii_n || Object.values(K).filter(x => x.gii != null).length;
-  return `<div class="small"><b>Gender Inequality Index ${k.gii.toFixed(3)}</b> (UNDP, ${k.gii_year}), ranked ${k.gii_rank} of ${n}; 0 = full equality between women and men.</div>
-    <div class="giibar" title="0 (equal) to about 0.8 (most unequal)"><i style="left:calc(${Math.min(100, 100 * k.gii / 0.85)}% - 1px)"></i></div>
+  const n = Object.values(K).filter(x => x.gii != null).length;
+  return `<div class="small"><b>Gender Inequality Index ${k.gii.toFixed(3)}</b> (UNDP, ${k.gii_year}), ranked ${k.gii_rank} of ${n}; 0 = women and men fare equally.</div>
+    <div class="giibar" title="0 (equal) to ${GII_MAX.toFixed(2)} (least equal)"><i style="left:calc(${Math.min(100, 100 * k.gii / GII_MAX)}% - 1px)"></i></div>
     <div class="small muted" style="display:flex;justify-content:space-between"><span>more equal</span><span>less equal</span></div>`;
 }
 function recItem(r) {
-  const who = r.u ? `<a href="${esc(r.u)}" target="_blank" rel="noopener">${esc(r.who)}</a>` : esc(r.who);
   const fl = (r.k || "").split("").filter(x => FLAGS[x]).map(x => `<span class="tag">${FLAGS[x]}</span>`).join(" ");
-  return `<li><b>${fmt$(r.v)}</b> ${who} ${fl}<br><span class="muted">${esc(r.t)}${r.dept ? " · " + esc(r.dept) : ""} · ${r.d}${r.ref ? " · " + esc(r.ref) : ""}</span></li>`;
+  return `<li><b>${fmt$(r.v)}</b> <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a> ${fl}<br><span class="muted">${esc(r.t)}${r.dept ? " · " + esc(r.dept) : ""} · ${r.d} (FY ${r.fy})${r.ref ? " · " + esc(r.ref) : ""}</span></li>`;
 }
-function hover(f) {
-  const iso = f.properties.iso3, k = K[iso];
+function spark(k) {
+  const qs = M.quarters || [], vals = ((k.q || {})[state.src]) || [];
+  if (!qs.length || !vals.some(v => v > 0)) return "";
+  const n = qs.length, W = 300, H = 46, bw = W / n, max = d3.max(vals) || 1;
+  const y = v => 36 - 32 * v / max;
+  const bars = qs.map((q, i) => { const v = vals[i] || 0; return `<rect x="${(i * bw + 1).toFixed(1)}" y="${y(v).toFixed(1)}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${(36 - y(v)).toFixed(1)}" class="${q.startsWith(state.fy) ? "on" : ""}"><title>${q}: ${fmt$(v)}</title></rect>`; }).join("");
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="${SRC[state.src]} by fiscal quarter">${bars}
+    <text x="0" y="45">${qs[0]}</text><text x="${W}" y="45" text-anchor="end">${qs[n - 1]}</text><text x="${W / 2}" y="45" text-anchor="middle">peak ${fmt$(max)} a quarter</text></svg>`;
+}
+function hover(iso) {
   if (iso === HOME) return;
-  document.getElementById("panel").innerHTML = `<h2>${esc(f.properties.name)}</h2><p class="big">${fmt$(V[iso] ? V[iso].v : 0)}</p>
-    <div class="small muted">${SRC[state.src]}, ${state.win === "after" ? "since the election" : "the year before"}${state.flag ? ", " + document.querySelector(`#flag option[value="${state.flag}"]`).textContent.toLowerCase() : ""}. Click for details.</div>${k ? "" : ""}`;
+  const k = K[iso], f = feats.find(x => x.properties.iso3 === iso);
+  document.getElementById("panel").innerHTML = `<h2>${esc((k && k.name) || (f && f.properties.name) || iso)}</h2><p class="big">${fmt$(V[iso] ? V[iso].v : 0)}</p>
+    <div class="small muted">${SRC[state.src]}, ${fyLabel(state.fy)}${state.flag ? ", " + flagName() : ""}${k && k.gii != null ? ` · Gender Inequality Index ${k.gii.toFixed(3)}` : ""}. Click for details.</div>`;
 }
+function setGrants(mode) { state.grants = mode; if (state.sel) select(state.sel); }
 function select(iso) {
   state.sel = iso;
   paths.classed("sel", f => f.properties.iso3 === iso).filter(f => f.properties.iso3 === iso).raise();
+  bubLayer.selectAll("circle").classed("sel", i => i === iso);
   const k = K[iso], f = feats.find(x => x.properties.iso3 === iso);
   const name = (k && k.name) || (f && f.properties.name) || iso;
-  if (!k) { document.getElementById("panel").innerHTML = `<h2>${esc(name)}</h2><p class="muted">No federal spending recorded here in either window.</p>`; return; }
-  const recs = (recByCountry[iso] || []).filter(r => r.s === REC_OF[state.src]);
-  const flagged = x => recs.filter(r => hasFlag(r, x)).reduce((a, r) => a + r.v, 0);
-  const top = state.flag ? recs.filter(r => hasFlag(r, state.flag)).sort((a, b) => b.v - a.v).slice(0, 10) : ((k.top || {})[state.src] || []);
+  if (!k) { document.getElementById("panel").innerHTML = `<h2>${esc(name)}</h2><p class="muted">No federal spending recorded here in any fiscal year shown.</p>`; return; }
+  const recs = (recByCountry[iso] || []).filter(r => r.s === REC_OF[state.src] && (!state.flag || hasFlag(r, state.flag)));
+  const inFy = recs.filter(r => r.fy === state.fy);
+  const flagged = x => inFy.filter(r => hasFlag(r, x)).reduce((a, r) => a + r.v, 0);
+  const pf = prevFy(state.fy), now = value(iso), before = pf ? value(iso, pf) : null;
+  const list = state.grants === "latest" ? recs.slice().sort((a, b) => b.d.localeCompare(a.d) || b.v - a.v).slice(0, 10) : inFy.slice().sort((a, b) => b.v - a.v).slice(0, 10);
+  const latest = (k.latest || {})[state.src];
   document.getElementById("panel").innerHTML = `
-    <h2 style="margin-bottom:2px">${esc(name)}</h2>
+    <h2 style="margin-bottom:2px"><span style="cursor:zoom-in" onclick="zoomToCountry('${iso}')" title="Zoom the map to ${esc(name)}">${esc(name)}</span></h2>
     <div class="small muted">${esc(k.continent)} · pop. ${k.pop ? Math.round(k.pop).toLocaleString() : "–"}</div>
-    <div class="small muted" style="margin-top:8px">${SRC[state.src]}, ${state.win === "after" ? `since the election (${M.election} to ${M.cutoff})` : `the year before (${M.before_start} to ${M.before_end})`}</div>
-    <p class="big">${fmt$(value(iso))}</p>
-    <div class="small">${k.pop ? fmtPc(value(iso) / k.pop) + " per resident" : ""}</div>
-    <h3 style="margin-top:12px">Since the election</h3><dl class="kv">${srcLine(k, "after")}</dl>
-    <h3 style="margin-top:8px">Year before</h3><dl class="kv">${srcLine(k, "before")}</dl>
-    <h3 style="margin-top:12px">Flags, ${SRC[state.src].toLowerCase()} since the election</h3>
-    <dl class="kv">${["W", "M", "G", "L"].concat(state.src === "iati" ? ["P", "S"] : []).map(x => `<dt>${FLAGS[x]}</dt><dd>${fmt$(flagged(x))}</dd>`).join("")}</dl>
     <div style="margin-top:10px">${giiBlock(k)}</div>
-    <h2 style="margin-top:14px">${state.flag ? "Largest flagged records" : "Largest records"}, ${SRC[state.src].toLowerCase()}</h2>
-    <ul class="grants">${top.map(recItem).join("") || "<li class='muted'>None recorded</li>"}</ul>
-    <p class="small"><button type="button" class="linkbtn" onclick="showInTable('${iso}')">Show all ${recs.length.toLocaleString()} records for ${esc(name)} in the table</button></p>`;
+    <div class="small muted" style="margin-top:10px">${SRC[state.src]}${state.flag ? ", " + flagName() : ""}, ${fyLabel(state.fy)}</div>
+    <p class="big">${fmt$(now)}</p>
+    <dl class="kv" style="margin-top:8px">
+      <dt>Per resident</dt><dd>${k.pop ? fmtPc(now / k.pop) : "–"}</dd>
+      ${pf ? `<dt>FY ${pf}</dt><dd>${fmt$(before)}</dd><dt>Change</dt><dd>${before > 0 ? (now >= before ? "+" : "") + Math.round(100 * (now - before) / before) + "%" : "–"}</dd>` : ""}
+      <dt>Records this year</dt><dd>${inFy.length.toLocaleString()}</dd>
+      <dt>Newest record here</dt><dd>${latest || "–"}</dd>
+    </dl>
+    ${spark(k)}
+    <h3 style="margin-top:12px">Every source by fiscal year</h3>
+    <table class="mini"><thead><tr><td></td>${FYS.map(f => `<td class="n"${f === state.fy ? ' style="font-weight:600"' : ""}>${f}</td>`).join("")}</tr></thead><tbody>${Object.keys(SRC).map(s => `<tr><td>${s === "iati" ? "IATI aid" : s === "grants" ? "Grants" : "Contracts"}</td>${FYS.map(f => `<td class="n"${f === state.fy ? ' style="font-weight:600"' : ""}>${fmt$((((k.fy || {})[f] || {})[s]) || 0)}</td>`).join("")}</tr>`).join("")}</tbody></table>
+    <h3 style="margin-top:12px">Flags, ${SRC[state.src].toLowerCase()}, FY ${state.fy}</h3>
+    <dl class="kv">${["W", "M", "G", "L"].concat(state.src === "iati" ? ["P", "S"] : []).map(x => `<dt>${FLAGS[x]}</dt><dd>${fmt$(flagged(x))}</dd>`).join("")}</dl>
+    <h2 style="margin-top:14px">${state.grants === "latest" ? "Latest records" : `Largest records, FY ${state.fy}`}
+      <span class="seg small" role="group" aria-label="Largest or latest" style="margin-left:8px;vertical-align:middle"><button type="button" aria-pressed="${state.grants !== "latest"}" onclick="setGrants('largest')">Largest</button><button type="button" aria-pressed="${state.grants === "latest"}" onclick="setGrants('latest')">Latest</button></span></h2>
+    <ul class="grants">${list.map(recItem).join("") || "<li class='muted'>None recorded</li>"}</ul>
+    <p class="small"><button type="button" class="linkbtn" onclick="showInTable('${iso}')">Show this year's ${inFy.length.toLocaleString()} records for ${esc(name)} in the table</button></p>`;
 }
 function showInTable(iso) {
   state.tab = REC_OF[state.src]; state.q = K[iso].name; state.limit = 200;
@@ -253,40 +334,41 @@ function showInTable(iso) {
   document.getElementById("tbl").scrollIntoView({block: "start", behavior: "smooth"});
 }
 
-// ---- continent bars ----
+// ---- fiscal-year table and continent bars ----
 function renderContinents() {
+  const t = M.totals || {};
+  document.getElementById("fyTbl").innerHTML = `<thead><tr><th>Fiscal year</th>${Object.values(SRC).map(s => `<th>${s}</th>`).join("")}</tr></thead><tbody>${FYS.map(f => `<tr class="${f === state.fy ? "on" : ""}"><td>${esc(fyLabel(f))}</td>${Object.keys(SRC).map(s => `<td>${fmt$(((t[f] || {})[s]) || 0)}</td>`).join("")}</tr>`).join("")}</tbody>`;
   const tot = {};
   for (const [iso, k] of Object.entries(K)) { if (iso === HOME) continue; const c = k.continent in CONT ? k.continent : "Other"; tot[c] = (tot[c] || 0) + (V[iso] ? V[iso].v : 0); }
   const rows = Object.entries(tot).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
   const max = d3.max(rows, r => r[1]) || 1, sum = d3.sum(rows, r => r[1]) || 1;
-  document.getElementById("contTitle").textContent = `By continent: ${SRC[state.src].toLowerCase()}`;
-  document.getElementById("contNote").textContent = `${state.win === "after" ? `Since the election (${M.election} to ${M.cutoff})` : `Year before (${M.before_start} to ${M.before_end})`}${state.flag ? ", flagged records only" : ""}. Placed by country; regional and unplaced money is listed further down.`;
+  document.getElementById("contNote").textContent = `${SRC[state.src]} by continent, ${fyLabel(state.fy)}${state.flag ? ", " + flagName() : ""}. Totals include money not placed in a country; the continent bars do not (see further down). An asterisk marks a year still being reported.`;
   document.getElementById("contBars").innerHTML = rows.map(([c, v]) => `<div class="row"><span>${c}</span><div class="track"><div class="fill" style="width:${100 * v / max}%;background:var(--c-${contKey(c)})"></div></div><span class="v">${fmt$(v)} · ${Math.round(100 * v / sum)}%</span></div>`).join("") || "<p class='muted small'>Nothing recorded for this selection.</p>";
 }
 
 // ---- flags card ----
 function renderFlags() {
-  const srcs = ["grant", "contract", "iati"];
+  const srcs = ["contract", "grant", "iati"];
   const cols = ["W", "M", "G", "L", "P", "S", "any"];
   const label = {W: "Women or girls", M: "Men or boys", G: "Gender", L: "LGBTQ2+", P: "Marker: principal", S: "Marker: significant", any: "Any flag"};
   const agg = Object.fromEntries(srcs.map(s => [s, {all: 0, n: 0}]));
-  for (const r of REC) { const a = agg[r.s]; if (!a) continue; a.all += r.v; a.n++; for (const c of cols) if (hasFlag(r, c)) { a[c] = (a[c] || 0) + r.v; a[c + "n"] = (a[c + "n"] || 0) + 1; } }
-  document.getElementById("flagNote").innerHTML = `Records since the election whose title, description or program mentions each keyword group (English and French), plus Global Affairs' own gender-equality marker on IATI projects. The keyword lists are in the notes at the bottom. A record can carry several flags. Percentages are shares of each source's dollars.`;
+  for (const r of REC) { if (r.fy !== state.fy) continue; const a = agg[r.s]; if (!a) continue; a.all += r.v; a.n++; for (const c of cols) if (hasFlag(r, c)) { a[c] = (a[c] || 0) + r.v; a[c + "n"] = (a[c + "n"] || 0) + 1; } }
+  document.getElementById("flagTitle").textContent = `Gender and LGBTQ2+ flags, ${fyLabel(state.fy)}`;
+  document.getElementById("flagNote").innerHTML = `Records whose title, description or program mentions each keyword group (English and French), plus Global Affairs' own gender-equality marker on IATI projects. The keyword lists are in the notes at the bottom. A record can carry several flags. Percentages are shares of each source's dollars in the year.`;
   document.getElementById("flagTbl").innerHTML = `<thead><tr><th>Source</th><th class="n">All records</th>${cols.map(c => `<th class="n">${label[c]}</th>`).join("")}</tr></thead><tbody>${srcs.map(s => { const a = agg[s]; return `<tr><td>${SRC[SRC_OF[s]]}</td><td class="n">${fmt$(a.all)}<br><span class="muted">${a.n.toLocaleString()}</span></td>${cols.map(c => (c === "P" || c === "S") && s !== "iati" ? `<td class="n muted">–</td>` : `<td class="n">${fmt$(a[c] || 0)}<br><span class="muted">${a.all ? Math.round(100 * (a[c] || 0) / a.all) : 0}% · ${(a[c + "n"] || 0).toLocaleString()}</span></td>`).join("")}</tr>`; }).join("")}</tbody>`;
   renderScatter();
 }
 function renderScatter() {
-  const s = REC_OF[state.src];
-  const f = state.flag || "any";
+  const s = REC_OF[state.src], f = state.flag || "any";
   const pts = Object.entries(K).filter(([iso, k]) => iso !== HOME && k.gii != null).map(([iso, k]) => {
-    const v = (recByCountry[iso] || []).filter(r => r.s === s && hasFlag(r, f)).reduce((a, r) => a + r.v, 0);
+    const v = (recByCountry[iso] || []).filter(r => r.fy === state.fy && r.s === s && hasFlag(r, f)).reduce((a, r) => a + r.v, 0);
     return {iso, k, v};
   }).filter(p => p.v > 0);
   const el = document.getElementById("scatter");
-  document.getElementById("scatterTitle").textContent = `${f === "any" ? "Gender or LGBTQ2+ flagged" : FLAGS[f] + " flagged"} ${SRC[state.src].toLowerCase()} and women's equality, by country`;
-  if (pts.length < 3) { el.innerHTML = ""; document.getElementById("scatterNote").textContent = "Too few flagged records with a country score for this selection."; return; }
+  document.getElementById("scatterTitle").textContent = `${f === "any" ? "Gender or LGBTQ2+ flagged" : FLAGS[f] + " flagged"} ${SRC[state.src].toLowerCase()} and women's equality, ${fyLabel(state.fy)}`;
+  if (pts.length < 3) { el.innerHTML = ""; document.getElementById("scatterNote").textContent = "Too few flagged records with a country score for this selection (contracts carry no flags: their descriptions are category labels only)."; return; }
   const W = 760, H = 300, m = {l: 58, r: 16, t: 12, b: 34};
-  const x = d3.scaleLinear().domain([0, Math.max(0.85, d3.max(pts, p => p.k.gii))]).range([m.l, W - m.r]);
+  const x = d3.scaleLinear().domain([0, GII_MAX]).range([m.l, W - m.r]);
   const y = d3.scaleLog().domain([d3.min(pts, p => p.v) * 0.8, d3.max(pts, p => p.v) * 1.3]).range([H - m.b, m.t]).nice();
   const sv = d3.create("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "img").attr("aria-label", "Flagged dollars by country against the Gender Inequality Index");
   sv.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(8).tickSizeOuter(0)).call(a => a.selectAll("text").attr("font-size", 10));
@@ -294,7 +376,7 @@ function renderScatter() {
   sv.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5, d => fmt$(d)).tickSizeOuter(0)).call(a => a.selectAll("text").attr("font-size", 10));
   sv.append("g").selectAll("circle").data(pts).join("circle")
     .attr("cx", p => x(p.k.gii)).attr("cy", p => y(p.v)).attr("r", 5)
-    .attr("fill", p => `var(--c-${contKey(p.k.continent)})`).attr("fill-opacity", 0.85).attr("stroke", "var(--surface)")
+    .attr("fill", p => d3.interpolateRgb(css("--surface"), css("--gii"))(0.25 + 0.75 * p.k.gii / GII_MAX)).attr("stroke", "var(--ink-2)").attr("stroke-width", 0.6)
     .style("cursor", "pointer").on("click", (ev, p) => { select(p.iso); zoomToCountry(p.iso); document.getElementById("svg").scrollIntoView({block: "start", behavior: "smooth"}); })
     .append("title").text(p => `${p.k.name}: ${fmt$(p.v)} flagged; GII ${p.k.gii.toFixed(3)} (rank ${p.k.gii_rank})`);
   sv.append("g").selectAll("text").data(pts.slice().sort((a, b) => b.v - a.v).slice(0, 8)).join("text").attr("class", "lbl")
@@ -302,7 +384,7 @@ function renderScatter() {
   el.innerHTML = ""; el.appendChild(sv.node());
   const q = d3.quantile(pts.map(p => p.k.gii).sort(d3.ascending), 0.75);
   const hi = pts.filter(p => p.k.gii >= q), share = d3.sum(hi, p => p.v) / (d3.sum(pts, p => p.v) || 1);
-  document.getElementById("scatterNote").innerHTML = `${pts.length} countries with flagged ${SRC[state.src].toLowerCase()} since the election and a UNDP score. The quarter of them with the least equality for women (index ${q.toFixed(2)} or higher) received <b>${Math.round(100 * share)}%</b> of the flagged dollars. Colour: continent. Click a dot to open the country.`;
+  document.getElementById("scatterNote").innerHTML = `${pts.length} countries with flagged ${SRC[state.src].toLowerCase()} in FY ${state.fy} and a UNDP score. The quarter of them with the least equality for women (index ${q.toFixed(2)} or higher) received <b>${Math.round(100 * share)}%</b> of the flagged dollars. Shade: the country's index. Click a dot to open the country.`;
 }
 
 // ---- recipients ----
@@ -310,14 +392,14 @@ function renderRecipients() {
   const s = REC_OF[state.src], q = state.recipQ.toLowerCase().trim();
   const agg = {};
   for (const r of REC) {
-    if (r.s !== s || (state.flag && !hasFlag(r, state.flag))) continue;
-    const a = agg[r.who] || (agg[r.who] = {who: r.who, v: 0, n: 0, c: {}});
-    a.v += r.v; a.n++; const c = r.c || r.r || "unplaced"; a.c[c] = (a.c[c] || 0) + r.v;
+    if (r.s !== s || r.fy !== state.fy || (state.flag && !hasFlag(r, state.flag))) continue;
+    const a = agg[r.who] || (agg[r.who] = {who: r.who, v: 0, n: 0, last: "", c: {}});
+    a.v += r.v; a.n++; if (r.d > a.last) a.last = r.d; const c = r.c || r.r || "unplaced"; a.c[c] = (a.c[c] || 0) + r.v;
   }
   const rows = Object.values(agg).filter(a => !q || a.who.toLowerCase().includes(q)).sort((a, b) => b.v - a.v).slice(0, 50);
-  document.getElementById("recipTitle").textContent = `Who receives the most: ${SRC[state.src].toLowerCase()}`;
-  document.getElementById("recipNote").textContent = `Since the election, all departments${state.flag ? ", flagged records only" : ""}. ${state.src === "contracts" ? "Vendors as the departments typed them." : state.src === "iati" ? "Implementing organisations as Global Affairs reports them." : "Recipients as the departments typed them; the country is the recipient's address."} Click a country to open it.`;
-  const item = a => `<li><b>${fmt$(a.v)}</b> ${esc(a.who)} <span class="muted">· ${a.n} record${a.n > 1 ? "s" : ""}</span><br><span class="chips">${Object.entries(a.c).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([c, v]) => K[c] ? `<button type="button" class="chip" onclick="select('${c}'); zoomToCountry('${c}')" title="${fmt$(v)}">${esc(K[c].name)}</button>` : `<span class="chip" title="${fmt$(v)}">${esc(c)}</span>`).join("")}</span></li>`;
+  document.getElementById("recipTitle").textContent = `Who receives the most: ${SRC[state.src].toLowerCase()}, ${fyLabel(state.fy)}`;
+  document.getElementById("recipNote").textContent = `All departments${state.flag ? ", flagged records only" : ""}. ${state.src === "contracts" ? "Vendors as the departments typed them." : state.src === "iati" ? "Implementing organisations as Global Affairs reports them." : "Recipients as the departments typed them; the country is the recipient's address."} Click a country to open it.`;
+  const item = a => `<li><b>${fmt$(a.v)}</b> ${esc(a.who)} <span class="muted">· ${a.n} record${a.n > 1 ? "s" : ""}, latest ${a.last}</span><br><span class="chips">${Object.entries(a.c).sort((x, y) => y[1] - x[1]).slice(0, 6).map(([c, v]) => K[c] ? `<button type="button" class="chip" onclick="select('${c}'); zoomToCountry('${c}')" title="${fmt$(v)}">${esc(K[c].name)}</button>` : `<span class="chip" title="${fmt$(v)}">${esc(c)}</span>`).join("")}</span></li>`;
   document.getElementById("recips").innerHTML = rows.slice(0, 10).map(item).join("") || "<li class='muted'>No match.</li>";
   const more = document.getElementById("recipMore");
   more.hidden = rows.length <= 10;
@@ -327,10 +409,11 @@ function renderRecipients() {
 
 // ---- unplaced ----
 function renderUnplaced() {
-  const u = M.unplaced_after || {}, t = (M.totals || {}).after || {};
+  const u = (M.unplaced || {})[state.fy] || {}, t = (M.totals || {})[state.fy] || {};
   const regions = (u.iati_regions || []).map(([r, v]) => `<li><b>${fmt$(v)}</b> ${esc(r)}</li>`).join("");
-  document.getElementById("unplaced").innerHTML = `<table class="mini"><tbody>${Object.keys(SRC).map(s => `<tr><td>${SRC[s]}</td><td class="n">${fmt$(u[s] || 0)} not placed</td><td class="n muted">of ${fmt$(t[s] || 0)} since the election</td></tr>`).join("")}</tbody></table>
-    <p class="muted" style="margin-top:8px">Contracts and grants are placed by the vendor's or recipient's country; rows with no country are left off. IATI projects are placed by their recipient countries; the share reported for a whole region (or "developing countries, unspecified") cannot be put on one country:</p>
+  document.getElementById("unplacedTitle").textContent = `Money that is not on the map, ${fyLabel(state.fy)}`;
+  document.getElementById("unplaced").innerHTML = `<table class="mini"><tbody>${Object.keys(SRC).map(s => `<tr><td>${SRC[s]}</td><td class="n">${fmt$(u[s] || 0)} not placed</td><td class="n muted">of ${fmt$(t[s] || 0)}</td></tr>`).join("")}</tbody></table>
+    <p class="muted" style="margin-top:8px">Contracts and grants are placed by the vendor's or recipient's country. IATI projects are placed by their recipient countries; the share reported for a whole region (or "developing countries, unspecified") cannot be put on one country:</p>
     <ul class="grants">${regions || "<li class='muted'>None</li>"}</ul>`;
 }
 
@@ -344,7 +427,7 @@ const COLS = [
 function tableRows() {
   const q = state.q.toLowerCase().trim();
   const col = COLS.find(c => c[0] === state.sort) || COLS[1];
-  return REC.filter(r => r.s === state.tab && (!state.flag || hasFlag(r, state.flag)) && (!q || `${r.who} ${r.t} ${r.dept} ${r.ref} ${r.c ? (K[r.c] || {}).name : r.r}`.toLowerCase().includes(q)))
+  return REC.filter(r => r.s === state.tab && r.fy === state.fy && (!state.flag || hasFlag(r, state.flag)) && (!q || `${r.who} ${r.t} ${r.dept} ${r.ref} ${r.c ? (K[r.c] || {}).name : r.r}`.toLowerCase().includes(q)))
     .sort((a, b) => { const x = col[2](a), y = col[2](b); return (x > y ? 1 : x < y ? -1 : 0) * state.dir; });
 }
 function renderTable() {
@@ -353,15 +436,15 @@ function renderTable() {
   thead.innerHTML = "<tr>" + COLS.map(([k, label, , num]) => `<th data-k="${k}" class="${num ? "n" : ""}">${label}${state.sort === k ? (state.dir < 0 ? " ▼" : " ▲") : ""}</th>`).join("") + "</tr>";
   thead.querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; state.dir = state.sort === k ? -state.dir : -1; state.sort = k; renderTable(); });
   const mark = (on, t) => `<span class="fl ${on ? "on" : "off"}">${on ? t : "·"}</span>`;
-  tbody.innerHTML = rows.slice(0, state.limit).map(r => `<tr><td>${r.d}</td><td class="n">${fmt$(r.v)}</td><td class="who">${r.u ? `<a href="${esc(r.u)}" target="_blank" rel="noopener">${esc(r.who)}</a>` : esc(r.who)}</td>
+  tbody.innerHTML = rows.slice(0, state.limit).map(r => `<tr><td>${r.d}</td><td class="n">${fmt$(r.v)}</td><td class="who"><a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a></td>
     <td>${r.c && K[r.c] ? `<a href="#" onclick="select('${r.c}'); zoomToCountry('${r.c}'); document.getElementById('svg').scrollIntoView({block: 'start', behavior: 'smooth'}); return false">${esc(K[r.c].name)}</a>` : `<span class="muted">${esc(r.r || "not placed")}</span>`}</td>
     <td>${esc(r.dept)}</td><td class="t">${esc(r.t)}</td>
     <td class="n">${mark(hasFlag(r, "W"), "W")}</td><td class="n">${mark(hasFlag(r, "M"), "M")}</td><td class="n">${mark(hasFlag(r, "G"), "G")}</td><td class="n">${mark(hasFlag(r, "L"), "L")}</td>
     <td class="n">${hasFlag(r, "P") ? mark(1, "principal") : hasFlag(r, "S") ? mark(1, "significant") : mark(0)}</td>
     <td class="n">${r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii.toFixed(3) : "–"}</td></tr>`).join("") || `<tr><td colspan="${COLS.length}" class="muted">No records match.</td></tr>`;
   const total = d3.sum(rows, r => r.v);
-  document.getElementById("tableTitle").textContent = `Every ${state.tab === "contract" ? "contract" : state.tab === "grant" ? "grant and contribution" : "IATI aid record"} abroad since the election`;
-  document.getElementById("tableNote").innerHTML = `${rows.length.toLocaleString()} records, ${fmt$(total)}${state.flag ? `, flagged "${document.querySelector(`#flag option[value="${state.flag}"]`).textContent}"` : ""}${state.q ? `, matching "${esc(state.q)}"` : ""}. Flag columns: W women or girls, M men or boys, G gender, L LGBTQ2+; Marker is Global Affairs' gender-equality policy marker on IATI projects. Country GII is the UN Gender Inequality Index of the record's country (0 = equal). Click a heading to sort.`;
+  document.getElementById("tableTitle").textContent = `Every ${state.tab === "contract" ? "contract" : state.tab === "grant" ? "grant and contribution" : "IATI aid record"} abroad, ${fyLabel(state.fy)}`;
+  document.getElementById("tableNote").innerHTML = `${rows.length.toLocaleString()} records, ${fmt$(total)}${state.flag ? `, flagged "${esc(flagName())}"` : ""}${state.q ? `, matching "${esc(state.q)}"` : ""}. Dates: contracts by original award, grants by agreement start, IATI by the year's latest disbursement. Flag columns: W women or girls, M men or boys, G gender, L LGBTQ2+; Marker is Global Affairs' gender-equality policy marker on IATI projects. Country GII is the UN Gender Inequality Index of the record's country (0 = equal). Click a heading to sort.`;
   const pager = document.getElementById("pager");
   pager.innerHTML = rows.length > state.limit ? `Showing ${state.limit.toLocaleString()} of ${rows.length.toLocaleString()} <button type="button" id="moreRows">Show 500 more</button>` : `Showing all ${rows.length.toLocaleString()}`;
   const mr = document.getElementById("moreRows"); if (mr) mr.onclick = () => { state.limit += 500; renderTable(); };
@@ -371,10 +454,10 @@ document.getElementById("recipQ").oninput = e => { state.recipQ = e.target.value
 document.getElementById("csvBtn").onclick = async () => {
   const rows = tableRows();
   const q = v => v == null ? "" : /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
-  const head = ["date", "value_cad", "recipient", "country_iso3", "country", "region", "department", "title", "reference", "source_url", "women", "men", "gender", "lgbtq", "iati_gender_marker", "country_gii"];
-  const body = rows.map(r => [r.d, r.v, r.who, r.c, r.c && K[r.c] ? K[r.c].name : "", r.r, r.dept, r.t, r.ref, r.u, hasFlag(r, "W") ? 1 : 0, hasFlag(r, "M") ? 1 : 0, hasFlag(r, "G") ? 1 : 0, hasFlag(r, "L") ? 1 : 0, hasFlag(r, "P") ? "principal" : hasFlag(r, "S") ? "significant" : "", r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii : ""].map(q).join(","));
-  const csv = "﻿# " + C.title + "; " + state.tab + " records " + M.election + " to " + M.cutoff + "; generated " + M.generated + "\n" + head.join(",") + "\n" + body.join("\n");
-  const filename = `international-${state.tab}s.csv`;
+  const head = ["date", "fiscal_year", "value_cad", "recipient", "country_iso3", "country", "region", "department", "title", "reference", "source_url", "women", "men", "gender", "lgbtq", "iati_gender_marker", "country_gii"];
+  const body = rows.map(r => [r.d, r.fy, r.v, r.who, r.c, r.c && K[r.c] ? K[r.c].name : "", r.r, r.dept, r.t, r.ref, recUrl(r), hasFlag(r, "W") ? 1 : 0, hasFlag(r, "M") ? 1 : 0, hasFlag(r, "G") ? 1 : 0, hasFlag(r, "L") ? 1 : 0, hasFlag(r, "P") ? "principal" : hasFlag(r, "S") ? "significant" : "", r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii : ""].map(q).join(","));
+  const csv = "﻿# " + C.title + "; " + state.tab + " records, FY " + state.fy + "; generated " + M.generated + "\n" + head.join(",") + "\n" + body.join("\n");
+  const filename = `international-${state.tab}s-fy${state.fy}.csv`;
   const dl = window.claude && claude.use ? await claude.use("downloads") : null;
   if (dl) { try { await dl.save({filename, data: csv}); } catch (e) { if (e && e.code !== "declined") alert("The download could not be offered here (" + (e.code || "unavailable") + ")."); } return; }
   const blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
@@ -384,12 +467,8 @@ document.getElementById("csvBtn").onclick = async () => {
 // ---- controls ----
 function syncSeg(id, attr, val) { document.querySelectorAll(`#${id} button`).forEach(b => b.setAttribute("aria-pressed", b.dataset[attr] === val)); }
 document.querySelectorAll("#src button").forEach(b => b.onclick = () => { state.src = b.dataset.s; syncSeg("src", "s", state.src); state.tab = REC_OF[state.src]; syncSeg("tab", "t", state.tab); state.limit = 200; render(); });
-document.querySelectorAll("#win button").forEach(b => b.onclick = () => {
-  state.win = b.dataset.w; syncSeg("win", "w", state.win);
-  // Flags come from the record list, which covers the "since the election" window only.
-  const fl = document.getElementById("flag"); fl.disabled = state.win === "before"; if (fl.disabled) { fl.value = ""; state.flag = ""; }
-  render();
-});
+document.querySelectorAll("#fy button").forEach(b => b.onclick = () => { state.fy = b.dataset.f; syncSeg("fy", "f", state.fy); state.limit = 200; render(); });
+document.querySelectorAll("#colorBy button").forEach(b => b.onclick = () => { state.colorBy = b.dataset.c; syncSeg("colorBy", "c", state.colorBy); render(); });
 document.querySelectorAll("#metric button").forEach(b => b.onclick = () => { state.metric = b.dataset.m; syncSeg("metric", "m", state.metric); render(); });
 document.querySelectorAll("#tab button").forEach(b => b.onclick = () => { state.tab = b.dataset.t; syncSeg("tab", "t", state.tab); state.limit = 200; renderTable(); });
 document.getElementById("flag").onchange = e => { state.flag = e.target.value; state.limit = 200; render(); };
@@ -397,7 +476,7 @@ document.getElementById("flag").onchange = e => { state.flag = e.target.value; s
 function render() {
   compute();
   paths.attr("fill", fillFor);
-  renderLegend(); renderContinents(); renderFlags(); renderRecipients(); renderUnplaced(); renderTable();
+  renderBubbles(); renderLegend(); renderContinents(); renderFlags(); renderRecipients(); renderUnplaced(); renderTable();
   if (state.sel) select(state.sel);
 }
 
