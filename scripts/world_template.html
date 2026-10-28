@@ -151,8 +151,8 @@ function recUrl(r) {
   if (r.s === "grant") return `https://search.open.canada.ca/grants/record/${encodeURIComponent(org)}%2C${encodeURIComponent(r.ref)}%2Ccurrent`;
   return `https://w05.international.gc.ca/projectbrowser-banqueprojets/project-projet/details/${encodeURIComponent(r.ref)}`;
 }
-// Records arrive as compact arrays: [source, date, value, who, iso3, region, org index, title, ref, flags].
-const REC = (D.records || []).map(a => { const r = {s: S_OF[a[0]], d: a[1], v: a[2], who: a[3], c: a[4], r: a[5], o: a[6], t: a[7], ref: a[8], k: a[9] || ""}; r.fy = fyOf(r.d); r.dept = (M.orgs[r.o] || [])[1] || ""; return r; });
+// Records arrive as compact arrays: [source, date, value, who, iso3, region, org index, title, ref, flags, Canadian address].
+const REC = (D.records || []).map(a => { const r = {s: S_OF[a[0]], d: a[1], v: a[2], who: a[3], c: a[4], r: a[5], o: a[6], t: a[7], ref: a[8], k: a[9] || "", a: a[10] === 1}; r.fy = fyOf(r.d); r.dept = (M.orgs[r.o] || [])[1] || ""; return r; });
 const recByCountry = {};
 for (const r of REC) if (r.c) (recByCountry[r.c] || (recByCountry[r.c] = [])).push(r);
 // Start on the latest complete fiscal year; a year still being reported is one click away.
@@ -273,7 +273,7 @@ function giiBlock(k) {
 }
 function recItem(r) {
   const fl = (r.k || "").split("").filter(x => FLAGS[x]).map(x => `<span class="tag">${FLAGS[x]}</span>`).join(" ");
-  return `<li><b>${fmt$(r.v)}</b> <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a> ${fl}<br><span class="muted">${esc(r.t)}${r.dept ? " · " + esc(r.dept) : ""} · ${r.d} (FY ${r.fy})${r.ref ? " · " + esc(r.ref) : ""}</span></li>`;
+  return `<li><b>${fmt$(r.v)}</b> <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a>${r.a ? ' <span class="tag" title="Addressed in Canada; placed in the country the project serves">Canadian organisation</span>' : ""} ${fl}<br><span class="muted">${esc(r.t)}${r.dept ? " · " + esc(r.dept) : ""} · ${r.d} (FY ${r.fy})${r.ref ? " · " + esc(r.ref) : ""}</span></li>`;
 }
 function spark(k) {
   const qs = M.quarters || [], vals = ((k.q || {})[state.src]) || [];
@@ -410,10 +410,12 @@ function renderRecipients() {
 // ---- unplaced ----
 function renderUnplaced() {
   const u = (M.unplaced || {})[state.fy] || {}, t = (M.totals || {})[state.fy] || {};
-  const regions = (u.iati_regions || []).map(([r, v]) => `<li><b>${fmt$(v)}</b> ${esc(r)}</li>`).join("");
+  const by = {};
+  for (const r of REC) if (!r.c && r.fy === state.fy && r.s === REC_OF[state.src]) by[r.r || "no country given"] = (by[r.r || "no country given"] || 0) + r.v;
+  const regions = Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 15).map(([r, v]) => `<li><b>${fmt$(v)}</b> ${esc(r)}</li>`).join("");
   document.getElementById("unplacedTitle").textContent = `Money that is not on the map, ${fyLabel(state.fy)}`;
   document.getElementById("unplaced").innerHTML = `<table class="mini"><tbody>${Object.keys(SRC).map(s => `<tr><td>${SRC[s]}</td><td class="n">${fmt$(u[s] || 0)} not placed</td><td class="n muted">of ${fmt$(t[s] || 0)}</td></tr>`).join("")}</tbody></table>
-    <p class="muted" style="margin-top:8px">Contracts and grants are placed by the vendor's or recipient's country. IATI projects are placed by their recipient countries; the share reported for a whole region (or "developing countries, unspecified") cannot be put on one country:</p>
+    <p class="muted" style="margin-top:8px">Contracts and grants are placed by the vendor's or recipient's country; a Canadian organisation delivering aid abroad is placed in the country its project serves, taken from Global Affairs' project record or from the country named in the description. IATI projects are placed by their recipient countries. Money reported for a whole region, or with no country named, cannot go on the map. ${SRC[state.src]}, ${fyLabel(state.fy)}:</p>
     <ul class="grants">${regions || "<li class='muted'>None</li>"}</ul>`;
 }
 
@@ -436,7 +438,7 @@ function renderTable() {
   thead.innerHTML = "<tr>" + COLS.map(([k, label, , num]) => `<th data-k="${k}" class="${num ? "n" : ""}">${label}${state.sort === k ? (state.dir < 0 ? " ▼" : " ▲") : ""}</th>`).join("") + "</tr>";
   thead.querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; state.dir = state.sort === k ? -state.dir : -1; state.sort = k; renderTable(); });
   const mark = (on, t) => `<span class="fl ${on ? "on" : "off"}">${on ? t : "·"}</span>`;
-  tbody.innerHTML = rows.slice(0, state.limit).map(r => `<tr><td>${r.d}</td><td class="n">${fmt$(r.v)}</td><td class="who"><a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a></td>
+  tbody.innerHTML = rows.slice(0, state.limit).map(r => `<tr><td>${r.d}</td><td class="n">${fmt$(r.v)}</td><td class="who"><a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a>${r.a ? ' <span class="tag" title="Addressed in Canada; placed in the country the project serves">Canadian org.</span>' : ""}</td>
     <td>${r.c && K[r.c] ? `<a href="#" onclick="select('${r.c}'); zoomToCountry('${r.c}'); document.getElementById('svg').scrollIntoView({block: 'start', behavior: 'smooth'}); return false">${esc(K[r.c].name)}</a>` : `<span class="muted">${esc(r.r || "not placed")}</span>`}</td>
     <td>${esc(r.dept)}</td><td class="t">${esc(r.t)}</td>
     <td class="n">${mark(hasFlag(r, "W"), "W")}</td><td class="n">${mark(hasFlag(r, "M"), "M")}</td><td class="n">${mark(hasFlag(r, "G"), "G")}</td><td class="n">${mark(hasFlag(r, "L"), "L")}</td>

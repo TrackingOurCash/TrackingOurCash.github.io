@@ -5,13 +5,20 @@ failed run leaves the committed copy alone) and prints a short summary to stderr
 Three sources, never added together (they overlap: see meta.overlap and meta.notes):
   contracts  Proactive Publication - Contracts over $10,000 (data/raw/contracts/contracts.csv, read
              once, streaming, rows dated from the first fiscal year on). Foreign = country_of_vendor
-             not CA and not blank. Amendments merged exactly as contracts.py does: rows sharing
+             not CA and not blank, placed by the vendor's country; plus Global Affairs contracts with
+             Canadian vendors under the international-assistance object codes (23xx, see AID_CODES),
+             placed by the GAC project number in the comments (via IATI) or by the countries named
+             in the description and comments. Amendments merged exactly as contracts.py does: rows sharing
              (owner_org, procurement_id), or reference_number when procurement_id is blank, are one
              contract; value = the latest row's contract_value (else original + amendment); date =
              the original award (earliest non-amendment contract_date, else earliest
              contract_period_start). Standing offers / supply arrangements (SOSA) dropped.
   grants     Proactive Disclosure - Grants and Contributions (data/raw/grants.csv, read once,
-             streaming). Foreign = recipient_country not CA and not blank. Amendments merged as in
+             streaming). Foreign = recipient_country not CA and not blank, placed by that address;
+             plus Global Affairs agreements with Canadian-addressed recipients that are international
+             assistance (an IATI project number in agreement_number, or an aid program, AID_PROG;
+             trade programs never), placed by the IATI activity's recipient countries or by the
+             countries named in the title, description and expected results. Amendments merged as in
              build_spending.py: per (owner_org, ref_number) the highest amendment_number's
              agreement_value, dated by the original agreement_start_date.
   iati       Global Affairs Canada's IATI activity files (data/raw/intl/iati/, fetched by
@@ -25,18 +32,24 @@ meta.future_dated. If contracts.csv is missing, recent.csv (rows from 2024-01-01
 and every source starts at 2024-25, so no year is half-covered. Money is CAD, whole dollars.
 
 Keyword flags (W women/girls, M men/boys, G gender, L LGBTQ2+) are whole-word, case-insensitive
-matches over title, description, program and expected results (contracts: description_en only);
-French patterns are used only when every English field is empty. IATI also carries GAC's own
+matches over title, description, program and expected results (contracts: description_en,
+comments_en and additional_comments_en, plus the French comments when both English ones are
+empty); French patterns are used only when every English field is empty. IATI also carries GAC's own
 gender-equality policy marker (OECD DAC vocabulary 1, code 1): P = principal, S = significant.
 
-Records are arrays [s, d, v, who, c, r, o, t, ref, k]: s "c"/"g"/"i"; o indexes meta.orgs; ref is
-the open.canada.ca reference (contracts, grants) or the GAC project number without "CA-3-" (iati).
+Records are arrays [s, d, v, who, c, r, o, t, ref, k, a]: s "c"/"g"/"i"; o indexes meta.orgs; ref
+is the open.canada.ca reference (contracts, grants) or the GAC project number without "CA-3-"
+(iati); a = 1 when the recipient or vendor is addressed in Canada and the record is placed by the
+country the project serves. A Canadian-addressed grant or contract split across countries is one
+agreement shown as several records (one per country) whose values add up to the agreement.
 """
 import csv
 import json
+import math
 import re
 import sys
 import time
+import unicodedata
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
 from datetime import date
@@ -50,6 +63,7 @@ OUT = ROOT / "data" / "intl"
 GAC = "dfatd-maecd"  # GAC's owner_org code in both open.canada.ca files; IATI records use it too
 GAC_NAME = "Global Affairs Canada"
 FIRST_FY = 2023  # fiscal year 2023-24 (1 April 2023 to 31 March 2024)
+ELECTION = "2025-04-28"  # only for the keyword-count comparison printed in the summary
 SRC = ("contracts", "grants", "iati")
 CODE = {"contracts": "c", "grants": "g", "iati": "i"}
 
@@ -62,6 +76,24 @@ CONTRACTS_DATASET = "https://open.canada.ca/data/en/dataset/d8f85d91-7dec-4fd1-8
 GRANT_URL = "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent"
 CONTRACT_URL = "https://search.open.canada.ca/contracts/record/{org}%2C{ref}"
 PROJECT_URL = "https://w05.international.gc.ca/projectbrowser-banqueprojets/project-projet/details/{ref}"
+
+NOT_STATED = "Canadian organisation, country not stated"
+PROJ_RX = re.compile(r"\b([A-Z]\d{9})\b")                              # grants agreement_number: P015878001
+CONTRACT_PROJ_RX = re.compile(r"\b([A-Z])-?(\d{6})(?:-(\d{3}))?(?!\d)")  # contract comments: P-008456, P-000520-001
+# Global Affairs programs that are international assistance (prog_name_en as published, several spellings).
+AID_PROG = re.compile(r"international development assistance|humanitarian|bilateral programming|multilateral programming|"
+                      r"partnership programming|peace\s*(?:&|and)\s*stab|weapon threat|counter-terrorism capacity|anti-crime capacity|"
+                      r"youth internship|canada fund for local initiatives|innovative finance|human rights, freedoms and inclusion|"
+                      r"development activities resulting from summits", re.I)
+# Never international assistance, even with a project number: trade and export support.
+TRADE_PROG = re.compile(r"canexport|export academy|trade commissioner|international innovation prog|inter\. innovation prog|"
+                        r"intl innovation prog|\bciip\b", re.I)
+# Economic object codes 23xx: development assistance and transfer payments abroad (2302 purchase of services
+# for development assistance, 2303 payments to Canadian NGOs, 2304 other payments to foreign countries,
+# 2311 UN bodies, 2319 other international organizations, 2329 other transfers outside Canada).
+AID_CODES = re.compile(r"^23\d\d$")
+BOILERPLATE = re.compile(r"GAC International Project Number:\s*\S+|(?:PWGSC|SSC) Contract Number:\s*\S+|"
+                         r"This (?:contract|is)[^.]*\.?|\s*\|\|\s*", re.I)
 
 # ---------------------------------------------------------------- keyword flags
 KEYWORDS = {
@@ -221,6 +253,59 @@ class Places:
         return ""
 
 
+def fold(s):
+    s = unicodedata.normalize("NFKD", (s or "").replace("\u2019", "'")).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"\s+", " ", s)
+
+
+# Extra spellings (folded) -> ISO3; bare "Congo" and "Korea" are ambiguous and left out.
+COUNTRY_ALIASES = {
+    "democratic republic of congo": "COD", "dr congo": "COD", "drc": "COD", "congo-kinshasa": "COD", "rdc": "COD",
+    "republique democratique du congo": "COD", "republic of congo": "COG", "congo-brazzaville": "COG",
+    "ivory coast": "CIV", "cote d'ivoire": "CIV", "cote divoire": "CIV",
+    "west bank": "PSE", "gaza": "PSE", "west bank and gaza": "PSE", "palestinian territories": "PSE",
+    "occupied palestinian territory": "PSE", "cisjordanie": "PSE", "territoires palestiniens": "PSE",
+    "burma": "MMR", "turkiye": "TUR", "viet nam": "VNM", "lao pdr": "LAO", "swaziland": "SWZ", "cape verde": "CPV",
+    "east timor": "TLS", "north macedonia": "MKD", "the gambia": "GMB", "kyrgyz republic": "KGZ", "syrian arab republic": "SYR",
+    "st. lucia": "LCA", "st lucia": "LCA", "st. kitts and nevis": "KNA", "st. vincent and the grenadines": "VCT",
+    "russian federation": "RUS", "united states": "USA", "united kingdom": "GBR", "soudan du sud": "SSD",
+    "tanzanie": "TZA", "republique centrafricaine": "CAF", "haiti": "HTI",
+}
+# Folded names never used: Canada itself, and names that are mostly something else in Canadian text.
+COUNTRY_SKIP = {"canada", "jersey", "guernsey", "congo", "korea", "antarctica", "indian ocean ter.", "georgia", "man", "chad"}
+
+
+class CountryNames:
+    """Finds country names (English and French, Natural Earth names plus aliases) in free text."""
+
+    def __init__(self, places):
+        names = {}
+        src = RAW / "ne" / "ne_50m_admin_0_countries.geojson"
+        if src.exists():
+            for f in json.load(open(src, encoding="utf-8"))["features"]:
+                q = f["properties"]
+                a3 = q["ISO_A3"] if len(q["ISO_A3"]) == 3 and q["ISO_A3"].isalpha() else q["ADM0_A3"]
+                for k in ("NAME", "NAME_LONG", "ADMIN", "NAME_EN", "NAME_FR", "BRK_NAME", "FORMAL_EN", "GEOUNIT"):
+                    if q.get(k):
+                        names.setdefault(fold(q[k]), a3)
+        for a3, info in places.info.items():
+            names.setdefault(fold(info["name"]), a3)
+        names.update(COUNTRY_ALIASES)
+        names = {n: a3 for n, a3 in names.items() if len(n) >= 4 and n not in COUNTRY_SKIP and a3 in places.info and a3 != "CAN"}
+        self.names = names
+        alts = sorted(names, key=len, reverse=True)
+        self.rx = re.compile(r"(?<![a-z0-9])(" + "|".join(re.escape(n) for n in alts) + r")(?![a-z0-9])")
+
+    def find(self, *texts):
+        out = []
+        for t in texts:
+            for m in self.rx.finditer(fold(t)):
+                a3 = self.names[m.group(1)]
+                if a3 not in out:
+                    out.append(a3)
+        return out
+
+
 class Orgs:
     """owner_org code -> index into meta.orgs, named by the most common short English title."""
 
@@ -243,8 +328,18 @@ def csv_columns(f):
 
 # ---------------------------------------------------------------- contracts
 
-def load_contracts(places, orgs, span, path):
-    """Foreign contracts dated in the span, merged across amendments as contracts.py does."""
+def informative(*comments):
+    """The first comment with something to say once boilerplate (project and contract numbers, sourcing notes) is removed."""
+    for c in comments:
+        c = re.sub(r"\s+", " ", BOILERPLATE.sub(" ", c or "")).strip(" .;,-")
+        if len(c) >= 8:
+            return c
+    return ""
+
+
+def load_contracts(places, orgs, span, path, placer):
+    """Contracts dated in the span, merged across amendments as contracts.py does: every foreign-vendor
+    contract, and Global Affairs development-assistance contracts with Canadian vendors."""
     stats = Counter()
     contracts = {}
     with open(path, encoding="utf-8-sig", newline="") as f:
@@ -252,6 +347,12 @@ def load_contracts(places, orgs, span, path):
         C = {k: ix[k] for k in ("reference_number", "procurement_id", "vendor_name", "contract_date", "contract_period_start",
                                 "contract_value", "original_value", "amendment_value", "description_en", "country_of_vendor",
                                 "instrument_type", "reporting_period", "owner_org", "owner_org_title")}
+        CX = {k: ix.get(k) for k in ("economic_object_code", "comments_en", "comments_fr", "additional_comments_en",
+                                     "additional_comments_fr")}
+
+        def cx(row, k):
+            i = CX[k]
+            return row[i].strip() if i is not None else ""
         for row in reader:
             stats["rows"] += 1
             if len(row) != len(head):
@@ -273,10 +374,15 @@ def load_contracts(places, orgs, span, path):
             ref = row[C["reference_number"]].strip()
             key = (org, "p:" + pid if pid else "r:" + ref)
             value = to_float(row[C["contract_value"]]) or (to_float(row[C["original_value"]]) + to_float(row[C["amendment_value"]]))
+            country = row[C["country_of_vendor"]].strip().upper()
             rec = {"date": cdate, "award": cdate if itype != "A" else "", "period": ps or cdate, "value": value,
                    "order": (row[C["reporting_period"]], cdate), "title": row[C["owner_org_title"]], "org": org, "ref": ref,
-                   "vendor": row[C["vendor_name"]].strip(), "country": row[C["country_of_vendor"]].strip().upper(),
-                   "desc": row[C["description_en"]].strip()}
+                   "vendor": row[C["vendor_name"]].strip(), "country": country, "desc": row[C["description_en"]].strip(),
+                   "code": cx(row, "economic_object_code")}
+            if org == GAC or country not in ("", "CA"):  # comments are only needed for contracts that can be kept
+                rec.update({k: cx(row, k) for k in ("comments_en", "comments_fr", "additional_comments_en", "additional_comments_fr")})
+                rec["projs"] = {m.group(1) + m.group(2) + (m.group(3) or "") for m in
+                                CONTRACT_PROJ_RX.finditer(rec["comments_en"] + " " + rec["additional_comments_en"])}
             prev = contracts.get(key)
             if prev is None:
                 contracts[key] = rec
@@ -286,28 +392,52 @@ def load_contracts(places, orgs, span, path):
             if rec["order"] >= prev["order"]:
                 rec["country"] = rec["country"] or prev["country"]
                 rec["desc"] = rec["desc"] or prev["desc"]
+                rec["code"] = rec["code"] or prev["code"]
+                for k in ("comments_en", "comments_fr", "additional_comments_en", "additional_comments_fr"):
+                    rec[k] = rec.get(k) or prev.get(k, "")
+                rec["projs"] = rec.get("projs", set()) | prev.get("projs", set())
                 contracts[key] = rec
+            else:
+                prev["projs"] = prev.get("projs", set()) | rec.get("projs", set())
+                for k in ("comments_en", "comments_fr", "additional_comments_en", "additional_comments_fr"):
+                    prev[k] = prev.get(k) or rec.get(k, "")
             contracts[key]["award"], contracts[key]["period"] = award, period
     out = []
     for rec in contracts.values():
         rec["date"] = rec["award"] or min(rec["period"], rec["date"])
-        if rec["country"] in ("", "CA") or rec["value"] <= 0:
+        foreign = rec["country"] not in ("", "CA")
+        aid = rec["org"] == GAC and bool(AID_CODES.match(rec["code"] or ""))
+        if not (foreign or aid) or rec["value"] <= 0:
             continue
         if not span.ok(rec["date"], "contracts"):
             if rec["date"] > span.end:
                 span.future["contracts_$"] += rec["value"]
             continue
         orgs.see(rec["org"], rec["title"])
-        stats["foreign_contracts"] += 1
-        out.append({"s": "contracts", "d": rec["date"], "v": rec["value"], "who": rec["vendor"], "c": places.iso3(rec["country"]),
-                    "code": rec["country"], "r": "", "org": rec["org"], "t": rec["desc"], "ref": rec["ref"], "k": kw_flags([rec["desc"]])})
+        en_comments = [rec.get("comments_en", ""), rec.get("additional_comments_en", "")]
+        k = kw_flags([rec["desc"]] + en_comments)
+        if not any(en_comments) and (rec.get("comments_fr") or rec.get("additional_comments_fr")):
+            k2 = kw_flags([], [rec.get("comments_fr", ""), rec.get("additional_comments_fr", "")])
+            k = "".join(L for L in "WMGL" if L in k or L in k2)
+        title = (informative(rec.get("additional_comments_en", ""), rec.get("comments_en", "")) if aid else "") or rec["desc"]
+        base = {"s": "contracts", "d": rec["date"], "who": rec["vendor"], "org": rec["org"], "t": title, "ref": rec["ref"], "k": k}
+        if foreign:
+            stats["foreign_contracts"] += 1
+            out.append({**base, "v": rec["value"], "c": places.iso3(rec["country"]), "code": rec["country"], "r": "", "a": 0})
+            continue
+        stats["canadian_aid_contracts"] += 1
+        parts, how = placer.by_contract_projects(rec.get("projs", ()))
+        if not parts:
+            parts, how = placer.by_text([rec["desc"]] + en_comments, [rec.get("comments_fr", ""), rec.get("additional_comments_fr", "")])
+        for c, r, share in parts:
+            out.append({**base, "v": rec["value"] * share, "c": c, "code": "", "r": r, "a": 1, "how": how})
     stats["contracts"] = len(contracts)
     return out, stats
 
 
 # ---------------------------------------------------------------- grants and contributions
 
-def load_grants(places, orgs, span):
+def load_grants(places, orgs, span, placer, election):
     full = RAW / "grants.csv"
     path = full if full.exists() else RAW / "grants_trim.csv"
     if not path.exists():
@@ -317,7 +447,7 @@ def load_grants(places, orgs, span):
     stats = Counter()
     agreements = {}
     gac_projects = defaultdict(set)  # project number -> {ref_number} for every GAC agreement in the file, any date or country
-    proj_rx = re.compile(r"\b([A-Z]\d{9})\b")
+    proj_rx = PROJ_RX
     with open(path, encoding="utf-8-sig", newline="") as f:
         reader, head, ix = csv_columns(f)
 
@@ -337,7 +467,7 @@ def load_grants(places, orgs, span):
             if start < span.start:
                 continue
             country = col(row, "recipient_country").strip().upper()
-            if country in ("", "CA"):
+            if country == "" or (country == "CA" and org != GAC):
                 continue
             key = (org, col(row, "ref_number").strip())
             a_no = amend_no(col(row, "amendment_number"))
@@ -360,7 +490,7 @@ def load_grants(places, orgs, span):
                     rec[k] = rec[k] or prev[k]
                 agreements[key] = rec
             agreements[key]["start"] = first_start
-    out = []
+    out, gac_units = [], []
     for rec in agreements.values():
         if rec["value"] <= 0:
             continue
@@ -368,19 +498,47 @@ def load_grants(places, orgs, span):
             if rec["start"] > span.end:
                 span.future["grants_$"] += rec["value"]
             continue
-        orgs.see(rec["org"], rec["title_org"])
-        stats["foreign_agreements"] += 1
-        if rec["rtype"] == "P":  # recipient_type P = individual or sole proprietorship (I = international organization)
-            stats["individuals"] += 1
         en = [rec["title"], rec["prog"], rec["desc"], rec["results"]]
         fr = [rec["title_fr"], rec["prog_fr"], rec["desc_fr"], rec["results_fr"]]
-        out.append({"s": "grants", "d": rec["start"], "v": rec["value"],
-                    # Individuals abroad (fellowships, athletes) are counted but not named.
-                    "who": "Individual recipient" if rec["rtype"] == "P" else rec["who"],
-                    "c": places.iso3(rec["country"]), "code": rec["country"], "r": "", "org": rec["org"],
-                    "t": rec["title"] or rec["prog"] or rec["title_fr"] or first(rec["prog_fr"]), "ref": rec["ref"],
-                    "k": kw_flags(en, fr), "proj": proj_rx.findall(rec["agreement_number"]) if rec["org"] == GAC else []})
-    return out, stats, gac_projects
+        k = kw_flags(en, fr)
+        projs = proj_rx.findall(rec["agreement_number"]) if rec["org"] == GAC else []
+        canadian = rec["country"] == "CA"
+        if canadian:
+            # Every Canadian-addressed GAC agreement, aid or not, for the comparison with keyword searches.
+            if rec["start"] >= election:
+                stats["gac_canadian_all_since_election"] += 1
+                if "W" in k:
+                    stats["gac_canadian_all_since_election_W"] += 1
+                    stats["gac_canadian_all_since_election_W_$"] += rec["value"]
+            prog = rec["prog"] or first(rec["prog_fr"])
+            if TRADE_PROG.search(prog):
+                stats["canadian_trade_skipped"] += 1
+                continue
+            iati_hit = [p for p in projs if p in placer.targets]
+            if not iati_hit and not AID_PROG.search(prog):
+                stats["canadian_not_aid_skipped"] += 1
+                continue
+            stats["canadian_aid_agreements"] += 1
+        else:
+            stats["foreign_agreements"] += 1
+        orgs.see(rec["org"], rec["title_org"])
+        if rec["rtype"] == "P":  # recipient_type P = individual or sole proprietorship (I = international organization)
+            stats["individuals"] += 1
+        base = {"s": "grants", "d": rec["start"],
+                # Individuals (fellowships, athletes) are counted but not named.
+                "who": "Individual recipient" if rec["rtype"] == "P" else rec["who"], "org": rec["org"],
+                "t": rec["title"] or rec["prog"] or rec["title_fr"] or first(rec["prog_fr"]), "ref": rec["ref"], "k": k}
+        if rec["org"] == GAC:
+            gac_units.append({"d": rec["start"], "v": rec["value"], "proj": projs, "a": int(canadian)})
+        if not canadian:
+            out.append({**base, "v": rec["value"], "c": places.iso3(rec["country"]), "code": rec["country"], "r": "", "a": 0})
+            continue
+        parts, how = placer.by_projects(projs)
+        if not parts:
+            parts, how = placer.by_text([rec["title"], rec["desc"], rec["results"]], [rec["title_fr"], rec["desc_fr"], rec["results_fr"]])
+        for c, r, share in parts:
+            out.append({**base, "v": rec["value"] * share, "c": c, "code": "", "r": r, "a": 1, "how": how})
+    return out, stats, gac_projects, gac_units
 
 
 # ---------------------------------------------------------------- IATI
@@ -415,7 +573,7 @@ def load_iati(places, orgs, span):
     man_path = IATI_DIR / "manifest.json"
     manifest = json.load(open(man_path)) if man_path.exists() else {"files": [{"file": p.name, "url": ""} for p in sorted(IATI_DIR.glob("*.xml"))]}
     stats = Counter()
-    out, seen_ids, iati_fy, iati_all = [], set(), defaultdict(dict), set()
+    out, seen_ids, iati_fy, iati_all, places_of = [], set(), defaultdict(dict), set(), {}
     orgs.see(GAC, GAC_NAME)
     for entry in manifest["files"]:
         path = IATI_DIR / entry["file"]
@@ -458,11 +616,6 @@ def load_iati(places, orgs, span):
                 fy_sum[f] += to_float(v.text)
                 fy_last[f] = max(fy_last.get(f, ""), d)
                 q_sum[quarter_of(d)] += to_float(v.text)
-            if not fy_sum:
-                a.clear()
-                continue
-            for f, v in fy_sum.items():
-                iati_fy[f][proj] = v
             # Where: recipient-country and recipient-region percentages (normalised if they do not sum to 100).
             targets = []
             for rc in a.findall("recipient-country"):
@@ -474,10 +627,16 @@ def load_iati(places, orgs, span):
                 else:
                     name = any_narrative(rr) or "Region (other vocabulary)"
                 targets.append(("r", name, to_float(rr.get("percentage") or 100)))
-            total_pct = sum(p for *_, p in targets)
+            total_pct = math.fsum(p for *_, p in targets)  # fsum: identical results on every Python version
             if not targets or total_pct <= 0:
                 targets, total_pct = [("r", "Unspecified (no country or region given)", 100.0)], 100.0
                 stats["activities_without_place"] += 1
+            places_of[proj] = [(kind, code, pct / total_pct) for kind, code, pct in targets]
+            if not fy_sum:
+                a.clear()
+                continue
+            for f, v in fy_sum.items():
+                iati_fy[f][proj] = v
             title_el = a.find("title")
             title_en, title_fr = narrative(title_el, "en"), narrative(title_el, "fr")
             desc_en = " ".join(narrative(d, "en") for d in a.findall("description"))
@@ -500,11 +659,54 @@ def load_iati(places, orgs, span):
                     c = places.iso3(code) if kind == "c" else ""
                     region = code if kind == "r" else ("" if c else f"Unrecognised country code {code}")
                     out.append({"s": "iati", "d": fy_last[f], "v": total * share, "who": who, "c": c, "code": code if kind == "c" else "",
-                                "r": region, "org": GAC, "t": title_en or title_fr, "ref": proj, "k": k + marker,
+                                "r": region, "org": GAC, "t": title_en or title_fr, "ref": proj, "k": k + marker, "a": 0,
                                 "qv": {q: v * share for q, v in qs.items()}})
             stats["activities_with_money"] += 1
             a.clear()
-    return out, stats, manifest, iati_fy, iati_all
+    return out, stats, manifest, iati_fy, iati_all, places_of
+
+
+class Placer:
+    """Places a Canadian-addressed GAC agreement or contract in the countries its project serves."""
+
+    def __init__(self, places, names):
+        self.places, self.names, self.targets, self.by_base = places, names, {}, defaultdict(list)
+
+    def load(self, places_of):
+        self.targets = places_of
+        for p in places_of:
+            self.by_base[p[:7]].append(p)
+
+    def _split(self, projs):
+        agg = defaultdict(float)
+        for p in projs:
+            for kind, code, share in self.targets[p]:
+                agg[(kind, code)] += share / len(projs)
+        parts = []
+        for (kind, code), share in sorted(agg.items()):
+            if kind == "c":
+                c = self.places.iso3(code)
+                parts.append((c, "" if c else f"Unrecognised country code {code}", share))
+            else:
+                parts.append(("", code, share))
+        return parts, "iati"
+
+    def by_projects(self, projs):
+        hit = [p for p in dict.fromkeys(projs) if p in self.targets]
+        return self._split(hit) if hit else (None, "")
+
+    def by_contract_projects(self, projs):
+        """Contract comments carry P-008456 (a project: every sub-project) or P-000520-001 (one sub-project)."""
+        hit = []
+        for p in sorted(projs):
+            hit += [p] if p in self.targets else self.by_base.get(p[:7], [])
+        return self._split(list(dict.fromkeys(hit))) if hit else (None, "")
+
+    def by_text(self, en, fr):
+        found = self.names.find(*en) or self.names.find(*fr)
+        if found:
+            return [(c, "", 1 / len(found)) for c in found], "text"
+        return [("", NOT_STATED, 1.0)], "none"
 
 
 # ---------------------------------------------------------------- assemble
@@ -534,12 +736,14 @@ def main():
         raise SystemExit(f"missing {full_contracts}")
     span = Span(first_fy, today)
 
-    contracts, cstats = load_contracts(places, orgs, span, contracts_path)
-    log(f"contracts: {cstats['foreign_contracts']} foreign contracts ({time.time() - t0:.0f}s)")
-    grants, gstats, gac_projects = load_grants(places, orgs, span)
-    log(f"grants: {gstats['foreign_agreements']} foreign agreements ({time.time() - t0:.0f}s)")
-    iati, istats, manifest, iati_fy, iati_all = load_iati(places, orgs, span)
+    iati, istats, manifest, iati_fy, iati_all, places_of = load_iati(places, orgs, span)
     log(f"iati: {istats['activities_with_money']} activities with disbursements ({time.time() - t0:.0f}s)")
+    placer = Placer(places, CountryNames(places))
+    placer.load(places_of)
+    contracts, cstats = load_contracts(places, orgs, span, contracts_path, placer)
+    log(f"contracts: {cstats['foreign_contracts']} foreign, {cstats['canadian_aid_contracts']} Canadian-vendor aid ({time.time() - t0:.0f}s)")
+    grants, gstats, gac_projects, gac_units = load_grants(places, orgs, span, placer, ELECTION)
+    log(f"grants: {gstats['foreign_agreements']} foreign, {gstats['canadian_aid_agreements']} Canadian-addressed aid ({time.time() - t0:.0f}s)")
 
     allrecs = contracts + grants + iati
     for r in allrecs:
@@ -557,8 +761,10 @@ def main():
 
     totals = {f: {s: 0.0 for s in SRC} for f in fys}
     unplaced = {f: {s: 0.0 for s in SRC} for f in fys}
-    regions = {f: Counter() for f in fys}
-    flags = {f: {s: {L: [0, 0.0] for L in FLAG_LETTERS[s]} for s in SRC} for f in fys}
+    regions = {f: {s: Counter() for s in SRC} for f in fys}
+    flags = {f: {s: {L: [set(), 0.0] for L in FLAG_LETTERS[s]} for s in SRC} for f in fys}
+    canadian = {f: {"grants": [set(), 0.0], "contracts": [set(), 0.0], "placed_by_iati": 0.0, "placed_by_text": 0.0,
+                    "unplaced": 0.0, "unplaced_regional": 0.0} for f in fys}
     latest = {s: None for s in SRC}
     fy_latest = {}
     countries = {}
@@ -581,14 +787,23 @@ def main():
         latest[s] = max(latest[s] or "", d)
         fy_latest[f] = max(fy_latest.get(f, ""), d)
         for L in r["k"]:
-            flags[f][s][L][0] += 1
+            flags[f][s][L][0].add(r["ref"])  # agreements, contracts or activities, not their per-country pieces
             flags[f][s][L][1] += r["v"]
+        if r["a"]:
+            ca = canadian[f]
+            ca[s][0].add(r["ref"])
+            ca[s][1] += r["v"]
+            if r["c"]:
+                ca["placed_by_iati" if r["how"] == "iati" else "placed_by_text"] += r["v"]
+            else:
+                ca["unplaced"] += r["v"]
+                if r["r"] != NOT_STATED:
+                    ca["unplaced_regional"] += r["v"]
         if not r["c"]:
             unplaced[f][s] += r["v"]
-            if s == "iati":
-                regions[f][r["r"]] += r["v"]
             if not r["r"]:
                 r["r"] = f"Unrecognised country code {r.get('code') or '(blank)'}"
+            regions[f][s][r["r"]] += r["v"]
             continue
         cc = country(r["c"])
         cc["fy"][f][s] += r["v"]
@@ -604,14 +819,16 @@ def main():
     # Overlap, per fiscal year: GAC agreements in the grants file carry the IATI project number in agreement_number.
     overlap = {}
     for f in fys:
-        gac = [r for r in grants if r["fy"] == f and r["org"] == GAC]
-        matched = [r for r in gac if any(p in iati_all for p in r["proj"])]
+        gac = [u for u in gac_units if fy_of(u["d"]) == f]
+        matched = [u for u in gac if any(p in iati_all for p in u["proj"])]
         ia = iati_fy.get(f, {})
         in_gc = [p for p in ia if p in gac_projects]
-        overlap[f] = {"gac_foreign_grants": len(gac), "gac_foreign_grants_$": int(round(sum(r["v"] for r in gac))),
-                      "with_iati_project": len(matched), "with_iati_project_$": int(round(sum(r["v"] for r in matched))),
+        overlap[f] = {"gac_grants": len(gac), "gac_grants_$": int(round(math.fsum(u["v"] for u in gac))),
+                      "gac_grants_canadian_addressed": sum(u["a"] for u in gac),
+                      "gac_grants_canadian_addressed_$": int(round(math.fsum(u["v"] for u in gac if u["a"]))),
+                      "with_iati_project": len(matched), "with_iati_project_$": int(round(math.fsum(u["v"] for u in matched))),
                       "iati_activities": len(ia), "iati_activities_in_grants_file": len(in_gc),
-                      "iati_$": int(round(sum(ia.values()))), "iati_$_in_grants_file": int(round(sum(ia[p] for p in in_gc)))}
+                      "iati_$": int(round(math.fsum(ia.values()))), "iati_$_in_grants_file": int(round(math.fsum(ia[p] for p in in_gc)))}
 
     complete = [f for f in fys if f"{int(f[:4]) + 1}-03-31" <= today]
     ref_fy = complete[-1] if complete else fys[-1]
@@ -629,7 +846,18 @@ def main():
         "Grants and contributions: 'country' is the recipient's mailing address (recipient_country), not where the money is spent. "
         "UN agencies and international NGOs are mostly addressed in New York, Geneva, Rome, Vienna, Paris or London, so those cities' "
         "countries collect money spent elsewhere. Value is the agreement's current total (latest amendment), counted in the year of the original "
-        "start date, as on the federal page. Canadian NGOs delivering aid abroad are addressed in Canada and are not counted here.",
+        "start date, as on the federal page.",
+        "Canadian organisations delivering aid abroad: Global Affairs grants and contributions to Canadian-addressed recipients (WUSC, "
+        "Cowater, Alinea, Plan Canada and the like) and its development-assistance contracts with Canadian firms are included and placed "
+        "in the country the project serves, not at the Canadian address (record element a = 1). A grant is placed by the recipient "
+        "countries of the matching GAC IATI activity (project number in agreement_number) and split by its percentages; failing that, by "
+        "the countries named in its title, description and expected results, split evenly when several are named; otherwise it is "
+        f"unplaced as '{NOT_STATED}'. Contracts are placed the same way from the GAC project number or country names in their "
+        "description and comments. Aid is recognised by an IATI project number or an international-assistance program "
+        "(development, humanitarian, bilateral, multilateral and partnership programming, peace and stabilization, weapon threat "
+        "reduction, counter-terrorism capacity, youth internships, CFLI); trade programs (CanExport, CIIP) and academic relations are left out. "
+        "Contracts count when they use the development-assistance and transfer-payment object codes (23xx). Canadian-addressed grants "
+        "from other departments are not included.",
         "IATI (Global Affairs Canada only): 'country' is the activity's recipient country as GAC reports it, the best measure of where aid goes. "
         "Money is actual disbursements in the year (a flow), not agreement totals (a commitment), so it is not comparable dollar for dollar with "
         "grants. Multi-country activities are split by GAC's recipient-country percentages; the share GAC assigns to a region rather than a "
@@ -637,8 +865,8 @@ def main():
         f"Do not add the sources together: GAC's aid appears both in the grants file (by agreement) and in IATI (by disbursement). In {ref_fy}, "
         f"{o['iati_activities_in_grants_file']} of the {o['iati_activities']} GAC activities with disbursements "
         f"(${o['iati_$_in_grants_file'] / 1e9:.1f}B of ${o['iati_$'] / 1e9:.1f}B) match a GAC agreement in the grants file by project number "
-        f"(any start date, any recipient address), and {o['with_iati_project']} of the {o['gac_foreign_grants']} foreign-addressed GAC grants "
-        f"(${o['with_iati_project_$'] / 1e9:.1f}B of ${o['gac_foreign_grants_$'] / 1e9:.1f}B) are IATI activities; the rest are mostly "
+        f"(any start date, any recipient address), and {o['with_iati_project']} of the {o['gac_grants']} GAC grants in the grants source "
+        f"(${o['with_iati_project_$'] / 1e9:.1f}B of ${o['gac_grants_$'] / 1e9:.1f}B) are IATI activities; the rest are mostly "
         "multi-year institutional pledges (Global Fund, Gavi, IFAD, development banks) and assessed contributions to the UN, NATO, OECD and "
         "similar bodies, which GAC does not report at project level.",
         "Keyword flags are whole-word matches on English text (French only when no English is given): W women/girls, M men/boys, G gender, "
@@ -685,9 +913,12 @@ def main():
         },
         "totals": {f: {s: int(round(v)) for s, v in t.items()} for f, t in totals.items()},
         "unplaced": {f: {**{s: int(round(v)) for s, v in unplaced[f].items()},
-                         "iati_regions": [[k, int(round(v))] for k, v in regions[f].most_common(15)]} for f in fys},
+                         **{f"{s}_regions" if s != "iati" else "iati_regions": [[k, int(round(v))] for k, v in regions[f][s].most_common(15)]
+                            for s in SRC}} for f in fys},
+        "canadian_addressed": {f: {k: ([len(v[0]), int(round(v[1]))] if isinstance(v, list) else int(round(v))) for k, v in m.items()}
+                               for f, m in canadian.items()},
         "orgs": org_table,
-        "flags": {f: {s: {L: [n, int(round(v))] for L, (n, v) in m.items()} for s, m in fs.items()} for f, fs in flags.items()},
+        "flags": {f: {s: {L: [len(n), int(round(v))] for L, (n, v) in m.items()} for s, m in fs.items()} for f, fs in flags.items()},
         "keywords": dict(KEYWORDS),
         "keywords_fr": {k: KEYWORDS[k] + "|" + KEYWORDS_FR[k] for k in KEYWORDS},
         "future_dated": {k: int(round(v)) for k, v in span.future.items()},
@@ -696,7 +927,7 @@ def main():
     }
     allrecs.sort(key=order)
     records = [[CODE[r["s"]], r["d"], int(round(r["v"])), short(r["who"], 80), r["c"], r["r"], org_ix[r["org"]],
-                short(r["t"], 110), r["ref"], r["k"]] for r in allrecs]
+                short(r["t"], 110), r["ref"], r["k"], r["a"]] for r in allrecs]
     data = {"meta": meta, "countries": countries, "records": records}
     OUT.mkdir(parents=True, exist_ok=True)
     tmp = OUT / "intl_spending.json.tmp"
@@ -715,6 +946,14 @@ def main():
         log(f"  {f}: " + ", ".join(f"{s} ${meta['totals'][f][s] / 1e6:,.0f}M ({counts[(s, f)]:,} records, "
                                    f"unplaced ${meta['unplaced'][f][s] / 1e6:,.0f}M)" for s in SRC))
     log(f"  overlap {ref_fy}: {json.dumps(overlap[ref_fy])}")
+    for f in fys:
+        log(f"  canadian-addressed {f}: {json.dumps(meta['canadian_addressed'][f])}")
+    since = [r for r in allrecs if r["org"] == GAC and r["d"] >= ELECTION and "W" in r["k"]]
+    for label, sel in (("Canadian-addressed grants+contracts", [r for r in since if r["a"]]), ("all GAC grants+contracts", [r for r in since if r["s"] != "iati"]),
+                       ("GAC IATI activity-years", [r for r in since if r["s"] == "iati"])):
+        log(f"  W since {ELECTION}, {label}: {len({(r['s'], r['ref']) for r in sel})} (${sum(r['v'] for r in sel) / 1e6:,.0f}M)")
+    log(f"  every Canadian-addressed GAC agreement since {ELECTION} (any program): {gstats['gac_canadian_all_since_election']}, "
+        f"{gstats['gac_canadian_all_since_election_W']} with W (${gstats['gac_canadian_all_since_election_W_$'] / 1e6:,.0f}M)")
     if span.future:
         log(f"  forward-dated, left out: {dict(span.future)}")
 
