@@ -309,6 +309,18 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
     <details id="recipMore" hidden><summary><span class="pm" aria-hidden="true"></span> <span id="recipMoreLabel">Show the next 40</span></summary><ol class="recips" id="recipsMore" start="11"></ol></details>
   </div>
 
+  <div class="card" style="margin-top:16px" id="megaCard" hidden>
+    <div class="controls" style="justify-content:space-between">
+      <h2 style="margin:0" id="megaTitle">Megacontracts</h2>
+      <div class="seg small" role="group" aria-label="Which window" id="megaWin">
+        <button type="button" data-w="all" aria-pressed="true">Both windows</button><button type="button" data-w="after" aria-pressed="false">Since the election</button><button type="button" data-w="before" aria-pressed="false">Year before</button>
+      </div>
+    </div>
+    <p class="small muted" id="megaNote"></p>
+    <ol class="recips" id="megas"></ol>
+    <details id="megaMore" hidden><summary><span class="pm" aria-hidden="true"></span> <span id="megaMoreLabel">Show the rest</span></summary><ol class="recips" id="megasMore" start="11"></ol></details>
+  </div>
+
   <div class="card" style="margin-top:16px" id="trendCard" hidden>
     <div class="controls" style="justify-content:space-between"><h2 id="trendTitle" style="margin:0">How the money moved over time</h2>
       <div class="seg small" role="group" aria-label="Per person or total" id="trendMode"><button type="button" data-t="pc" aria-pressed="true">$ per person per year</button><button type="button" data-t="total" aria-pressed="false">Total $ per party</button></div></div>
@@ -546,7 +558,7 @@ function render() {
   const f = d => fillFor(d.id, V[d.id]);
   paths.attr("fill", f).attr("opacity", d => state.closeOnly && !R[d.id].close ? 0.45 : 1);
   insetPaths.forEach(ps => ps.attr("fill", f));
-  renderLegend(); renderPies(); renderGroups(); renderMinisters(); renderRecipients(); renderTrend(); renderUnplaced(); renderTable(); renderDots();
+  renderLegend(); renderPies(); renderGroups(); renderMinisters(); renderRecipients(); renderMega(); renderTrend(); renderUnplaced(); renderTable(); renderDots();
   if (state.sel) select(state.sel, true);
 }
 function renderLegend() {
@@ -635,6 +647,7 @@ function select(n, quiet) {
     ${r.after_formula != null && C.formula && !state.dept ? `<div class="small muted">Of the adjusted ${fmt$(r.after_adj)} since the election, <b>${fmt$(r.after_formula)}</b> is formula money and <b>${fmt$(r.after_adj - r.after_formula)}</b> discretionary${r.before_adj ? ` (before: ${fmt$(r.before_formula || 0)} formula of ${fmt$(r.before_adj)})` : ""}.</div>` : ""}
     ${sparkline(r)}
     ${CT && state.money !== "grants" && CT.ridings[n] ? contractsList(n) : ""}
+    ${megaInRiding(n)}
     <h2 style="margin-top:14px">${state.grants === "latest" ? C.topGrantsTitle.replace(/^Largest/, "Latest") : C.topGrantsTitle}
       <span class="seg small" role="group" aria-label="Largest or latest" style="margin-left:8px;vertical-align:middle"><button type="button" data-g="largest" aria-pressed="${state.grants !== "latest"}" onclick="setGrants('largest')">Largest</button><button type="button" data-g="latest" aria-pressed="${state.grants === "latest"}" onclick="setGrants('latest')">Latest</button></span></h2>
     ${r.latest_date ? `<div class="small muted">Newest award on record here: ${r.latest_date}${SER && SER.kind === "fiscal year" ? " (statements carry no dates, so \"latest\" is the latest fiscal year)" : ""}</div>` : ""}
@@ -909,6 +922,46 @@ function renderMinisters() {
 
 // ---- recipients: search any payee, or the top 50 since the election ----
 const RECIPS = D.recipients || [];
+// ---- megacontracts ($100M+): listed rather than mapped ----
+const MEGA = (CT && CT.large) || [];
+const megaMin = () => fmt$(C.contracts.large_threshold).replace(/\.0M$/, "M");
+function megaWhen(c) { return c.window === "after" ? "since the election" : "year before the election"; }
+function megaGrowth(c) {
+  if (!c.orig || Math.abs(c.v - c.orig) < 1) return "";
+  const pct = Math.round(100 * (c.v - c.orig) / c.orig);
+  return ` · originally ${fmt$(c.orig)}, ${pct >= 0 ? "+" : ""}${pct}% through amendments`;
+}
+function megaItem(c, chips) {
+  const where = Object.keys(c.ridings || {}).length
+    ? (chips ? `<br><span class="chips">${Object.entries(c.ridings).map(([n, sh]) => R[n] ? `<button type="button" class="chip" onclick="select('${n}'); zoomToRiding('${n}')" title="${sh < 1 ? Math.round(sh * 100) + "% of the vendor's postal area" : "vendor's postal area"}">${R[n].name}${sh < 1 ? " " + Math.round(sh * 100) + "%" : ""}</button>` : "").join("")}</span>` : "")
+    : `<br><span class="muted">not placed in a riding: ${c.why}</span>`;
+  return `<li><b>${fmt$(c.v)}</b> ${c.who} <span class="tag">${megaWhen(c)}</span><br><span class="muted">${c.desc || "–"} · ${c.dept} · awarded ${c.date}${megaGrowth(c)}${c.reported ? ` · last reported ${c.reported}` : ""} · ref ${c.ref}</span>${where}</li>`;
+}
+function megaInRiding(n) {
+  const xs = MEGA.filter(c => c.ridings && c.ridings[n]);
+  if (!xs.length) return "";
+  return `<h2 style="margin-top:14px">Megacontracts billed from here</h2>
+    <div class="small muted">Contracts of ${megaMin()} or more whose vendor bills from this ${C.level}. They are left out of the map colours and adjusted totals because the work rarely happens at the billing address.</div>
+    <ul class="grants">${xs.map(c => megaItem(c, false).replace(/<\/li>$/, (c.ridings[n] < 1 ? ` <span class="muted">(${Math.round(c.ridings[n] * 100)}% of its postal area is in this ${C.level})</span>` : "") + "</li>")).join("")}</ul>`;
+}
+function renderMega() {
+  const card = document.getElementById("megaCard");
+  if (!MEGA.length) { card.hidden = true; return; }
+  card.hidden = false;
+  const w = state.megaWin || "all";
+  const pool = MEGA.filter(c => (w === "all" || c.window === w) && (!state.dept || state.dept.startsWith(c.dept) || c.dept.startsWith(state.dept)));
+  const sum = xs => xs.reduce((a, c) => a + c.v, 0);
+  const aft = MEGA.filter(c => c.window === "after"), bef = MEGA.filter(c => c.window === "before");
+  document.getElementById("megaTitle").textContent = `Megacontracts (${megaMin()} and up)`;
+  document.getElementById("megaNote").innerHTML = `${MEGA.length} federal contracts of ${megaMin()} or more fall in the two windows: <b>${fmt$(sum(aft))}</b> in ${aft.length} since the election (${M.election} to ${M.cutoff}) and <b>${fmt$(sum(bef))}</b> in ${bef.length} in the year before. They sit in the ${C.level} of the vendor's billing address, which is rarely where the ships are built or the software runs, so they are kept off the map colours and adjusted totals and listed here instead. The date is the original award; a contract amended later keeps that date and shows its original value.${state.dept ? ` Filtered to ${state.dept}.` : ""}`;
+  document.getElementById("megas").innerHTML = pool.slice(0, 10).map(c => megaItem(c, true)).join("") || "<li class='muted'>None in this selection.</li>";
+  const more = document.getElementById("megaMore");
+  more.hidden = pool.length <= 10;
+  document.getElementById("megaMoreLabel").textContent = `Show the next ${pool.length - 10}`;
+  document.getElementById("megasMore").innerHTML = pool.slice(10).map(c => megaItem(c, true)).join("");
+}
+document.querySelectorAll("#megaWin button").forEach(b => b.onclick = () => { document.querySelectorAll("#megaWin button").forEach(x => x.setAttribute("aria-pressed", x === b)); state.megaWin = b.dataset.w; renderMega(); });
+
 function renderRecipients() {
   const card = document.getElementById("recipCard");
   if (!RECIPS.length) { card.hidden = true; return; }
@@ -1031,7 +1084,7 @@ function renderTrend() {
 function contractsList(n) {
   const c = CT.ridings[n];
   return `<h2 style="margin-top:14px">Largest contracts since the election</h2>
-    <div class="small muted">${fmt$(c.after_total || 0)} in ${Math.round(c.after_n || 0)} contracts (${fmt$(c.after_adj || 0)} without the ${fmt$(C.contracts.large_threshold)}+ megacontracts); top departments: ${(c.top_depts || []).map(([d, v]) => `${d} ${fmt$(v)}`).join(", ") || "–"}.</div>
+    <div class="small muted">${fmt$(c.after_total || 0)} in ${Math.round(c.after_n || 0)} contracts (${fmt$(c.after_adj || 0)} without the ${megaMin()}+ megacontracts); top departments: ${(c.top_depts || []).map(([d, v]) => `${d} ${fmt$(v)}`).join(", ") || "–"}.</div>
     <ul class="grants">${(c.top_contracts || []).map(t => `<li><b>${fmt$(t.v)}</b> ${t.who}${t.flag ? ` <span class="tag">${t.flag === "large" ? "megacontract, left out of adjusted" : t.flag}</span>` : ""}<br><span class="muted">${t.desc || ""}${t.dept ? " · " + t.dept : ""} · ${t.date} · ${t.how}</span></li>`).join("") || "<li class='muted'>None recorded</li>"}</ul>`;
 }
 if (CT) {
@@ -1113,6 +1166,12 @@ function buildFind() {
       add("Date", `${t.date} · ${t.who} · ${fmt$(t.v)} (contract)`, `${t.desc || ""} · ${r.name}`, n, {money: true, hay: longDate(t.date)});
     }
   }
+  for (const c of MEGA) {
+    const names = Object.keys(c.ridings || {}).filter(n => R[n]).map(n => R[n].name);
+    const first = Object.entries(c.ridings || {}).sort((a, b) => b[1] - a[1]).map(([n]) => n).find(n => R[n]) || null;
+    add("Contract", `${c.who} · ${fmt$(c.v)}`, `megacontract, ${megaWhen(c)} · ${c.desc || ""} · ${c.dept} · ${c.date} · ${names.join(", ") || "not placed: " + c.why}`, first, {mega: true, hay: longDate(c.date) + " megacontract"});
+    add("Date", `${c.date} · ${c.who} · ${fmt$(c.v)} (megacontract)`, `${c.desc || ""} · ${names.join(", ") || "not placed"}`, first, {mega: true, hay: longDate(c.date)});
+  }
   for (const d of C.filterOptions) add("Department", d, "filter the map and table to this department or program", null, {dept: d});
   for (const [name, total, awards, , by] of (D.recipients || [])) {
     const top = Object.entries(by || {}).sort((a, b) => b[1] - a[1])[0];
@@ -1164,6 +1223,7 @@ function pickFind(i) {
   if (e.dept != null) { deptSel.value = e.dept; deptSel.onchange(); return; }
   if (e.money && CT && state.money === "grants") { const b = document.querySelector('#money button[data-m="both"]'); if (b) b.onclick(); }
   if (e.mode) state.grants = e.mode;
+  if (e.mega && !e.n) { document.getElementById("megaCard").scrollIntoView({block: "start", behavior: "smooth"}); return; }
   select(e.n);
 }
 function setFindActive(i) {

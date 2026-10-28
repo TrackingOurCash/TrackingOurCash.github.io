@@ -204,7 +204,7 @@ def main():
                 "vendor": (row["vendor_name"] or "").strip(), "pc": pc, "country": country,
                 "desc": (row["description_en"] or "").strip()[:100], "how": PROCEDURE.get((row["solicitation_procedure"] or "").strip(), ""),
                 "itype": itype, "ministers": row["ministers_office"] == "Y", "ctype": row["commodity_type"],
-                "n_rows": 1,
+                "n_rows": 1, "orig": to_float(row["original_value"]), "reported": (row["reporting_period"] or "").strip(),
             }
             prev = contracts.get(key)
             if prev is None:
@@ -219,9 +219,11 @@ def main():
                 rec["country"] = rec["country"] or prev["country"]
                 rec["desc"] = rec["desc"] or prev["desc"]
                 rec["n_rows"] = prev["n_rows"] + 1
+                rec["orig"] = prev["orig"] or rec["orig"]  # the earliest row's original value
                 contracts[key] = rec
             else:
                 prev["n_rows"] += 1
+                prev["orig"] = rec["orig"] or prev["orig"]
             contracts[key]["award"], contracts[key]["period"] = award, period
     for rec in contracts.values():
         # Date = original award; for amendment-only groups the period start stands in for it.
@@ -275,6 +277,7 @@ def main():
     vendor_after = Counter()
     vendor_names = defaultdict(Counter)
     large_after = []
+    large_all = []  # every $100M+ contract in either window, placed or not, for the page's megacontracts card
     method_counts = Counter()
     unmapped = defaultdict(lambda: [0.0, 0, "", ""])
     windows = Counter()
@@ -293,6 +296,10 @@ def main():
         if window:
             windows[window + "_n"] += 1
             windows[window + "_$"] += rec["value"]
+        if window and rec["flag"]:
+            foreign = rec["country"] not in ("", "CA")
+            sh = None if foreign else (fsa_shares.get(rec["pc"][:3]) if rec["pc"] else None)
+            large_all.append((rec, window, sh or {}, "foreign vendor" if foreign else ("" if sh else "no usable postal code")))
         if rec["country"] not in ("", "CA"):
             if window:
                 method_counts[(window, "foreign")] += 1
@@ -378,6 +385,10 @@ def main():
         "large_threshold": LARGE,
         "large_after": [{"v": round(c["value"]), "who": c["vendor"][:80], "dept": c["dept"][:60], "desc": c["desc"], "date": c["date"],
                          "fsa": c["pc"][:3], "ref": c["ref"], "org": c["org"]} for c in sorted(large_after, key=lambda c: -c["value"])],
+        "large": [{"v": round(c["value"]), "orig": round(c["orig"]) if c["orig"] else None, "who": c["vendor"][:80], "dept": c["dept"][:60],
+                   "desc": c["desc"], "date": c["date"], "reported": c["reported"], "window": w, "ridings": sh, "why": why,
+                   "fsa": c["pc"][:3], "ref": c["ref"], "org": c["org"]}
+                  for c, w, sh, why in sorted(large_all, key=lambda t: -t[0]["value"])],
         "departments": [d for d, _ in dept_after.most_common(60)],
         "top_vendors": [[vendor_names[k].most_common(1)[0][0], round(x)] for k, x in vendor_after.most_common(50)],
     }
