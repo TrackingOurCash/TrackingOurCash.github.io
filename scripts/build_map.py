@@ -179,6 +179,7 @@ def federal():
         config["filterOptions"] = sorted(set(config["filterOptions"]) | set(cm["departments"]))  # the department menu serves both layers
     else:
         contracts_payload = None
+    config["search"] = True  # type-ahead search box beside the department menu (MPs, ridings, departments, recipients, grants, contracts, dates)
     budget = json.load(open(DATA / "budget_by_riding.json")) if (DATA / "budget_by_riding.json").exists() else None
     if budget:
         config["notes"].insert(1, "<b>Budget commitments:</b> the dots and the panel's \"Budget commitments\" list come from reading "
