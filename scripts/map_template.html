@@ -849,7 +849,6 @@ function equalizationLine(J) {
   return `<div class="note" style="margin-top:8px"><b>Equalization received, ${E.year}: ${M(E.amount)}</b> (${perM(E.amount)} per person; ${M(E.prev_amount)} in ${E.prev_year}).${E.cht != null ? ` Plus Canada Health Transfer ${M(E.cht)} and Canada Social Transfer ${M(E.cst)}.` : ""} <a href="${E.source}" target="_blank" rel="noopener">Finance Canada</a></div>`;
 }
 renderLegislature();
-openFromHash();
 
 // ---- budget commitments naming a riding ----
 function budgetSection(n) {
@@ -1451,4 +1450,6 @@ document.getElementById("subtitle").textContent = C.subtitle;
 document.getElementById("notes").innerHTML = `<h2>How to read this</h2><ul>${C.notes.map(n => `<li>${n}</li>`).join("")}</ul>`;
 
 render();
+// A #r= riding link opens its panel only now: the panel uses charts and constants defined further up the script.
+openFromHash();
 </script>
