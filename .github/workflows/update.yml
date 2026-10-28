@@ -31,13 +31,14 @@ jobs:
             data/raw/ne
             data/raw/shape
             data/raw/ab/shape
+            data/raw/intl
           key: raw-static-${{ hashFiles('scripts/fetch_csd.py', 'scripts/fetch_shapes.py') }}
       - name: Download data and build the map
         run: ./run.sh
       - name: Stage the site
         run: |
           mkdir -p site
-          cp output/index.html output/alberta.html output/bc.html output/saskatchewan.html output/manitoba.html output/nb.html output/pei.html output/ontario.html output/quebec.html output/ns.html output/nl.html output/yukon.html output/nwt.html output/nunavut.html site/ 2>/dev/null || cp output/riding_spending_map.html site/index.html
+          cp output/index.html output/alberta.html output/bc.html output/saskatchewan.html output/manitoba.html output/nb.html output/pei.html output/ontario.html output/quebec.html output/ns.html output/nl.html output/yukon.html output/nwt.html output/nunavut.html output/international.html output/sources.html site/ 2>/dev/null || cp output/riding_spending_map.html site/index.html
           cp output/*.csv data/summary.json site/
       - uses: actions/upload-pages-artifact@v3
         with:

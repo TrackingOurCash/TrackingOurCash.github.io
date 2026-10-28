@@ -35,6 +35,7 @@ data/*/
 !data/yt/
 !data/nt/
 !data/nu/
+!data/intl/
 output/
 .claude/
 __pycache__/

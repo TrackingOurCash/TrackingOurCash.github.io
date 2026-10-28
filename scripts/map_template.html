@@ -72,6 +72,15 @@ ul.grants a:hover { text-decoration-color: var(--ink); }
 .mdot.before { fill: var(--surface); fill-opacity: 0.25; stroke: var(--ink); stroke-dasharray: 3 2; }
 #megaChart svg { width: 100%; height: auto; display: block; }
 #megaChart .lbl { font-size: 10px; fill: var(--ink-2); }
+.zname { cursor: zoom-in; }
+#panel ul.grants li { cursor: zoom-in; }
+.megabox { border: 1px solid var(--border); border-left: 3px solid var(--ink); border-radius: 8px; padding: 8px 10px; margin: 10px 0 6px; }
+.megabox h3 { margin: 0 0 4px; font-size: 13px; }
+.megabox ul.grants li { font-size: 12px; }
+.megabox details summary { cursor: pointer; font-size: 12px; color: var(--ink-2); margin-top: 6px; }
+.mchip { display: inline-block; font-size: 11px; padding: 0 6px; margin: 2px 3px 0 0; border: 1px solid var(--axis); border-radius: 999px; background: none; color: var(--ink-2); cursor: pointer; font: inherit; font-size: 11px; }
+.mchip:hover { border-color: var(--ink); color: var(--ink); }
+.mchip i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; vertical-align: 0; }
 .megaSplit { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 16px; margin: 8px 0 10px; }
 .megaSplit .box { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
 .megaSplit .bar { display: flex; height: 10px; border-radius: 3px; overflow: hidden; margin: 6px 0 4px; background: var(--grid); }
@@ -367,6 +376,7 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
   </div>
 
   <div class="card notes" style="margin-top:16px" id="notes"></div>
+  <p class="small muted" style="margin:16px 4px 0"><a id="sourcesLink" href="sources.html" style="color:var(--focus)">Sources</a>: every dataset behind these pages, with links.</p>
 </div>
 <div id="tip"></div>
 
@@ -385,6 +395,7 @@ applyPartyColors();
 document.getElementById("title").textContent = C.title;
 document.title = C.title;
 document.getElementById("nav").innerHTML = C.nav.map(n => `<a href="${n.href}"${n.current ? ' aria-current="page"' : ""}>${n.label}</a>`).join("");
+document.getElementById("sourcesLink").href = C.sourcesHref || "sources.html";
 document.getElementById("deptAll").textContent = C.filterAll;
 document.getElementById("natlLabel").textContent = C.includeLabel;
 document.getElementById("groupTitle").textContent = C.groupTitle;
@@ -400,6 +411,7 @@ const CT = D.contracts || null;  // federal contracts layer, same windows, keyed
 const MEGA = (CT && CT.large) || [];
 const megaMin = () => fmt$(C.contracts.large_threshold).replace(/\.0M$/, "M");
 const GOV = (C.ministers && C.ministers.govParty) || "LPC";
+const PANEL_IDLE = document.getElementById("panel").innerHTML;
 const BUDGET = D.budget || null;
 // Budget documents are listed oldest first; "latest" is the most recent one.
 const LATEST_BUDGET = BUDGET ? BUDGET.documents.slice().sort((a, b) => a.date < b.date ? 1 : -1)[0] : null;
@@ -508,7 +520,7 @@ const ridingLayer = drawLand(g, path, "clip-canada");
 const paths = ridingLayer.selectAll("path").data(D.geo.features).join("path")
   .attr("class", d => R[d.id].minister ? "r min" : "r").attr("d", path).attr("tabindex", 0).attr("aria-label", d => R[d.id].name)
   .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip)
-  .on("click", (e, d) => select(d.id)).on("keydown", (e, d) => { if (e.key === "Enter") select(d.id); });
+  .on("click", (e, d) => { select(d.id); zoomToRiding(d.id); }).on("keydown", (e, d) => { if (e.key === "Enter") { select(d.id); zoomToRiding(d.id); } });
 paths.filter(d => R[d.id].minister).raise();  // so the dashed cabinet outline is not hidden by neighbours
 // Budget commitments: one dot per riding named in a budget document, sized by the dollars named.
 const dotLayer = g.append("g").attr("class", "dots");
@@ -562,7 +574,7 @@ for (const [name, b] of INSETS) {
   const ipath = d3.geoPath(ip);
   const ps = drawLand(inner, ipath, cid + "-land", b).selectAll("path").data(feats).join("path")
     .attr("class", d => R[d.id].minister ? "r min" : "r").attr("d", d3.geoPath(ip))
-    .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip).on("click", (e, d) => { select(d.id); zoomTo(b, 0.5); });
+    .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip).on("click", (e, d) => { select(d.id); zoomToRiding(d.id); });
   ps.filter(d => R[d.id].minister).raise();
   insetPaths.push(ps);
   const cap = box.append("div").attr("class", "cap");
@@ -579,7 +591,7 @@ function render() {
   paths.attr("fill", f).attr("opacity", d => state.closeOnly && !R[d.id].close ? 0.45 : 1);
   insetPaths.forEach(ps => ps.attr("fill", f));
   renderLegend(); renderPies(); renderGroups(); renderMinisters(); renderRecipients(); renderMega(); renderTrend(); renderUnplaced(); renderTable(); renderDots(); renderMegaDots();
-  if (state.sel) select(state.sel, true);
+  if (state.sel) select(state.sel, true); else panelIdle();
 }
 function renderLegend() {
   const lg = d3.select("#legend").html("");
@@ -624,6 +636,11 @@ function showTip(e, n) {
 function hideTip() { tip.style.display = "none"; }
 
 const featById = Object.fromEntries(D.geo.features.map(f => [f.id, f]));
+// A click on any grant or contract line in the panel (but not on its links or buttons) zooms to the open riding.
+document.getElementById("panel").addEventListener("click", ev => {
+  if (!state.sel || ev.target.closest("a, button, summary")) return;
+  if (ev.target.closest("ul.grants li")) zoomToRiding(state.sel);
+});
 function zoomToRiding(n) {
   const [[w, s], [e, no]] = d3.geoBounds(featById[n]);
   zoomTo([w, s, e, no], 0.5);
@@ -644,7 +661,7 @@ function select(n, quiet) {
   const shares = Object.entries(r.shares).map(([p, s]) => `${PARTY[p] || p} ${s}%`).join(" · ");
   const switched = r.rep_party && r.rep_party !== r.party_won;
   document.getElementById("panel").innerHTML = `
-    <h2 style="margin-bottom:2px">${r.name} <button type="button" class="linkbtn" onclick="copyLink('${n}', this)" title="Copy a link that opens this ${C.level}">link</button></h2>
+    <h2 style="margin-bottom:2px"><span class="zname" onclick="zoomToRiding('${n}')" title="Zoom the map to ${r.name}">${r.name}</span> <button type="button" class="linkbtn" onclick="copyLink('${n}', this)" title="Copy a link that opens this ${C.level}">link</button></h2>
     <div class="small muted">${r.region} · pop. ${r.population.toLocaleString()} (${C.popLabel})${r.wiki ? ` · <a href="${r.wiki}" target="_blank" rel="noopener">Wikipedia</a>` : ""}${r.poliwave ? ` · <a href="${r.poliwave}" target="_blank" rel="noopener">Poliwave projection</a>` : ""}</div>
     <div class="small" style="margin-top:6px"><svg class="sw-big" width="44" height="18" aria-hidden="true"><rect width="44" height="18" fill="${fillFor(n, v)}"></rect></svg>
       <span class="muted">map colour: ${r.close ? "close seat, striped " + PARTY[r.party_won] + " / " + PARTY[r.runnerup_party] : PARTY[r.rep_party || r.party_won]}${rank ? `, ${rank === 1 ? "deepest" : "#" + rank} of ${rankOf.length} by ${state.metric === "pc" ? "$ per person" : "change vs before"}` : ""}</span></div>
@@ -653,8 +670,9 @@ function select(n, quiet) {
       <div><b>${r.winner}</b> (${PARTY[r.party_won]}) won by <b>${r.margin_votes.toLocaleString()} votes</b> (${r.margin_pts} pts) over ${r.runnerup} (${PARTY[r.runnerup_party]})${r.close ? ' <span class="tag">close</span>' : ""}</div>
       <div class="small muted">${shares}</div>
     </div>
-    <div class="small muted">Grants since the election (${M.election} to ${M.cutoff}, the last fully reported quarter)</div>
+    <div class="small muted">${moneyLabel()} since the election (${M.election} to ${M.cutoff}, the last fully reported quarter)</div>
     <p class="big">${fmt$(v.after)}</p>
+    ${state.megaOn ? megaPanel(n) : ""}
     <dl class="kv" style="margin-top:8px">
       <dt>Per person per year</dt><dd>${fmtPc(v.pc)}</dd>
       <dt>${C.beforeLabel}<br><span class="muted">(${M.before_start} to ${M.before_end})</span></dt><dd>${fmt$(v.before)} · ${fmtPc(v.pcb)}/person</dd>
@@ -667,7 +685,7 @@ function select(n, quiet) {
     ${r.after_formula != null && C.formula && !state.dept ? `<div class="small muted">Of the adjusted ${fmt$(r.after_adj)} since the election, <b>${fmt$(r.after_formula)}</b> is formula money and <b>${fmt$(r.after_adj - r.after_formula)}</b> discretionary${r.before_adj ? ` (before: ${fmt$(r.before_formula || 0)} formula of ${fmt$(r.before_adj)})` : ""}.</div>` : ""}
     ${sparkline(r)}
     ${CT && state.money !== "grants" && CT.ridings[n] ? contractsList(n) : ""}
-    ${megaInRiding(n)}
+    ${state.megaOn ? "" : megaInRiding(n)}
     <h2 style="margin-top:14px">${state.grants === "latest" ? C.topGrantsTitle.replace(/^Largest/, "Latest") : C.topGrantsTitle}
       <span class="seg small" role="group" aria-label="Largest or latest" style="margin-left:8px;vertical-align:middle"><button type="button" data-g="largest" aria-pressed="${state.grants !== "latest"}" onclick="setGrants('largest')">Largest</button><button type="button" data-g="latest" aria-pressed="${state.grants === "latest"}" onclick="setGrants('latest')">Latest</button></span></h2>
     ${r.latest_date ? `<div class="small muted">Newest award on record here: ${r.latest_date}${SER && SER.kind === "fiscal year" ? " (statements carry no dates, so \"latest\" is the latest fiscal year)" : ""}</div>` : ""}
@@ -972,7 +990,7 @@ function renderMegaDots() {
     .attr("transform", d => `translate(${path.centroid(feat[d.n])})`)
     .attr("data-r", d => Math.min(26, 4 + 3.2 * Math.sqrt(d.v / 1e8)))
     .attr("r", function () { return +this.dataset.r / zoomK; })
-    .on("click", (ev, d) => { ev.stopPropagation(); select(d.n); })
+    .on("click", (ev, d) => { ev.stopPropagation(); select(d.n); zoomToRiding(d.n); })
     .selectAll("title").data(d => [d]).join("title")
     .text(d => `${R[d.n].name}: ${fmt$(d.v)} in ${d.items.length} megacontract${d.items.length > 1 ? "s" : ""} ${d.w === "after" ? "since the election" : "in the year before"}\n` + d.items.map(c => `${fmt$(c.v)} ${c.who} (${c.date})`).join("\n"));
 }
@@ -1020,6 +1038,38 @@ function megaChart() {
     .text(c => c.who.replace(/\b(inc|ltd|limited|corporation|corp|co|canada|limited partnership)\b\.?/gi, "").replace(/[ ,.]+$/, "").slice(0, 26));
   el.innerHTML = ""; el.appendChild(svgc.node());
   document.getElementById("megaChartNote").innerHTML = `Each dot is one contract, placed by award date and value (log scale). Colour: the party that won the vendor's ${C.level} in ${C.electionYear}; dark ring: a close seat; grey: not placed in a ${C.level}. Click a dot to open its ${C.level}.`;
+}
+function moneyLabel() {
+  if (!CT || state.money === "grants") return "Grants";
+  const big = state.megaOn ? ", megacontracts included" : "";
+  return state.money === "contracts" ? `Contracts${big}` : `Grants and contracts${big}`;
+}
+// Compact megacontract line for the side panel; `here` marks the riding the panel is about.
+function megaLi(c, here) {
+  const seats = Object.entries(c.ridings || {}).filter(([n]) => R[n]).sort((a, b) => b[1] - a[1]);
+  const chips = seats.length
+    ? seats.map(([n, sh]) => n === here ? `<button type="button" class="mchip" onclick="zoomToRiding('${n}')" title="Zoom the map to ${R[n].name}"><i style="background:var(${PVAR[R[n].party_won]})"></i><b>${R[n].name}</b>${sh < 1 ? ` ${Math.round(sh * 100)}%` : ""}</button>` : `<button type="button" class="mchip" onclick="select('${n}'); zoomToRiding('${n}')" title="${megaSeat(n)}"><i style="background:var(${PVAR[R[n].party_won]})"></i>${R[n].name}${sh < 1 ? ` ${Math.round(sh * 100)}%` : ""}</button>`).join("")
+    : `<span class="muted">not placed: ${c.why}</span>`;
+  const g = c.orig && Math.abs(c.v - c.orig) >= 1 ? ` · originally ${fmt$(c.orig)} (${c.v >= c.orig ? "+" : ""}${Math.round(100 * (c.v - c.orig) / c.orig)}%)` : "";
+  return `<li><b>${fmt$(c.v)}</b> ${c.who} <span class="tag">${c.window === "after" ? "since the election" : "year before"}</span><br><span class="muted">${c.desc || "–"} · ${c.dept} · ${c.date}, ${megaDays(c)}${g}</span><br>${chips}${seats.length === 1 && seats[0][0] === here ? `<br><span class="muted">${megaSeat(here)}</span>` : ""}</li>`;
+}
+function megaPanel(n) {
+  const xs = MEGA.filter(c => c.ridings && c.ridings[n] && megaDeptMatch(c));
+  const all = MEGA.filter(megaDeptMatch);
+  const sum = xs.reduce((a, c) => a + c.v * c.ridings[n], 0);
+  return `<div class="megabox"><h3>Megacontracts billed from ${R[n].name}${xs.length ? `: ${fmt$(sum)}` : ""}</h3>
+    ${xs.length ? `<ul class="grants">${xs.map(c => megaLi(c, n)).join("")}</ul>` : `<div class="small muted">None of the ${all.length} federal contracts of ${megaMin()} or more in the two windows bills from this ${C.level}.</div>`}
+    <details><summary>All ${all.length} megacontracts</summary><ul class="grants">${all.map(c => megaLi(c, n)).join("")}</ul></details></div>`;
+}
+// With the toggle on and nothing selected, the panel lists every megacontract.
+function panelIdle() {
+  const el = document.getElementById("panel");
+  if (!state.megaOn) { el.innerHTML = PANEL_IDLE; return; }
+  const all = MEGA.filter(megaDeptMatch);
+  const tot = w => all.filter(c => c.window === w).reduce((a, c) => a + c.v, 0);
+  el.innerHTML = `<h2 style="margin-bottom:2px">Megacontracts (${megaMin()} and up)</h2>
+    <div class="small muted">${all.length} federal contracts${state.dept ? ` in ${state.dept}` : ""}: <b>${fmt$(tot("after"))}</b> since the election, <b>${fmt$(tot("before"))}</b> in the year before. Each sits in the ${C.level} the vendor bills from; the bubbles on the map are these. Solid bubble: since the election; dashed ring: the year before. Click a ${C.level} for its result.</div>
+    <div class="megabox" style="border-left-width:1px"><ul class="grants">${all.map(c => megaLi(c, null)).join("")}</ul></div>`;
 }
 function megaWhen(c) { return c.window === "after" ? "since the election" : "year before the election"; }
 function megaGrowth(c) {
@@ -1333,6 +1383,7 @@ function pickFind(i) {
   if (e.mode) state.grants = e.mode;
   if (e.mega && !e.n) { document.getElementById("megaCard").scrollIntoView({block: "start", behavior: "smooth"}); return; }
   select(e.n);
+  zoomToRiding(e.n);
 }
 function setFindActive(i) {
   const opts = document.querySelectorAll("#findList .opt");

@@ -76,4 +76,6 @@ layer PEI pe grid pe       # federal grants on the provincial districts (no prov
 layer QC qc grid qc
 layer NL nl grid nl
 for t in yt nt nu; do layer "$t" "$t" grid "$t"; done
+# International page data (data/intl/): country shapes, UNDP GII, GAC IATI files; the committed copy stands if this fails.
+if python3 scripts/intl_prep.py >&2 && python3 scripts/intl_spending.py; then echo "INTL layer refreshed"; else echo "INTL layer: rebuild failed; using committed data"; fi
 python3 scripts/build_map.py

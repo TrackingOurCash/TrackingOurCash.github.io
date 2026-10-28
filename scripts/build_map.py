@@ -15,7 +15,8 @@ OUTDIR = ROOT / "output"
 NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "bc.html", "label": "British Columbia"}, {"href": "alberta.html", "label": "Alberta"},
        {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "ontario.html", "label": "Ontario"},
        {"href": "quebec.html", "label": "Quebec"}, {"href": "nb.html", "label": "New Brunswick"}, {"href": "pei.html", "label": "PEI"}, {"href": "ns.html", "label": "Nova Scotia"}, {"href": "nl.html", "label": "Newfoundland"},
-       {"href": "yukon.html", "label": "Yukon"}, {"href": "nwt.html", "label": "NWT"}, {"href": "nunavut.html", "label": "Nunavut"}]
+       {"href": "yukon.html", "label": "Yukon"}, {"href": "nwt.html", "label": "NWT"}, {"href": "nunavut.html", "label": "Nunavut"},
+       {"href": "international.html", "label": "International"}]
 # The published Claude pages live at fixed links; the website uses relative ones.
 ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXgM", "alberta.html": "https://claude.ai/artifact/HniakFetDdXzVWcveb9zy9",
                  "bc.html": "https://claude.ai/artifact/1BU8kCqcxVtwsJpjAnXS7s", "saskatchewan.html": "https://claude.ai/artifact/P8kMKchyth4j5ykhcSXug6",
@@ -23,7 +24,8 @@ ARTIFACT_URLS = {"index.html": "https://claude.ai/artifact/J6Va83R2P7m4HKErD6KXg
                  "nb.html": "https://claude.ai/artifact/6srrgUF4eD9A4JLfb9gB4R", "pei.html": "https://claude.ai/artifact/X4239bKZYyxRcX8ozVVZHQ",
                  "ontario.html": "https://claude.ai/artifact/JXkiRVQspJBViHHJ2MDcYL", "quebec.html": "https://claude.ai/artifact/YCvZDpg18q9rNjVfrG1nGz",
                  "ns.html": "https://claude.ai/artifact/KZKpkXpFKx5vSGPxYMrDPX", "nl.html": "https://claude.ai/artifact/9bRA1fMpskDcP2EzTcYjT1",
-                 "yukon.html": "https://claude.ai/artifact/TfZdzP8WmqHWxpADNAJQjS", "nwt.html": "https://claude.ai/artifact/EHbnP8UrR4CvzXmWrNDpc1", "nunavut.html": "https://claude.ai/artifact/8QyhH7xKkzNy3vzTws8c81"}
+                 "yukon.html": "https://claude.ai/artifact/TfZdzP8WmqHWxpADNAJQjS", "nwt.html": "https://claude.ai/artifact/EHbnP8UrR4CvzXmWrNDpc1", "nunavut.html": "https://claude.ai/artifact/8QyhH7xKkzNy3vzTws8c81",
+                 "sources.html": "https://claude.ai/artifact/SUrRaa5Q3jGQ19N657K9nG", "international.html": "https://claude.ai/artifact/FQKbVmqvTbXkT6dL7SezeK"}
 
 COMMON = ["population", "margin_pts", "margin_votes", "after_total", "after_n", "after_adj", "after_adj_n",
           "before_adj", "before_total", "pc_after", "pc_after_all", "pc_before", "change_pct", "score", "close",
@@ -763,8 +765,10 @@ def provincial(key):
 
 def render(payload, nav_urls=None):
     tpl = (ROOT / "scripts" / "map_template.html").read_text()
+    cfg = dict(payload["config"], sourcesHref=(nav_urls or {}).get("sources.html", "sources.html"))
     if nav_urls:
-        payload = dict(payload, config=dict(payload["config"], nav=[dict(n, href=nav_urls.get(n["href"], n["href"])) for n in payload["config"]["nav"]]))
+        cfg["nav"] = [dict(n, href=nav_urls.get(n["href"], n["href"])) for n in cfg["nav"]]
+    payload = dict(payload, config=cfg)
     return tpl.replace("/*__DATA__*/null", json.dumps(payload, ensure_ascii=False, separators=(",", ":")))
 
 
@@ -840,9 +844,79 @@ def legislature_for(name):
     return None
 
 
+def world():
+    """The international page: federal money abroad by country (scripts/intl_*.py) on a world map."""
+    sp_path, geo_path = DATA / "intl" / "intl_spending.json", DATA / "intl" / "world_geo.json"
+    if not (sp_path.exists() and geo_path.exists()):
+        print("international page skipped: run scripts/intl_prep.py and scripts/intl_spending.py first")
+        return
+    sp, geo = json.load(open(sp_path)), json.load(open(geo_path))
+    m = dict(sp["meta"])
+    m["gii_n"] = sum(1 for k in sp["countries"].values() if k.get("gii") is not None)
+    src = m.get("sources", {})
+    def src_link(key, fallback):
+        x = src.get(key) or {}
+        return f'<a href="{x.get("url")}" target="_blank" rel="noopener">{x.get("label") or fallback}</a>' if x.get("url") else (x.get("label") or fallback)
+    kw = m.get("keywords", {})
+    notes = [
+        f"<b>Sources:</b> {src_link('grants', 'Proactive disclosure of grants and contributions')}; {src_link('contracts', 'Proactive publication of contracts over $10,000')}; "
+        f"{src_link('iati', 'Global Affairs Canada IATI activity files')}; {src_link('gii', 'UNDP Gender Inequality Index')}. The three spending sources overlap (Global Affairs grants appear both in the disclosure and in IATI), so the page switches between them instead of adding them up.",
+        f"<b>Windows:</b> since the election means {m['election']} to {m['cutoff']}; the year before means {m['before_start']} to {m['before_end']}, the same windows as the riding maps. Contracts are dated by the original award, grants by the agreement start, IATI aid by its disbursement and expenditure transactions in the window.",
+        "<b>Where the money is placed:</b> contracts by the vendor's country, grants and contributions by the recipient's address (a United Nations agency in New York or Geneva counts there, wherever the program runs), IATI aid by the project's recipient countries. Canada itself is shaded neutral.",
+        "<b>Flags</b> are keyword matches on each record's title, description and program, in English and French. They say what a record mentions, not whether the money was well or badly spent. "
+        + "; ".join(f"<b>{lbl}</b> <code>{kw[k]}</code>" for k, lbl in (("women", "W"), ("men", "M"), ("gender", "G"), ("lgbtq", "L")) if kw.get(k))
+        + ". Global Affairs also tags every IATI project with the OECD gender-equality policy marker: <i>principal</i> means gender equality is the main objective, <i>significant</i> means it is one objective.",
+        "<b>Gender Inequality Index (UNDP):</b> 0 means women and men fare equally on reproductive health, empowerment and labour-market measures; higher means less equal. The flags card plots flagged dollars against it so readers can see where gender-focused money goes.",
+    ] + [f"<b>Caveat:</b> {n}" for n in m.get("notes", [])]
+    config = {
+        "title": "Canada's money abroad",
+        "subtitle": (f"Federal grants, contributions and contracts paid to recipients and vendors outside Canada, and Global Affairs Canada's aid "
+                     f"as reported to IATI, since the {m['election']} federal election (to {m['cutoff']}) against the year before. Each continent has its own colour; "
+                     f"the deeper the colour, the more money. Grey: none recorded."),
+        "nav": [dict(x, current=x["href"] == "international.html") for x in NAV],
+        "notes": notes,
+    }
+    payload = {"config": config, "meta": m, "countries": sp["countries"], "records": sp.get("records", []), "geo": geo}
+    base = (ROOT / "scripts" / "map_template.html").read_text()
+    head = base[:base.index("</style>") + len("</style>")].replace("<title>Riding Spending Map</title>", f"<title>{config['title']}</title>", 1)
+    tpl = head + "\n" + (ROOT / "scripts" / "world_template.html").read_text()
+    def html_for(nav_urls=None):
+        cfg = dict(config, sourcesHref=(nav_urls or {}).get("sources.html", "sources.html"))
+        if nav_urls:
+            cfg["nav"] = [dict(n, href=nav_urls.get(n["href"], n["href"])) for n in config["nav"]]
+        pl = dict(payload, config=cfg)
+        return tpl.replace("/*__DATA__*/null", json.dumps(pl, ensure_ascii=False, separators=(",", ":")))
+    html = html_for()
+    full = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            + html.replace('<div class="wrap">', '</head>\n<body>\n<div class="wrap">', 1) + "</body>\n</html>\n")
+    out = OUTDIR / "international.html"
+    out.write_text(full)
+    print(out, f"{out.stat().st_size / 1e6:.2f} MB")
+    (OUTDIR / "artifact_international.html").write_text(html_for(ARTIFACT_URLS))
+    return config
+
+
+def sources(pages):
+    """sources.html: every source behind every page (scripts/sources_page.py)."""
+    import sources_page
+    base = (ROOT / "scripts" / "map_template.html").read_text()
+    head = base[:base.index("</style>") + len("</style>")].replace("<title>Riding Spending Map</title>", "<title>Sources</title>", 1)
+    nav = [n for n in NAV]
+    body, n = sources_page.build(pages, nav, head)
+    full = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            + body.replace('<div class="wrap">', '</head>\n<body>\n<div class="wrap">', 1) + "</body>\n</html>\n")
+    (OUTDIR / "sources.html").write_text(full)
+    (OUTDIR / "artifact_sources.html").write_text(sources_page.build(pages, nav, head, ARTIFACT_URLS)[0])
+    print(OUTDIR / "sources.html", f"{n} distinct source addresses")
+
+
 def main():
     OUTDIR.mkdir(exist_ok=True)
     payload, raw = federal()
+    label = {n["href"]: n["label"] for n in NAV}
+    src_pages = [("index.html", label["index.html"], payload["config"]["notes"] + [payload["config"].get("linkNote") or ""])]
     fragment = write_page(payload, "index")
     (OUTDIR / "artifact.html").write_text(fragment)
     write_csv(raw, ["num", "current_name", "province", "population", "mp", "mp_party", "party_2025", "runnerup_party_2025", "margin_votes",
@@ -853,11 +927,17 @@ def main():
         if not (DATA / P["dir"] / "division_spending.json").exists():
             continue
         payload, raw, y = provincial(key)
+        src_pages.append((f"{key}.html", label.get(f"{key}.html", key), payload["config"]["notes"] + [payload["config"].get("linkNote") or ""]))
         fragment = write_page(payload, key)
         (OUTDIR / f"artifact_{key}.html").write_text(fragment)
         write_csv(raw, ["num", "name", "population", "mla", "mla_party", f"party_{y}", f"runnerup_party_{y}", "margin_votes", "margin_pts",
                         "close", "group", "after_adj", "after_total", "after_n", "before_adj", "before_total", "pc_after", "pc_after_all",
                         "pc_before", "change_pct", "score"], OUTDIR / f"{key}_spending.csv")
+    wc = world()
+    if wc:
+        src_pages.append(("international.html", "International", wc["notes"]))
+    order = {n["href"]: i for i, n in enumerate(NAV)}
+    sources(sorted(src_pages, key=lambda p: order.get(p[0], 99)))
 
 
 if __name__ == "__main__":
