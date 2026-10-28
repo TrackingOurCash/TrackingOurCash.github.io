@@ -628,7 +628,7 @@ const tip = document.getElementById("tip");
 function showTip(e, n) {
   const r = R[n], v = V[n];
   tip.innerHTML = `<b>${r.name}</b><br>${r.rep} ${pill(r.rep_party)}${r.minister ? ` · <b>${r.minister.rank === "head" ? "head of government" : "cabinet"}</b>` : ""}<br>
-    ${C.electionYear}: ${PARTY[r.party_won]} by ${r.margin_votes.toLocaleString()} votes (${r.margin_pts} pts)${r.close ? " · <b>close</b>" : ""}<br>
+    ${C.electionYear}: ${r.margin_votes == null ? `${PARTY[r.party_won] || r.party_won}, acclaimed` : `${PARTY[r.party_won]} by ${r.margin_votes.toLocaleString()} votes (${r.margin_pts} pts)`}${r.close ? " · <b>close</b>" : ""}<br>
     ${fmt$(v.after)} since the election · ${fmtPc(v.pc)}/person/yr · ${fmtPct(v.chg)} vs before`;
   tip.style.display = "block";
   tip.style.left = Math.min(e.clientX + 14, innerWidth - 285) + "px"; tip.style.top = (e.clientY + 14) + "px";
@@ -667,7 +667,7 @@ function select(n, quiet) {
       <span class="muted">map colour: ${r.close ? "close seat, striped " + PARTY[r.party_won] + " / " + PARTY[r.runnerup_party] : PARTY[r.rep_party || r.party_won]}${rank ? `, ${rank === 1 ? "deepest" : "#" + rank} of ${rankOf.length} by ${state.metric === "pc" ? "$ per person" : "change vs before"}` : ""}</span></div>
     <p style="margin:10px 0 4px"><b>${r.rep}</b> ${pill(r.rep_party)}${switched ? ` <span class="tag">elected as ${PARTY[r.party_won]}</span>` : ""}${r.minister ? `<br><span class="tag">${r.minister.rank === "head" ? "" : "Cabinet: "}${r.minister.title}</span>` : ""}</p>
     <div class="result" style="border-color:var(${PVAR[r.party_won]})">
-      <div><b>${r.winner}</b> (${PARTY[r.party_won]}) won by <b>${r.margin_votes.toLocaleString()} votes</b> (${r.margin_pts} pts) over ${r.runnerup} (${PARTY[r.runnerup_party]})${r.close ? ' <span class="tag">close</span>' : ""}</div>
+      <div><b>${r.winner}</b> (${PARTY[r.party_won]}) ${r.margin_votes == null ? "was acclaimed: no other candidate ran" : `won by <b>${r.margin_votes.toLocaleString()} votes</b> (${r.margin_pts} pts) over ${r.runnerup} (${PARTY[r.runnerup_party]})`}${r.close ? ' <span class="tag">close</span>' : ""}</div>
       <div class="small muted">${shares}</div>
     </div>
     <div class="small muted">${moneyLabel()} since the election (${M.election} to ${M.cutoff}, the last fully reported quarter)</div>
@@ -1272,7 +1272,7 @@ function renderTable() {
   const ns = Object.keys(R).filter(n => (!state.closeOnly || R[n].close) && (!q || (R[n].name + " " + R[n].rep + " " + R[n].region).toLowerCase().includes(q)));
   ns.sort((a, b) => { const x = col[2](R[a], V[a]), y = col[2](R[b], V[b]); if (x == null) return 1; if (y == null) return -1; return (x < y ? -1 : x > y ? 1 : 0) * state.dir; });
   tbody.innerHTML = ns.map(n => { const r = R[n], v = V[n]; return `<tr data-n="${n}"><td><span class="sw" style="background:var(${PVAR[r.rep_party]})"></span>${r.name}${r.close ? ' <span class="tag">close</span>' : ""}${r.minister ? ' <span class="tag">cabinet</span>' : ""}</td><td>${r.region.slice(0, 16)}</td>
-      <td>${r.rep} · ${r.rep_party || "–"}</td><td>${r.party_won}</td><td class="n">${r.margin_votes.toLocaleString()}</td><td class="n">${r.margin_pts}</td>
+      <td>${r.rep} · ${r.rep_party || "–"}</td><td>${r.party_won}</td><td class="n">${r.margin_votes == null ? "acclaimed" : r.margin_votes.toLocaleString()}</td><td class="n">${r.margin_pts}</td>
       <td class="n">${fmt$(v.after)}</td><td class="n">${fmtPc(v.pc)}</td><td class="n">${fmtPc(v.pcb)}</td><td class="n">${fmtPct(v.chg)}</td><td class="n" title="Date of the newest award recorded in this ${C.level}">${r.latest_date || "–"}</td></tr>`; }).join("");
   tbody.querySelectorAll("tr").forEach(tr => {
     tr.classList.toggle("sel", tr.dataset.n === state.sel);
