@@ -67,6 +67,14 @@ ul.grants a:hover { text-decoration-color: var(--ink); }
 .r:focus, .r:focus-visible { outline: none; }  /* the browser's box-shaped focus ring; the bold outline above marks the selection */
 .bdot { fill-opacity: 0.8; stroke-width: 1.2; vector-effect: non-scaling-stroke; pointer-events: none; }
 .bdot.citywide { fill-opacity: 0.4; }
+.mdot { stroke-width: 1.6; vector-effect: non-scaling-stroke; cursor: pointer; }
+.mdot.after { fill: var(--ink); fill-opacity: 0.78; stroke: var(--surface); }
+.mdot.before { fill: var(--surface); fill-opacity: 0.25; stroke: var(--ink); stroke-dasharray: 3 2; }
+#megaChart svg { width: 100%; height: auto; display: block; }
+#megaChart .lbl { font-size: 10px; fill: var(--ink-2); }
+.megaSplit { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 16px; margin: 8px 0 10px; }
+.megaSplit .box { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+.megaSplit .bar { display: flex; height: 10px; border-radius: 3px; overflow: hidden; margin: 6px 0 4px; background: var(--grid); }
 ul.budget { list-style: none; padding: 0; margin: 6px 0 0; }
 ul.budget li { padding: 6px 0; border-top: 1px solid var(--grid); font-size: 12px; }
 .sw-big { display: inline-block; vertical-align: middle; border-radius: 3px; border: 1px solid var(--border); }
@@ -241,6 +249,7 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
       <button data-m="contracts" aria-pressed="false">Contracts</button>
       <button data-m="both" aria-pressed="false">Both</button>
     </div>
+    <label class="chk" id="megaWrap" hidden title="Contracts of $100M or more: draws them on the map where the vendor bills from and counts them in the contract totals"><input type="checkbox" id="megaOn"> <b>Megacontracts</b> ($100M+) on the map</label>
     <label class="chk"><input type="checkbox" id="closeOnly"> Close ridings only</label>
     <label class="chk" id="budgetLabel" hidden><input type="checkbox" id="budgetDots" checked> Budget commitments (dots)</label>
     <select id="budgetScope" aria-label="Which budgets" hidden></select>
@@ -317,6 +326,9 @@ tbody tr.sel td { border-bottom-color: var(--focus); }
       </div>
     </div>
     <p class="small muted" id="megaNote"></p>
+    <div class="megaSplit" id="megaSplit"></div>
+    <div id="megaChart"></div>
+    <p class="small muted" id="megaChartNote"></p>
     <ol class="recips" id="megas"></ol>
     <details id="megaMore" hidden><summary><span class="pm" aria-hidden="true"></span> <span id="megaMoreLabel">Show the rest</span></summary><ol class="recips" id="megasMore" start="11"></ol></details>
   </div>
@@ -382,8 +394,12 @@ const fmt$ = v => v == null ? "–" : "$" + (Math.abs(v) >= 1e9 ? (v/1e9).toFixe
 const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleString() : v.toFixed(2));
 const fmtPct = v => v == null ? "–" : (v > 0 ? "+" : "") + v.toFixed(0) + "%";
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const state = {metric: "pc", dept: "", natl: false, disc: false, money: "grants", grants: "largest", trend: "pc", closeOnly: false, budget: true, budgetScope: "all", sel: null, sort: "pc", dir: -1, q: "", recipQ: ""};
+const state = {metric: "pc", dept: "", natl: false, disc: false, money: "grants", grants: "largest", trend: "pc", closeOnly: false, budget: true, budgetScope: "all", sel: null, sort: "pc", dir: -1, q: "", recipQ: "", megaOn: false, megaWin: "all"};
 const CT = D.contracts || null;  // federal contracts layer, same windows, keyed like R
+// Megacontracts ($100M+), declared early: a #r= permalink opens a panel before the cards are built.
+const MEGA = (CT && CT.large) || [];
+const megaMin = () => fmt$(C.contracts.large_threshold).replace(/\.0M$/, "M");
+const GOV = (C.ministers && C.ministers.govParty) || "LPC";
 const BUDGET = D.budget || null;
 // Budget documents are listed oldest first; "latest" is the most recent one.
 const LATEST_BUDGET = BUDGET ? BUDGET.documents.slice().sort((a, b) => a.date < b.date ? 1 : -1)[0] : null;
@@ -411,8 +427,10 @@ function compute() {
     if (state.disc && !state.dept && r.after_formula != null) { after -= r.after_formula; before -= r.before_formula || 0; }
     if (CT && state.money !== "grants") {
       const c = CT.ridings[n] || {};
-      const ca = state.dept ? ((CT.dept[state.dept] || {})[n] || 0) : state.natl ? (c.after_total || 0) : (c.after_adj || 0);
-      const cb = state.dept ? 0 : state.natl ? (c.before_total || 0) : (c.before_adj || 0);
+      const big = state.natl || state.megaOn;
+      let ca = state.dept ? ((CT.dept[state.dept] || {})[n] || 0) : big ? (c.after_total || 0) : (c.after_adj || 0);
+      let cb = state.dept ? 0 : big ? (c.before_total || 0) : (c.before_adj || 0);
+      if (state.dept && state.megaOn) for (const m of MEGA) if (m.ridings && m.ridings[n] && megaDeptMatch(m)) { if (m.window === "after") ca += m.v * m.ridings[n]; else cb += m.v * m.ridings[n]; }
       if (state.money === "contracts") { after = ca; before = cb; } else { after += ca; before += cb; }
     }
     const pc = after / r.population / YEARS, pcb = before / r.population / YEARS;
@@ -494,6 +512,7 @@ const paths = ridingLayer.selectAll("path").data(D.geo.features).join("path")
 paths.filter(d => R[d.id].minister).raise();  // so the dashed cabinet outline is not hidden by neighbours
 // Budget commitments: one dot per riding named in a budget document, sized by the dollars named.
 const dotLayer = g.append("g").attr("class", "dots");
+const megaLayer = g.append("g").attr("class", "megadots");
 function renderDots() {
   if (!BUDGET) return;
   const rows = state.budget ? Object.keys(BUDGET.by_riding).map(n => [n, budgetItems(n)]).filter(d => d[1].length) : [];
@@ -514,6 +533,7 @@ const zoom = d3.zoom().scaleExtent([1, 80]).on("zoom", e => {
   // Keep the close-seat stripes the same width on screen whatever the zoom.
   if (Math.abs(e.transform.k - zoomK) / zoomK > 0.15) { zoomK = e.transform.k; defs.selectAll("pattern").attr("patternTransform", `rotate(45) scale(${1 / zoomK})`); }
   dotLayer.selectAll("circle").attr("r", function () { return +this.dataset.r / e.transform.k; });
+  megaLayer.selectAll("circle").attr("r", function () { return +this.dataset.r / e.transform.k; });
 });
 svg.call(zoom);
 function zoomTo(b, factor = 1) {
@@ -558,7 +578,7 @@ function render() {
   const f = d => fillFor(d.id, V[d.id]);
   paths.attr("fill", f).attr("opacity", d => state.closeOnly && !R[d.id].close ? 0.45 : 1);
   insetPaths.forEach(ps => ps.attr("fill", f));
-  renderLegend(); renderPies(); renderGroups(); renderMinisters(); renderRecipients(); renderMega(); renderTrend(); renderUnplaced(); renderTable(); renderDots();
+  renderLegend(); renderPies(); renderGroups(); renderMinisters(); renderRecipients(); renderMega(); renderTrend(); renderUnplaced(); renderTable(); renderDots(); renderMegaDots();
   if (state.sel) select(state.sel, true);
 }
 function renderLegend() {
@@ -923,8 +943,84 @@ function renderMinisters() {
 // ---- recipients: search any payee, or the top 50 since the election ----
 const RECIPS = D.recipients || [];
 // ---- megacontracts ($100M+): listed rather than mapped ----
-const MEGA = (CT && CT.large) || [];
-const megaMin = () => fmt$(C.contracts.large_threshold).replace(/\.0M$/, "M");
+function megaDeptMatch(c) { return !state.dept || state.dept.startsWith(c.dept) || c.dept.startsWith(state.dept); }
+function megaDays(c) {
+  const d = Math.round((new Date(c.date + "T12:00:00") - new Date(M.election + "T12:00:00")) / 864e5);
+  return d === 0 ? "on election day" : d < 0 ? `${-d} days before the election` : `${d} days after the election`;
+}
+function megaSeat(n) {
+  const r = R[n];
+  const held = r.party_won === GOV ? "government" : "opposition";
+  return `${r.name}: ${PARTY[r.party_won] || r.party_won} won it in ${C.electionYear} by ${r.margin_pts} pts (${r.close ? "close" : "safe"} ${held} seat)${r.rep_party && r.rep_party !== r.party_won ? `, now held by ${PARTY[r.rep_party] || r.rep_party}` : ""}`;
+}
+function megaTop(c) { return Object.entries(c.ridings || {}).filter(([n]) => R[n]).sort((a, b) => b[1] - a[1]).map(([n]) => n)[0] || null; }
+function renderMegaDots() {
+  if (!MEGA.length) return;
+  const feat = Object.fromEntries(D.geo.features.map(f => [f.id, f]));
+  const agg = {};
+  if (state.megaOn) for (const c of MEGA) {
+    if (!megaDeptMatch(c)) continue;
+    for (const [n, sh] of Object.entries(c.ridings || {})) {
+      if (!feat[n]) continue;
+      const k = n + "|" + c.window, a = agg[k] || (agg[k] = {n, w: c.window, v: 0, items: []});
+      a.v += c.v * sh; a.items.push(c);
+    }
+  }
+  const rows = Object.values(agg).sort((a, b) => b.v - a.v);
+  megaLayer.selectAll("circle").data(rows, d => d.n + d.w).join("circle")
+    .attr("class", d => "mdot " + d.w)
+    .attr("transform", d => `translate(${path.centroid(feat[d.n])})`)
+    .attr("data-r", d => Math.min(26, 4 + 3.2 * Math.sqrt(d.v / 1e8)))
+    .attr("r", function () { return +this.dataset.r / zoomK; })
+    .on("click", (ev, d) => { ev.stopPropagation(); select(d.n); })
+    .selectAll("title").data(d => [d]).join("title")
+    .text(d => `${R[d.n].name}: ${fmt$(d.v)} in ${d.items.length} megacontract${d.items.length > 1 ? "s" : ""} ${d.w === "after" ? "since the election" : "in the year before"}\n` + d.items.map(c => `${fmt$(c.v)} ${c.who} (${c.date})`).join("\n"));
+}
+function megaSplit() {
+  const box = w => {
+    const xs = MEGA.filter(c => c.window === w && megaDeptMatch(c));
+    let gov = 0, opp = 0, close = 0, none = 0;
+    for (const c of xs) {
+      const sh = Object.entries(c.ridings || {}).filter(([n]) => R[n]);
+      if (!sh.length) { none += c.v; continue; }
+      for (const [n, s] of sh) { const v = c.v * s; if (R[n].party_won === GOV) gov += v; else opp += v; if (R[n].close) close += v; }
+    }
+    const tot = gov + opp + none || 1;
+    const seg = (v, col, t) => v > 0 ? `<span style="width:${100 * v / tot}%;background:${col}" title="${t}: ${fmt$(v)}"></span>` : "";
+    return `<div class="box"><b>${w === "after" ? "Since the election" : "Year before the election"}</b> <span class="muted small">${xs.length} contracts, ${fmt$(gov + opp + none)}</span>
+      <div class="bar">${seg(gov, `var(${PVAR[GOV]})`, "government seats")}${seg(opp, "var(--ink-2)", "opposition seats")}${seg(none, "var(--axis)", "not placed")}</div>
+      <div class="small">${pill(GOV)} seats ${fmt$(gov)} · opposition seats ${fmt$(opp)}${none ? ` · not placed ${fmt$(none)}` : ""}<br><span class="muted">in close seats (under ${M.close_margin || 10} pts): ${fmt$(close)}</span></div></div>`;
+  };
+  return box("after") + box("before");
+}
+function megaChart() {
+  const el = document.getElementById("megaChart");
+  const xs = MEGA.filter(megaDeptMatch);
+  if (!xs.length) { el.innerHTML = ""; return; }
+  const W = 760, H = 230, m = {l: 58, r: 14, t: 16, b: 28};
+  const x = d3.scaleTime().domain([new Date(M.before_start + "T00:00:00"), new Date(M.cutoff + "T23:59:59")]).range([m.l, W - m.r]);
+  const y = d3.scaleLog().domain([1e8, d3.max(xs, c => c.v) * 1.25]).range([H - m.b, m.t]);
+  const svgc = d3.create("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "img").attr("aria-label", "Megacontracts by award date and value");
+  svgc.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(d3.timeMonth.every(3)).tickFormat(d3.timeFormat("%b %Y")).tickSizeOuter(0)).call(a => a.selectAll("text").attr("font-size", 10));
+  svgc.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues([1e8, 3e8, 1e9, 3e9, 1e10].filter(v => v <= y.domain()[1])).tickFormat(fmt$).tickSizeOuter(0)).call(a => a.selectAll("text").attr("font-size", 10));
+  const ex = x(new Date(M.election + "T12:00:00"));
+  svgc.append("line").attr("x1", ex).attr("x2", ex).attr("y1", m.t - 6).attr("y2", H - m.b).attr("stroke", "var(--ink)").attr("stroke-dasharray", "4 3");
+  svgc.append("text").attr("class", "lbl").attr("x", ex + 4).attr("y", m.t).text(`Election ${M.election}`);
+  const col = c => { const n = megaTop(c); return n ? `var(${PVAR[R[n].party_won]})` : "var(--axis)"; };
+  svgc.append("g").selectAll("circle").data(xs.slice().sort((a, b) => b.v - a.v)).join("circle")
+    .attr("cx", c => x(new Date(c.date + "T12:00:00"))).attr("cy", c => y(c.v)).attr("r", 6)
+    .attr("fill", col).attr("fill-opacity", 0.85)
+    .attr("stroke", c => { const n = megaTop(c); return n && R[n].close ? "var(--ink)" : "var(--surface)"; })
+    .attr("stroke-width", c => { const n = megaTop(c); return n && R[n].close ? 2.2 : 1; })
+    .style("cursor", c => megaTop(c) ? "pointer" : "default")
+    .on("click", (ev, c) => { const n = megaTop(c); if (n) { select(n); zoomToRiding(n); } })
+    .append("title").text(c => { const n = megaTop(c); return `${c.who}: ${fmt$(c.v)}, awarded ${c.date} (${megaDays(c)})\n${c.desc || ""} · ${c.dept}\n${n ? megaSeat(n) : "not placed in a riding: " + c.why}`; });
+  svgc.append("g").selectAll("text").data(xs.slice().sort((a, b) => b.v - a.v).slice(0, 5)).join("text").attr("class", "lbl")
+    .attr("x", c => x(new Date(c.date + "T12:00:00")) + 8).attr("y", c => y(c.v) + 3)
+    .text(c => c.who.replace(/\b(inc|ltd|limited|corporation|corp|co|canada|limited partnership)\b\.?/gi, "").replace(/[ ,.]+$/, "").slice(0, 26));
+  el.innerHTML = ""; el.appendChild(svgc.node());
+  document.getElementById("megaChartNote").innerHTML = `Each dot is one contract, placed by award date and value (log scale). Colour: the party that won the vendor's ${C.level} in ${C.electionYear}; dark ring: a close seat; grey: not placed in a ${C.level}. Click a dot to open its ${C.level}.`;
+}
 function megaWhen(c) { return c.window === "after" ? "since the election" : "year before the election"; }
 function megaGrowth(c) {
   if (!c.orig || Math.abs(c.v - c.orig) < 1) return "";
@@ -935,7 +1031,8 @@ function megaItem(c, chips) {
   const where = Object.keys(c.ridings || {}).length
     ? (chips ? `<br><span class="chips">${Object.entries(c.ridings).map(([n, sh]) => R[n] ? `<button type="button" class="chip" onclick="select('${n}'); zoomToRiding('${n}')" title="${sh < 1 ? Math.round(sh * 100) + "% of the vendor's postal area" : "vendor's postal area"}">${R[n].name}${sh < 1 ? " " + Math.round(sh * 100) + "%" : ""}</button>` : "").join("")}</span>` : "")
     : `<br><span class="muted">not placed in a riding: ${c.why}</span>`;
-  return `<li><b>${fmt$(c.v)}</b> ${c.who} <span class="tag">${megaWhen(c)}</span><br><span class="muted">${c.desc || "–"} · ${c.dept} · awarded ${c.date}${megaGrowth(c)}${c.reported ? ` · last reported ${c.reported}` : ""} · ref ${c.ref}</span>${where}</li>`;
+  const seats = Object.keys(c.ridings || {}).filter(n => R[n]);
+  return `<li><b>${fmt$(c.v)}</b> ${c.who} <span class="tag">${megaWhen(c)}</span><br><span class="muted">${c.desc || "–"} · ${c.dept} · awarded ${c.date}, ${megaDays(c)}${megaGrowth(c)}${c.reported ? ` · last reported ${c.reported}` : ""} · ref ${c.ref}</span>${chips && seats.length ? `<br><span class="small">${seats.map(megaSeat).join("<br>")}</span>` : ""}${where}</li>`;
 }
 function megaInRiding(n) {
   const xs = MEGA.filter(c => c.ridings && c.ridings[n]);
@@ -949,7 +1046,9 @@ function renderMega() {
   if (!MEGA.length) { card.hidden = true; return; }
   card.hidden = false;
   const w = state.megaWin || "all";
-  const pool = MEGA.filter(c => (w === "all" || c.window === w) && (!state.dept || state.dept.startsWith(c.dept) || c.dept.startsWith(state.dept)));
+  const pool = MEGA.filter(c => (w === "all" || c.window === w) && megaDeptMatch(c));
+  document.getElementById("megaSplit").innerHTML = megaSplit();
+  megaChart();
   const sum = xs => xs.reduce((a, c) => a + c.v, 0);
   const aft = MEGA.filter(c => c.window === "after"), bef = MEGA.filter(c => c.window === "before");
   document.getElementById("megaTitle").textContent = `Megacontracts (${megaMin()} and up)`;
@@ -959,6 +1058,15 @@ function renderMega() {
   more.hidden = pool.length <= 10;
   document.getElementById("megaMoreLabel").textContent = `Show the next ${pool.length - 10}`;
   document.getElementById("megasMore").innerHTML = pool.slice(10).map(c => megaItem(c, true)).join("");
+}
+if (MEGA.length) {
+  document.getElementById("megaWrap").hidden = false;
+  document.getElementById("megaOn").onchange = e => {
+    state.megaOn = e.target.checked;
+    // Counting them needs the contract layer on: from Grants, switch to Both.
+    if (state.megaOn && state.money === "grants") { const b = document.querySelector('#money button[data-m="both"]'); if (b) { b.onclick(); return; } }
+    render();
+  };
 }
 document.querySelectorAll("#megaWin button").forEach(b => b.onclick = () => { document.querySelectorAll("#megaWin button").forEach(x => x.setAttribute("aria-pressed", x === b)); state.megaWin = b.dataset.w; renderMega(); });
 
