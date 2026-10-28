@@ -865,9 +865,6 @@ def world():
         + "".join(f"FY {fy} is still being reported (records to {d}). " for fy, d in (m.get("fy_through") or {}).items())
         + "Contracts are dated by the original award (an amendment does not move them), grants by the agreement start, IATI aid by the disbursements paid in the year.",
         "<b>Where the money is placed:</b> contracts by the vendor's country, grants and contributions by the recipient's address (a United Nations agency in New York or Geneva counts there, wherever the program runs), IATI aid by the project's recipient countries. Canada itself is shaded neutral.",
-        "<b>Flags</b> are keyword matches on each record's title, description and program, in English and French. They say what a record mentions, not whether the money was well or badly spent. "
-        + "; ".join(f"<b>{lbl}</b> <code>{kw[k]}</code>" for k, lbl in (("women", "W"), ("men", "M"), ("gender", "G"), ("lgbtq", "L")) if kw.get(k))
-        + ". Global Affairs also tags every IATI project with the OECD gender-equality policy marker: <i>principal</i> means gender equality is the main objective, <i>significant</i> means it is one objective.",
         "<b>Gender Inequality Index (UNDP):</b> 0 means women and men fare equally on reproductive health, empowerment and labour-market measures; higher means less equal. It shades the map, and the flags card plots flagged dollars against it so readers can see where gender-focused money goes. Grey countries have no score.",
     ] + [f"<b>Caveat:</b> {n}" for n in m.get("notes", [])]
     config = {

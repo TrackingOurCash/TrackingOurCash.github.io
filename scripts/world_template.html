@@ -37,6 +37,17 @@ table.fytbl { border-collapse: collapse; font-size: 13px; margin: 4px 0 12px; }
 table.fytbl td, table.fytbl th { padding: 3px 10px 3px 0; border-bottom: 1px solid var(--grid); text-align: right; position: static; cursor: default; }
 table.fytbl td:first-child, table.fytbl th:first-child { text-align: left; }
 table.fytbl tr.on td { font-weight: 600; }
+.purp { margin-top: 3px; }
+.purp summary { cursor: pointer; font-size: 11px; color: var(--ink-2); }
+.purp div { font-size: 12px; line-height: 1.5; color: var(--ink); white-space: normal; margin: 4px 0 2px; max-width: 640px; }
+.purp mark { color: inherit; border-radius: 2px; padding: 0 1px; font-weight: 600; }
+.purp mark.kW { background: rgba(200, 67, 90, 0.28); }
+.purp mark.kM { background: rgba(58, 107, 208, 0.28); }
+.purp mark.kG { background: rgba(130, 87, 204, 0.28); }
+.purp mark.kL { background: rgba(35, 148, 106, 0.30); }
+.purp mark.kD { background: rgba(125, 138, 150, 0.40); }
+.purp mark.kH { background: rgba(208, 122, 31, 0.32); }
+.purp mark.kE { background: rgba(26, 146, 173, 0.32); }
 </style>
 
 <div class="wrap">
@@ -61,13 +72,20 @@ table.fytbl tr.on td { font-weight: 600; }
     </div>
     <select id="flag" aria-label="Keyword flag">
       <option value="">All spending</option>
-      <option value="W">Mentions women or girls</option>
-      <option value="M">Mentions men or boys</option>
-      <option value="G">Mentions gender</option>
-      <option value="L">Mentions LGBTQ2+</option>
-      <option value="P">Gender equality is the principal aim (IATI marker)</option>
-      <option value="S">Gender equality is a significant aim (IATI marker)</option>
-      <option value="any">Any gender or LGBTQ2+ flag</option>
+      <optgroup label="Gender and LGBTQ2+">
+        <option value="W">Mentions women or girls</option>
+        <option value="M">Mentions men or boys</option>
+        <option value="G">Mentions gender</option>
+        <option value="L">Mentions LGBTQ2+</option>
+        <option value="P">Gender equality is the principal aim (IATI marker)</option>
+        <option value="S">Gender equality is a significant aim (IATI marker)</option>
+        <option value="any">Any gender or LGBTQ2+ flag</option>
+      </optgroup>
+      <optgroup label="Other topics">
+        <option value="D">Military or defence</option>
+        <option value="H">Housing or shelter</option>
+        <option value="E">Carbon, emissions or climate</option>
+      </optgroup>
     </select>
   </div>
 
@@ -86,7 +104,7 @@ table.fytbl tr.on td { font-weight: 600; }
     <div class="cbars" id="contBars"></div>
   </div>
 
-  <div class="card" style="margin-top:16px">
+  <div class="card" style="margin-top:16px" id="flagCard" hidden>
     <h2 id="flagTitle">Gender and LGBTQ2+ flags</h2>
     <p class="small muted" id="flagNote"></p>
     <div class="tablewrap" style="max-height:none"><table class="flagtbl" id="flagTbl"></table></div>
@@ -139,7 +157,8 @@ const S_OF = {c: "contract", g: "grant", i: "iati"};
 const SRC = {contracts: "Contracts", grants: "Grants & contributions", iati: "Global Affairs aid (IATI)"};
 const REC_OF = {grants: "grant", contracts: "contract", iati: "iati"};
 const SRC_OF = {grant: "grants", contract: "contracts", iati: "iati"};
-const FLAGS = {W: "Women or girls", M: "Men or boys", G: "Gender", L: "LGBTQ2+", P: "Gender marker: principal", S: "Gender marker: significant"};
+const FLAGS = {W: "Women or girls", M: "Men or boys", G: "Gender", L: "LGBTQ2+", P: "Gender marker: principal", S: "Gender marker: significant", D: "Military or defence", H: "Housing or shelter", E: "Carbon or climate"};
+const GENDER_FLAGS = new Set(["W", "M", "G", "L", "P", "S", "any"]);
 const CONT = {"Africa": "AF", "Asia": "AS", "Europe": "EU", "North America": "NA", "South America": "SA", "Oceania": "OC"};
 const contKey = c => CONT[c] || "OT";
 const HOME = "CAN";
@@ -273,7 +292,34 @@ function giiBlock(k) {
 }
 function recItem(r) {
   const fl = (r.k || "").split("").filter(x => FLAGS[x]).map(x => `<span class="tag">${FLAGS[x]}</span>`).join(" ");
-  return `<li><b>${fmt$(r.v)}</b> <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a>${r.a ? ' <span class="tag" title="Addressed in Canada; placed in the country the project serves">Canadian organisation</span>' : ""} ${fl}<br><span class="muted">${esc(r.t)}${r.dept ? " · " + esc(r.dept) : ""} · ${r.d} (FY ${r.fy})${r.ref ? " · " + esc(r.ref) : ""}</span></li>`;
+  return `<li><b>${fmt$(r.v)}</b> <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a>${r.a ? ' <span class="tag" title="Addressed in Canada; placed in the country the project serves">Canadian organisation</span>' : ""} ${fl}<br><span class="muted">${esc(r.t)}${r.dept ? " · " + esc(r.dept) : ""} · ${r.d} (FY ${r.fy})${r.ref ? " · " + esc(r.ref) : ""} · <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${srcName(r)} ↗</a></span>${purposeHtml(r)}</li>`;
+}
+// ---- published purpose: the description text, with each keyword group highlighted and counted ----
+const PURP = M.purposes || {};
+const PKEY = {contract: "c", grant: "g", iati: "i"};
+const KW = (() => {
+  const out = [];
+  const add = (letter, src) => { if (!src) return; try { out.push([letter, new RegExp(src, "giu")]); } catch (e) {} };
+  const en = M.keywords_js || {}, fr = M.keywords_fr_js || {};
+  for (const [letter, key] of [["W", "women"], ["M", "men"], ["G", "gender"], ["L", "lgbtq"], ["D", "military"], ["H", "housing"], ["E", "carbon"]]) { add(letter, en[key]); add(letter, fr[key]); }
+  return out;
+})();
+const KW_NAME = {W: "women", M: "men", G: "gender", L: "LGBTQ2+", D: "military", H: "housing", E: "carbon"};
+// Where each link goes: the Government of Canada open-data record, or Global Affairs' project browser for IATI aid.
+function srcName(r) { return r.s === "iati" ? "Global Affairs project page" : "official open.canada.ca record"; }
+function purposeHtml(r) {
+  const text = PURP[PKEY[r.s] + "|" + r.ref];
+  if (!text) return "";
+  const hits = [];
+  for (const [letter, rx] of KW) { rx.lastIndex = 0; let m; while ((m = rx.exec(text))) { if (!m[0]) { rx.lastIndex++; continue; } hits.push([m.index, m.index + m[0].length, letter]); } }
+  hits.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+  const kept = [], count = {};
+  for (const h of hits) { if (kept.length && h[0] < kept[kept.length - 1][1]) continue; kept.push(h); count[h[2]] = (count[h[2]] || 0) + 1; }
+  let html = "", at = 0;
+  for (const [a, b, letter] of kept) { html += esc(text.slice(at, a)) + `<mark class="k${letter}">${esc(text.slice(a, b))}</mark>`; at = b; }
+  html += esc(text.slice(at));
+  const tally = ["W", "M", "G", "L", "D", "H", "E"].filter(x => count[x]).map(x => `${KW_NAME[x]} ×${count[x]}`).join(" · ");
+  return `<details class="purp"><summary>Published purpose${tally ? " · " + tally : ""}</summary><div>${html} <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">Read it on the ${srcName(r)} ↗</a></div></details>`;
 }
 function spark(k) {
   const qs = M.quarters || [], vals = ((k.q || {})[state.src]) || [];
@@ -319,8 +365,8 @@ function select(iso) {
     ${spark(k)}
     <h3 style="margin-top:12px">Every source by fiscal year</h3>
     <table class="mini"><thead><tr><td></td>${FYS.map(f => `<td class="n"${f === state.fy ? ' style="font-weight:600"' : ""}>${f}</td>`).join("")}</tr></thead><tbody>${Object.keys(SRC).map(s => `<tr><td>${s === "iati" ? "IATI aid" : s === "grants" ? "Grants" : "Contracts"}</td>${FYS.map(f => `<td class="n"${f === state.fy ? ' style="font-weight:600"' : ""}>${fmt$((((k.fy || {})[f] || {})[s]) || 0)}</td>`).join("")}</tr>`).join("")}</tbody></table>
-    <h3 style="margin-top:12px">Flags, ${SRC[state.src].toLowerCase()}, FY ${state.fy}</h3>
-    <dl class="kv">${["W", "M", "G", "L"].concat(state.src === "iati" ? ["P", "S"] : []).map(x => `<dt>${FLAGS[x]}</dt><dd>${fmt$(flagged(x))}</dd>`).join("")}</dl>
+    ${state.flag ? `<h3 style="margin-top:12px">Flags, ${SRC[state.src].toLowerCase()}, FY ${state.fy}</h3>
+    <dl class="kv">${(GENDER_FLAGS.has(state.flag) ? ["W", "M", "G", "L"].concat(state.src === "iati" ? ["P", "S"] : []) : ["D", "H", "E"]).map(x => `<dt>${FLAGS[x]}</dt><dd>${fmt$(flagged(x))}</dd>`).join("")}</dl>` : ""}
     <h2 style="margin-top:14px">${state.grants === "latest" ? "Latest records" : `Largest records, FY ${state.fy}`}
       <span class="seg small" role="group" aria-label="Largest or latest" style="margin-left:8px;vertical-align:middle"><button type="button" aria-pressed="${state.grants !== "latest"}" onclick="setGrants('largest')">Largest</button><button type="button" aria-pressed="${state.grants === "latest"}" onclick="setGrants('latest')">Latest</button></span></h2>
     <ul class="grants">${list.map(recItem).join("") || "<li class='muted'>None recorded</li>"}</ul>
@@ -348,13 +394,17 @@ function renderContinents() {
 
 // ---- flags card ----
 function renderFlags() {
+  // The card only appears once a keyword option is picked in the menu above the map.
+  const card = document.getElementById("flagCard");
+  card.hidden = !GENDER_FLAGS.has(state.flag);
+  if (card.hidden) return;
   const srcs = ["contract", "grant", "iati"];
   const cols = ["W", "M", "G", "L", "P", "S", "any"];
   const label = {W: "Women or girls", M: "Men or boys", G: "Gender", L: "LGBTQ2+", P: "Marker: principal", S: "Marker: significant", any: "Any flag"};
   const agg = Object.fromEntries(srcs.map(s => [s, {all: 0, n: 0}]));
   for (const r of REC) { if (r.fy !== state.fy) continue; const a = agg[r.s]; if (!a) continue; a.all += r.v; a.n++; for (const c of cols) if (hasFlag(r, c)) { a[c] = (a[c] || 0) + r.v; a[c + "n"] = (a[c + "n"] || 0) + 1; } }
   document.getElementById("flagTitle").textContent = `Gender and LGBTQ2+ flags, ${fyLabel(state.fy)}`;
-  document.getElementById("flagNote").innerHTML = `Records whose title, description or program mentions each keyword group (English and French), plus Global Affairs' own gender-equality marker on IATI projects. The keyword lists are in the notes at the bottom. A record can carry several flags. Percentages are shares of each source's dollars in the year.`;
+  document.getElementById("flagNote").innerHTML = `Records whose title, description or program mentions each keyword group (English and French), plus Global Affairs' own gender-equality marker on IATI projects. Open a record's published purpose to see the words that matched. A record can carry several flags. Percentages are shares of each source's dollars in the year.`;
   document.getElementById("flagTbl").innerHTML = `<thead><tr><th>Source</th><th class="n">All records</th>${cols.map(c => `<th class="n">${label[c]}</th>`).join("")}</tr></thead><tbody>${srcs.map(s => { const a = agg[s]; return `<tr><td>${SRC[SRC_OF[s]]}</td><td class="n">${fmt$(a.all)}<br><span class="muted">${a.n.toLocaleString()}</span></td>${cols.map(c => (c === "P" || c === "S") && s !== "iati" ? `<td class="n muted">–</td>` : `<td class="n">${fmt$(a[c] || 0)}<br><span class="muted">${a.all ? Math.round(100 * (a[c] || 0) / a.all) : 0}% · ${(a[c + "n"] || 0).toLocaleString()}</span></td>`).join("")}</tr>`; }).join("")}</tbody>`;
   renderScatter();
 }
@@ -424,7 +474,9 @@ const COLS = [
   ["d", "Date", r => r.d], ["v", "Value", r => r.v, true], ["who", "Recipient / vendor", r => r.who], ["c", "Country", r => r.c ? (K[r.c] ? K[r.c].name : r.c) : (r.r || "not placed")],
   ["dept", "Department", r => r.dept], ["t", "What it is for", r => r.t],
   ["W", "Women", r => hasFlag(r, "W") ? 1 : 0, true], ["M", "Men", r => hasFlag(r, "M") ? 1 : 0, true], ["G", "Gender", r => hasFlag(r, "G") ? 1 : 0, true], ["L", "LGBTQ2+", r => hasFlag(r, "L") ? 1 : 0, true],
+  ["D", "Military", r => hasFlag(r, "D") ? 1 : 0, true], ["H", "Housing", r => hasFlag(r, "H") ? 1 : 0, true], ["E", "Carbon", r => hasFlag(r, "E") ? 1 : 0, true],
   ["mk", "Marker", r => hasFlag(r, "P") ? 2 : hasFlag(r, "S") ? 1 : 0, true], ["gii", "Country GII", r => r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii : -1, true],
+  ["src", "Source record", r => r.ref],
 ];
 function tableRows() {
   const q = state.q.toLowerCase().trim();
@@ -440,13 +492,14 @@ function renderTable() {
   const mark = (on, t) => `<span class="fl ${on ? "on" : "off"}">${on ? t : "·"}</span>`;
   tbody.innerHTML = rows.slice(0, state.limit).map(r => `<tr><td>${r.d}</td><td class="n">${fmt$(r.v)}</td><td class="who"><a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a>${r.a ? ' <span class="tag" title="Addressed in Canada; placed in the country the project serves">Canadian org.</span>' : ""}</td>
     <td>${r.c && K[r.c] ? `<a href="#" onclick="select('${r.c}'); zoomToCountry('${r.c}'); document.getElementById('svg').scrollIntoView({block: 'start', behavior: 'smooth'}); return false">${esc(K[r.c].name)}</a>` : `<span class="muted">${esc(r.r || "not placed")}</span>`}</td>
-    <td>${esc(r.dept)}</td><td class="t">${esc(r.t)}</td>
-    <td class="n">${mark(hasFlag(r, "W"), "W")}</td><td class="n">${mark(hasFlag(r, "M"), "M")}</td><td class="n">${mark(hasFlag(r, "G"), "G")}</td><td class="n">${mark(hasFlag(r, "L"), "L")}</td>
+    <td>${esc(r.dept)}</td><td class="t">${esc(r.t)}${purposeHtml(r)}</td>
+    <td class="n">${mark(hasFlag(r, "W"), "W")}</td><td class="n">${mark(hasFlag(r, "M"), "M")}</td><td class="n">${mark(hasFlag(r, "G"), "G")}</td><td class="n">${mark(hasFlag(r, "L"), "L")}</td><td class="n">${mark(hasFlag(r, "D"), "D")}</td><td class="n">${mark(hasFlag(r, "H"), "H")}</td><td class="n">${mark(hasFlag(r, "E"), "E")}</td>
     <td class="n">${hasFlag(r, "P") ? mark(1, "principal") : hasFlag(r, "S") ? mark(1, "significant") : mark(0)}</td>
-    <td class="n">${r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii.toFixed(3) : "–"}</td></tr>`).join("") || `<tr><td colspan="${COLS.length}" class="muted">No records match.</td></tr>`;
+    <td class="n">${r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii.toFixed(3) : "–"}</td>
+    <td><a href="${esc(recUrl(r))}" target="_blank" rel="noopener" title="${esc(srcName(r))}">${r.s === "iati" ? "GAC project" : "open.canada.ca"} ↗</a></td></tr>`).join("") || `<tr><td colspan="${COLS.length}" class="muted">No records match.</td></tr>`;
   const total = d3.sum(rows, r => r.v);
   document.getElementById("tableTitle").textContent = `Every ${state.tab === "contract" ? "contract" : state.tab === "grant" ? "grant and contribution" : "IATI aid record"} abroad, ${fyLabel(state.fy)}`;
-  document.getElementById("tableNote").innerHTML = `${rows.length.toLocaleString()} records, ${fmt$(total)}${state.flag ? `, flagged "${esc(flagName())}"` : ""}${state.q ? `, matching "${esc(state.q)}"` : ""}. Dates: contracts by original award, grants by agreement start, IATI by the year's latest disbursement. Flag columns: W women or girls, M men or boys, G gender, L LGBTQ2+; Marker is Global Affairs' gender-equality policy marker on IATI projects. Country GII is the UN Gender Inequality Index of the record's country (0 = equal). Click a heading to sort.`;
+  document.getElementById("tableNote").innerHTML = `${rows.length.toLocaleString()} records, ${fmt$(total)}${state.flag ? `, flagged "${esc(flagName())}"` : ""}${state.q ? `, matching "${esc(state.q)}"` : ""}. Dates: contracts by original award, grants by agreement start, IATI by the year's latest disbursement. Flag columns: W women or girls, M men or boys, G gender, L LGBTQ2+, D military or defence (every National Defence record counts), H housing or shelter, E carbon, emissions or climate; Marker is Global Affairs' gender-equality policy marker on IATI projects. Country GII is the UN Gender Inequality Index of the record's country (0 = equal). Flagged records from the last two years (any of the keyword options) carry their published purpose under the title, with the matched words highlighted and counted. Click a heading to sort.`;
   const pager = document.getElementById("pager");
   pager.innerHTML = rows.length > state.limit ? `Showing ${state.limit.toLocaleString()} of ${rows.length.toLocaleString()} <button type="button" id="moreRows">Show 500 more</button>` : `Showing all ${rows.length.toLocaleString()}`;
   const mr = document.getElementById("moreRows"); if (mr) mr.onclick = () => { state.limit += 500; renderTable(); };
@@ -456,8 +509,8 @@ document.getElementById("recipQ").oninput = e => { state.recipQ = e.target.value
 document.getElementById("csvBtn").onclick = async () => {
   const rows = tableRows();
   const q = v => v == null ? "" : /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
-  const head = ["date", "fiscal_year", "value_cad", "recipient", "country_iso3", "country", "region", "department", "title", "reference", "source_url", "women", "men", "gender", "lgbtq", "iati_gender_marker", "country_gii"];
-  const body = rows.map(r => [r.d, r.fy, r.v, r.who, r.c, r.c && K[r.c] ? K[r.c].name : "", r.r, r.dept, r.t, r.ref, recUrl(r), hasFlag(r, "W") ? 1 : 0, hasFlag(r, "M") ? 1 : 0, hasFlag(r, "G") ? 1 : 0, hasFlag(r, "L") ? 1 : 0, hasFlag(r, "P") ? "principal" : hasFlag(r, "S") ? "significant" : "", r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii : ""].map(q).join(","));
+  const head = ["date", "fiscal_year", "value_cad", "recipient", "country_iso3", "country", "region", "department", "title", "reference", "source_url", "women", "men", "gender", "lgbtq", "military", "housing", "carbon_climate", "iati_gender_marker", "country_gii"];
+  const body = rows.map(r => [r.d, r.fy, r.v, r.who, r.c, r.c && K[r.c] ? K[r.c].name : "", r.r, r.dept, r.t, r.ref, recUrl(r), hasFlag(r, "W") ? 1 : 0, hasFlag(r, "M") ? 1 : 0, hasFlag(r, "G") ? 1 : 0, hasFlag(r, "L") ? 1 : 0, hasFlag(r, "D") ? 1 : 0, hasFlag(r, "H") ? 1 : 0, hasFlag(r, "E") ? 1 : 0, hasFlag(r, "P") ? "principal" : hasFlag(r, "S") ? "significant" : "", r.c && K[r.c] && K[r.c].gii != null ? K[r.c].gii : ""].map(q).join(","));
   const csv = "﻿# " + C.title + "; " + state.tab + " records, FY " + state.fy + "; generated " + M.generated + "\n" + head.join(",") + "\n" + body.join("\n");
   const filename = `international-${state.tab}s-fy${state.fy}.csv`;
   const dl = window.claude && claude.use ? await claude.use("downloads") : null;

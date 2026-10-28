@@ -52,7 +52,7 @@ import time
 import unicodedata
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -102,6 +102,19 @@ KEYWORDS = {
     "gender": r"\b(?:gender(?:[- ](?:based|equality|responsive|transformative))?|s?gbv|feminist international assistance)\b",
     "lgbtq": r"(?<![\w])(?:(?:2s)?lgbt[qia2s]*\+?|sogi(?:esc)?|sexual orientation|gender identit(?:y|ies)|transgender|queer|intersex|"
              r"sexual (?:and gender )?minorit(?:y|ies))(?![\w])",
+    # Bare "defence"/"defense" (self-defence, defence of human rights), "combat" (combat climate change),
+    # "drones" (only wildlife monitoring here) and "non-military" are left out on purpose.
+    "military": r"(?<![\w])(?:(?<!non-)(?<!non )militar(?:y|ies)|(?:national|ministry of|department of) defen[cs]e|"
+                r"defen[cs]e (?:forces?|sector|ministry|minister|industry|industrial|procurement|market|supply|cooperation|"
+                r"capabilit(?:y|ies)|spending|budget|and aerospace|and security forces)|armed forces|army|navy|naval|air force|"
+                r"soldiers?|troops|weapons?|munitions?|ammunition|nato|peacekeep(?:ing|ers?)|security forces|combat vehicles?|"
+                r"missiles?|warships?|fighter jets?|frigates?|submarines?)(?![\w])",
+    # Bare "accommodation" is mostly travel and hotels; only the shelter senses are kept.
+    "housing": r"(?<![\w])(?:housing|houses|shelters?|homeless(?:ness)?|dwellings?|"
+               r"(?:safe|emergency|temporary|transitional) accommodations?|accommodation buildings?|"
+               r"(?:re)?construction of (?:homes|houses))(?![\w])",
+    "carbon": r"(?<![\w])(?:carbon|decarboni[sz](?:e|es|ed|ing|ation)|emissions?|greenhouse gas(?:es)?|ghgs?|net[- ]zero|climate|"
+              r"methane)(?![\w])",
 }
 # Added to the English patterns when a record has French text only.
 KEYWORDS_FR = {
@@ -109,11 +122,18 @@ KEYWORDS_FR = {
     "men": r"\b(?:hommes?|garçons?)\b",
     "gender": r"\b(?:genres?|vfg|vsbg)\b",
     "lgbtq": r"(?<![\w])(?:orientation sexuelle|identité de genre|minorités sexuelles)(?![\w])",
+    # Bare "défense" (défense des droits) and "armée(s)" (violence armée) are left out.
+    "military": r"(?<![\w])(?:militaires?|défense nationale|ministère de la défense|forces de défense|forces armées|soldats|armes|"
+                r"munitions|otan|maintien de la paix)(?![\w])",
+    "housing": r"(?<![\w])(?:logements?|(?<!l')(?<!l’)abris?|hébergement|sans-abri)(?![\w])",
+    "carbon": r"(?<![\w])(?:carbone|décarbonation|émissions?|gaz à effet de serre|ges|climat|climatiques?|carboneutres?)(?![\w])",
 }
-LETTER = {"women": "W", "men": "M", "gender": "G", "lgbtq": "L"}
+LETTER = {"women": "W", "men": "M", "gender": "G", "lgbtq": "L", "military": "D", "housing": "H", "carbon": "E"}
+LETTER_ORDER = "WMGLDHEPS"
+DEFENCE_ORGS = {"dnd-mdn", "cse-cst"}  # National Defence and the Communications Security Establishment: D by department
 RX = {k: re.compile(v, re.I) for k, v in KEYWORDS.items()}
 RX_FR = {k: re.compile(KEYWORDS[k] + "|" + KEYWORDS_FR[k], re.I) for k in KEYWORDS}
-FLAG_LETTERS = {"contracts": "WMGL", "grants": "WMGL", "iati": "WMGLPS"}
+FLAG_LETTERS = {"contracts": "WMGLDHE", "grants": "WMGLDHE", "iati": "WMGLDHEPS"}
 
 
 def kw_flags(en_parts, fr_parts=()):
@@ -123,6 +143,13 @@ def kw_flags(en_parts, fr_parts=()):
     else:
         text, rx = " ".join(p for p in fr_parts if p), RX_FR
     return "".join(LETTER[k] for k, r in rx.items() if text and r.search(text))
+
+
+def dept_flag(k, org):
+    """Adds D to every defence-department record. -> (flags, True when D came from the department alone)."""
+    if org in DEFENCE_ORGS and "D" not in k:
+        return "".join(L for L in LETTER_ORDER if L in k + "D"), True
+    return k, False
 
 
 # ---------------------------------------------------------------- places
@@ -418,9 +445,13 @@ def load_contracts(places, orgs, span, path, placer):
         k = kw_flags([rec["desc"]] + en_comments)
         if not any(en_comments) and (rec.get("comments_fr") or rec.get("additional_comments_fr")):
             k2 = kw_flags([], [rec.get("comments_fr", ""), rec.get("additional_comments_fr", "")])
-            k = "".join(L for L in "WMGL" if L in k or L in k2)
+            k = "".join(L for L in LETTER_ORDER if L in k or L in k2)
+        k, d_dept = dept_flag(k, rec["org"])
         title = (informative(rec.get("additional_comments_en", ""), rec.get("comments_en", "")) if aid else "") or rec["desc"]
-        base = {"s": "contracts", "d": rec["date"], "who": rec["vendor"], "org": rec["org"], "t": title, "ref": rec["ref"], "k": k}
+        main_en = " ".join(en_comments).strip()
+        main = main_en or " ".join([rec.get("comments_fr", ""), rec.get("additional_comments_fr", "")]).strip()
+        base = {"s": "contracts", "d": rec["date"], "who": rec["vendor"], "org": rec["org"], "t": title, "ref": rec["ref"], "k": k, "d_dept": d_dept,
+                "pt": {"main": main, "title": rec["desc"], "title_label": "Description"}}
         if foreign:
             stats["foreign_contracts"] += 1
             out.append({**base, "v": rec["value"], "c": places.iso3(rec["country"]), "code": rec["country"], "r": "", "a": 0})
@@ -501,13 +532,15 @@ def load_grants(places, orgs, span, placer, election):
         en = [rec["title"], rec["prog"], rec["desc"], rec["results"]]
         fr = [rec["title_fr"], rec["prog_fr"], rec["desc_fr"], rec["results_fr"]]
         k = kw_flags(en, fr)
+        k_text = k
+        k, d_dept = dept_flag(k, rec["org"])
         projs = proj_rx.findall(rec["agreement_number"]) if rec["org"] == GAC else []
         canadian = rec["country"] == "CA"
         if canadian:
             # Every Canadian-addressed GAC agreement, aid or not, for the comparison with keyword searches.
             if rec["start"] >= election:
                 stats["gac_canadian_all_since_election"] += 1
-                if "W" in k:
+                if "W" in k_text:
                     stats["gac_canadian_all_since_election_W"] += 1
                     stats["gac_canadian_all_since_election_W_$"] += rec["value"]
             prog = rec["prog"] or first(rec["prog_fr"])
@@ -527,7 +560,9 @@ def load_grants(places, orgs, span, placer, election):
         base = {"s": "grants", "d": rec["start"],
                 # Individuals (fellowships, athletes) are counted but not named.
                 "who": "Individual recipient" if rec["rtype"] == "P" else rec["who"], "org": rec["org"],
-                "t": rec["title"] or rec["prog"] or rec["title_fr"] or first(rec["prog_fr"]), "ref": rec["ref"], "k": k}
+                "t": rec["title"] or rec["prog"] or rec["title_fr"] or first(rec["prog_fr"]), "ref": rec["ref"], "k": k, "d_dept": d_dept,
+                "pt": {"main": rec["desc"] or rec["desc_fr"], "results": rec["results"] or (rec["results_fr"] if not rec["desc"] else ""),
+                       "title": rec["title"] or rec["title_fr"], "title_label": "Title"}}
         if rec["org"] == GAC:
             gac_units.append({"d": rec["start"], "v": rec["value"], "proj": projs, "a": int(canadian)})
         if not canadian:
@@ -650,6 +685,7 @@ def load_iati(places, orgs, span):
             if not any(orgs_):
                 orgs_ = [any_narrative(p) for p in a.findall("participating-org") if p.get("role") == "2"]
             who = "; ".join(dict.fromkeys(o for o in orgs_ if o))
+            pt = {"main": desc_en.strip() or desc_fr.strip(), "title": title_en or title_fr, "title_label": "Title"}
             for f, total in fy_sum.items():
                 qs = {q: v for q, v in q_sum.items() if q.startswith(f + " ")}
                 for kind, code, pct in targets:
@@ -659,7 +695,7 @@ def load_iati(places, orgs, span):
                     c = places.iso3(code) if kind == "c" else ""
                     region = code if kind == "r" else ("" if c else f"Unrecognised country code {code}")
                     out.append({"s": "iati", "d": fy_last[f], "v": total * share, "who": who, "c": c, "code": code if kind == "c" else "",
-                                "r": region, "org": GAC, "t": title_en or title_fr, "ref": proj, "k": k + marker, "a": 0,
+                                "r": region, "org": GAC, "t": title_en or title_fr, "ref": proj, "k": k + marker, "a": 0, "pt": pt,
                                 "qv": {q: v * share for q, v in qs.items()}})
             stats["activities_with_money"] += 1
             a.clear()
@@ -710,6 +746,40 @@ class Placer:
 
 
 # ---------------------------------------------------------------- assemble
+
+PURPOSE_DAYS = 730
+MAX_BYTES = 10_000_000
+PURPOSE_MAX = 1800
+JS_WORD = r"[\p{L}\p{N}_]"  # Python's Unicode \w, for JavaScript with the u flag
+
+
+def js_regex(py):
+    r"""A keyword pattern rewritten for JavaScript new RegExp(p, "giu"): Python's Unicode \b and \w become
+    explicit Unicode lookarounds (JavaScript's \b and \w are ASCII-only, even with the u flag)."""
+    js = (py.replace(r"(?<![\w])", f"(?<!{JS_WORD})").replace(r"(?![\w])", f"(?!{JS_WORD})")
+          .replace(r"\b(?:", f"(?<!{JS_WORD})(?:").replace(r")\b", f")(?!{JS_WORD})"))
+    if r"\b" in js or r"\w" in js:
+        raise ValueError(f"keyword pattern needs a JavaScript rewrite: {py}")
+    return js
+
+
+def purpose(pt):
+    """The published purpose behind a record's flags: the description, with the expected results and then the
+    title added only when the description itself has none of the keywords."""
+    def clean(t):
+        return re.sub(r"\s+", " ", t or "").strip()
+
+    def hit(t):
+        return any(rx.search(t) for rx in RX_FR.values())  # English and French patterns
+    text = clean(pt["main"])
+    if not hit(text) and clean(pt.get("results")):
+        text = (text + " Expected results: " + clean(pt["results"])).strip()
+    if not hit(text) and clean(pt.get("title")):
+        text = (f"{pt['title_label']}: {clean(pt['title'])}. " + text).strip()
+    if len(text) > PURPOSE_MAX:
+        text = text[:PURPOSE_MAX - 1].rsplit(" ", 1)[0].rstrip(" ,;:.") + "…"
+    return text
+
 
 def order(r):
     """Largest first, ties broken by reference so the output is stable across Python versions."""
@@ -874,6 +944,12 @@ def main():
         "targeted at that group. Contract descriptions are standard category labels (e.g. 'Management consulting'), so contracts almost never "
         "carry a flag. P and S are GAC's own OECD gender-equality policy marker (principal objective / significant objective) and exist for "
         "IATI records only.",
+        "Military, housing and climate flags: D marks military or defence terms (armed forces, weapons, ammunition, NATO, "
+        "peacekeeping, navy and the like) and every record of a defence department (National Defence, Communications Security "
+        "Establishment), which is flagged military by department whatever its text; H marks housing and shelter (housing, houses, "
+        "shelter, homelessness, emergency or temporary accommodation); E marks carbon, emissions and climate (carbon, decarbonisation, "
+        "emissions, greenhouse gases, net zero, climate in any sense, methane). Like the other flags they mean the words appear, not "
+        "that the money is for that purpose.",
         "Gender Inequality Index: UNDP Human Development Report, " + str(gii_meta["latest_year"]) + " values; rank 1 = most equal among the "
         f"{sum(1 for v in gii.values() if v['rank'])} countries with a value. Lower is more equal.",
         "Grants to individuals with a foreign address (mostly NSERC, SSHRC and CIHR fellowships held abroad and Canadian athletes "
@@ -890,6 +966,21 @@ def main():
                      + ", ".join(f"{countries[c]['name']} ({c})" for c in noshape) + ".")
     if places.unknown:
         notes.append("Unrecognised country codes (unplaced): " + ", ".join(f"{k or '(blank)'} x{v}" for k, v in places.unknown.most_common()))
+
+    # Published purpose of every flagged record from the last PURPOSE_DAYS days, one per (source, ref).
+    since = (date.fromisoformat(today) - timedelta(days=PURPOSE_DAYS)).isoformat()
+    purposes, dept_only = {}, set()
+    for r in sorted(allrecs, key=order):
+        key = f"{CODE[r['s']]}|{r['ref']}"
+        if not r["k"] or r["d"] < since or key in purposes:
+            continue
+        if r.get("d_dept") and r["k"] == "D":
+            # Flagged only because a defence department paid it: keep the text when there is any.
+            if not ((r["pt"].get("main") or "") + (r["pt"].get("results") or "")).strip():
+                continue
+            dept_only.add(key)
+        purposes[key] = purpose(r["pt"])
+    purposes = dict(sorted(purposes.items()))
 
     meta = {
         "generated": today,
@@ -921,6 +1012,9 @@ def main():
         "flags": {f: {s: {L: [len(n), int(round(v))] for L, (n, v) in m.items()} for s, m in fs.items()} for f, fs in flags.items()},
         "keywords": dict(KEYWORDS),
         "keywords_fr": {k: KEYWORDS[k] + "|" + KEYWORDS_FR[k] for k in KEYWORDS},
+        "keywords_js": {k: js_regex(v) for k, v in KEYWORDS.items()},
+        "keywords_fr_js": {k: js_regex(KEYWORDS[k]) + "|" + js_regex(KEYWORDS_FR[k]) for k in KEYWORDS},
+        "purposes": purposes,
         "future_dated": {k: int(round(v)) for k, v in span.future.items()},
         "overlap": overlap,
         "notes": notes,
@@ -929,6 +1023,11 @@ def main():
     records = [[CODE[r["s"]], r["d"], int(round(r["v"])), short(r["who"], 80), r["c"], r["r"], org_ix[r["org"]],
                 short(r["t"], 110), r["ref"], r["k"], r["a"]] for r in allrecs]
     data = {"meta": meta, "countries": countries, "records": records}
+    if len(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode()) > MAX_BYTES and dept_only:
+        meta["purposes"] = {k: v for k, v in purposes.items() if k not in dept_only}
+        meta["notes"].append("Published purposes are kept only for records flagged by their text, not for records flagged military "
+                             "by department alone, to keep the file small.")
+        log(f"  over {MAX_BYTES / 1e6:.0f} MB: dropped {len(dept_only)} department-only purposes")
     OUT.mkdir(parents=True, exist_ok=True)
     tmp = OUT / "intl_spending.json.tmp"
     try:
@@ -946,6 +1045,14 @@ def main():
         log(f"  {f}: " + ", ".join(f"{s} ${meta['totals'][f][s] / 1e6:,.0f}M ({counts[(s, f)]:,} records, "
                                    f"unplaced ${meta['unplaced'][f][s] / 1e6:,.0f}M)" for s in SRC))
     log(f"  overlap {ref_fy}: {json.dumps(overlap[ref_fy])}")
+    pbytes = len(json.dumps(meta["purposes"], ensure_ascii=False, separators=(",", ":")).encode())
+    log(f"  purposes since {since}: {dict(Counter(k[0] for k in meta['purposes']))}, {pbytes / 1e6:.2f} MB "
+        f"({len(dept_only)} department-only D)")
+    for f in fys[-3:-1]:
+        for L in "DHE":
+            log(f"  {f} {L}: " + ", ".join(f"{s} {meta['flags'][f][s][L][0]} (${meta['flags'][f][s][L][1] / 1e6:,.0f}M)" for s in SRC))
+    dd = Counter((r["fy"], r["s"]) for r in allrecs if r.get("d_dept"))
+    log(f"  D by department only (records): {dict(sorted(dd.items()))}")
     for f in fys:
         log(f"  canadian-addressed {f}: {json.dumps(meta['canadian_addressed'][f])}")
     since = [r for r in allrecs if r["org"] == GAC and r["d"] >= ELECTION and "W" in r["k"]]
