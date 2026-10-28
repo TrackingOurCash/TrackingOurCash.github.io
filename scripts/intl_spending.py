@@ -43,7 +43,9 @@ is the open.canada.ca reference (contracts, grants) or the GAC project number wi
 country the project serves. A Canadian-addressed grant or contract split across countries is one
 agreement shown as several records (one per country) whose values add up to the agreement.
 """
+import base64
 import csv
+import gzip
 import json
 import math
 import re
@@ -448,10 +450,9 @@ def load_contracts(places, orgs, span, path, placer):
             k = "".join(L for L in LETTER_ORDER if L in k or L in k2)
         k, d_dept = dept_flag(k, rec["org"])
         title = (informative(rec.get("additional_comments_en", ""), rec.get("comments_en", "")) if aid else "") or rec["desc"]
-        main_en = " ".join(en_comments).strip()
-        main = main_en or " ".join([rec.get("comments_fr", ""), rec.get("additional_comments_fr", "")]).strip()
+        parts = [c for c in en_comments if c] or [c for c in (rec.get("comments_fr", ""), rec.get("additional_comments_fr", "")) if c]
         base = {"s": "contracts", "d": rec["date"], "who": rec["vendor"], "org": rec["org"], "t": title, "ref": rec["ref"], "k": k, "d_dept": d_dept,
-                "pt": {"main": main, "title": rec["desc"], "title_label": "Description"}}
+                "pt": {"main": " ".join(parts), "parts": parts, "title": rec["desc"], "title_label": "Description"}}
         if foreign:
             stats["foreign_contracts"] += 1
             out.append({**base, "v": rec["value"], "c": places.iso3(rec["country"]), "code": rec["country"], "r": "", "a": 0})
@@ -750,6 +751,7 @@ class Placer:
 PURPOSE_DAYS = 730
 MAX_BYTES = 10_000_000
 PURPOSE_MAX = 1800
+EMPTY_TEXT = re.compile(r"\W*(?:n/?a|none|nil|tbd|tba|-+|public disclosure)\W*", re.I)  # placeholders, not purposes
 JS_WORD = r"[\p{L}\p{N}_]"  # Python's Unicode \w, for JavaScript with the u flag
 
 
@@ -763,19 +765,32 @@ def js_regex(py):
     return js
 
 
-def purpose(pt):
-    """The published purpose behind a record's flags: the description, with the expected results and then the
-    title added only when the description itself has none of the keywords."""
+def purpose(pt, shown_title, flagged):
+    """A record's published purpose: the description (grants, IATI) or comments (contracts), without parts that only
+    repeat the title shown on the page. For a record flagged by its text, when the description holds none of the
+    keywords, the expected results and then the title are added if that is where the keyword is. With no description,
+    the title (contracts: description_en) stands in unless it is the title already shown. None = nothing to add."""
     def clean(t):
         return re.sub(r"\s+", " ", t or "").strip()
 
     def hit(t):
         return any(rx.search(t) for rx in RX_FR.values())  # English and French patterns
-    text = clean(pt["main"])
-    if not hit(text) and clean(pt.get("results")):
-        text = (text + " Expected results: " + clean(pt["results"])).strip()
-    if not hit(text) and clean(pt.get("title")):
-        text = (f"{pt['title_label']}: {clean(pt['title'])}. " + text).strip()
+    shown = clean(shown_title).lower()
+    parts = [clean(p) for p in (pt.get("parts") or [pt.get("main")])]
+    text = " ".join(dict.fromkeys(p for p in parts if p and p.lower() != shown and not EMPTY_TEXT.fullmatch(p)))
+    if flagged and not hit(text):
+        results = clean(pt.get("results"))
+        if results and hit(results):
+            text = (text + " Expected results: " + results).strip()
+    if flagged and not hit(text):
+        title = clean(pt.get("title"))
+        if title and hit(title):
+            text = (f"{pt['title_label']}: {title}. " + text).strip()
+    if not text:
+        title = clean(pt.get("title"))
+        text = title if title and title.lower() != shown else ""
+    if not text:
+        return None
     if len(text) > PURPOSE_MAX:
         text = text[:PURPOSE_MAX - 1].rsplit(" ", 1)[0].rstrip(" ,;:.") + "…"
     return text
@@ -967,20 +982,25 @@ def main():
     if places.unknown:
         notes.append("Unrecognised country codes (unplaced): " + ", ".join(f"{k or '(blank)'} x{v}" for k, v in places.unknown.most_common()))
 
-    # Published purpose of every flagged record from the last PURPOSE_DAYS days, one per (source, ref).
+    # Published purpose of every record from the last PURPOSE_DAYS days, one per (source, ref). Contract reference
+    # numbers repeat across departments (C-2025-2026-Q1-00001 ...), so a ref used by more than one department gets
+    # the department's meta.orgs index as a third part: "c|<ref>|<o>".
     since = (date.fromisoformat(today) - timedelta(days=PURPOSE_DAYS)).isoformat()
-    purposes, dept_only = {}, set()
+    ref_orgs = defaultdict(set)
+    for r in allrecs:
+        ref_orgs[(r["s"], r["ref"])].add(r["org"])
+    purposes, seen = {}, set()
     for r in sorted(allrecs, key=order):
-        key = f"{CODE[r['s']]}|{r['ref']}"
-        if not r["k"] or r["d"] < since or key in purposes:
+        key = f"{CODE[r['s']]}|{r['ref']}" + (f"|{org_ix[r['org']]}" if len(ref_orgs[(r["s"], r["ref"])]) > 1 else "")
+        if r["d"] < since or key in seen:
             continue
-        if r.get("d_dept") and r["k"] == "D":
-            # Flagged only because a defence department paid it: keep the text when there is any.
-            if not ((r["pt"].get("main") or "") + (r["pt"].get("results") or "")).strip():
-                continue
-            dept_only.add(key)
-        purposes[key] = purpose(r["pt"])
+        seen.add(key)
+        text_flags = r["k"].replace("D", "") if r.get("d_dept") else r["k"]  # department-only D explains nothing in the text
+        text = purpose(r["pt"], r["t"], bool(text_flags.replace("P", "").replace("S", "")))
+        if text:
+            purposes[key] = text
     purposes = dict(sorted(purposes.items()))
+    purposes_qualified = sum(1 for k in purposes if k.count("|") == 2)
 
     meta = {
         "generated": today,
@@ -1015,6 +1035,7 @@ def main():
         "keywords_js": {k: js_regex(v) for k, v in KEYWORDS.items()},
         "keywords_fr_js": {k: js_regex(KEYWORDS[k]) + "|" + js_regex(KEYWORDS_FR[k]) for k in KEYWORDS},
         "purposes": purposes,
+        "purposes_since": since,
         "future_dated": {k: int(round(v)) for k, v in span.future.items()},
         "overlap": overlap,
         "notes": notes,
@@ -1023,11 +1044,16 @@ def main():
     records = [[CODE[r["s"]], r["d"], int(round(r["v"])), short(r["who"], 80), r["c"], r["r"], org_ix[r["org"]],
                 short(r["t"], 110), r["ref"], r["k"], r["a"]] for r in allrecs]
     data = {"meta": meta, "countries": countries, "records": records}
-    if len(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode()) > MAX_BYTES and dept_only:
-        meta["purposes"] = {k: v for k, v in purposes.items() if k not in dept_only}
-        meta["notes"].append("Published purposes are kept only for records flagged by their text, not for records flagged military "
-                             "by department alone, to keep the file small.")
-        log(f"  over {MAX_BYTES / 1e6:.0f} MB: dropped {len(dept_only)} department-only purposes")
+    purposes_raw = json.dumps(purposes, ensure_ascii=False, separators=(",", ":")).encode()
+    purposes_gz = 0
+    if len(json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode()) > MAX_BYTES:
+        # Too big as plain JSON: ship the purposes gzipped (level 9, mtime 0 so the bytes are reproducible) and
+        # base64-encoded; the page decodes them with DecompressionStream("gzip").
+        packed = base64.b64encode(gzip.compress(purposes_raw, compresslevel=9, mtime=0)).decode("ascii")
+        purposes_gz = len(packed)
+        meta.pop("purposes")
+        meta = {**{k: v for k, v in meta.items() if k != "notes"}, "purposes_gz": packed, "notes": meta["notes"]}
+        data["meta"] = meta
     OUT.mkdir(parents=True, exist_ok=True)
     tmp = OUT / "intl_spending.json.tmp"
     try:
@@ -1045,9 +1071,8 @@ def main():
         log(f"  {f}: " + ", ".join(f"{s} ${meta['totals'][f][s] / 1e6:,.0f}M ({counts[(s, f)]:,} records, "
                                    f"unplaced ${meta['unplaced'][f][s] / 1e6:,.0f}M)" for s in SRC))
     log(f"  overlap {ref_fy}: {json.dumps(overlap[ref_fy])}")
-    pbytes = len(json.dumps(meta["purposes"], ensure_ascii=False, separators=(",", ":")).encode())
-    log(f"  purposes since {since}: {dict(Counter(k[0] for k in meta['purposes']))}, {pbytes / 1e6:.2f} MB "
-        f"({len(dept_only)} department-only D)")
+    log(f"  purposes since {since}: {dict(Counter(k[0] for k in purposes))} ({purposes_qualified} keys department-qualified), "
+        f"{len(purposes_raw) / 1e6:.2f} MB raw" + (f", {purposes_gz / 1e6:.2f} MB gzip+base64" if purposes_gz else ", stored as plain JSON"))
     for f in fys[-3:-1]:
         for L in "DHE":
             log(f"  {f} {L}: " + ", ".join(f"{s} {meta['flags'][f][s][L][0]} (${meta['flags'][f][s][L][1] / 1e6:,.0f}M)" for s in SRC))

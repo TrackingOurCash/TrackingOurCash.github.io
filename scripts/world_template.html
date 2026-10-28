@@ -48,6 +48,7 @@ table.fytbl tr.on td { font-weight: 600; }
 .purp mark.kD { background: rgba(125, 138, 150, 0.40); }
 .purp mark.kH { background: rgba(208, 122, 31, 0.32); }
 .purp mark.kE { background: rgba(26, 146, 173, 0.32); }
+.purp mark.kQ { background: rgba(240, 200, 40, 0.55); outline: 1px solid rgba(180, 140, 0, 0.6); }
 </style>
 
 <div class="wrap">
@@ -70,6 +71,7 @@ table.fytbl tr.on td { font-weight: 600; }
       <button data-m="total" aria-pressed="true">Total $</button>
       <button data-m="pc" aria-pressed="false">$ per resident</button>
     </div>
+    <input type="search" id="text" placeholder="Search any word: recipient, title, published purpose" aria-label="Search all spending" style="flex:1 1 260px;max-width:420px">
     <select id="flag" aria-label="Keyword flag">
       <option value="">All spending</option>
       <optgroup label="Gender and LGBTQ2+">
@@ -176,7 +178,7 @@ const recByCountry = {};
 for (const r of REC) if (r.c) (recByCountry[r.c] || (recByCountry[r.c] = [])).push(r);
 // Start on the latest complete fiscal year; a year still being reported is one click away.
 const done = FYS.filter(f => !(M.fy_through || {})[f]);
-const state = {src: "contracts", fy: done.length ? done[done.length - 1] : FYS[FYS.length - 1], colorBy: "gii", metric: "total", flag: "", sel: null, grants: "largest", tab: "contract", q: "", recipQ: "", sort: "v", dir: -1, limit: 200};
+const state = {src: "contracts", fy: done.length ? done[done.length - 1] : FYS[FYS.length - 1], colorBy: "gii", metric: "total", flag: "", sel: null, grants: "largest", tab: "contract", q: "", recipQ: "", sort: "v", dir: -1, limit: 200, text: ""};
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const fmt$ = v => v == null ? "–" : "$" + (Math.abs(v) >= 1e9 ? (v/1e9).toFixed(2) + "B" : Math.abs(v) >= 1e6 ? (v/1e6).toFixed(1) + "M" : Math.abs(v) >= 1e3 ? (v/1e3).toFixed(0) + "K" : Math.round(v));
 const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleString() : v >= 1 ? v.toFixed(2) : v.toFixed(3));
@@ -198,7 +200,7 @@ document.getElementById("fy").innerHTML = FYS.map(f => `<button data-f="${f}" ar
 function value(iso, fy = state.fy) {
   const k = K[iso];
   if (!k) return 0;
-  if (state.flag) return (recByCountry[iso] || []).filter(r => r.fy === fy && r.s === REC_OF[state.src] && hasFlag(r, state.flag)).reduce((a, r) => a + r.v, 0);
+  if (filtering()) return (recByCountry[iso] || []).filter(r => r.fy === fy && r.s === REC_OF[state.src] && recOk(r)).reduce((a, r) => a + r.v, 0);
   return (((k.fy || {})[fy] || {})[state.src]) || 0;
 }
 function metricOf(iso) { const v = value(iso), p = K[iso] && K[iso].pop; return state.metric === "pc" ? (p ? v / p : 0) : v; }
@@ -269,7 +271,7 @@ function renderBubbles() {
 }
 function renderLegend() {
   const surface = css("--surface");
-  const what = `${SRC[state.src].toLowerCase()}, ${fyLabel(state.fy)}${state.flag ? ", " + flagName() : ""}`;
+  const what = `${SRC[state.src].toLowerCase()}, ${fyLabel(state.fy)}${filtering() ? ", " + filterLabel() : ""}`;
   if (state.colorBy === "gii") {
     document.getElementById("legend").innerHTML = `<span><span class="ramp" style="background:linear-gradient(90deg, ${d3.interpolateRgb(surface, css("--gii"))(0.1)}, ${css("--gii")})"></span>more equal → less equal for women (UN Gender Inequality Index)</span>
       <span><span class="ramp" style="background:var(--nodata);width:18px"></span>no score</span>
@@ -295,8 +297,32 @@ function recItem(r) {
   return `<li><b>${fmt$(r.v)}</b> <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${esc(r.who)}</a>${r.a ? ' <span class="tag" title="Addressed in Canada; placed in the country the project serves">Canadian organisation</span>' : ""} ${fl}<br><span class="muted">${esc(r.t)}${r.dept ? " · " + esc(r.dept) : ""} · ${r.d} (FY ${r.fy})${r.ref ? " · " + esc(r.ref) : ""} · <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">${srcName(r)} ↗</a></span>${purposeHtml(r)}</li>`;
 }
 // ---- published purpose: the description text, with each keyword group highlighted and counted ----
-const PURP = M.purposes || {};
-const PKEY = {contract: "c", grant: "g", iati: "i"};
+let PURP = M.purposes || {};
+// ---- free-text search: every word typed must appear in the recipient, title, department, reference, country or published purpose ----
+function fold(x) { return String(x == null ? "" : x).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+let TOKENS = [];
+function hay(r) {
+  if (r._h == null) r._h = fold(`${r.who} ${r.t} ${r.dept} ${r.ref} ${r.c && K[r.c] ? K[r.c].name : ""} ${r.r} ${purposeOf(r) || ""}`);
+  return r._h;
+}
+const matchText = r => !TOKENS.length || TOKENS.every(t => hay(r).includes(t));
+const recOk = r => (!state.flag || hasFlag(r, state.flag)) && matchText(r);
+const filtering = () => !!(state.flag || TOKENS.length);
+const filterLabel = () => [state.flag ? flagName() : "", TOKENS.length ? `matching "${state.text.trim()}"` : ""].filter(Boolean).join(", ");
+if (M.purposes_gz && typeof DecompressionStream === "function") {
+  (async () => {
+    try {
+      const bytes = Uint8Array.from(atob(M.purposes_gz), ch => ch.charCodeAt(0));
+      const text = await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
+      PURP = JSON.parse(text);
+      for (const r of REC) r._h = null;
+      render();
+    } catch (e) { console.warn("published purposes could not be unpacked", e); }
+  })();
+}
+var PKEY = {contract: "c", grant: "g", iati: "i"};
+// Contract reference numbers repeat across departments; those keys carry the department index as a third part.
+function purposeOf(r) { const k = PKEY[r.s] + "|" + r.ref; return PURP[k + "|" + r.o] ?? PURP[k]; }
 const KW = (() => {
   const out = [];
   const add = (letter, src) => { if (!src) return; try { out.push([letter, new RegExp(src, "giu")]); } catch (e) {} };
@@ -308,10 +334,12 @@ const KW_NAME = {W: "women", M: "men", G: "gender", L: "LGBTQ2+", D: "military",
 // Where each link goes: the Government of Canada open-data record, or Global Affairs' project browser for IATI aid.
 function srcName(r) { return r.s === "iati" ? "Global Affairs project page" : "official open.canada.ca record"; }
 function purposeHtml(r) {
-  const text = PURP[PKEY[r.s] + "|" + r.ref];
+  const text = purposeOf(r);
   if (!text) return "";
   const hits = [];
-  for (const [letter, rx] of KW) { rx.lastIndex = 0; let m; while ((m = rx.exec(text))) { if (!m[0]) { rx.lastIndex++; continue; } hits.push([m.index, m.index + m[0].length, letter]); } }
+  const rxs = KW.slice();
+  if (TOKENS.length) rxs.push(["Q", new RegExp(TOKENS.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"), "giu")]);
+  for (const [letter, rx] of rxs) { rx.lastIndex = 0; let m; while ((m = rx.exec(text))) { if (!m[0]) { rx.lastIndex++; continue; } hits.push([m.index, m.index + m[0].length, letter]); } }
   hits.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
   const kept = [], count = {};
   for (const h of hits) { if (kept.length && h[0] < kept[kept.length - 1][1]) continue; kept.push(h); count[h[2]] = (count[h[2]] || 0) + 1; }
@@ -319,7 +347,8 @@ function purposeHtml(r) {
   for (const [a, b, letter] of kept) { html += esc(text.slice(at, a)) + `<mark class="k${letter}">${esc(text.slice(a, b))}</mark>`; at = b; }
   html += esc(text.slice(at));
   const tally = ["W", "M", "G", "L", "D", "H", "E"].filter(x => count[x]).map(x => `${KW_NAME[x]} ×${count[x]}`).join(" · ");
-  return `<details class="purp"><summary>Published purpose${tally ? " · " + tally : ""}</summary><div>${html} <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">Read it on the ${srcName(r)} ↗</a></div></details>`;
+  const open = TOKENS.length && count.Q ? " open" : "";
+  return `<details class="purp"${open}><summary>Published purpose${tally ? " · " + tally : ""}${count.Q ? ` · your search ×${count.Q}` : ""}</summary><div>${html} <a href="${esc(recUrl(r))}" target="_blank" rel="noopener">Read it on the ${srcName(r)} ↗</a></div></details>`;
 }
 function spark(k) {
   const qs = M.quarters || [], vals = ((k.q || {})[state.src]) || [];
@@ -334,7 +363,7 @@ function hover(iso) {
   if (iso === HOME) return;
   const k = K[iso], f = feats.find(x => x.properties.iso3 === iso);
   document.getElementById("panel").innerHTML = `<h2>${esc((k && k.name) || (f && f.properties.name) || iso)}</h2><p class="big">${fmt$(V[iso] ? V[iso].v : 0)}</p>
-    <div class="small muted">${SRC[state.src]}, ${fyLabel(state.fy)}${state.flag ? ", " + flagName() : ""}${k && k.gii != null ? ` · Gender Inequality Index ${k.gii.toFixed(3)}` : ""}. Click for details.</div>`;
+    <div class="small muted">${SRC[state.src]}, ${fyLabel(state.fy)}${filtering() ? ", " + filterLabel() : ""}${k && k.gii != null ? ` · Gender Inequality Index ${k.gii.toFixed(3)}` : ""}. Click for details.</div>`;
 }
 function setGrants(mode) { state.grants = mode; if (state.sel) select(state.sel); }
 function select(iso) {
@@ -344,7 +373,7 @@ function select(iso) {
   const k = K[iso], f = feats.find(x => x.properties.iso3 === iso);
   const name = (k && k.name) || (f && f.properties.name) || iso;
   if (!k) { document.getElementById("panel").innerHTML = `<h2>${esc(name)}</h2><p class="muted">No federal spending recorded here in any fiscal year shown.</p>`; return; }
-  const recs = (recByCountry[iso] || []).filter(r => r.s === REC_OF[state.src] && (!state.flag || hasFlag(r, state.flag)));
+  const recs = (recByCountry[iso] || []).filter(r => r.s === REC_OF[state.src] && recOk(r));
   const inFy = recs.filter(r => r.fy === state.fy);
   const flagged = x => inFy.filter(r => hasFlag(r, x)).reduce((a, r) => a + r.v, 0);
   const pf = prevFy(state.fy), now = value(iso), before = pf ? value(iso, pf) : null;
@@ -354,7 +383,7 @@ function select(iso) {
     <h2 style="margin-bottom:2px"><span style="cursor:zoom-in" onclick="zoomToCountry('${iso}')" title="Zoom the map to ${esc(name)}">${esc(name)}</span></h2>
     <div class="small muted">${esc(k.continent)} · pop. ${k.pop ? Math.round(k.pop).toLocaleString() : "–"}</div>
     <div style="margin-top:10px">${giiBlock(k)}</div>
-    <div class="small muted" style="margin-top:10px">${SRC[state.src]}${state.flag ? ", " + flagName() : ""}, ${fyLabel(state.fy)}</div>
+    <div class="small muted" style="margin-top:10px">${SRC[state.src]}${filtering() ? ", " + filterLabel() : ""}, ${fyLabel(state.fy)}</div>
     <p class="big">${fmt$(now)}</p>
     <dl class="kv" style="margin-top:8px">
       <dt>Per resident</dt><dd>${k.pop ? fmtPc(now / k.pop) : "–"}</dd>
@@ -388,7 +417,7 @@ function renderContinents() {
   for (const [iso, k] of Object.entries(K)) { if (iso === HOME) continue; const c = k.continent in CONT ? k.continent : "Other"; tot[c] = (tot[c] || 0) + (V[iso] ? V[iso].v : 0); }
   const rows = Object.entries(tot).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
   const max = d3.max(rows, r => r[1]) || 1, sum = d3.sum(rows, r => r[1]) || 1;
-  document.getElementById("contNote").textContent = `${SRC[state.src]} by continent, ${fyLabel(state.fy)}${state.flag ? ", " + flagName() : ""}. Totals include money not placed in a country; the continent bars do not (see further down). An asterisk marks a year still being reported.`;
+  document.getElementById("contNote").textContent = `${SRC[state.src]} by continent, ${fyLabel(state.fy)}${filtering() ? ", " + filterLabel() : ""}. Totals include money not placed in a country; the continent bars do not (see further down). An asterisk marks a year still being reported.`;
   document.getElementById("contBars").innerHTML = rows.map(([c, v]) => `<div class="row"><span>${c}</span><div class="track"><div class="fill" style="width:${100 * v / max}%;background:var(--c-${contKey(c)})"></div></div><span class="v">${fmt$(v)} · ${Math.round(100 * v / sum)}%</span></div>`).join("") || "<p class='muted small'>Nothing recorded for this selection.</p>";
 }
 
@@ -442,7 +471,7 @@ function renderRecipients() {
   const s = REC_OF[state.src], q = state.recipQ.toLowerCase().trim();
   const agg = {};
   for (const r of REC) {
-    if (r.s !== s || r.fy !== state.fy || (state.flag && !hasFlag(r, state.flag))) continue;
+    if (r.s !== s || r.fy !== state.fy || !recOk(r)) continue;
     const a = agg[r.who] || (agg[r.who] = {who: r.who, v: 0, n: 0, last: "", c: {}});
     a.v += r.v; a.n++; if (r.d > a.last) a.last = r.d; const c = r.c || r.r || "unplaced"; a.c[c] = (a.c[c] || 0) + r.v;
   }
@@ -481,7 +510,7 @@ const COLS = [
 function tableRows() {
   const q = state.q.toLowerCase().trim();
   const col = COLS.find(c => c[0] === state.sort) || COLS[1];
-  return REC.filter(r => r.s === state.tab && r.fy === state.fy && (!state.flag || hasFlag(r, state.flag)) && (!q || `${r.who} ${r.t} ${r.dept} ${r.ref} ${r.c ? (K[r.c] || {}).name : r.r}`.toLowerCase().includes(q)))
+  return REC.filter(r => r.s === state.tab && r.fy === state.fy && recOk(r) && (!q || `${r.who} ${r.t} ${r.dept} ${r.ref} ${r.c ? (K[r.c] || {}).name : r.r}`.toLowerCase().includes(q)))
     .sort((a, b) => { const x = col[2](a), y = col[2](b); return (x > y ? 1 : x < y ? -1 : 0) * state.dir; });
 }
 function renderTable() {
@@ -499,7 +528,7 @@ function renderTable() {
     <td><a href="${esc(recUrl(r))}" target="_blank" rel="noopener" title="${esc(srcName(r))}">${r.s === "iati" ? "GAC project" : "open.canada.ca"} ↗</a></td></tr>`).join("") || `<tr><td colspan="${COLS.length}" class="muted">No records match.</td></tr>`;
   const total = d3.sum(rows, r => r.v);
   document.getElementById("tableTitle").textContent = `Every ${state.tab === "contract" ? "contract" : state.tab === "grant" ? "grant and contribution" : "IATI aid record"} abroad, ${fyLabel(state.fy)}`;
-  document.getElementById("tableNote").innerHTML = `${rows.length.toLocaleString()} records, ${fmt$(total)}${state.flag ? `, flagged "${esc(flagName())}"` : ""}${state.q ? `, matching "${esc(state.q)}"` : ""}. Dates: contracts by original award, grants by agreement start, IATI by the year's latest disbursement. Flag columns: W women or girls, M men or boys, G gender, L LGBTQ2+, D military or defence (every National Defence record counts), H housing or shelter, E carbon, emissions or climate; Marker is Global Affairs' gender-equality policy marker on IATI projects. Country GII is the UN Gender Inequality Index of the record's country (0 = equal). Flagged records from the last two years (any of the keyword options) carry their published purpose under the title, with the matched words highlighted and counted. Click a heading to sort.`;
+  document.getElementById("tableNote").innerHTML = `${rows.length.toLocaleString()} records, ${fmt$(total)}${filtering() ? `, ${esc(filterLabel())}` : ""}${state.q ? `, matching "${esc(state.q)}"` : ""}. Dates: contracts by original award, grants by agreement start, IATI by the year's latest disbursement. Flag columns: W women or girls, M men or boys, G gender, L LGBTQ2+, D military or defence (every National Defence record counts), H housing or shelter, E carbon, emissions or climate; Marker is Global Affairs' gender-equality policy marker on IATI projects. Country GII is the UN Gender Inequality Index of the record's country (0 = equal). Flagged records from the last two years carry their published purpose under the title, with keyword and search matches highlighted. The search box above the map reads that text too, so it finds words in the purpose of records from the last two years and in the titles of older ones. Click a heading to sort.`;
   const pager = document.getElementById("pager");
   pager.innerHTML = rows.length > state.limit ? `Showing ${state.limit.toLocaleString()} of ${rows.length.toLocaleString()} <button type="button" id="moreRows">Show 500 more</button>` : `Showing all ${rows.length.toLocaleString()}`;
   const mr = document.getElementById("moreRows"); if (mr) mr.onclick = () => { state.limit += 500; renderTable(); };
@@ -527,6 +556,11 @@ document.querySelectorAll("#colorBy button").forEach(b => b.onclick = () => { st
 document.querySelectorAll("#metric button").forEach(b => b.onclick = () => { state.metric = b.dataset.m; syncSeg("metric", "m", state.metric); render(); });
 document.querySelectorAll("#tab button").forEach(b => b.onclick = () => { state.tab = b.dataset.t; syncSeg("tab", "t", state.tab); state.limit = 200; renderTable(); });
 document.getElementById("flag").onchange = e => { state.flag = e.target.value; state.limit = 200; render(); };
+let textTimer = null;
+document.getElementById("text").oninput = e => {
+  clearTimeout(textTimer);
+  textTimer = setTimeout(() => { state.text = e.target.value; TOKENS = fold(state.text).split(/\s+/).filter(t => t.length > 1); state.limit = 200; render(); }, 250);
+};
 
 function render() {
   compute();
