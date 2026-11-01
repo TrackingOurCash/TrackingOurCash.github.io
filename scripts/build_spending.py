@@ -304,7 +304,10 @@ def main():
         y, m = int(rec["start"][:4]), int(rec["start"][5:7])
         q_counts[(y, (m - 1) // 3)] += 1
     election_q = (ELECTION.year, (ELECTION.month - 1) // 3)
-    passing = [q for q in q_counts if q >= election_q and q_counts[q] >= 0.7 * q_counts[(q[0] - 1, q[1])]]
+    # Only quarters that have already ended count: agreements dated years ahead (multi-year deals entered early)
+    # once made a 2028 quarter "pass" against its near-empty 2027 twin and stretched the window to 2028.
+    q_end = lambda q: date(q[0] + (q[1] == 3), (q[1] * 3 + 3) % 12 + 1, 1) - timedelta(days=1)
+    passing = [q for q in q_counts if q >= election_q and q_end(q) < date.today() and q_counts[q] >= 0.7 * q_counts[(q[0] - 1, q[1])]]
     cy, cq = max(passing)
     cutoff = date(cy + (cq == 3), (cq * 3 + 3) % 12 + 1, 1) - timedelta(days=1)
     # "Before" is the same calendar dates one year earlier, so both windows hold the same season.
