@@ -39,7 +39,7 @@ Method, in order:
      meta.foreign and never placed in a riding.
   5. Windows, cutoff and quarter labels are taken from data/riding_spending.json
      so both layers cover the same dates: "after" = election day to the cutoff,
-     "before" = the same length of time just before the election. Per-person figures use
+     "before" = the same calendar dates in an earlier year, ending before the election. Per-person figures use
      data/ridings.json population and years_per_window.
 """
 import csv
@@ -63,7 +63,7 @@ RECENT = RAW / "recent.csv"
 VENDOR_PC = RAW / "vendor_postal.json"
 FSA_SHARES = RAW / "fsa_shares.json"
 MIN_SHARE = 0.05
-KEEP_FROM = "2024-01-01"
+KEEP_FROM = "2022-01-01"
 LARGE = 100_000_000  # flag threshold: multi-year megaprojects booked on one day
 
 csv.field_size_limit(sys.maxsize)
@@ -296,10 +296,12 @@ def main():
         if window:
             windows[window + "_n"] += 1
             windows[window + "_$"] += rec["value"]
-        if window and rec["flag"]:
+        # Megacontracts keep a literal "year before the election" (the riding totals' "before" window can sit two years back).
+        mwin = "after" if window == "after" else "before" if election.replace(year=election.year - 1) <= d < election else None
+        if mwin and rec["flag"]:
             foreign = rec["country"] not in ("", "CA")
             sh = None if foreign else (fsa_shares.get(rec["pc"][:3]) if rec["pc"] else None)
-            large_all.append((rec, window, sh or {}, "foreign vendor" if foreign else ("" if sh else "no usable postal code")))
+            large_all.append((rec, mwin, sh or {}, "foreign vendor" if foreign else ("" if sh else "no usable postal code")))
         if rec["country"] not in ("", "CA"):
             if window:
                 method_counts[(window, "foreign")] += 1

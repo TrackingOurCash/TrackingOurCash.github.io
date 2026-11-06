@@ -128,7 +128,7 @@ def federal():
         "regionGroup": {"Yukon": "Territories", "Northwest Territories": "Territories", "Nunavut": "Territories"},
         "regionShort": {"Territories": "North", "Newfoundland and Labrador": "NL", "Prince Edward Island": "PE", "Nova Scotia": "NS", "New Brunswick": "NB",
                         "Quebec": "QC", "Ontario": "ON", "Manitoba": "MB", "Saskatchewan": "SK", "Alberta": "AB", "British Columbia": "BC"},
-        "beforeLabel": "Same length of time before the election", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest grants since the election",
+        "beforeLabel": "Same dates in an earlier year", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest grants since the election",
         "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
         "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
         "linkNote": "Links open the government's own record of each award on open.canada.ca.",
@@ -140,7 +140,7 @@ def federal():
                    ["Halifax", [-63.85, 44.55, -63.4, 44.85]], ["St. John's", [-53.0, 47.4, -52.6, 47.65]]],
         "subtitle": (f"Federal grants and contributions with agreements starting {m['election']} (election day) to {m['cutoff']}, placed in the 343 ridings "
                      f"and set against the 2025 result. Each riding wears its current MP's party colour; the deeper the colour, the more grant money per resident. "
-                     f"\"Before\" means the same length of time just before the election."),
+                     f"\"Before\" means the same calendar dates in an earlier year, moved back far enough to end before the election."),
         "notes": [
             "<b>Sources:</b> " + links([
                 ("Proactive Disclosure – Grants and Contributions (Treasury Board, open.canada.ca)", "https://open.canada.ca/data/en/dataset/432527ab-7aac-45b5-81d6-7597107a7013"),
@@ -206,7 +206,7 @@ PROVINCES = {
                     "PTP": {"name": "Progressive", "light": "#6a4c93", "dark": "#9b7fc4"}, "IND": {"name": "Independent", "light": "#6f6e69", "dark": "#9a9892"}},
         "legendParties": ["UCP", "NDP", "PTP"], "opp": "NDP",
         "groupNote": '"UCP" means the governing United Conservatives won the seat in 2023.',
-        "filterAll": "All programs", "topProgsTitle": "Top programs", "beforeLabel": "Same length of time before the election",
+        "filterAll": "All programs", "topProgsTitle": "Top programs", "beforeLabel": "Same dates in an earlier year",
         "includeLabel": "Include province-wide bodies (health, post-secondary, school divisions) & big-city governments",
         "projection": {"parallels": [50, 58], "rotate": [114.5, 0]},
         "insets": [["Calgary", [-114.35, 50.85, -113.85, 51.22]], ["Edmonton", [-113.75, 53.38, -113.25, 53.7]], ["Red Deer", [-113.9, 52.2, -113.7, 52.35]],
@@ -378,7 +378,7 @@ PROVINCES = {
             "legendParties": ["PC", "LIB", "NDP", "IND"], "opp": "opposition",
             "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2025; "opposition" covers the Liberals, the NDP and the two independents (Eddie Joyce and Paul Lane, the Speaker). The money is federal, so the question here is whether Ottawa\'s grants land more heavily in the province\'s close provincial seats.',
             "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
-            "beforeLabel": "Same length of time before the election",
+            "beforeLabel": "Same dates in an earlier year",
             "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
             "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
             "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
@@ -390,7 +390,7 @@ PROVINCES = {
             "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in Newfoundland and Labrador's provincial districts.",
             "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Newfoundland and Labrador's 40 provincial districts "
                          "and set against the 14 October 2025 provincial result. Each district wears its current MHA's party colour; the deeper the colour, the more federal grant money "
-                         "per resident. \"Before\" means the same length of time just before the election. The province publishes no list of its own payees, so provincial payments cannot be shown."),
+                         "per resident. \"Before\" means the same calendar dates in an earlier year, moved back far enough to end before the election. The province publishes no list of its own payees, so provincial payments cannot be shown."),
             "notes": [
                 "<b>Why federal money:</b> Newfoundland and Labrador's Public Accounts (the Report on the Program Expenditures and Revenues of the Consolidated Revenue Fund) stop at the "
                 "program level and the province publishes no payee or grant-recipient list, so provincial payments cannot be placed in a district. This page therefore shows the federal "
@@ -431,7 +431,7 @@ PROVINCES = {
         "legendParties": ["YP", "NDP", "LIB"], "opp": "opposition",
         "groupNote": '"YP" means the governing Yukon Party won the seat in 2025; "opposition" covers the NDP (official opposition) and the lone Liberal. The money is federal, so the question is whether Ottawa\'s grants land more heavily in the territory\'s close seats.',
         "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
-        "beforeLabel": "Same length of time before the election", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "beforeLabel": "Same dates in an earlier year", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
         "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
         "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
         "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
@@ -442,7 +442,7 @@ PROVINCES = {
         "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in Yukon's 21 electoral districts.",
         "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Yukon's 21 electoral districts "
                      "and set against the 3 November 2025 territorial result. Each district wears its current MLA's party colour; the deeper the colour, the more federal grant money "
-                     "per resident. \"Before\" means the same length of time just before the election. Yukon publishes no list of its own payees, so territorial payments cannot be shown."),
+                     "per resident. \"Before\" means the same calendar dates in an earlier year, moved back far enough to end before the election. Yukon publishes no list of its own payees, so territorial payments cannot be shown."),
         "notes": [
             "<b>Why federal money:</b> Yukon's Public Accounts stop at the program level (Schedules 1 to 11) and the territory publishes no payee list, so this page shows the federal grants that land in each district: the same awards as the federal page.",
             "<b>Where money lands:</b> each award is placed at the recipient's address by postal code; recipients with no postal code were matched to their address on other awards, then by postal area or city (marked approximate). {unmapped_n} awards worth {unmapped_money} since the federal election are still unplaced.",
@@ -467,7 +467,7 @@ PROVINCES = {
         "legendParties": ["IND"], "opp": "regular members",
         "groupNote": 'The NWT has consensus government: every MLA is an independent, so the groups are cabinet (the Premier and six ministers, dashed outlines on the map) against the regular members. The money is federal.',
         "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
-        "beforeLabel": "Same length of time before the election", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "beforeLabel": "Same dates in an earlier year", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
         "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
         "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
         "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
@@ -477,7 +477,7 @@ PROVINCES = {
         "insets": [["Yellowknife", [-114.45, 62.42, -114.3, 62.5]]],
         "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), placed in the NWT's 19 electoral districts.",
         "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in the Northwest Territories' 19 electoral districts "
-                     "and set against the 14 November 2023 territorial result. The NWT has no parties; cabinet members' districts carry a dashed outline. \"Before\" means the same length of time just before the election. "
+                     "and set against the 14 November 2023 territorial result. The NWT has no parties; cabinet members' districts carry a dashed outline. \"Before\" means the same calendar dates in an earlier year, moved back far enough to end before the election. "
                      "The territory's own payee reporting covers one department, so territorial payments are not shown."),
         "notes": [
             "<b>Why federal money:</b> the GNWT itemises recipients only in Industry, Tourism and Investment's annual Grants and Contributions Results Report; the Public Accounts stop at the program level. This page shows the federal grants that land in each district.",
@@ -504,7 +504,7 @@ PROVINCES = {
         "legendParties": ["IND"], "opp": "regular members",
         "groupNote": 'Nunavut has consensus government: every MLA is an independent, so the groups are cabinet (the Premier and eight ministers chosen by the Assembly on 18 November 2025, dashed outlines on the map) against the regular members. The money is federal.',
         "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
-        "beforeLabel": "Same length of time before the election", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
+        "beforeLabel": "Same dates in an earlier year", "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
         "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
         "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
         "searchUrl": "https://search.open.canada.ca/grants/?search_text={q}", "searchLabel": "all awards to this recipient",
@@ -514,7 +514,7 @@ PROVINCES = {
         "insets": [["Iqaluit", [-68.6, 63.72, -68.45, 63.78]]],
         "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), placed in Nunavut's 22 constituencies.",
         "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Nunavut's 22 constituencies "
-                     "and set against the 27 October 2025 territorial result. Nunavut has no parties; cabinet members' constituencies carry a dashed outline. \"Before\" means the same length of time just before the election. "
+                     "and set against the 27 October 2025 territorial result. Nunavut has no parties; cabinet members' constituencies carry a dashed outline. \"Before\" means the same calendar dates in an earlier year, moved back far enough to end before the election. "
                      "Nunavut's Grants and Contributions Report names only municipalities and territorial corporations, so territorial payments are not shown."),
         "notes": [
             "<b>Why federal money:</b> the Government of Nunavut's annual Grants and Contributions Report gives totals by department, recipient category and municipality, not named recipients, and the Public Accounts stop at the program level. This page shows the federal grants that land in each constituency.",
@@ -545,7 +545,7 @@ PROVINCES = {
         "legendParties": ["PC", "LIB", "GRN"], "opp": "opposition",
         "groupNote": '"PC" means the governing Progressive Conservatives won the seat in 2023; "opposition" covers the Liberals, Greens and independents. The money is federal, so the question here is whether Ottawa\'s grants land more heavily in the Island\'s close provincial seats.',
         "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
-        "beforeLabel": "Same length of time before the election",
+        "beforeLabel": "Same dates in an earlier year",
         "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
         "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
         "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
@@ -557,7 +557,7 @@ PROVINCES = {
         "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in PEI's provincial districts.",
         "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in PEI's 27 provincial districts "
                      "and set against the 3 April 2023 provincial result. Each district wears its current MLA's party colour; the deeper the colour, the more federal grant money "
-                     "per resident. \"Before\" means the same length of time just before the election. PEI publishes no list of its own payees, so provincial payments cannot be shown."),
+                     "per resident. \"Before\" means the same calendar dates in an earlier year, moved back far enough to end before the election. PEI publishes no list of its own payees, so provincial payments cannot be shown."),
         "notes": [
             "<b>Why federal money:</b> PEI's Public Accounts Volume II itemises spending by department and program only (\"Operating Grant\", \"Pharmacare\", \"Miscellaneous\") and "
             "the province publishes no payee list, so provincial payments cannot be placed in a district. This page therefore shows the federal grants that land in each "
@@ -626,7 +626,7 @@ PROVINCES = {
         "legendParties": ["PQ", "PLQ", "PCQ", "QS"], "opp": "opposition",
         "groupNote": '"PQ" means the governing Parti Québécois won the seat in 2026; "opposition" covers the Liberals, Conservatives and Québec solidaire. The money is federal, so the question here is whether Ottawa\'s grants land more heavily in Quebec\'s close provincial seats.',
         "filterAll": "All departments", "topProgsTitle": "Top departments", "topGrantsTitle": "Largest federal grants since the 2025 federal election",
-        "beforeLabel": "Same length of time before the election",
+        "beforeLabel": "Same dates in an earlier year",
         "includeLabel": "Include national HQs, other governments, settlements & foreign aid",
         "flags": {"national": "national HQ", "government": "other government", "settlement": "treaty settlement", "international": "foreign aid"},
         "recordUrl": "https://search.open.canada.ca/grants/record/{org}%2C{ref}%2Ccurrent",
@@ -639,7 +639,7 @@ PROVINCES = {
         "source": "the federal Proactive Disclosure of grants and contributions (open.canada.ca), the same awards as the federal page, placed in Quebec's provincial ridings.",
         "subtitle": ("Federal grants and contributions with agreements starting {election} (the federal election) to {cutoff}, placed in Quebec's 127 provincial ridings "
                      "and set against the 5 October 2026 provincial result. Each riding wears its current MNA's party colour; the deeper the colour, the more federal grant money "
-                     "per resident. \"Before\" means the same length of time just before the election. Quebec publishes no list of its own payees, so provincial payments cannot be shown."),
+                     "per resident. \"Before\" means the same calendar dates in an earlier year, moved back far enough to end before the election. Quebec publishes no list of its own payees, so provincial payments cannot be shown."),
         "notes": [
             "<b>Why federal money:</b> Quebec's Comptes publics (Volume 2) report transfer spending by portfolio and by seven categories of beneficiary (municipalities, non-profits, "
             "health and education institutions, private firms, government bodies, individuals), never by named recipient, and no payee list exists. This page therefore shows "

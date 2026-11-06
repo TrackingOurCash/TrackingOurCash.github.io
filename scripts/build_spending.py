@@ -37,7 +37,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "data"
 ELECTION = date(2025, 4, 28)
-KEEP_FROM = "2024-01-01"  # earliest start date that can fall in the "before" window
+KEEP_FROM = "2022-01-01"  # earliest start date that can fall in the "before" window (it moves back two years once "after" passes a year)
 CLOSE_MARGIN = 10.0
 
 csv.field_size_limit(sys.maxsize)
@@ -310,11 +310,15 @@ def main():
     passing = [q for q in q_counts if q >= election_q and q_end(q) < date.today() and q_counts[q] >= 0.7 * q_counts[(q[0] - 1, q[1])]]
     cy, cq = max(passing)
     cutoff = date(cy + (cq == 3), (cq * 3 + 3) % 12 + 1, 1) - timedelta(days=1)
-    # "Before" is a window of the same length ending the day before the election. (It used to be the same dates one
-    # year earlier; once the "after" window passed a year, that overlapped it and counted post-election grants as "before".)
+    # "Before" is the same calendar dates moved back by whole years, so both windows hold the same seasons (1 April
+    # core funding, summer jobs), and moved back far enough to end before the election. With one year back, an
+    # "after" window longer than a year overlapped it and counted post-election grants as "before".
     span = (cutoff - ELECTION).days + 1
-    before_end = ELECTION - timedelta(days=1)
-    before_start = ELECTION - timedelta(days=span)
+    shift = 1
+    while cutoff.replace(year=cutoff.year - shift) >= ELECTION:
+        shift += 1
+    before_start = ELECTION.replace(year=ELECTION.year - shift)
+    before_end = cutoff.replace(year=cutoff.year - shift)
     years = span / 365.25
 
     per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "grants": [], "series": Counter()} for num in ridings}
