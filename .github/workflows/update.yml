@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write   # commit the grants ledger
+  issues: write     # open an alert issue when a refresh fails or falls back
   pages: write
   id-token: write
 
@@ -17,6 +18,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      LIVE_URL: https://trackingourcash.github.io   # check_site.py compares each new page with the live one
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -33,16 +37,64 @@ jobs:
             data/raw/ab/shape
             data/raw/intl
           key: raw-static-${{ hashFiles('scripts/fetch_csd.py', 'scripts/fetch_shapes.py') }}
+      # The last build that passed its checks (federal data, budget estimate, by-election detail).
+      # run.sh falls back to it when a source is down or a rebuild is rejected.
+      - name: Restore the last good federal data
+        uses: actions/cache/restore@v4
+        with:
+          path: data/lastgood
+          key: lastgood-${{ github.run_id }}
+          restore-keys: lastgood-
       - name: Download data and build the map
+        id: build
         run: ./run.sh
+      - name: Keep the last good federal data for tomorrow
+        if: success()
+        uses: actions/cache/save@v4
+        with:
+          path: data/lastgood
+          key: lastgood-${{ github.run_id }}
+      # Every grant since the election, kept even if the government later withdraws it from the open-data file.
+      # Committed only when it changed (the file is byte-identical on a quiet day). The commit also keeps the
+      # repository active, so GitHub does not switch off the daily schedule after 60 quiet days.
+      - name: Commit the grants ledger
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ledger
+          if git diff --cached --quiet; then echo "Ledger unchanged"; exit 0; fi
+          git commit -m "Grants ledger: refresh of $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do git pull --rebase -q origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" && exit 0; sleep 10; done
+          echo "::warning::Could not push the ledger; it will be committed on the next run"
       - name: Stage the site
+        if: success()
         run: |
           mkdir -p site
-          cp output/index.html output/alberta.html output/bc.html output/saskatchewan.html output/manitoba.html output/nb.html output/pei.html output/ontario.html output/quebec.html output/ns.html output/nl.html output/yukon.html output/nwt.html output/nunavut.html output/international.html output/sources.html site/ 2>/dev/null || cp output/riding_spending_map.html site/index.html
+          cp output/index.html output/budget.html output/byelections.html output/alberta.html output/bc.html output/saskatchewan.html output/manitoba.html output/nb.html output/pei.html output/ontario.html output/quebec.html output/ns.html output/nl.html output/yukon.html output/nwt.html output/nunavut.html output/international.html output/sources.html output/status.json site/
           cp output/*.csv data/summary.json site/
       - uses: actions/upload-pages-artifact@v3
+        if: success()
         with:
           path: site
+      # Alert: a failed build (the live site is left as it was) or a build that fell back to old data
+      # opens an issue, or comments on the one already open, so GitHub emails the repository owner.
+      - name: Alert on failure or fallback
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OUTCOME: ${{ steps.build.outcome }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          warnings=$(cat data/build_warnings.txt 2>/dev/null || true)
+          problems=$(python3 -c "import json;print('\n'.join(json.load(open('output/status.json'))['problems']))" 2>/dev/null || true)
+          if [[ "$OUTCOME" == "success" && -z "$warnings" ]]; then echo "No alert needed"; exit 0; fi
+          if [[ "$OUTCOME" == "success" ]]; then head="Daily refresh published, but some sources fell back to their last good copy."; else head="Daily refresh FAILED; the live site was left as it was."; fi
+          body=$(printf '%s\n\n%s\n\n%s\n\nRun: %s\n\n---\n_Posted by the daily refresh workflow._' "$head" "$problems" "$warnings" "$RUN_URL")
+          gh label create refresh-alert --color d93f0b --description "Daily data refresh needs a look" 2>/dev/null || true
+          open=$(gh issue list --label refresh-alert --state open --json number --jq '.[0].number' || true)
+          if [[ -n "$open" ]]; then gh issue comment "$open" --body "$body"; else gh issue create --title "Daily refresh needs a look" --label refresh-alert --body "$body"; fi
   deploy:
     needs: build
     runs-on: ubuntu-latest

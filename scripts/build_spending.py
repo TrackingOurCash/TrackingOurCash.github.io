@@ -22,6 +22,7 @@ Method, in order:
      Both are annualized and divided by 2021 population.
 """
 import csv
+import io
 import json
 import re
 import statistics
@@ -145,6 +146,54 @@ def amend_no(v):
         return int(float(v))
     except (TypeError, ValueError):
         return 0
+
+
+LEDGER = OUT / "ledger" / "federal_grants_since_election.csv.gz"
+LEDGER_COLS = ["org", "ref", "start", "value", "value_first_seen", "riding", "how", "flag", "recipient", "city", "prov", "dept", "program", "title",
+               "first_seen", "dropped_on", "in_source"]
+
+
+def write_ledger(rows):
+    """Append-only record of every federal grant or contribution that starts on or after election day.
+
+    The open-data file is republished in full every day and departments sometimes withdraw or
+    restate records; the ledger keeps every agreement ever seen. An agreement that drops out of the
+    source stays here with in_source=0 and the date it dropped out (dropped_on), and value_first_seen keeps the value
+    it first appeared with, so later cuts and amendments stay visible. The workflow commits it."""
+    import gzip
+    today = date.today().isoformat()
+    old = {}
+    if LEDGER.exists():
+        with gzip.open(LEDGER, "rt", encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                old[(r["org"], r["ref"])] = r
+    seen = set()
+    out = []
+    for rec, num, how, flag in rows:
+        key = (rec["org"], rec["ref"])
+        seen.add(key)
+        prev = old.get(key, {})
+        out.append({"org": rec["org"], "ref": rec["ref"], "start": rec["start"], "value": round(rec["value"]),
+                    "value_first_seen": prev.get("value_first_seen") or round(rec["value"]), "riding": num or "", "how": how, "flag": flag,
+                    "recipient": rec["recipient"][:120], "city": rec["city"], "prov": rec["prov"], "dept": rec["dept"], "program": rec["program"][:120],
+                    "title": rec["title"], "first_seen": prev.get("first_seen") or today, "dropped_on": "", "in_source": 1})
+    gone = 0
+    for key, r in old.items():
+        if key not in seen:
+            r["in_source"] = 0
+            r["dropped_on"] = r.get("dropped_on") or today
+            out.append(r)
+            gone += 1
+    LEDGER.parent.mkdir(parents=True, exist_ok=True)
+    tmp = LEDGER.with_suffix(".tmp")
+    # mtime=0 keeps the bytes identical when nothing changed, so git sees no change on a quiet day.
+    with gzip.GzipFile(tmp, "wb", mtime=0) as gz, io.TextIOWrapper(gz, encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=LEDGER_COLS, extrasaction="ignore")
+        w.writeheader()
+        for r in sorted(out, key=lambda r: (r["start"], r["org"], r["ref"])):
+            w.writerow(r)
+    tmp.replace(LEDGER)
+    print(f"ledger: {len(out):,} agreements since the election ({gone:,} no longer in the source, kept)", file=sys.stderr)
 
 
 def main():
@@ -327,6 +376,7 @@ def main():
     method_counts = Counter()
     natl_examples = Counter()
     unmapped = []
+    since_election = []  # every agreement starting on or after election day, placed or not, for the ledger
 
     for rec in agreements.values():
         if rec["value"] <= 0 or (rec["country"] and rec["country"] != "CA") or rec["rtype"] == "I":
@@ -346,6 +396,8 @@ def main():
             num, method = fsa_to_riding[rec["pc"][:3]], "postal area (approx.)"
         if not num and (norm(rec["city"]), rec["prov"]) in city_to_riding:
             num, method = city_to_riding[(norm(rec["city"]), rec["prov"])], "city (approx.)"
+        if rec["start"] >= ELECTION.isoformat():
+            since_election.append((rec, num, method if num else "", flag_reason(rec, multi_riding_cities) if num else ""))
         if not num:
             if window:
                 method_counts[(window, "unmapped")] += 1
@@ -455,6 +507,8 @@ def main():
         w.writerow(["value", "recipient", "type", "city", "province", "department", "program", "start"])
         for rec in sorted(unmapped, key=lambda r: -r["value"]):
             w.writerow([round(rec["value"]), rec["legal"], rec["rtype"], rec["city"], rec["prov"], rec["dept"], rec["program"], rec["start"]])
+
+    write_ledger(since_election)
 
     dept_matrix = {d: {n: round(v) for n, v in m.items()} for d, m in dept_totals.items()}
     dept_matrix_before = {d: {n: round(v) for n, v in m.items()} for d, m in dept_before.items()}

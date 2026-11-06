@@ -1,0 +1,446 @@
+<title>Federal special page</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<!-- Two federal pages share this template: "budget" (each budget's estimated dollars per riding) and
+     "byelection" (everything placed in the ridings with a by-election coming up). The stylesheet is
+     the federal map's own, copied in at build time, so the pages look like the rest of the site. -->
+<style>/*__STYLE__*/
+.r.dim { fill: var(--nodata); cursor: default; }
+.r.focus { stroke: var(--ink); stroke-width: 1.8; }
+.becards { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 16px; margin-top: 16px; }
+@media (max-width: 480px) { .becards { grid-template-columns: 1fr; } }
+.becard h2 { margin-bottom: 2px; }
+.becard .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin: 10px 0; }
+.becard .kpi { padding: 8px 10px; }
+.becard .kpi .big { font-size: 20px; }
+.deptbars { display: grid; grid-template-columns: minmax(0, 1fr) 90px 70px; gap: 3px 8px; align-items: center; font-size: 12px; margin-top: 4px; }
+.deptbars .bar { height: 10px; background: var(--after); border-radius: 0 3px 3px 0; min-width: 1px; margin: 0; }
+.deptbars .v { text-align: right; font-variant-numeric: tabular-nums; }
+.deptbars .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink-2); }
+details.more summary { cursor: pointer; font-size: 12px; color: var(--focus); margin-top: 6px; }
+.timeline svg { width: 100%; height: auto; display: block; }
+.timeline text { font-size: 10px; fill: var(--ink-2); }
+.keychips { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; color: var(--ink-2); margin: 6px 0; }
+.stack { display: flex; height: 12px; border-radius: 3px; overflow: hidden; background: var(--grid); margin: 6px 0 2px; }
+.stack i { display: block; height: 100%; }
+ul.grants li.gone { opacity: .75; }
+</style>
+
+<div class="wrap">
+  <div class="topbar"><h1 id="title"></h1><button id="theme" type="button" aria-pressed="false">Dark mode</button></div>
+  <nav class="nav" id="nav" aria-label="Maps"></nav>
+  <p class="sub" id="subtitle"></p>
+  <div class="controls" id="controls"></div>
+  <div class="grid">
+    <div class="card mapcard">
+      <svg id="svg" viewBox="0 0 960 600" role="img" aria-label="Map"><defs id="defs"></defs><g id="main"></g></svg>
+      <div class="zoombar" id="zoombar"><span class="small muted">Scroll or pinch to zoom, drag to pan.</span></div>
+      <div class="insets" id="insets"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="card" id="panel"></div>
+  </div>
+  <div class="card" style="margin-top:16px" id="timelineCard">
+    <h2 id="timelineTitle">Budget days against the money</h2>
+    <p class="small muted" id="timelineNote"></p>
+    <div class="timeline" id="timeline"></div>
+  </div>
+  <div id="extra"></div>
+  <div class="card" style="margin-top:16px" id="tableCard">
+    <div class="controls" style="justify-content:space-between;margin-bottom:6px">
+      <h2 style="margin:0" id="tableTitle"></h2>
+      <div style="display:flex;gap:8px;align-items:center"><button type="button" id="csvBtn">Download CSV</button><input type="search" id="q" placeholder="Search riding, MP or province" aria-label="Search"></div>
+    </div>
+    <div class="tablewrap"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  </div>
+  <div class="card notes" style="margin-top:16px" id="notes"></div>
+  <p class="small muted" style="margin:16px 4px 0"><a id="sourcesLink" href="sources.html" style="color:var(--focus)">Sources</a>: every dataset behind these pages, with links.</p>
+</div>
+<div id="tip"></div>
+
+<script>
+const D = /*__DATA__*/null;
+const C = D.config, R = D.ridings, MODE = C.mode;
+const PARTY = Object.fromEntries(Object.entries(C.parties).map(([k, p]) => [k, p.name]));
+PARTY[""] = "Vacant"; PARTY.IND = PARTY.IND || "Independent"; PARTY.OTH = "Other";
+const PVAR = new Proxy({}, {get: (_, k) => C.parties[k] ? `--p-${k}` : "--p-IND"});
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function applyPartyColors() {
+  const dark = isDark();
+  for (const [k, p] of Object.entries(C.parties)) document.documentElement.style.setProperty(`--p-${k}`, dark ? p.dark : p.light);
+}
+const isDark = () => document.documentElement.dataset.theme === "dark" || (!document.documentElement.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
+applyPartyColors();
+document.getElementById("title").textContent = C.title;
+document.title = C.title;
+document.getElementById("subtitle").innerHTML = C.subtitle;
+document.getElementById("nav").innerHTML = C.nav.map(n => `<a href="${n.href}"${n.current ? ' aria-current="page"' : ""}>${n.label}</a>`).join("");
+document.getElementById("sourcesLink").href = C.sourcesHref || "sources.html";
+document.getElementById("notes").innerHTML = "<ul>" + C.notes.map(x => `<li>${x}</li>`).join("") + "</ul>";
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const fmt$ = v => v == null ? "–" : (v < 0 ? "−" : "") + "$" + (Math.abs(v) >= 1e9 ? (Math.abs(v) / 1e9).toFixed(2) + "B" : Math.abs(v) >= 1e6 ? (Math.abs(v) / 1e6).toFixed(1) + "M" : Math.abs(v) >= 1e3 ? (Math.abs(v) / 1e3).toFixed(0) + "K" : Math.round(Math.abs(v)));
+const fmtM = m => fmt$(m * 1e6);
+const fmtPc = v => v == null ? "–" : "$" + (v >= 100 ? Math.round(v).toLocaleString() : v.toFixed(2));
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const fmtDate = s => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ""); return m ? `${+m[3]} ${MONTHS[+m[2] - 1]} ${m[1]}` : (s || ""); };
+const pill = p => `<span class="pill" style="background:var(${PVAR[p] || "--p-IND"})">${PARTY[p] || p || "Vacant"}</span>`;
+const recordUrl = g => g.org && g.ref ? C.recordUrl.replace("{org}", encodeURIComponent(g.org)).replace("{ref}", encodeURIComponent(g.ref)) : null;
+const KEYNAME = {pop: "per person", prov: "province-specific", dept: "by department's grant record", cdept: "by department's contracts", places: "named places"};
+const KEYCOLOR = {places: "var(--ink)", prov: "#8a6bc8", dept: "#2a78d6", cdept: "#c47f00", pop: "var(--axis)"};
+
+// ---- state and values ----
+const state = {budget: C.defaultBudget || null, sel: null, sort: C.defaultSort, dir: -1, q: ""};
+const BUD = Object.fromEntries((D.estimates || []).map(b => [b.key, b]));
+function value(n) {
+  if (MODE === "budget") { const row = BUD[state.budget].by_riding[n] || {}; return {v: row.total || 0, pc: row.pc || 0}; }
+  return {v: D.since[n] || 0, pc: (D.since[n] || 0) / R[n].population};
+}
+let V = {};
+function compute() {
+  V = {};
+  for (const n of Object.keys(R)) V[n] = value(n);
+  const ranked = Object.keys(R).sort((a, b) => V[a].pc - V[b].pc);
+  ranked.forEach((n, i) => { V[n].t = i / (ranked.length - 1); V[n].rank = ranked.length - i; });
+}
+const FOCUS = new Set(C.focus || []);
+const inFocus = n => !FOCUS.size || FOCUS.has(n);
+
+// ---- colour: party hue, depth by rank ----
+let surfaceColor = css("--surface");
+let zoomK = 1;
+function tint(party, t) { return d3.interpolateLab(surfaceColor, css(PVAR[party]) || css("--p-IND"))(0.18 + 0.82 * t); }
+const defs = d3.select("#defs").append("g").attr("id", "patdefs");
+const patterns = new Set();
+function hatch(pa, pb, t) {
+  const b = Math.round(t * 7), id = `h-${pa}-${pb}-${b}`;
+  if (!patterns.has(id)) {
+    patterns.add(id);
+    const p = defs.append("pattern").attr("id", id).attr("patternUnits", "userSpaceOnUse").attr("width", 5).attr("height", 5).attr("patternTransform", `rotate(45) scale(${1 / zoomK})`);
+    p.append("rect").attr("width", 5).attr("height", 5).attr("fill", tint(pa, b / 7));
+    p.append("rect").attr("width", 2.5).attr("height", 5).attr("fill", tint(pb, b / 7));
+  }
+  return `url(#${id})`;
+}
+function fillFor(n) {
+  const r = R[n];
+  if (!inFocus(n)) return css("--nodata");
+  const t = V[n].t;
+  if (r.close) return hatch(r.party_won, r.runnerup_party, t);
+  return tint(r.rep_party || r.party_won, t);
+}
+
+// ---- maps ----
+const W = 960, H = 600;
+const svg = d3.select("#svg");
+const proj = d3.geoConicConformal().parallels(C.projection.parallels).rotate(C.projection.rotate).fitExtent([[6, 6], [W - 6, H - 6]], D.geo);
+const path = d3.geoPath(proj);
+const g = d3.select("#main");
+const LAND = D.land.features;
+const byKind = k => LAND.filter(f => f.properties.kind === k);
+function drawLand(parent, pth, clipId, box) {
+  const near = f => { if (!box) return false; const [[x0, y0], [x1, y1]] = d3.geoBounds(f); return x1 > box[0] && x0 < box[2] && y1 > box[1] && y0 < box[3]; };
+  parent.selectAll(".otherland").data(byKind("other")).join("path").attr("class", "otherland").attr("d", pth);
+  parent.selectAll(".land").data(byKind("canada")).join("path").attr("class", "land").attr("d", pth);
+  // City insets clip to municipal outlines (they follow the shore closely); rural boxes would lose most of the riding that way.
+  const munis = box && C.clipInsetsToMunis ? byKind("muni").filter(near) : [];
+  d3.select("#defs").insert("clipPath", "#patdefs").attr("id", clipId).selectAll("path").data(munis.length ? munis : byKind("canada")).join("path").attr("d", pth);
+  const layer = parent.append("g").attr("clip-path", `url(#${clipId})`);
+  const over = parent.append("g");
+  over.selectAll(".lake").data(byKind("lake").concat(box ? byKind("lake_small").filter(near) : [])).join("path").attr("class", "lake").attr("d", pth);
+  if (box) {
+    over.selectAll(".river").data(byKind("river").filter(near)).join("path").attr("class", "river").attr("d", pth);
+    over.selectAll(".urban").data(byKind("urban").filter(near)).join("path").attr("class", "urban").attr("d", pth);
+    over.selectAll(".muni").data(byKind("muni").filter(near)).join("path").attr("class", "muni").attr("d", pth).append("title").text(d => d.properties.name);
+  }
+  if (!box) over.selectAll(".coast").data(byKind("canada")).join("path").attr("class", "coast").attr("d", pth);
+  return layer;
+}
+const cls = d => "r" + (FOCUS.size ? (FOCUS.has(d.id) ? " focus" : " dim") : "");
+const paths = drawLand(g, path, "clip-canada").selectAll("path").data(D.geo.features).join("path")
+  .attr("class", cls).attr("d", path).attr("tabindex", d => inFocus(d.id) ? 0 : -1).attr("aria-label", d => R[d.id].name)
+  .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip)
+  .on("click", (e, d) => { if (inFocus(d.id)) { select(d.id); zoomToRiding(d.id); } })
+  .on("keydown", (e, d) => { if (e.key === "Enter" && inFocus(d.id)) { select(d.id); zoomToRiding(d.id); } });
+paths.filter(d => FOCUS.has(d.id)).raise();
+const zoom = d3.zoom().scaleExtent([1, 80]).on("zoom", e => {
+  g.attr("transform", e.transform);
+  if (Math.abs(e.transform.k - zoomK) / zoomK > 0.15) { zoomK = e.transform.k; defs.selectAll("pattern").attr("patternTransform", `rotate(45) scale(${1 / zoomK})`); }
+});
+svg.call(zoom);
+function zoomTo(b, factor = 1) {
+  if (!b) return svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity);
+  const [x0, y0] = proj([b[0], b[3]]), [x1, y1] = proj([b[2], b[1]]);
+  const k = Math.min(80, 0.9 * factor / Math.max((x1 - x0) / W, (y1 - y0) / H));
+  svg.transition().duration(700).call(zoom.transform, d3.zoomIdentity.translate(W / 2, H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2));
+}
+d3.select("#zoombar").append("button").text("Reset view").on("click", () => zoomTo(null));
+const featById = Object.fromEntries(D.geo.features.map(f => [f.id, f]));
+function zoomToRiding(n) { const [[w, s], [e, no]] = d3.geoBounds(featById[n]); zoomTo([w, s, e, no], 0.5); }
+
+const FINE = Object.fromEntries((D.geoFine.features || []).map(f => [f.id, f]));
+const insetPaths = [];
+for (const [name, b, num] of C.insets) {
+  const feats = D.geo.features.map(f => FINE[f.id] || f).filter(f => { const [[x0, y0], [x1, y1]] = d3.geoBounds(f); return x1 > b[0] && x0 < b[2] && y1 > b[1] && y0 < b[3]; });
+  const w = 190, h = Math.min(260, Math.round(w * (b[3] - b[1]) / ((b[2] - b[0]) * Math.cos((b[1] + b[3]) / 2 * Math.PI / 180))));
+  const ip = d3.geoMercator().fitExtent([[0, 0], [w, h]], {type: "Polygon", coordinates: [[[b[0], b[1]], [b[0], b[3]], [b[2], b[3]], [b[2], b[1]], [b[0], b[1]]]]});
+  const box = d3.select("#insets").append("div").attr("class", "inset");
+  const s = box.append("svg").attr("viewBox", `0 0 ${w} ${h}`);
+  const cid = "clip-" + name.replace(/\W/g, "");
+  s.append("clipPath").attr("id", cid).append("rect").attr("width", w).attr("height", h);
+  const inner = s.append("g").attr("clip-path", `url(#${cid})`);
+  const ps = drawLand(inner, d3.geoPath(ip), cid + "-land", b).selectAll("path").data(feats).join("path").attr("class", cls).attr("d", d3.geoPath(ip))
+    .on("mousemove", (e, d) => showTip(e, d.id)).on("mouseleave", hideTip).on("click", (e, d) => { if (inFocus(d.id)) { select(d.id); zoomToRiding(d.id); } });
+  ps.filter(d => FOCUS.has(d.id)).raise();
+  insetPaths.push(ps);
+  const cap = box.append("div").attr("class", "cap");
+  cap.append("span").text(name);
+  cap.append("button").text(num ? "open" : "zoom main map").on("click", () => num ? (select(num), zoomToRiding(num)) : zoomTo(b, 0.5));
+}
+
+// ---- tooltip, legend ----
+const tip = document.getElementById("tip");
+function showTip(e, n) {
+  const r = R[n], v = V[n];
+  const line = MODE === "budget" ? `${BUD[state.budget].name.replace(/ \(.*\)/, "")}: about ${fmt$(v.v)} · ${fmtPc(v.pc)} per person` :
+    inFocus(n) ? `${fmt$(v.v)} in grants since the election · ${fmtPc(v.pc)} per person` : "No by-election here";
+  tip.innerHTML = `<b>${esc(r.name)}</b><br>${r.rep ? `${esc(r.rep)} ${pill(r.rep_party)}` : "Seat vacant"}<br>2025: ${PARTY[r.party_won]}${r.margin_votes == null ? ", acclaimed" : ` by ${r.margin_votes.toLocaleString()} votes (${r.margin_pts} pts)`}${r.close ? " · <b>close</b>" : ""}<br>${line}`;
+  tip.style.display = "block";
+  tip.style.left = Math.min(e.clientX + 14, innerWidth - 285) + "px"; tip.style.top = (e.clientY + 14) + "px";
+}
+function hideTip() { tip.style.display = "none"; }
+function renderLegend() {
+  const lg = d3.select("#legend").html("");
+  const pb = lg.append("div");
+  pb.append("div").attr("class", "lab").text(MODE === "budget" ? "Colour = MP's party · depth = estimated budget $ per person, lowest to highest" : "Colour = party that won in 2025 (seat now vacant) · depth = grants $ per person since the election, ranked against all 343 ridings");
+  const row = pb.append("div").attr("class", "swl");
+  for (const p of C.legendParties) {
+    const d = row.append("div");
+    d.append("div").attr("class", "ramp").selectAll("span").data([0, 0.2, 0.4, 0.6, 0.8, 1]).join("span").style("background", t => tint(p, t));
+    d.append("div").attr("class", "small").text(PARTY[p]);
+  }
+  const hb = lg.append("div");
+  hb.append("div").attr("class", "lab").text("Close in 2025 (under 10 pts): stripes of the top two parties");
+  hb.append("div").html(`<svg width="60" height="14" aria-hidden="true"><rect width="60" height="14" rx="2" fill="${hatch(C.legendParties[0], C.legendParties[1], 0.7)}"></rect></svg>`);
+  if (FOCUS.size) lg.append("div").html(`<div class="lab">Other ridings</div><span class="sw" style="background:var(--nodata)"></span><span class="small">no by-election called</span>`);
+}
+
+// ---- controls ----
+const ctl = document.getElementById("controls");
+if (MODE === "budget") {
+  ctl.innerHTML = `<div class="seg" role="group" aria-label="Which budget" id="budSeg">${D.estimates.map(b => `<button type="button" data-b="${b.key}" aria-pressed="${b.key === state.budget}">${esc(b.name)}</button>`).join("")}</div>`;
+  ctl.querySelectorAll("#budSeg button").forEach(btn => btn.onclick = () => { ctl.querySelectorAll("#budSeg button").forEach(x => x.setAttribute("aria-pressed", x === btn)); state.budget = btn.dataset.b; render(); });
+} else {
+  ctl.innerHTML = `<span class="small muted">Polling day ${fmtDate(D.be.meta.polling_day)}. Jump to:</span> ` + C.focus.map(n => `<button type="button" class="linkbtn" data-n="${n}">${esc(R[n].name)}</button>`).join(" ");
+  ctl.querySelectorAll("button[data-n]").forEach(b => b.onclick = () => { select(b.dataset.n); zoomToRiding(b.dataset.n); });
+}
+
+// ---- panel ----
+function resultBlock(r) {
+  const shares = Object.entries(r.shares || {}).map(([p, s]) => `${PARTY[p] || p} ${s}%`).join(" · ");
+  return `<div class="result" style="border-color:var(${PVAR[r.party_won]})"><div><b>${esc(r.winner)}</b> (${PARTY[r.party_won]}) ${r.margin_votes == null ? "was acclaimed" : `won by <b>${r.margin_votes.toLocaleString()} votes</b> (${r.margin_pts} pts) over ${esc(r.runnerup)} (${PARTY[r.runnerup_party]})`}${r.close ? ' <span class="tag">close</span>' : ""}</div><div class="small muted">${shares}</div></div>`;
+}
+function stack(byKey, total) {
+  const ks = Object.keys(KEYNAME).filter(k => byKey[k] > 0);
+  return `<div class="stack" role="img" aria-label="How the estimate splits by allocation key">${ks.map(k => `<i style="width:${(100 * byKey[k] / total).toFixed(1)}%;background:${KEYCOLOR[k]}" title="${KEYNAME[k]}: ${fmt$(byKey[k])}"></i>`).join("")}</div>
+    <div class="keychips">${ks.map(k => `<span><span class="sw" style="background:${KEYCOLOR[k]}"></span>${KEYNAME[k]} ${fmt$(byKey[k])}</span>`).join("")}</div>`;
+}
+function budgetItemsList(items) {
+  if (!items || !items.length) return "";
+  return `<ul class="budget">${items.map(i => `<li><b>${i.amount_millions == null ? "Amount not stated" : fmtM(i.amount_millions)}</b>${i.years ? ` <span class="muted">· ${esc(i.years)}</span>` : ""}${i.city_wide ? ' <span class="tag">city-wide</span>' : ""} <span class="tag">${esc(i.kind)}</span><br>${esc(i.text)}<br><span class="muted">${esc(i.department)} · <a href="${i.url}" target="_blank" rel="noopener">${esc(i.budget)}, section</a></span></li>`).join("")}</ul>`;
+}
+function select(n, quiet) {
+  state.sel = n;
+  if (!quiet && history.replaceState) history.replaceState(null, "", location.pathname + location.search + "#r=" + encodeURIComponent(n));
+  paths.classed("sel", d => d.id === n).filter(d => d.id === n).raise();
+  insetPaths.forEach(ps => ps.classed("sel", d => d.id === n).filter(d => d.id === n).raise());
+  document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.classList.toggle("sel", tr.dataset.n === n));
+  const r = R[n], v = V[n];
+  const head = `<h2 style="margin-bottom:2px">${esc(r.name)}</h2><div class="small muted">${esc(r.region)} · pop. ${r.population.toLocaleString()} · <a href="index.html#r=${n}">open on the federal grants map</a></div>
+    <p style="margin:10px 0 4px">${r.rep ? `<b>${esc(r.rep)}</b> ${pill(r.rep_party)}` : "<b>Seat vacant</b>"}</p>${resultBlock(r)}`;
+  let body;
+  if (MODE === "budget") {
+    const b = BUD[state.budget], row = b.by_riding[n] || {top: [], by_key: {}};
+    const other = D.estimates.filter(x => x.key !== b.key).map(x => `<dt>${esc(x.name.replace(/ \(.*\)/, ""))}</dt><dd>${fmt$((x.by_riding[n] || {}).total)} · ${fmtPc((x.by_riding[n] || {}).pc)}/person</dd>`).join("");
+    const named = (D.items[n] || []).filter(i => b.name.startsWith(i.budget));
+    body = `<div class="small muted">${esc(b.name)}, estimated share over ${esc(b.years)}</div><p class="big">${fmt$(row.total)}</p>
+      <dl class="kv" style="margin-top:6px"><dt>Per person</dt><dd>${fmtPc(row.pc)}</dd><dt>Rank</dt><dd>${v.rank} of 343 per person</dd>${other}</dl>
+      ${row.total ? stack(row.by_key, row.total) : ""}
+      <h2 style="margin-top:12px">Largest measures here</h2>
+      <ul class="grants">${row.top.map(([i, x]) => { const mz = b.measures[i]; return `<li><b>${fmt$(x)}</b> ${esc(mz.measure)}<br><span class="muted">${KEYNAME[mz.key.split(":")[0]]}${mz.key.includes(":") ? ": " + esc(mz.key.split(":")[1].replace(/\|/g, ", ")) : ""} · ${fmtM(mz.net_millions)} nationally</span></li>`; }).join("")}</ul>
+      <h2 style="margin-top:14px">Measures in ${esc(b.name.replace(/ \(.*\)/, ""))} naming a place here</h2>
+      ${named.length ? budgetItemsList(named) : `<p class="small muted">None: this budget names no project in this riding.</p>`}`;
+  } else {
+    const x = D.be.ridings[n];
+    body = x ? `<p class="small"><b>By-election ${fmtDate(D.be.meta.polling_day)}.</b> ${esc(x.previous_mp)} (${PARTY[x.previous_party]}${x.sat_as ? `, sat as ${esc(x.sat_as)}` : ""}) left on ${fmtDate(x.vacated)}: ${esc(x.reason.toLowerCase())}.</p>
+      <div class="small muted">Federal grants and contributions since election day (${fmtDate(D.be.meta.election)})</div><p class="big">${fmt$(x.grants_since)}</p>
+      <dl class="kv"><dt>Per person</dt><dd>${fmtPc(x.pc_since)}</dd><dt>Rank, all 343 ridings</dt><dd>${x.rank} per person</dd><dt>Agreements</dt><dd>${x.grants_n.toLocaleString()}</dd>
+      <dt>Contracts (vendors billing here)</dt><dd>${fmt$(x.contracts_after)}</dd>${x.estimates.map(e => `<dt>${esc(e.name.replace(/ \(.*\)/, ""))} estimate</dt><dd>${fmt$(e.total)}</dd>`).join("")}</dl>
+      <p class="small"><a href="#be-${n}">Every grant, contract and budget item below</a></p>` : "";
+  }
+  document.getElementById("panel").innerHTML = head + body;
+}
+function panelIdle() {
+  document.getElementById("panel").innerHTML = MODE === "budget" ? `<p class="muted">Hover a riding for its estimated share. Click it for the measures behind the number and any project the budget names there.</p>` :
+    `<p class="muted">Click one of the six outlined ridings for its summary, or scroll down for every grant, contract and budget item in each.</p>`;
+}
+
+// ---- timeline: monthly grants nationally, with budget days and by-election dates ----
+function renderTimeline() {
+  const T = D.timeline;
+  if (!T || !T.months.length) { document.getElementById("timelineCard").hidden = true; return; }
+  const n = T.months.length, Wt = 900, Ht = 200, m = {l: 54, r: 10, t: 34, b: 26};
+  const x = d3.scaleBand().domain(T.months).range([m.l, Wt - m.r]).padding(0.15);
+  const ymax = d3.max(T.values) || 1;
+  const y = d3.scaleLinear().domain([0, ymax]).nice().range([Ht - m.b, m.t]);
+  const xd = d => { const k = d.slice(0, 7), i = T.months.indexOf(k); if (i < 0) return null; const day = +d.slice(8, 10); return x(k) + x.step() * (day - 1) / 31; };
+  // Labels go on the first of three rows where they do not run into the previous label.
+  const rowEnd = [-1e9, -1e9, -1e9];
+  const marks = T.markers.slice().sort((a, b) => a.date < b.date ? -1 : 1).map(mk => {
+    const xm = xd(mk.date);
+    if (xm == null) return "";
+    const wl = 6 * mk.label.length + 8, anchorEnd = xm + wl > Wt;
+    const x0 = anchorEnd ? xm - wl : xm;
+    let row = rowEnd.findIndex(e => e < x0);
+    if (row < 0) row = 2;
+    rowEnd[row] = x0 + wl;
+    return `<line x1="${xm}" x2="${xm}" y1="${4 + 11 * row}" y2="${Ht - m.b}" stroke="${mk.kind === "budget" ? "var(--focus)" : "var(--ink)"}" stroke-width="1.4" ${mk.kind === "budget" ? "" : 'stroke-dasharray="3 2"'}/><text x="${anchorEnd ? xm - 3 : xm + 3}" text-anchor="${anchorEnd ? "end" : "start"}" y="${10 + 11 * row}" fill="${mk.kind === "budget" ? "var(--focus)" : "var(--ink-2)"}">${esc(mk.label)}</text>`;
+  }).join("");
+  document.getElementById("timeline").innerHTML = `<svg viewBox="0 0 ${Wt} ${Ht}" role="img" aria-label="Grants by month with budget days marked">
+    ${y.ticks(4).map(t => `<line x1="${m.l}" x2="${Wt - m.r}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${m.l - 6}" y="${y(t) + 3}" text-anchor="end">${fmt$(t)}</text>`).join("")}
+    ${T.months.map((k, i) => `<rect x="${x(k)}" y="${y(T.values[i])}" width="${x.bandwidth()}" height="${y(0) - y(T.values[i])}" fill="${k > T.complete ? "var(--before)" : "var(--after)"}"><title>${k}: ${fmt$(T.values[i])}${k > T.complete ? " (still being reported)" : ""}</title></rect>`).join("")}
+    ${T.months.map((k, i) => i % 3 === 0 ? `<text x="${x(k) + x.bandwidth() / 2}" y="${Ht - m.b + 14}" text-anchor="middle">${MONTHS[+k.slice(5) - 1]} ${k.slice(0, 4)}</text>` : "").join("")}
+    ${marks}</svg>`;
+  document.getElementById("timelineNote").innerHTML = T.note;
+  if (C.timelineTitle) document.getElementById("timelineTitle").textContent = C.timelineTitle;
+}
+
+// ---- table ----
+const COLS = MODE === "budget" ? [
+  {k: "name", t: "Riding", f: n => esc(R[n].name)}, {k: "region", t: "Prov.", f: n => esc(C.regionShort[R[n].region] || R[n].region)},
+  {k: "rep", t: "MP", f: n => R[n].rep ? `${esc(R[n].rep)} ${pill(R[n].rep_party)}` : "Vacant"}, {k: "margin", t: "2025 margin", n: 1, f: n => R[n].margin_pts == null ? "–" : R[n].margin_pts + " pts", s: n => R[n].margin_pts ?? 999},
+  ...D.estimates.flatMap(b => [{k: b.key, t: `${b.name.replace(/ \(.*\)/, "")} est.`, n: 1, f: n => fmt$((b.by_riding[n] || {}).total), s: n => (b.by_riding[n] || {}).total || 0},
+    {k: b.key + "pc", t: "per person", n: 1, f: n => fmtPc((b.by_riding[n] || {}).pc), s: n => (b.by_riding[n] || {}).pc || 0}]),
+  {k: "named", t: "Named items", n: 1, f: n => (D.items[n] || []).length || "", s: n => (D.items[n] || []).length},
+] : [
+  {k: "name", t: "Riding", f: n => esc(R[n].name)}, {k: "region", t: "Prov.", f: n => esc(C.regionShort[R[n].region] || R[n].region)},
+  {k: "prev", t: "Previous MP", f: n => `${esc(D.be.ridings[n].previous_mp)} ${pill(D.be.ridings[n].previous_party)}`},
+  {k: "margin", t: "2025 margin", n: 1, f: n => R[n].margin_pts + " pts", s: n => R[n].margin_pts},
+  {k: "since", t: "Grants since election", n: 1, f: n => fmt$(D.be.ridings[n].grants_since), s: n => D.be.ridings[n].grants_since},
+  {k: "pc", t: "per person", n: 1, f: n => fmtPc(D.be.ridings[n].pc_since), s: n => D.be.ridings[n].pc_since},
+  {k: "rank", t: "Rank /343", n: 1, f: n => D.be.ridings[n].rank, s: n => -D.be.ridings[n].rank},
+  {k: "ct", t: "Contracts", n: 1, f: n => fmt$(D.be.ridings[n].contracts_after), s: n => D.be.ridings[n].contracts_after},
+  ...D.estimates.map(b => ({k: b.key, t: `${b.name.replace(/ \(.*\)/, "")} est.`, n: 1, f: n => fmt$((b.by_riding[n] || {}).total), s: n => (b.by_riding[n] || {}).total || 0})),
+];
+function tableRows() {
+  const q = state.q.toLowerCase();
+  const col = COLS.find(c => c.k === state.sort) || COLS[0];
+  const key = col.s || (n => String(col.f(n)).replace(/<[^>]+>/g, ""));
+  return Object.keys(R).filter(inFocus).filter(n => !q || `${R[n].name} ${R[n].rep} ${R[n].region}`.toLowerCase().includes(q))
+    .sort((a, b) => { const x = key(a), y = key(b); return (x < y ? -1 : x > y ? 1 : 0) * state.dir; });
+}
+function renderTable() {
+  document.getElementById("tableTitle").textContent = MODE === "budget" ? "All ridings" : "The six by-election ridings";
+  document.querySelector("#tbl thead").innerHTML = "<tr>" + COLS.map(c => `<th class="${c.n ? "n" : ""}" data-k="${c.k}">${c.t}${state.sort === c.k ? (state.dir < 0 ? " ▼" : " ▲") : ""}</th>`).join("") + "</tr>";
+  document.querySelector("#tbl tbody").innerHTML = tableRows().map(n => `<tr data-n="${n}" class="${n === state.sel ? "sel" : ""}">${COLS.map(c => `<td class="${c.n ? "n" : ""}">${c.f(n)}</td>`).join("")}</tr>`).join("");
+  document.querySelectorAll("#tbl th").forEach(th => th.onclick = () => { state.dir = state.sort === th.dataset.k ? -state.dir : -1; state.sort = th.dataset.k; renderTable(); });
+  document.querySelectorAll("#tbl tbody tr").forEach(tr => tr.onclick = () => { select(tr.dataset.n); zoomToRiding(tr.dataset.n); });
+}
+document.getElementById("q").oninput = e => { state.q = e.target.value; renderTable(); };
+document.getElementById("csvBtn").onclick = () => {
+  const strip = s => String(s).replace(/<[^>]+>/g, "").trim();
+  const lines = [COLS.map(c => c.t).join(",")].concat(tableRows().map(n => COLS.map(c => `"${strip(c.s ? c.s(n) : c.f(n)).replace(/"/g, '""')}"`).join(",")));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n")], {type: "text/csv"}));
+  a.download = (MODE === "budget" ? "budget_by_riding" : "byelection_ridings") + ".csv"; a.click();
+};
+
+// ---- budget page: the measures card ----
+function renderMeasures() {
+  const b = BUD[state.budget];
+  const ex = b.measures.filter(mz => mz.key.startsWith("excluded"));
+  const keyTotals = {};
+  for (const mz of b.measures) if (!mz.key.startsWith("excluded") && mz.net_millions > 0) { const k = mz.key.split(":")[0]; keyTotals[k] = (keyTotals[k] || 0) + mz.net_millions * 1e6; }
+  document.getElementById("extra").innerHTML = `<div class="card" style="margin-top:16px">
+    <h2>How ${esc(b.name)} was spread over the ridings</h2>
+    <p class="small muted">Tabled ${fmtDate(b.date)}. <a href="${b.url}" target="_blank" rel="noopener" style="color:var(--focus)">Budget documents</a>. Five-year totals (${esc(b.years)}), from the summary table at the end of each chapter.</p>
+    <div class="kpis"><div class="kpi"><div class="lab">Placed in ridings</div><div class="big">${fmt$(b.total_placed)}</div><div class="per">every new measure with money attached</div></div>
+      <div class="kpi"><div class="lab">Savings, revenues, money abroad (not placed)</div><div class="big">${fmt$(b.excluded)}</div><div class="per">${ex.length} lines</div></div>
+      <div class="kpi"><div class="lab">Budget's own net cost of new measures</div><div class="big">${fmt$(b.official_net)}</div><div class="per">placed + not placed; the lists reconcile</div></div></div>
+    ${stack(keyTotals, b.total_placed)}
+    <details class="more"><summary>Every measure, its five-year cost and how it was shared (${b.measures.length})</summary>
+    <div class="tablewrap" style="max-height:480px"><table class="mini"><thead><tr><th>Ch.</th><th>Measure</th><th class="n">Net, 5 yrs</th><th>Shared</th><th class="n">Ridings</th></tr></thead><tbody>
+    ${b.measures.slice().sort((a, c) => c.net_millions - a.net_millions).map(mz => `<tr><td>${mz.chapter}</td><td style="white-space:normal">${esc(mz.measure)}${mz.note ? `<br><span class="muted">${esc(mz.note)}</span>` : ""}</td><td class="n">${fmtM(mz.net_millions)}</td><td style="white-space:normal">${mz.key.startsWith("excluded") ? "not placed: " + esc(mz.key.split(":")[1]) : KEYNAME[mz.key.split(":")[0]] + (mz.key.includes(":") ? ": " + esc(mz.key.split(":")[1].replace(/\|/g, ", ")) : "")}</td><td class="n">${mz.ridings_reached || ""}</td></tr>`).join("")}
+    </tbody></table></div></details></div>`;
+}
+
+// ---- by-election page: one card per riding ----
+function grantLi(g) {
+  const u = recordUrl(g);
+  return `<li class="${g.in_source === false ? "gone" : ""}"><b>${fmt$(g.v)}</b> ${u ? `<a href="${u}" target="_blank" rel="noopener">${esc(g.who)}</a>` : esc(g.who)}${g.flag ? ` <span class="tag">${esc(C.flags[g.flag] || g.flag)}</span>` : ""}${g.late ? ' <span class="tag" title="Agreements this recent are still being reported by departments">recent</span>' : ""}${g.in_source === false ? ' <span class="tag">withdrawn from the open-data file; kept in our ledger</span>' : ""}${/approx/.test(g.how) ? ' <span class="tag">location approx.</span>' : ""}<br><span class="muted">${esc(g.prog)} · ${esc(g.dept)} · ${fmtDate(g.date)}${g.city ? " · " + esc(g.city) : ""}</span>${g.title ? `<br><span class="muted">${esc(g.title)}</span>` : ""}</li>`;
+}
+function monthBars(x) {
+  const months = D.timeline.months, vals = Object.fromEntries(x.by_month);
+  const Wm = 360, Hm = 70, bw = Wm / months.length, max = d3.max(months, k => vals[k] || 0) || 1;
+  const xd = d => { const i = months.indexOf(d.slice(0, 7)); return i < 0 ? null : (i + (+d.slice(8, 10) - 1) / 31) * bw; };
+  const mk = D.timeline.markers.concat([{date: x.vacated, label: "seat vacant", kind: "vacant"}]).map(mk => { const xm = xd(mk.date); return xm == null ? "" : `<line x1="${xm}" x2="${xm}" y1="0" y2="${Hm - 12}" stroke="${mk.kind === "budget" ? "var(--focus)" : "var(--ink)"}" ${mk.kind === "budget" ? "" : 'stroke-dasharray="2 2"'}><title>${esc(mk.label)}, ${fmtDate(mk.date)}</title></line>`; }).join("");
+  return `<svg class="spark" viewBox="0 0 ${Wm} ${Hm}" role="img" aria-label="Grants by month">${months.map((k, i) => { const v = vals[k] || 0, h = (Hm - 14) * v / max; return `<rect x="${(i * bw + 1).toFixed(1)}" y="${(Hm - 12 - h).toFixed(1)}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${h.toFixed(1)}" class="${k > D.timeline.complete ? "partial" : ""}"><title>${k}: ${fmt$(v)}</title></rect>`; }).join("")}${mk}
+    <text x="0" y="${Hm - 1}">${months[0]}</text><text x="${Wm}" y="${Hm - 1}" text-anchor="end">${months[months.length - 1]}</text></svg>`;
+}
+function renderByCards() {
+  const B = D.be;
+  const cards = C.focus.map(n => {
+    const x = B.ridings[n], r = R[n];
+    const topD = x.by_dept.slice(0, 8), dmax = topD.length ? topD[0][1] : 1;
+    const byVal = x.grants.slice().sort((a, b) => b.v - a.v);
+    return `<div class="card becard" id="be-${n}">
+      <h2>${esc(x.name)} <button type="button" class="linkbtn" onclick="select('${n}');zoomToRiding('${n}');document.getElementById('svg').scrollIntoView({behavior:'smooth'})">map</button></h2>
+      <div class="small muted">${esc(x.province)} · pop. ${x.population.toLocaleString()} · vacant since ${fmtDate(x.vacated)} · by-election ${fmtDate(B.meta.polling_day)}</div>
+      <p class="small" style="margin:6px 0">${esc(x.previous_mp)} ${pill(x.previous_party)}${x.sat_as ? ` <span class="tag">sat as ${esc(x.sat_as)}</span>` : ""}: ${esc(x.reason)}.</p>
+      ${resultBlock(r)}
+      <div class="kpis">
+        <div class="kpi"><div class="lab">Grants since the election</div><div class="big">${fmt$(x.grants_since)}</div><div class="per">${fmtPc(x.pc_since)}/person · #${x.rank} of ${B.meta.ridings_ranked}</div></div>
+        <div class="kpi"><div class="lab">Contracts, vendors billing here</div><div class="big">${fmt$(x.contracts_after)}</div><div class="per">${x.contracts_n} contracts to ${fmtDate(B.meta.cutoff)}</div></div>
+        ${x.estimates.map(e => `<div class="kpi"><div class="lab">${esc(e.name.replace(/ \(.*\)/, ""))}: estimated share</div><div class="big">${fmt$(e.total)}</div><div class="per">${fmtPc(e.pc)}/person over five years</div></div>`).join("")}
+      </div>
+      <div class="small muted">Grants by month (blue lines: budget days; dashed: election, seat vacant, polling day; pale bars: still being reported)</div>
+      ${monthBars(x)}
+      <h3 style="margin-top:10px">By department</h3>
+      <div class="deptbars">${topD.map(([d, v]) => `<div class="nm" title="${esc(d)}">${esc(d)}</div><div><div class="bar" style="width:${(100 * v / dmax).toFixed(1)}%"></div></div><div class="v">${fmt$(v)}</div>`).join("") || '<div class="muted">None</div>'}</div>
+      ${x.megas.length ? `<h3 style="margin-top:10px">Megacontracts ($100M+) billed from here</h3><ul class="grants">${x.megas.map(m => `<li><b>${fmt$(m.v)}</b> ${esc(m.who)}${m.v < m.full ? ` <span class="muted">(share of ${fmt$(m.full)})</span>` : ""}<br><span class="muted">${esc(m.dept)} · ${esc(m.desc || "")} · ${fmtDate(m.date)}</span></li>`).join("")}</ul>` : ""}
+      ${x.budget_items.length ? `<h3 style="margin-top:10px">Budget measures naming this riding</h3>${budgetItemsList(x.budget_items)}` : `<p class="small muted" style="margin-top:10px">No budget since the election names a project in this riding.</p>`}
+      <h3 style="margin-top:10px">Largest grants since the election</h3>
+      <ul class="grants">${byVal.slice(0, 8).map(grantLi).join("") || "<li class='muted'>None recorded</li>"}</ul>
+      ${x.grants.length > 8 ? `<details class="more"><summary>All ${x.grants.length.toLocaleString()} grants and contributions, newest first</summary><ul class="grants">${x.grants.map(grantLi).join("")}</ul></details>` : ""}
+      ${x.grants_dropped.length ? `<details class="more"><summary>${x.grants_dropped.length} records the government has since removed from the open-data file (kept here)</summary><ul class="grants">${x.grants_dropped.map(grantLi).join("")}</ul></details>` : ""}
+      ${x.contracts_top.length ? `<details class="more"><summary>Largest contracts billed from here</summary><ul class="grants">${x.contracts_top.map(c => `<li><b>${fmt$(c.v)}</b> ${esc(c.who)}<br><span class="muted">${esc(c.dept)} · ${esc(c.desc || "")} · ${fmtDate(c.date)}</span></li>`).join("")}</ul></details>` : ""}
+    </div>`;
+  }).join("");
+  const held = `<div class="card" style="margin-top:16px"><h2>By-elections already held since April 2025</h2>
+    <table class="mini"><tbody>${B.held.map(h => `<tr><td><a href="index.html#r=${h.num}" style="color:var(--focus)">${esc(h.name)}</a></td><td>${fmtDate(h.date)}</td><td>${esc(h.winner)} ${pill(h.party)}${h.party !== h.previous_party ? ' <span class="tag">gain</span>' : ""}</td></tr>`).join("")}</tbody></table>
+    <p class="fn">These seats are on the federal grants map; the links open each one.</p></div>`;
+  document.getElementById("extra").innerHTML = `<div class="becards">${cards}</div>${held}`;
+}
+
+function render() {
+  surfaceColor = css("--surface");
+  defs.selectAll("*").remove(); patterns.clear();
+  compute();
+  paths.attr("fill", d => fillFor(d.id));
+  insetPaths.forEach(ps => ps.attr("fill", d => fillFor(d.id)));
+  renderLegend(); renderTable();
+  if (MODE === "budget") renderMeasures(); else renderByCards();
+  if (state.sel) select(state.sel, true); else panelIdle();
+}
+renderTimeline();
+render();
+const fromHash = /#r=([^&]+)/.exec(location.hash);
+if (fromHash && R[decodeURIComponent(fromHash[1])] && inFocus(decodeURIComponent(fromHash[1]))) { select(decodeURIComponent(fromHash[1]), true); zoomToRiding(decodeURIComponent(fromHash[1])); }
+
+// ---- theme ----
+const themeBtn = document.getElementById("theme");
+function syncThemeBtn() { const d = isDark(); themeBtn.textContent = d ? "Light mode" : "Dark mode"; themeBtn.setAttribute("aria-pressed", d); }
+themeBtn.onclick = () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark"; applyPartyColors(); syncThemeBtn(); render(); };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { applyPartyColors(); syncThemeBtn(); render(); });
+syncThemeBtn();
+</script>

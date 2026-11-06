@@ -21,6 +21,12 @@ data/*/
 !data/news_queue.json
 !data/contracts_by_riding.json
 !data/budget_by_riding.json
+!data/budget_measures.json
+!data/byelections.json
+!data/ledger/
+data/build_warnings.txt
+data/ledger_counts.json.tmp
+data/ledger/*.tmp
 !data/news/
 !data/ab/
 !data/bc/
