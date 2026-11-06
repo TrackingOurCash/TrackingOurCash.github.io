@@ -310,10 +310,11 @@ def main():
     passing = [q for q in q_counts if q >= election_q and q_end(q) < date.today() and q_counts[q] >= 0.7 * q_counts[(q[0] - 1, q[1])]]
     cy, cq = max(passing)
     cutoff = date(cy + (cq == 3), (cq * 3 + 3) % 12 + 1, 1) - timedelta(days=1)
-    # "Before" is the same calendar dates one year earlier, so both windows hold the same season.
-    before_start = ELECTION.replace(year=ELECTION.year - 1)
-    before_end = cutoff.replace(year=cutoff.year - 1)
+    # "Before" is a window of the same length ending the day before the election. (It used to be the same dates one
+    # year earlier; once the "after" window passed a year, that overlapped it and counted post-election grants as "before".)
     span = (cutoff - ELECTION).days + 1
+    before_end = ELECTION - timedelta(days=1)
+    before_start = ELECTION - timedelta(days=span)
     years = span / 365.25
 
     per = {num: {"after": Counter(), "before": Counter(), "depts": Counter(), "grants": [], "series": Counter()} for num in ridings}

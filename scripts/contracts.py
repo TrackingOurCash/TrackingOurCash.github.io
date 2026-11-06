@@ -39,7 +39,7 @@ Method, in order:
      meta.foreign and never placed in a riding.
   5. Windows, cutoff and quarter labels are taken from data/riding_spending.json
      so both layers cover the same dates: "after" = election day to the cutoff,
-     "before" = the same calendar dates one year earlier. Per-person figures use
+     "before" = the same length of time just before the election. Per-person figures use
      data/ridings.json population and years_per_window.
 """
 import csv
