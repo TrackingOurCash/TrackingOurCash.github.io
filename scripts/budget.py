@@ -28,7 +28,9 @@ def norm(s):
     return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9 ]", " ", s)).strip()
 
 
-def main():
+def locator():
+    """place -> riding numbers, for "City, PR" names: the ridings holding at least a tenth of the
+    place's GeoNames postal codes (a city spread over several ridings returns them all)."""
     index = RidingIndex()
     places = defaultdict(list)
     with open(RAW / "geonames" / "CA_full.txt", encoding="utf-8", newline="") as f:
@@ -49,7 +51,11 @@ def main():
         total = sum(hits.values())
         # Ridings holding at least a tenth of the city's postal codes count as "in the city".
         return [n for n, c in hits.most_common() if c >= 0.1 * total] or list(hits)[:1]
+    return ridings_for
 
+
+def main():
+    ridings_for = locator()
     src = json.load(open(DATA / "budget_items.json"))
     by_riding = defaultdict(list)
     unplaced = []

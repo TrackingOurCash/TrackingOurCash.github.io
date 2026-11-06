@@ -1,0 +1,941 @@
+{
+ "as_of": "2026-11-06",
+ "method": "Each measure in the budget's chapter summary tables, net of the 'Less:' lines under it, is shared among ridings by one key. pop: by population. prov: by population within the named provinces. dept: by each riding's share of that department's grants and contributions in the two years around the 2025 election (both windows). cdept: by that department's contracts since the election. places: equally among the ridings of the named places. excluded: savings, revenues, accounting lines and money spent abroad are listed but not placed.",
+ "groups": {
+  "RDA": [
+   "Innovation, Science and Economic Development Canada",
+   "Canada Economic Development for Quebec Regions",
+   "Prairies Economic Development Canada",
+   "Atlantic Canada Opportunities Agency",
+   "Federal Economic Development Agency for Southern Ontario",
+   "Pacific Economic Development Canada",
+   "Federal Economic Development Agency for Northern Ontario",
+   "Canadian Northern Economic Development Agency"
+  ],
+  "ISED": [
+   "Innovation, Science and Economic Development Canada"
+  ],
+  "NRCan": [
+   "Natural Resources Canada"
+  ],
+  "NRC": [
+   "National Research Council Canada"
+  ],
+  "TC": [
+   "Transport Canada"
+  ],
+  "ECCC": [
+   "Environment and Climate Change Canada"
+  ],
+  "HICC": [
+   "Department of Housing, Infrastructure and Communities"
+  ],
+  "AAFC": [
+   "Agriculture and Agri-Food Canada"
+  ],
+  "DFO": [
+   "Fisheries and Oceans Canada"
+  ],
+  "ESDC": [
+   "Employment and Social Development Canada"
+  ],
+  "HC": [
+   "Health Canada"
+  ],
+  "PHAC": [
+   "Public Health Agency of Canada"
+  ],
+  "PCH": [
+   "Canadian Heritage"
+  ],
+  "Parks": [
+   "Parks Canada"
+  ],
+  "Justice": [
+   "Department of Justice Canada"
+  ],
+  "PS": [
+   "Public Safety Canada"
+  ],
+  "VAC": [
+   "Veterans Affairs Canada"
+  ],
+  "CIHR": [
+   "Canadian Institutes of Health Research"
+  ],
+  "Indigenous": [
+   "Indigenous Services Canada",
+   "Crown-Indigenous Relations and Northern Affairs Canada"
+  ],
+  "Research": [
+   "Natural Sciences and Engineering Research Council of Canada",
+   "Social Sciences and Humanities Research Council of Canada",
+   "Canadian Institutes of Health Research"
+  ],
+  "AgriFish": [
+   "Agriculture and Agri-Food Canada",
+   "Fisheries and Oceans Canada"
+  ]
+ },
+ "budgets": [
+  {
+   "key": "B2025",
+   "name": "Budget 2025 (Canada Strong)",
+   "date": "2025-11-04",
+   "url": "https://budget.canada.ca/2025/report-rapport/toc-tdm-en.html",
+   "years": "2025-26 to 2029-30",
+   "measures": [
+    {
+     "chapter": 1,
+     "measure": "Launching the Major Projects Office",
+     "net_millions": 244,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Productivity Super-Deduction",
+     "net_millions": 1490,
+     "key": "pop",
+     "note": "Business tax measure."
+    },
+    {
+     "chapter": 1,
+     "measure": "SR&ED tax incentives",
+     "net_millions": 293,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Artificial intelligence; intellectual property; high-growth companies",
+     "net_millions": 388,
+     "key": "dept:ISED",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Immigration levels plan; forgone revenues; clean economy tax credits; financial system",
+     "net_millions": 330,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Recruiting international talent",
+     "net_millions": 879,
+     "key": "dept:Research",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Catalysing investment in airports and ports",
+     "net_millions": 55,
+     "key": "dept:TC",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Generational Infrastructure Investments",
+     "net_millions": 9027,
+     "key": "dept:HICC",
+     "note": "Net of $11.1B already provisioned."
+    },
+    {
+     "chapter": 1,
+     "measure": "Supporting critical minerals projects",
+     "net_millions": 585,
+     "key": "dept:NRCan",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Improving VIA Rail service in the Corridor",
+     "net_millions": 8,
+     "key": "prov:Ontario|Quebec",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Medical school infrastructure (TMU, Brampton)",
+     "net_millions": 25,
+     "key": "places:Brampton, ON",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Landfill methane regulations",
+     "net_millions": 15,
+     "key": "dept:ECCC",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Strategic industries: agriculture, fish and seafood",
+     "net_millions": 464,
+     "key": "dept:AgriFish",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Strategic industries: forestry",
+     "net_millions": 859,
+     "key": "dept:NRCan",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Strategic industries: equipping companies for growth; access to financing; backing businesses in new markets",
+     "net_millions": 5820,
+     "key": "dept:RDA",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Strategic industries: supporting workers",
+     "net_millions": 4939,
+     "key": "dept:ESDC",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Becoming our own best customer; trade connections and finance; steel trade controls",
+     "net_millions": 207,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "A new Trade Infrastructure Strategy",
+     "net_millions": 4150,
+     "key": "dept:TC",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Increasing food exports",
+     "net_millions": 94,
+     "key": "dept:AAFC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Launching Build Canada Homes",
+     "net_millions": 6696,
+     "key": "dept:HICC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Eliminating the GST for first-time home buyers",
+     "net_millions": 3910,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Training the next generation of builders; youth jobs; Youth Climate Corps",
+     "net_millions": 1633,
+     "key": "dept:ESDC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "First Nations infrastructure financing and clean water",
+     "net_millions": 2331,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Middle-class tax cut",
+     "net_millions": 27245,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Cancelling the consumer carbon price",
+     "net_millions": 4185,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Automatic federal benefits; school food; personal support workers; disability benefit; top-up tax credit; EI bereavement",
+     "net_millions": 739,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Protecting workers against improper classification (net of revenues)",
+     "net_millions": -83,
+     "key": "excluded:revenue",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Women and Gender Equality; CBC/Radio-Canada; Canada Strong Pass",
+     "net_millions": 794,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Cultural experiences and celebrations; Canadian creators",
+     "net_millions": 503,
+     "key": "dept:PCH",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "FIFA Men's World Cup 2026 (Toronto and Vancouver host cities)",
+     "net_millions": 100,
+     "key": "places:Toronto, ON|Vancouver, BC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Terry Fox Research Institute",
+     "net_millions": 80,
+     "key": "places:Vancouver, BC",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Rebuilding, rearming and reinvesting in the Canadian Armed Forces",
+     "net_millions": 55883,
+     "key": "cdept:National Defence",
+     "note": "Placed where DND's contract vendors bill from; bases and payroll are not in the contract file."
+    },
+    {
+     "chapter": 4,
+     "measure": "A new Defence Investment Agency",
+     "net_millions": 71,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Operations REASSURANCE and AMARNA",
+     "net_millions": 2830,
+     "key": "excluded:abroad",
+     "note": "Spent on deployments abroad."
+    },
+    {
+     "chapter": 4,
+     "measure": "Federal law enforcement; CBSA; Meteorological Service; public alerting; preclearance; firearms; asylum",
+     "net_millions": 3832,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Strengthening Canada's emergency management",
+     "net_millions": 258,
+     "key": "dept:PS",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Workforce renewal; tax-system efficiency; administration funding; advertising; other",
+     "net_millions": 2694,
+     "key": "pop",
+     "note": "Federal administration."
+    },
+    {
+     "chapter": 5,
+     "measure": "Faster services for veterans",
+     "net_millions": 185,
+     "key": "dept:VAC",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Comprehensive Expenditure Review and other savings",
+     "net_millions": -59569,
+     "key": "excluded:saving",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Less: unrealized Budget 2024 savings",
+     "net_millions": 5510,
+     "key": "excluded:accounting",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Home Accessibility Tax Credit change",
+     "net_millions": -21,
+     "key": "excluded:saving",
+     "note": ""
+    }
+   ],
+   "official_net_by_chapter": {
+    "1": 13339,
+    "2": 16534,
+    "3": 48132,
+    "4": 62875,
+    "5": -51202
+   }
+  },
+  {
+   "key": "B2026",
+   "name": "Budget 2026 (Masters of Our Destiny)",
+   "date": "2026-11-05",
+   "url": "https://budget.canada.ca/2026/report-rapport/toc-tdm-en.html",
+   "years": "2026-27 to 2030-31",
+   "measures": [
+    {
+     "chapter": 1,
+     "measure": "Kickstarting Canada's Investment Supercycle with the Productivity Mega Deduction",
+     "net_millions": 36055,
+     "key": "pop",
+     "note": "Business tax measure; no published regional split, so shared per person."
+    },
+    {
+     "chapter": 1,
+     "measure": "Backing Canada's next generation of entrepreneurs",
+     "net_millions": 715,
+     "key": "dept:RDA",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Helping Canadian innovators scale at home",
+     "net_millions": 94,
+     "key": "dept:ISED",
+     "note": "Net of $56M already provisioned."
+    },
+    {
+     "chapter": 1,
+     "measure": "Boosting innovation and commercialisation",
+     "net_millions": 936,
+     "key": "dept:NRC|ISED",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Canada Investment Summit",
+     "net_millions": 181,
+     "key": "dept:ISED",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Mobilising private investment to modernise Canada's airports",
+     "net_millions": 42,
+     "key": "dept:TC",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Powering Canada Strong",
+     "net_millions": 8747,
+     "key": "dept:NRCan",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Growing Canada's nuclear advantage",
+     "net_millions": 419,
+     "key": "dept:NRCan",
+     "note": "Net of projected revenues."
+    },
+    {
+     "chapter": 1,
+     "measure": "Expanding electric vehicle charging infrastructure",
+     "net_millions": 553,
+     "key": "dept:NRCan",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Bringing critical minerals from mine to market",
+     "net_millions": 1348,
+     "key": "dept:NRCan",
+     "note": "Net of $200M provisioned and $113M projected revenues."
+    },
+    {
+     "chapter": 1,
+     "measure": "Strengthening Canada's forest sector",
+     "net_millions": 2216,
+     "key": "dept:NRCan",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Advancing Canada's climate competitiveness",
+     "net_millions": 185,
+     "key": "dept:ECCC",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Arctic offshore oil and gas governance; GeoNorth; northern economic development (CanNor)",
+     "net_millions": 116,
+     "key": "prov:Yukon|Northwest Territories|Nunavut",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Polar Knowledge Canada (Canadian High Arctic Research Station)",
+     "net_millions": 105,
+     "key": "places:Cambridge Bay, NU",
+     "note": "Net of $145M from existing resources."
+    },
+    {
+     "chapter": 1,
+     "measure": "NRC IRAP Clean Technology renewal",
+     "net_millions": 298,
+     "key": "dept:NRC",
+     "note": ""
+    },
+    {
+     "chapter": 1,
+     "measure": "Standards Council, Infrastructure Council, financial-system digital transformation",
+     "net_millions": 9,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Major projects management entity (Mackenzie Valley Highway, Taltson Hydro)",
+     "net_millions": 187,
+     "key": "prov:Northwest Territories",
+     "note": "The budget says the entity begins support for two NWT projects."
+    },
+    {
+     "chapter": 2,
+     "measure": "Mackenzie Valley Highway",
+     "net_millions": 3100,
+     "key": "prov:Northwest Territories",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Modernising trade systems – digital trade",
+     "net_millions": 51,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Supporting Canadian workers and businesses – Ontario steel, auto and critical minerals (incl. Ring of Fire)",
+     "net_millions": 6100,
+     "key": "prov:Ontario",
+     "note": "The budget names $6.1B of the tariff response for Ontario."
+    },
+    {
+     "chapter": 2,
+     "measure": "Supporting Canadian workers and businesses – rest of the tariff response",
+     "net_millions": 5224,
+     "key": "dept:RDA|ESDC",
+     "note": "$11.3B net in the table minus the $6.1B named for Ontario."
+    },
+    {
+     "chapter": 2,
+     "measure": "Supporting a more competitive wine sector",
+     "net_millions": 177,
+     "key": "dept:AAFC",
+     "note": ""
+    },
+    {
+     "chapter": 2,
+     "measure": "Major Projects Office resources; supply chain data",
+     "net_millions": 143,
+     "key": "pop",
+     "note": "Federal administration."
+    },
+    {
+     "chapter": 3,
+     "measure": "Providing more help with groceries and everyday essentials",
+     "net_millions": 4665,
+     "key": "pop",
+     "note": "Benefit paid to households; shared per person."
+    },
+    {
+     "chapter": 3,
+     "measure": "Strengthening support for workers earning low wages",
+     "net_millions": 2060,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Making the Canada Caregiver Credit refundable",
+     "net_millions": 845,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Lowering costs at the pump (fuel excise tax relief)",
+     "net_millions": 2870,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Home retrofits: National Heat Pump Rebate Program",
+     "net_millions": 1339,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Securing a Canada-wide early learning and child care system",
+     "net_millions": 5416,
+     "key": "pop",
+     "note": "Transfers to provinces; shared per person."
+    },
+    {
+     "chapter": 3,
+     "measure": "Pillar 1: Putting Canada on a path to end homelessness (incl. $1B+ Winnipeg)",
+     "net_millions": 11224,
+     "key": "dept:HICC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Pillar 2: Expand non-market housing",
+     "net_millions": 1498,
+     "key": "dept:HICC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Turning federal lands and buildings into homes",
+     "net_millions": 1550,
+     "key": "dept:HICC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Pillar 3: Building a housing market that works for all",
+     "net_millions": 468,
+     "key": "dept:HICC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "National Food Security Strategy; Local Food Infrastructure Fund",
+     "net_millions": 1709,
+     "key": "dept:AAFC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Improving access to mental health and home and community care",
+     "net_millions": 1200,
+     "key": "pop",
+     "note": "Transfers to provinces."
+    },
+    {
+     "chapter": 3,
+     "measure": "Renewing the Emergency Treatment Fund",
+     "net_millions": 100,
+     "key": "dept:HC",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Helping workers build skills; tariff-affected workers; Migrant Worker Support",
+     "net_millions": 512,
+     "key": "dept:ESDC",
+     "note": "Net of $192M from existing resources."
+    },
+    {
+     "chapter": 3,
+     "measure": "Immigration, asylum, biometrics, FHSA administration, vaccine injury, autism, medications, mortgages, Team Canada Strong",
+     "net_millions": 527,
+     "key": "pop",
+     "note": "Federal administration and small national programs."
+    },
+    {
+     "chapter": 4,
+     "measure": "Celebrating Canada's 160th anniversary; Canadian stories, journalism and media; journalism tax credit; Francophone culture; Canada Council; sport",
+     "net_millions": 2235,
+     "key": "dept:PCH",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Revitalising recreational facilities and ice rinks",
+     "net_millions": 680,
+     "key": "dept:HICC",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Canada Strong Pass, free national museums for under-25s, national museums and heritage institutions",
+     "net_millions": 511,
+     "key": "pop",
+     "note": "Mostly national museums in the capital region, but the pass benefits visitors from everywhere."
+    },
+    {
+     "chapter": 4,
+     "measure": "National Field of Honour; RCMP Heritage Centre",
+     "net_millions": 27,
+     "key": "places:Pointe-Claire, QC|Regina, SK",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Supporting Canada's national parks and historic sites; conserving oceans (new marine conservation areas)",
+     "net_millions": 413,
+     "key": "dept:Parks",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Investing in our oceans; aquatic invasive species",
+     "net_millions": 1224,
+     "key": "dept:DFO",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Ferry services and remote passenger rail",
+     "net_millions": 1341,
+     "key": "places:Belfast, PE|Pictou, NS|Cap-aux-Meules, QC|Digby, NS|Saint John, NB",
+     "note": "Ferry Services Contribution Program routes: Wood Islands–Caribou, Souris–Îles-de-la-Madeleine, Saint John–Digby."
+    },
+    {
+     "chapter": 4,
+     "measure": "First Nations clean water infrastructure and legislation",
+     "net_millions": 4611,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "First Nations housing and infrastructure: stabilise, accelerate, transform financing",
+     "net_millions": 7913,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Supporting student success in First Nations communities",
+     "net_millions": 4796,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Supporting Indigenous children and families (Jordan's Principle, child and family services)",
+     "net_millions": 5253,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Strengthening health and safety in Indigenous communities",
+     "net_millions": 3998,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Indigenous fiscal capacity, justice, land surveys, reserve lands, Section 35 negotiations, youth sport, Dechinta",
+     "net_millions": 307,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Gender equality, Black Justice Strategy, 2SLGBTQI+ projects, Kids Help Phone, Terry Fox awards",
+     "net_millions": 307,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Canadian Air Transport Security Authority operations",
+     "net_millions": 776,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Circular economy for plastics",
+     "net_millions": 76,
+     "key": "dept:ECCC",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Brain Canada Foundation",
+     "net_millions": 24,
+     "key": "dept:CIHR",
+     "note": ""
+    },
+    {
+     "chapter": 4,
+     "measure": "Faster services for veterans; veterans' well-being",
+     "net_millions": 119,
+     "key": "dept:VAC",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Advancing the Defence Drone Initiative",
+     "net_millions": 382,
+     "key": "cdept:National Defence",
+     "note": "Net of $1,028M already provisioned."
+    },
+    {
+     "chapter": 5,
+     "measure": "Expanding Operation REASSURANCE",
+     "net_millions": 0,
+     "key": "excluded:abroad",
+     "note": "Fully funded from existing resources, and spent abroad."
+    },
+    {
+     "chapter": 5,
+     "measure": "Supporting CAF members and families after the Wainwright tragedy",
+     "net_millions": 28,
+     "key": "places:Wainwright, AB",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Strengthening Canada's defence industrial base",
+     "net_millions": -39,
+     "key": "excluded:net zero",
+     "note": "Redirected from previously announced funding."
+    },
+    {
+     "chapter": 5,
+     "measure": "Protecting Canada through sovereign intelligence; online safety; anti-fraud; tax evasion; other security measures",
+     "net_millions": 880,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Delivering the benefits of AI for all Canadians – AI for All",
+     "net_millions": 2038,
+     "key": "dept:ISED",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Global Partnership on AI centre in Montréal",
+     "net_millions": 6,
+     "key": "places:Montréal, QC",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Supporting the Canadian Centre for Child Protection",
+     "net_millions": 8,
+     "key": "places:Winnipeg, MB",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Engaging communities and preventing violence",
+     "net_millions": 64,
+     "key": "dept:PS",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Supporting victims of crime and reducing repeat offending",
+     "net_millions": 49,
+     "key": "dept:Justice",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Addressing gender-based violence (bilateral agreements)",
+     "net_millions": 607,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Preparing for and responding to wildfires",
+     "net_millions": 8,
+     "key": "dept:NRCan",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Strengthening emergency preparedness in First Nations communities",
+     "net_millions": 2710,
+     "key": "dept:Indigenous",
+     "note": ""
+    },
+    {
+     "chapter": 6,
+     "measure": "Simplifying taxes, connecting people to benefits, easier business",
+     "net_millions": 1391,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 6,
+     "measure": "AI in government, modernising benefits, border infrastructure",
+     "net_millions": 799,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 6,
+     "measure": "GST/HST health measures; interest deductibility for rental housing; other tax and operations items",
+     "net_millions": 1080,
+     "key": "pop",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Phasing out of advance payments",
+     "net_millions": -3082,
+     "key": "excluded:saving",
+     "note": ""
+    },
+    {
+     "chapter": 3,
+     "measure": "Projected EI premium revenues",
+     "net_millions": -2188,
+     "key": "excluded:revenue",
+     "note": ""
+    },
+    {
+     "chapter": 5,
+     "measure": "Protecting against catastrophic earthquake risks",
+     "net_millions": -154,
+     "key": "excluded:saving",
+     "note": ""
+    },
+    {
+     "chapter": 6,
+     "measure": "Fines, tax compliance, public service savings, Canada Post, registered pension plans",
+     "net_millions": -2232,
+     "key": "excluded:saving",
+     "note": ""
+    },
+    {
+     "chapter": 6,
+     "measure": "Less: amounts provisioned in Budget 2025 for future reviews",
+     "net_millions": 2064,
+     "key": "excluded:accounting",
+     "note": "An accounting reversal of Budget 2025 savings, not new spending."
+    }
+   ],
+   "official_net_by_chapter": {
+    "1": 52018,
+    "2": 14983,
+    "3": 30715,
+    "4": 34613,
+    "5": 6593,
+    "6": 3091
+   }
+  }
+ ]
+}

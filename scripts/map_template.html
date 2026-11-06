@@ -1192,6 +1192,17 @@ const perPeriodRaw = (r, i) => {
   return state.money === "contracts" ? c : state.money === "both" ? g + c : g;
 };
 const perPeriodPc = (r, i) => perPeriodRaw(r, i) / r.population / PERIOD_YEARS;
+// Budget Day and other dated markers (C.markers: [{date, label}]) as a fractional position on the series:
+// the period's index plus how far into the period the date falls, centred like the points (-0.5 to +0.5).
+function markerPos(date) {
+  if (!SER || SER.kind !== "quarter") return null;
+  const [y, m, d] = date.split("-").map(Number), q = Math.floor((m - 1) / 3);
+  const i = SER.labels.indexOf(`${y}Q${q + 1}`);
+  if (i < 0) return null;
+  const start = Date.UTC(y, q * 3, 1), end = Date.UTC(y + (q === 3 ? 1 : 0), (q * 3 + 3) % 12, 1);
+  return i + (Date.UTC(y, m - 1, d) - start) / (end - start) - 0.5;
+}
+const MARKERS = (C.markers || []).map(mk => ({...mk, pos: markerPos(mk.date)})).filter(mk => mk.pos != null);
 function sparkline(r) {
   if (!SER || !r.series) return "";
   const n = SER.labels.length, W = 300, H = 46, bw = W / n;
@@ -1199,7 +1210,8 @@ function sparkline(r) {
   const y = v => 36 - 32 * v / max;
   const bars = vals.map((v, i) => `<rect x="${(i * bw + 1).toFixed(1)}" y="${y(v).toFixed(1)}" width="${Math.max(1, bw - 2).toFixed(1)}" height="${(36 - y(v)).toFixed(1)}" class="${i >= SER.complete ? "partial" : ""}"><title>${SER.labels[i]}: ${fmtPc(v)} per person per year${i >= SER.complete ? " (still being reported)" : ""}</title></rect>`).join("");
   const el = SER.election_index >= 0 ? `<line class="el" x1="${((SER.election_index + 1) * bw).toFixed(1)}" x2="${((SER.election_index + 1) * bw).toFixed(1)}" y1="2" y2="38"/>` : "";
-  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Spending by ${SER.kind} in this ${C.level}">${bars}${el}
+  const mks = MARKERS.map(mk => { const xm = ((mk.pos + 0.5) * bw).toFixed(1); return `<line x1="${xm}" x2="${xm}" y1="2" y2="38" stroke="var(--focus)" stroke-width="1.2"><title>${mk.label}, ${mk.date}</title></line>`; }).join("");
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Spending by ${SER.kind} in this ${C.level}">${bars}${el}${mks}
     <text x="0" y="45">${SER.labels[0]}</text><text x="${W}" y="45" text-anchor="end">${SER.labels[n - 1]}</text>
     <text x="${W / 2}" y="45" text-anchor="middle">peak ${fmtPc(max)}/person/yr</text></svg>`;
 }
@@ -1233,8 +1245,9 @@ function renderTrend() {
     ${lines.map(l => `<path d="${line(l.v)}" fill="none" stroke="${lc(l.p)}" stroke-width="2.2"><title>${PARTY[l.p]}</title></path>`).join("")}
     ${lines.map(l => `<circle cx="${x(n - 1)}" cy="${y(l.v[n - 1])}" r="3" fill="${lc(l.p)}"/>`).join("")}
     ${el}
+    ${MARKERS.map((mk, k) => { const step = n > 1 ? x(1) - x(0) : 0, xm = x(0) + mk.pos * step; const end = xm + 7 * (mk.short || mk.label).length > W - m.r; return `<line x1="${xm}" x2="${xm}" y1="${m.t}" y2="${H - m.b}" stroke="var(--focus)" stroke-width="1.4"/><text x="${end ? xm - 4 : xm + 4}" text-anchor="${end ? "end" : "start"}" y="${m.t + 22 + 12 * (k % 3)}" font-size="11" fill="var(--focus)">${mk.short || mk.label}</text>`; }).join("")}
   </svg>
-  <div class="swl small" style="margin-top:6px">${lines.map(l => `<span><span class="sw" style="background:${lc(l.p)}"></span>${PARTY[l.p]} ${C.levelPlural}</span>`).join("")}<span><svg width="22" height="8" aria-hidden="true" style="vertical-align:middle"><line x1="1" y1="4" x2="21" y2="4" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3"/></svg> all ${C.levelPlural}${total ? " (sum)" : " (median)"}</span></div>`;
+  <div class="swl small" style="margin-top:6px">${lines.map(l => `<span><span class="sw" style="background:${lc(l.p)}"></span>${PARTY[l.p]} ${C.levelPlural}</span>`).join("")}<span><svg width="22" height="8" aria-hidden="true" style="vertical-align:middle"><line x1="1" y1="4" x2="21" y2="4" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 3"/></svg> all ${C.levelPlural}${total ? " (sum)" : " (median)"}</span>${MARKERS.length ? `<span><svg width="10" height="12" aria-hidden="true" style="vertical-align:middle"><line x1="5" y1="0" x2="5" y2="12" stroke="var(--focus)" stroke-width="1.6"/></svg> ${MARKERS.map(mk => `${mk.label} (${mk.date})`).join(" · ")}</span>` : ""}</div>`;
   document.getElementById("trendNote").innerHTML = (total ? `Every dollar placed in the ${C.levelPlural} each party holds today, per ${SER.kind} (adjusted totals: flagged bodies left out, no department filter); a party with more seats naturally has a taller line, so switch to per person to compare fairly.` : `Median ${C.level} held by each party today, dollars per person per year in each ${SER.kind} (adjusted totals: flagged bodies left out, no department filter), so a spike in one ${SER.kind} stands out against the before/after averages.`) + `  ${SER.complete < n ? `The shaded ${SER.kind}${n - SER.complete > 1 ? "s are" : " is"} still being reported, which is the lag the main map waits out.` : ""} ${SER.kind === "quarter" ? "Big one-time agreements land in the quarter they are signed, so a tall spike is usually one award." : "Statements carry no dates, so the series is by fiscal year."}`;
 }
 

@@ -1,0 +1,28 @@
+{
+ "as_of": "2026-11-06",
+ "note": "Hand-kept list. The six seats vacant on 1 November 2026, when the by-elections were called for 7 December 2026. Refresh after polling day: move them to \"held\" with the winner.",
+ "sources": [
+  {"name": "Elections Canada news releases (seat vacant, by-elections under way)", "url": "https://www.elections.ca/content.aspx?section=med&dir=pre&document=index&lang=e"},
+  {"name": "Prime Minister calls six federal by-elections for December 7 (CTV News)", "url": "https://www.ctvnews.ca/canada/article/prime-minister-mark-carney-calls-six-federal-byelections-for-december/"},
+  {"name": "By-elections to the 45th Canadian Parliament (Wikipedia)", "url": "https://en.wikipedia.org/wiki/By-elections_to_the_45th_Canadian_Parliament"}
+ ],
+ "polling_day": "2026-12-07",
+ "called": "2026-11-01",
+ "upcoming": [
+  {"num": "24066", "name": "Saint-Hyacinthe—Bagot—Acton", "province": "Quebec", "vacated": "2026-06-22", "previous_mp": "Simon-Pierre Savard-Tremblay", "previous_party": "BQ", "sat_as": "Independent (elected Bloc Québécois)", "reason": "Resigned to run for the Parti Québécois provincially"},
+  {"num": "35095", "name": "Scarborough North", "province": "Ontario", "vacated": "2026-08-15", "previous_mp": "Shaun Chen", "previous_party": "LPC", "reason": "Resigned for health reasons"},
+  {"num": "24065", "name": "Rosemont—La Petite-Patrie", "province": "Quebec", "vacated": "2026-08-26", "previous_mp": "Alexandre Boulerice", "previous_party": "NDP", "sat_as": "Independent (elected NDP)", "reason": "Resigned to run for Québec solidaire provincially"},
+  {"num": "24037", "name": "Laurier—Sainte-Marie", "province": "Quebec", "vacated": "2026-08-28", "previous_mp": "Steven Guilbeault", "previous_party": "LPC", "reason": "Resigned to pursue climate work outside Parliament"},
+  {"num": "47014", "name": "Yorkton—Melville", "province": "Saskatchewan", "vacated": "2026-08-31", "previous_mp": "Cathay Wagantall", "previous_party": "CPC", "reason": "Resigned for personal reasons"},
+  {"num": "35015", "name": "Brantford—Brant South—Six Nations", "province": "Ontario", "vacated": "2026-09-18", "previous_mp": "Larry Brock", "previous_party": "CPC", "reason": "Resigned to return to the Crown attorney's office"}
+ ],
+ "held": [
+  {"num": "48002", "name": "Battle River—Crowfoot", "date": "2025-08-18", "winner": "Pierre Poilievre", "party": "CPC", "previous_party": "CPC"},
+  {"num": "35112", "name": "University—Rosedale", "date": "2026-04-13", "winner": "Danielle Martin", "party": "LPC", "previous_party": "LPC"},
+  {"num": "35096", "name": "Scarborough Southwest", "date": "2026-04-13", "winner": "Doly Begum", "party": "LPC", "previous_party": "LPC"},
+  {"num": "24073", "name": "Terrebonne", "date": "2026-04-13", "winner": "Tatiana Auguste", "party": "LPC", "previous_party": "LPC"},
+  {"num": "24018", "name": "Chicoutimi—Le Fjord", "date": "2026-08-31", "winner": "Daniel Gobeil", "party": "LPC", "previous_party": "CPC"},
+  {"num": "35007", "name": "Beaches—East York", "date": "2026-08-31", "winner": "Tanveer Shahnawaz", "party": "LPC", "previous_party": "LPC"},
+  {"num": "59022", "name": "North Vancouver—Capilano", "date": "2026-08-31", "winner": "Braeden Caley", "party": "LPC", "previous_party": "LPC"}
+ ]
+}

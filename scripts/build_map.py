@@ -5,14 +5,18 @@
 plus CSV exports of each table.
 """
 import csv
+import gzip
 import json
+import re
+from collections import defaultdict
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 OUTDIR = ROOT / "output"
 
-NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "bc.html", "label": "British Columbia"}, {"href": "alberta.html", "label": "Alberta"},
+NAV = [{"href": "index.html", "label": "Federal ridings"}, {"href": "budget.html", "label": "Budget by riding"}, {"href": "byelections.html", "label": "By-election ridings"}, {"href": "bc.html", "label": "British Columbia"}, {"href": "alberta.html", "label": "Alberta"},
        {"href": "saskatchewan.html", "label": "Saskatchewan"}, {"href": "manitoba.html", "label": "Manitoba"}, {"href": "ontario.html", "label": "Ontario"},
        {"href": "quebec.html", "label": "Quebec"}, {"href": "nb.html", "label": "New Brunswick"}, {"href": "pei.html", "label": "PEI"}, {"href": "ns.html", "label": "Nova Scotia"}, {"href": "nl.html", "label": "Newfoundland"},
        {"href": "yukon.html", "label": "Yukon"}, {"href": "nwt.html", "label": "NWT"}, {"href": "nunavut.html", "label": "Nunavut"},
@@ -189,12 +193,146 @@ def federal():
                                + " for every measure that names a place, then locating that place in a riding. Budgets name few places: most measures are national programs, "
                                "and the money reaches ridings later through departmental grants, which is what the map colours show. "
                                f"Items with no amount are projects the budget names without a dollar figure. {budget['next']}")
+    config["markers"] = budget_markers()
     config["legislatureInGrid"] = True  # the federal inset grid has room for it
     payload = {"config": config, "meta": m, "groups": sp["groups"], "ridings": ridings, "dept": sp["dept_by_riding"], "budget": budget,
                "legislature": legislature_for("Canada"),
                "deptBefore": sp["dept_by_riding_before"], "recipients": sp.get("recipients", []), "contracts": contracts_payload, "geo": json.load(open(DATA / "ridings_geo.json")), "land": land_for(config["insets"]),
                "geoFine": json.load(open(DATA / "ridings_geo_fine.json")) if (DATA / "ridings_geo_fine.json").exists() else {"features": []}}
     return payload, sp["ridings"]
+
+
+def budget_markers():
+    """Budget days (and the spring update) for the timelines: [{date, label, short}]."""
+    docs = json.load(open(DATA / "budget_items.json"))["documents"] if (DATA / "budget_items.json").exists() else []
+    return [{"date": d["date"], "label": d["name"].replace(" (", ": ").rstrip(")"), "short": re.sub(r" \(.*", "", d["name"]).replace("Spring Economic Update", "Spring update")} for d in docs]
+
+
+PARTIES = None  # filled from the federal config on first use
+
+
+def basic_ridings(sp):
+    """The riding fields the special pages need (no grant lists)."""
+    return {n: {"num": n, "name": r["current_name"], "region": r["province"], "population": r["population"], "party_won": r["party_2025"],
+                "runnerup_party": r["runnerup_party_2025"], "winner": r["winner_2025"], "runnerup": r["runnerup_2025"], "rep": r["mp"] or "",
+                "rep_party": r["mp_party"] or "", "margin_votes": r["margin_votes"], "margin_pts": r["margin_pts"], "close": r["margin_pts"] is not None and r["margin_pts"] < 10,
+                "shares": r["shares_2025"]} for n, r in sp["ridings"].items()}
+
+
+def ledger_summary(sp):
+    """From the grants ledger: adjusted dollars since the election by riding, and by month nationally."""
+    path = DATA / "ledger" / "federal_grants_since_election.csv.gz"
+    since, months = defaultdict(float), defaultdict(float)
+    if path.exists():
+        with gzip.open(path, "rt", encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                if r["in_source"] != "1" or r["flag"]:
+                    continue
+                v = float(r["value"] or 0)
+                months[r["start"][:7]] += v
+                if r["riding"]:
+                    since[r["riding"]] += v
+    return since, months
+
+
+def timeline(sp, months, extra=()):
+    """Monthly grants nationally from election month to the last marker or this month, with dated markers."""
+    marks = [{"date": sp["meta"]["election"], "label": "election", "kind": "event"}] + [dict(m, kind="budget", label=m["short"]) for m in budget_markers()] + list(extra)
+    last = max([date.today().isoformat()[:7]] + [m["date"][:7] for m in marks])
+    keys, y, mo = [], 2025, 4
+    while f"{y}-{mo:02d}" <= last:
+        keys.append(f"{y}-{mo:02d}")
+        y, mo = (y + 1, 1) if mo == 12 else (y, mo + 1)
+    return {"months": keys, "values": [round(months.get(k, 0)) for k in keys], "complete": sp["meta"]["cutoff"][:7], "markers": marks,
+            "note": f"Federal grants and contributions placed in a riding, all ridings together, by the month the agreement starts (national head offices, other governments and settlements left out). "
+                    f"Months after {sp['meta']['cutoff'][:7]} are pale: departments report a quarter or more late, so they will fill in. Blue lines are budget days."}
+
+
+def special_config(fed_config, **kw):
+    keep = ["parties", "legendParties", "projection", "regionShort", "recordUrl", "flags"]
+    return {k: fed_config[k] for k in keep} | kw
+
+
+def box_of(feature, pad=0.18):
+    pts = []
+    for poly in feature["geometry"]["coordinates"] if feature["geometry"]["type"] == "MultiPolygon" else [feature["geometry"]["coordinates"]]:
+        pts += poly[0]
+    x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)
+    y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+    dx, dy = (x1 - x0) * pad + 0.02, (y1 - y0) * pad + 0.02
+    return [round(x0 - dx, 4), round(y0 - dy, 4), round(x1 + dx, 4), round(y1 + dy, 4)]
+
+
+def budget_page(fed_payload, sp):
+    est = json.load(open(DATA / "budget_estimate.json"))
+    items = json.load(open(DATA / "budget_by_riding.json"))["by_riding"] if (DATA / "budget_by_riding.json").exists() else {}
+    since, months = ledger_summary(sp)
+    latest = max(est["budgets"], key=lambda b: b["date"])
+    fc = fed_payload["config"]
+    cfg = special_config(fc, mode="budget", title="Where the federal budgets land, riding by riding", defaultBudget=latest["key"], defaultSort=latest["key"] + "pc",
+                         nav=[dict(x, current=x["href"] == "budget.html") for x in NAV], insets=fc["insets"], clipInsetsToMunis=True,
+                         subtitle=f"An estimate of how much of each budget since the 2025 election reaches each of the 343 ridings over its five-year plan. "
+                                  f"{latest['name']} was tabled on {latest['date']}. Every new measure in the budget's own summary tables is shared out by a stated rule "
+                                  f"(by population, within a province, along the department's record of grants, or to the places the budget names), then added up. "
+                                  f"Each riding wears its MP's party colour; the deeper the colour, the more per person. Close 2025 seats are striped.",
+                         notes=[
+                             "<b>This is an estimate, not a record.</b> Budgets announce national programs; where the money lands is decided later, award by award, and shows up on the federal grants map as it is paid out. The point here is to put a dollar figure on each riding that anyone can check and argue with, measure by measure.",
+                             "<b>How each measure is shared.</b> " + est["method"].split(". ", 1)[1].replace("pop:", "<i>Per person</i>:").replace("prov:", "<i>Province-specific</i>:").replace("dept:", "<i>By department</i>:").replace("cdept:", "<i>By contracts</i>:").replace("places:", "<i>Named places</i>:").replace("excluded:", "<i>Not placed</i>:") + " Department shares use the square root of each riding's dollars, so one very large award does not decide where a whole national program goes. Tax cuts and benefits to households are shared per person: richer and poorer ridings get the same share, which overstates some and understates others.",
+                             "<b>Named projects</b> (the Mackenzie Valley Highway, the Winnipeg homelessness plan, the Build Communities Strong Fund list and the rest) are placed by locating each named town in its riding; a city split over several ridings shares the item. The full list is in the panel for each riding and on the federal map's budget dots.",
+                             "<b>Totals reconcile.</b> The measures placed plus the lines not placed add up to each budget's own net cost of new measures in its chapter tables, to the million. Amounts are net of the \"Less:\" lines (money already provisioned, sourced from existing budgets, or recovered through fees and premiums).",
+                             f"<b>Sources:</b> <a href=\"{est['budgets'][0]['url']}\" target=\"_blank\" rel=\"noopener\">{est['budgets'][0]['name']}</a>; <a href=\"{latest['url']}\" target=\"_blank\" rel=\"noopener\">{latest['name']}</a>; department grant records from the federal grants map (open.canada.ca proactive disclosure); contracts from the proactive publication of contracts; 2021 census populations scaled to today.",
+                         ])
+    payload = {"config": cfg, "ridings": basic_ridings(sp), "estimates": est["budgets"], "items": items, "since": {n: round(v) for n, v in since.items()},
+               "timeline": timeline(sp, months), "geo": fed_payload["geo"], "geoFine": fed_payload["geoFine"], "land": fed_payload["land"]}
+    return payload
+
+
+def byelection_page(fed_payload, sp):
+    be = json.load(open(DATA / "byelection_detail.json"))
+    est = json.load(open(DATA / "budget_estimate.json"))
+    since, months = ledger_summary(sp)
+    fine = {f["id"]: f for f in fed_payload["geoFine"]["features"]} | {f["id"]: f for f in fed_payload["geo"]["features"] if f["id"] not in {g["id"] for g in fed_payload["geoFine"]["features"]}}
+    focus = list(be["ridings"])
+    insets = [[be["ridings"][n]["name"], box_of(fine[n]), n] for n in focus]
+    fc = fed_payload["config"]
+    held = [{"date": h["date"], "label": "by-elections", "kind": "event"} for h in {h["date"]: h for h in be["held"]}.values()]
+    marks = held + [{"date": be["meta"]["polling_day"], "label": "polling day", "kind": "event"}]
+    cfg = special_config(fc, mode="byelection", title="By-election ridings: what the government has spent there",
+                         nav=[dict(x, current=x["href"] == "byelections.html") for x in NAV], insets=insets, focus=focus, defaultSort="pc", timelineTitle="Grants by month, with budget days and by-elections",
+                         subtitle=f"Six seats go to the polls on {be['meta']['polling_day']}. For each: every federal grant and contribution placed there since the {be['meta']['election']} election, "
+                                  f"the contracts billed from there, any megacontract, every budget measure that names it, and its estimated share of each budget. "
+                                  f"Ranks compare grants per person with all 343 ridings.",
+                         notes=[
+                             "<b>Which ridings:</b> the six seats vacant when the by-elections were called on " + be["meta"]["called"] + ": " + ", ".join(r["name"] for r in be["ridings"].values()) + ". " + be["meta"]["note"],
+                             f"<b>Grants since the election</b> count every agreement starting on or after election day, including the months after {be['meta']['cutoff']} that departments are still reporting (marked \"recent\"), so the totals here run later than the federal map's fixed window. National head offices, other governments and settlements are listed but left out of the totals, as on the federal map.",
+                             "<b>Nothing is dropped:</b> the site keeps its own ledger of every agreement since the election. If a department later withdraws or restates a record in the open-data file, it stays in the ledger and is shown here as withdrawn.",
+                             "<b>Where money lands:</b> each award sits at the recipient's address. A downtown riding with head offices (Laurier—Sainte-Marie holds much of central Montréal) collects money spent across the city or the province.",
+                             "<b>Budget shares</b> are estimates; see the Budget by riding page for the method.",
+                             "<b>Sources:</b> " + "; ".join(f'<a href="{x["url"]}" target="_blank" rel="noopener">{x["name"]}</a>' for x in be["meta"]["sources"]) + "; grants and contracts from open.canada.ca proactive disclosure.",
+                         ])
+    payload = {"config": cfg, "ridings": basic_ridings(sp), "be": be, "estimates": est["budgets"], "since": {n: round(v) for n, v in since.items()},
+               "timeline": timeline(sp, months, marks), "geo": fed_payload["geo"], "geoFine": fed_payload["geoFine"], "land": land_for([i[:2] for i in insets])}
+    return payload
+
+
+def write_special(payload, name):
+    """Render scripts/special_template.html with the federal map's stylesheet, for the website and the Claude page."""
+    tpl = (ROOT / "scripts" / "special_template.html").read_text()
+    style = (ROOT / "scripts" / "map_template.html").read_text().split("<style>", 1)[1].split("</style>", 1)[0]
+    tpl = tpl.replace("/*__STYLE__*/", style, 1).replace("<title>Federal special page</title>", f"<title>{payload['config']['title']}</title>", 1)
+
+    def page(nav_urls=None):
+        cfg = dict(payload["config"], sourcesHref=(nav_urls or {}).get("sources.html", "sources.html"))
+        if nav_urls:
+            cfg["nav"] = [dict(n, href=nav_urls.get(n["href"], n["href"])) for n in cfg["nav"]]
+        return tpl.replace("/*__DATA__*/null", json.dumps(dict(payload, config=cfg), ensure_ascii=False, separators=(",", ":")))
+    full = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+            + page().replace('<div class="wrap">', '</head>\n<body>\n<div class="wrap">', 1) + "</body>\n</html>\n")
+    out = OUTDIR / f"{name}.html"
+    out.write_text(full)
+    (OUTDIR / f"artifact_{name}.html").write_text(page(ARTIFACT_URLS))
+    print(out, f"{out.stat().st_size / 1e6:.2f} MB")
 
 
 PROVINCES = {
@@ -920,6 +1058,21 @@ def main():
     src_pages = [("index.html", label["index.html"], payload["config"]["notes"] + [payload["config"].get("linkNote") or ""])]
     fragment = write_page(payload, "index")
     (OUTDIR / "artifact.html").write_text(fragment)
+    sp = json.load(open(DATA / "riding_spending.json"))
+    if (DATA / "budget_estimate.json").exists():
+        bp = budget_page(payload, sp)
+        write_special(bp, "budget")
+        src_pages.append(("budget.html", label["budget.html"], bp["config"]["notes"]))
+        b = {x["key"]: x for x in bp["estimates"]}
+        with open(OUTDIR / "budget_by_riding.csv", "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(["num", "riding", "province", "mp", "party"] + [h for k in b for h in (f"{k}_estimate", f"{k}_per_person")])
+            for n, r in bp["ridings"].items():
+                w.writerow([n, r["name"], r["region"], r["rep"], r["rep_party"]] + [v for k in b for v in (b[k]["by_riding"][n]["total"], b[k]["by_riding"][n]["pc"])])
+    if (DATA / "byelection_detail.json").exists():
+        bep = byelection_page(payload, sp)
+        write_special(bep, "byelections")
+        src_pages.append(("byelections.html", label["byelections.html"], bep["config"]["notes"]))
     write_csv(raw, ["num", "current_name", "province", "population", "mp", "mp_party", "party_2025", "runnerup_party_2025", "margin_votes",
                     "margin_pts", "close", "group", "after_adj", "after_total", "after_n", "before_adj", "before_total", "pc_after",
                     "pc_after_all", "pc_before", "change_pct", "score"], OUTDIR / "riding_spending.csv")
